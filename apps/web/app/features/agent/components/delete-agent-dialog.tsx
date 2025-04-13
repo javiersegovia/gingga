@@ -1,4 +1,3 @@
-import React from 'react'
 import { useDeleteAgentMutation } from '@/features/agent/agent.query'
 import {
   Dialog,

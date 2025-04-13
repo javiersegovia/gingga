@@ -1,23 +1,14 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { Badge } from '@gingga/ui/components/badge'
 import { Button } from '@gingga/ui/components/button'
 import {
   Card,
-  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from '@gingga/ui/components/card'
 import { GridPattern } from '@gingga/ui/components/grid-pattern'
-import { DotPattern } from '@gingga/ui/components/dot-pattern'
-import {
-  LockIcon,
-  MessageSquareTextIcon,
-  ArrowRightIcon,
-  BotIcon,
-  EditIcon,
-} from 'lucide-react'
+import { MessageSquareTextIcon, ArrowRightIcon, BotIcon, EditIcon } from 'lucide-react'
 import { cn } from '@gingga/ui/lib/utils'
 import { Agent } from '@/features/agent/agent.types'
 import { agentsQueryOptions } from '@/features/agent/agent.query'

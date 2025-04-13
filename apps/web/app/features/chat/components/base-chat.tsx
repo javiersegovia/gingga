@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { MultimodalInput } from './multimodal-input'
 import { Messages } from './messages/messages'
 import { VisibilityType } from './visibility-selector'
-import { createId } from '@paralleldrive/cuid2'
+import { nanoid } from 'nanoid'
 import { useQueryClient } from '@tanstack/react-query'
 import { userChatsQueryOptions } from '../chat.query'
 import { useLinkProps } from '@tanstack/react-router'
@@ -69,7 +69,7 @@ export function BaseChat({
     body: { id, agentId, modelId: undefined },
     sendExtraMessageFields: true,
     // experimental_throttle: 200,
-    generateId: createId,
+    generateId: nanoid,
     initialMessages,
     onResponse: (response) => {
       if (authData?.isAuthenticated) {

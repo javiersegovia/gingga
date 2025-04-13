@@ -11,7 +11,7 @@ interface MarqueeItemProps {
   color: string
 }
 
-function MarqueeItem({ value, label, color, id }: MarqueeItemProps) {
+function MarqueeItem({ value, label, color }: MarqueeItemProps) {
   return (
     <div className="group mx-16 text-center opacity-40 transition-opacity duration-200 hover:opacity-100">
       <div

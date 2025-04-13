@@ -26,7 +26,7 @@ export function IntegrationCard({ integration, userConnection }: IntegrationCard
 
   const { mutate: initiateConnection, isPending: isConnecting } = useMutation({
     mutationFn: initiateConnectionMutationFn,
-    onSuccess: (data) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: composioQueryKeys.connections() })
     },
     onError: (error) => {

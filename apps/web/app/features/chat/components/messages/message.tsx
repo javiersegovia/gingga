@@ -57,7 +57,7 @@ function isToolResponse(result: unknown): result is ToolResponse {
 }
 
 const PurePreviewMessage = ({
-  chatId,
+  // chatId,
   message,
   status,
   isLoading,
@@ -251,7 +251,7 @@ const PurePreviewMessage = ({
                   }
 
                   if (state === 'call') {
-                    const { args } = toolInvocation
+                    // const { args } = toolInvocation
 
                     return (
                       <div

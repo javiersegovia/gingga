@@ -6,18 +6,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@gingga/ui/components/dialog'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@gingga/ui/components/form'
-import { Input } from '@gingga/ui/components/input'
+
 import { Switch } from '@gingga/ui/components/switch'
 
-import { z } from 'zod'
 import { Label } from '@gingga/ui/components/label'
 import { CopyIcon, CheckIcon } from 'lucide-react'
 import { useState } from 'react'

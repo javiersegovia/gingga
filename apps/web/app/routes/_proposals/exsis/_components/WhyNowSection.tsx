@@ -1,8 +1,6 @@
-import { Badge } from '@gingga/ui/components/badge'
+import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@gingga/ui/components/card'
-import { cn } from '@gingga/ui/lib/utils'
 import { TrendingUp, Zap } from 'lucide-react'
-import React, { useEffect, useRef } from 'react'
 
 interface Reason {
   title: string

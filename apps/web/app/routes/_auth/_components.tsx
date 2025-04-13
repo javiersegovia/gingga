@@ -1,5 +1,4 @@
 import { Link } from '@tanstack/react-router'
-import { Card, CardContent } from '@gingga/ui/components/card'
 
 interface AuthLayoutProps {
   children: React.ReactNode

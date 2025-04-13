@@ -5,7 +5,6 @@ import {
   Composio,
   ConnectorListItemDTO,
 } from 'composio-core'
-import type { ConnectedAccounts } from 'composio-core'
 
 import { getServerEnv } from '@/server/env'
 import {

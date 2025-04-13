@@ -1,8 +1,5 @@
 import { motion } from 'motion/react'
-import { Circle } from 'lucide-react'
 import { cn } from '@gingga/ui/lib/utils'
-import { Badge } from '@gingga/ui/components/badge'
-import { Card, CardContent, CardHeader, CardTitle } from '@gingga/ui/components/card'
 
 // ElegantShape component (provided by refiner tool)
 function ElegantShape({
@@ -74,7 +71,6 @@ function ElegantShape({
 // Renamed PitchDeckHero to CoverSection and adapted props
 export const CoverSection = () => {
   // Content based on Slide 1
-  const companyName = 'Gingga × Exsis'
   const title = 'Strategic Partnership Conversation'
   const subtitle = 'Gingga × Exsis'
   const description = 'Vladimir Guzman, CEO @ Gingga | April 2025'

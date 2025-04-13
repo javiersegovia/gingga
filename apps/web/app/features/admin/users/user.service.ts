@@ -1,6 +1,6 @@
 import { getDatabase } from '@/db'
 import { Users, UserMemberships, Chats, ChatMessages } from '@/db/schema'
-import { eq, and, desc, count } from 'drizzle-orm'
+import { eq, desc, count } from 'drizzle-orm'
 import type { UpdateUserInput, BanUserInput, BaseUser } from './user.schema'
 
 // Helper function to potentially throw specific errors (e.g., NotFoundError)

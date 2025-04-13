@@ -8,7 +8,6 @@ import {
   $getComposioIntegrations,
   $getComposioIntegration,
   $getUserComposioConnections,
-  $initiateComposioConnection,
   $deleteUserComposioConnection,
 } from './composio.api' // Assuming API functions are exported
 import type { ComposioAppName } from './composio.schema'

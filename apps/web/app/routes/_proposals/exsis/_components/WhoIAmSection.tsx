@@ -1,5 +1,3 @@
-import { Badge } from '@gingga/ui/components/badge'
-import { Avatar, AvatarFallback, AvatarImage } from '@gingga/ui/components/avatar'
 import { motion } from 'motion/react'
 
 export function WhoIAmSection() {

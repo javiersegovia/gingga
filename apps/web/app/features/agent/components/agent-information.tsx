@@ -4,7 +4,6 @@ import { DotPattern } from '@gingga/ui/components/dot-pattern'
 import { Card } from '@gingga/ui/components/card'
 import {
   ArrowRightIcon,
-  InfoIcon,
   BarChart2Icon,
   BrainCircuitIcon,
   CodeIcon,

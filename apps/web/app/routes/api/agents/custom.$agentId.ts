@@ -1,7 +1,7 @@
 import { json } from '@tanstack/react-start'
 import { createAPIFileRoute } from '@tanstack/react-start/api'
 import { streamText, appendResponseMessages, createDataStreamResponse } from 'ai'
-import { createId } from '@paralleldrive/cuid2'
+import { nanoid } from 'nanoid'
 import {
   generateChatTitleFromUserMessage,
   getChatById,
@@ -106,7 +106,7 @@ export const APIRoute = createAPIFileRoute('/api/agents/custom/$agentId')({
             : proccesedMessages,
           tools,
           experimental_activeTools: [],
-          experimental_generateMessageId: createId,
+          experimental_generateMessageId: nanoid,
           maxSteps: 10,
           async onFinish({ response }) {
             try {

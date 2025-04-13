@@ -1,4 +1,3 @@
-import { Badge } from '@gingga/ui/components/badge'
 import { Card, CardContent } from '@gingga/ui/components/card'
 import { cn } from '@gingga/ui/lib/utils'
 import { CheckCircle, Circle } from 'lucide-react'

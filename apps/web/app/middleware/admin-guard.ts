@@ -1,6 +1,5 @@
 import { createMiddleware } from '@tanstack/react-start'
 import { setResponseStatus } from '@tanstack/react-start/server'
-import { $getAuthSession } from '@/features/auth/auth.api'
 import { authMiddleware } from './auth-guard'
 /**
  * Middleware to enforce admin privileges on a server function.

@@ -1,5 +1,4 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
-import { Button } from '@gingga/ui/components/button'
 import {
   Form,
   FormControl,
@@ -40,8 +39,7 @@ function VerifyPage() {
     },
   })
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async function onSubmit(data: any) {
+  async function onSubmit() {
     // TODO: Implement verification logic
   }
 

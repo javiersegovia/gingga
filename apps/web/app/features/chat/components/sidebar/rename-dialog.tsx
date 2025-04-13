@@ -1,6 +1,5 @@
 import { Button } from '@gingga/ui/components/button'
 import {
-  DialogClose,
   DialogDescription,
   DialogFooter,
   DialogHeader,
@@ -11,14 +10,12 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from '@gingga/ui/components/form'
 import { Input } from '@gingga/ui/components/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { useRouter } from '@tanstack/react-router'
 import { useRenameChatMutation } from '@/features/chat/chat.query'
 import { RenameChatSchema } from '@/features/chat/chat.schema'
 import { Chat } from '@/db/types'

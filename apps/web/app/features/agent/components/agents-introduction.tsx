@@ -1,14 +1,6 @@
-import React from 'react'
 import { Badge } from '@gingga/ui/components/badge'
-import { FileQuestion, Bot, Presentation, RefreshCcwIcon } from 'lucide-react'
-import { cn } from '@gingga/ui/lib/utils'
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from '@gingga/ui/components/card'
+import { FileQuestion, Bot, Presentation } from 'lucide-react'
+import { Card, CardContent, CardTitle, CardDescription } from '@gingga/ui/components/card'
 
 // STYLING NOTE: This component uses brand colors for card shadows and icons
 

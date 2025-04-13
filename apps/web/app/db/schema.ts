@@ -1,11 +1,11 @@
 import { sqliteTable, text, integer, primaryKey } from 'drizzle-orm/sqlite-core'
 import { relations, sql } from 'drizzle-orm'
-import { createId } from '@paralleldrive/cuid2'
+import { nanoid } from 'nanoid'
 import { Attachment } from 'ai'
 import { SkillId } from '../features/ai/skills/skill.types'
 
-// Helper for UUID default values
-const uuidDefault = () => text('id').notNull().$defaultFn(createId)
+// Helper for NanoId default values
+const nanoIdDefault = () => text('id').notNull().$defaultFn(nanoid)
 
 // Helper for timestamps
 const timestamps = {
@@ -37,7 +37,7 @@ export const availableModelIds = [
 
 export const Users = sqliteTable('users', {
   ...timestamps,
-  id: uuidDefault().primaryKey(),
+  id: nanoIdDefault().primaryKey(),
   name: text('name'),
   firstName: text('first_name'),
   lastName: text('last_name'),
@@ -65,7 +65,7 @@ export const usersRelations = relations(Users, ({ one, many }) => ({
 
 export const Verifications = sqliteTable('verifications', {
   ...timestamps,
-  id: uuidDefault().primaryKey(),
+  id: nanoIdDefault().primaryKey(),
 
   identifier: text('identifier').notNull(),
   value: text('value').notNull(),
@@ -75,7 +75,7 @@ export const Verifications = sqliteTable('verifications', {
 
 export const Accounts = sqliteTable('accounts', {
   ...timestamps,
-  id: uuidDefault().primaryKey(),
+  id: nanoIdDefault().primaryKey(),
   userId: text('user_id')
     .notNull()
     .references(() => Users.id, { onDelete: 'cascade' }),
@@ -119,7 +119,7 @@ export const oauthAccountsRelations = relations(OAuthAccounts, ({ one }) => ({
 
 export const Sessions = sqliteTable('sessions', {
   ...timestamps,
-  id: uuidDefault().primaryKey(),
+  id: nanoIdDefault().primaryKey(),
   userId: text('user_id')
     .notNull()
     .references(() => Users.id, { onDelete: 'cascade' }),
@@ -178,7 +178,7 @@ export const userMembershipsRelations = relations(UserMemberships, ({ one }) => 
 /* ________________________________________________________________________________________________ */
 
 export const Agents = sqliteTable('agents', {
-  id: uuidDefault().primaryKey(),
+  id: nanoIdDefault().primaryKey(),
   ...timestamps,
 
   ownerId: text('owner_id').references(() => Users.id, { onDelete: 'set null' }),
@@ -208,7 +208,7 @@ export const agentsRelations = relations(Agents, ({ one, many }) => ({
 
 export const Chats = sqliteTable('chats', {
   ...timestamps,
-  id: uuidDefault().primaryKey(),
+  id: nanoIdDefault().primaryKey(),
 
   // References
   userId: text('user_id').references(() => Users.id, { onDelete: 'set null' }),
@@ -235,7 +235,7 @@ export const chatsRelations = relations(Chats, ({ one, many }) => ({
 
 export const ChatMessages = sqliteTable('chat_messages', {
   ...timestamps,
-  id: uuidDefault().primaryKey(),
+  id: nanoIdDefault().primaryKey(),
 
   // References
   chatId: text('chat_id')
@@ -272,7 +272,7 @@ export const chatMessagesRelations = relations(ChatMessages, ({ one }) => ({
 
 export const AgentSkills = sqliteTable('agent_skills', {
   ...timestamps,
-  id: uuidDefault().primaryKey(),
+  id: nanoIdDefault().primaryKey(),
   agentId: text('agent_id')
     .notNull()
     .references(() => Agents.id, { onDelete: 'cascade' }),

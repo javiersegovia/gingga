@@ -1,5 +1,3 @@
-import { Badge } from '@gingga/ui/components/badge'
-
 export const SharedOpportunitySection = () => {
   return (
     <section className="flex min-h-screen flex-col items-center justify-center gap-12 p-8">

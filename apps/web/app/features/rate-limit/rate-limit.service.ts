@@ -3,7 +3,6 @@ import { rateLimit, RateLimitResult, Tier } from '@/lib/ratelimiter'
 import { eq } from 'drizzle-orm'
 import { getDatabase } from '@/db'
 import { ipAddress, waitUntil } from '@vercel/functions'
-import { DBSizeCommand } from '@upstash/redis'
 
 export interface RateLimitContext {
   identifier: string

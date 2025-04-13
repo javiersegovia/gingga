@@ -1,6 +1,3 @@
-import { Badge } from '@gingga/ui/components/badge'
-import { CheckIcon } from 'lucide-react'
-
 export const FinalThoughtSection = () => {
   return (
     <section className="bg-muted/40 flex min-h-screen flex-col items-center justify-center gap-12 p-8 text-center">

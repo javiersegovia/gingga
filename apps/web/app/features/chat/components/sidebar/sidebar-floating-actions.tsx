@@ -8,6 +8,7 @@ import { Button } from '@gingga/ui/components/button'
 import { useWindowSize } from 'usehooks-ts'
 import { Link } from '@tanstack/react-router'
 import { PlusIcon } from 'lucide-react'
+import { cn } from '@gingga/ui/lib/utils'
 
 export function SidebarFloatingActions({
   className,
@@ -17,7 +18,7 @@ export function SidebarFloatingActions({
   const { width: windowWidth } = useWindowSize()
 
   return (
-    <div className="pointer-events-auto z-50 flex flex-row gap-2 p-1">
+    <div className={cn('pointer-events-auto z-50 flex flex-row gap-2 p-1', className)}>
       <Tooltip>
         <TooltipTrigger asChild>
           {/* <Button onClick={toggleSidebar} variant="outline" className="md:h-fit md:px-2">

@@ -2,15 +2,14 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@gingga/ui/components/card'
-import { Check, HelpCircle, Clock, TrendingUp } from 'lucide-react'
+import { Check } from 'lucide-react'
 import { Button } from '@gingga/ui/components/button'
 import { cn } from '@gingga/ui/lib/utils'
 import { Badge } from '@gingga/ui/components/badge'
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@gingga/ui/components/tabs'
+import { Tabs, TabsList, TabsTrigger } from '@gingga/ui/components/tabs'
 import { useState } from 'react'
 import { Link } from '@tanstack/react-router'
 
@@ -116,7 +115,7 @@ export function SquadPricing() {
         </Tabs>
 
         <div className="mx-auto grid max-w-7xl grid-cols-1 items-start divide-y pt-8 md:grid-cols-3 md:divide-x md:divide-y-0">
-          {plans.map((plan, index) => (
+          {plans.map((plan) => (
             <Card
               key={plan.name}
               hover="noShadow"

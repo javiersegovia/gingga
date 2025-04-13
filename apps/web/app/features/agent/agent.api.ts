@@ -2,7 +2,7 @@ import { createServerFn } from '@tanstack/react-start'
 import { z } from 'zod'
 import { zodValidator } from '@tanstack/zod-adapter'
 import { authMiddleware } from '@/middleware/auth-guard'
-import { AgentSchema, AgentFormSchema } from './agent.schema'
+import { AgentFormSchema } from './agent.schema'
 import {
   createAgent,
   getAgents,

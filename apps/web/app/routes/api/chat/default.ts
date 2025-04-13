@@ -14,7 +14,7 @@ import { setupAppContext } from '@/middleware/setup-context.server'
 import { modelProvider } from '@/features/ai/utils/providers'
 import { tools, executions } from '@/features/ai/skills'
 import { processToolCalls } from '@/features/ai/utils/human-in-the-loop'
-import { createId } from '@paralleldrive/cuid2'
+import { nanoid } from 'nanoid'
 
 const ChatSchema = z.object({
   id: z.string(),
@@ -90,7 +90,7 @@ export const APIRoute = createAPIFileRoute('/api/chat/default')({
             abortSignal: request.signal,
             messages: proccesedMessages,
             tools,
-            experimental_generateMessageId: createId,
+            experimental_generateMessageId: nanoid,
             maxSteps: 10, // Consider if maxSteps is appropriate here
             async onFinish({ response }) {
               console.log('~~~~ STARTING ON FINISH ~~~~')

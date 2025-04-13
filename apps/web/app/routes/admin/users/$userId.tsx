@@ -1,4 +1,3 @@
-import React from 'react'
 import { createFileRoute, useParams } from '@tanstack/react-router'
 import { useQuery } from '@tanstack/react-query'
 import { UserForm } from '@/features/admin/users/components/user-form'

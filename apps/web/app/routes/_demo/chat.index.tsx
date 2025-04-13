@@ -1,12 +1,12 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { createId } from '@paralleldrive/cuid2'
+import { nanoid } from 'nanoid'
 import { BaseChat } from '@/features/chat/components/base-chat'
 
 export const Route = createFileRoute('/_demo/chat/')({
   component: ChatLayout,
   loader: async () => {
     return {
-      chatId: createId(),
+      chatId: nanoid(),
     }
   },
 })

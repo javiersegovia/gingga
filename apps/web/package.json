@@ -59,6 +59,7 @@
     "lucide-react": "^0.487.0",
     "marked": "^15.0.7",
     "motion": "^12.6.3",
+    "nanoid": "^5.1.5",
     "outdent": "^0.8.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

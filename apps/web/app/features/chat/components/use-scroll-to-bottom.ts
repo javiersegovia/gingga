@@ -73,7 +73,7 @@ export function useScrollToBottom<T extends HTMLElement>(): [
         container.addEventListener('scrollend', handleScrollEnd, {
           once: true,
         })
-      } catch (e) {
+      } catch (_e) {
         // scrollend event not supported in this browser, fallback to requestAnimationFrame
       }
     },

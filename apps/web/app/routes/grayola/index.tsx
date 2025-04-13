@@ -7,7 +7,6 @@ import { DeliverablesSection } from './_components/DeliverablesSection'
 import { SpeedGuaranteeSection } from './_components/SpeedGuaranteeSection'
 import { CaseStudiesSection } from './_components/CaseStudiesSection'
 import { PricingSection } from './_components/PricingSection'
-import { GridPattern } from '@gingga/ui/components/grid-pattern'
 import { DotPattern } from '@gingga/ui/components/dot-pattern'
 
 export const Route = createFileRoute('/grayola/')({

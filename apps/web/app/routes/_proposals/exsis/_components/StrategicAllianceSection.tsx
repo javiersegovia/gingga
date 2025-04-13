@@ -1,4 +1,3 @@
-import { Badge } from '@gingga/ui/components/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@gingga/ui/components/card'
 import { Scale, Layers3, Copyleft, TrendingUp } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'

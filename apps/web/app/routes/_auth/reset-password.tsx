@@ -1,11 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import {
-  createFileRoute,
-  redirect,
-  useNavigate,
-  Link,
-  useRouter,
-} from '@tanstack/react-router'
+import { createFileRoute, redirect, useNavigate, Link } from '@tanstack/react-router'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { toast } from 'sonner'
@@ -57,7 +51,6 @@ export const Route = createFileRoute('/_auth/reset-password')({
 function ResetPasswordPage() {
   const { token, error: tokenError } = Route.useSearch()
   const navigate = useNavigate({ from: Route.fullPath })
-  const router = useRouter()
 
   const form = useForm<z.infer<typeof ResetPasswordSchema>>({
     resolver: zodResolver(ResetPasswordSchema),
@@ -75,7 +68,7 @@ function ResetPasswordPage() {
       return
     }
 
-    const { error } = await authClient.resetPassword(
+    await authClient.resetPassword(
       {
         newPassword: values.password,
         token: token,

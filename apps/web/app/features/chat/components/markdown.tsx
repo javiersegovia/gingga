@@ -47,7 +47,7 @@ const components: Partial<Components> = {
       </a>
     )
   },
-  h1: ({ node, children, ...props }) => {
+  h1: ({ node: _, children, ...props }) => {
     return (
       <h1 className="mt-2 mb-2 text-3xl font-semibold" {...props}>
         {children}

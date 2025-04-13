@@ -1,5 +1,5 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
-import { createId } from '@paralleldrive/cuid2'
+import { nanoid } from 'nanoid'
 import { BaseChat } from '@/features/chat/components/base-chat'
 import { agentQueryOptions } from '@/features/agent/agent.query'
 
@@ -19,7 +19,7 @@ export const Route = createFileRoute('/_demo/chat/agent/$agentId')({
 
 function AgentChatRoute() {
   const { agentId } = Route.useParams()
-  const chatId = createId()
+  const chatId = nanoid()
 
   return (
     <BaseChat

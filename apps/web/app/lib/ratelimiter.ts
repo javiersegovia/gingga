@@ -3,9 +3,7 @@ import { Redis } from '@upstash/redis'
 import { UserMemberships } from '@/db/schema'
 import { getServerEnv } from '@/server/env'
 
-const tierValues = UserMemberships.tier.enumValues
-
-export type Tier = 'public' | (typeof tierValues)[number]
+export type Tier = 'public' | (typeof UserMemberships.tier.enumValues)[number]
 export type MessageType = 'standard' | 'premium'
 
 const env = getServerEnv()

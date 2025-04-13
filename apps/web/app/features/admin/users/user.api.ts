@@ -18,7 +18,7 @@ export const $getUsers = createServerFn({
   // No input schema needed for getting all users
 })
   .middleware([adminMiddleware])
-  .handler(async ({ context }) => {
+  .handler(async () => {
     try {
       const users = await getUsers()
       return users
@@ -34,7 +34,7 @@ export const $getUserDetails = createServerFn({
 })
   .validator(zodValidator(UserIdSchema))
   .middleware([adminMiddleware])
-  .handler(async ({ data, context }) => {
+  .handler(async ({ data }) => {
     try {
       const user = await getUserById(data.userId)
       if (!user) {
@@ -60,7 +60,7 @@ export const $updateUser = createServerFn({
 })
   .validator(zodValidator(UpdateUserSchema))
   .middleware([adminMiddleware])
-  .handler(async ({ data, context }) => {
+  .handler(async ({ data }) => {
     try {
       const updatedUser = await updateUser(data)
       return updatedUser
@@ -80,7 +80,7 @@ export const $deleteUser = createServerFn({
 })
   .validator(zodValidator(UserIdSchema))
   .middleware([adminMiddleware])
-  .handler(async ({ data, context }) => {
+  .handler(async ({ data }) => {
     try {
       await deleteUser(data.userId)
       return { success: true }
@@ -100,7 +100,7 @@ export const $banUser = createServerFn({
 })
   .validator(zodValidator(BanUserSchema))
   .middleware([adminMiddleware])
-  .handler(async ({ data, context }) => {
+  .handler(async ({ data }) => {
     try {
       await banUser(data)
       return { success: true }
@@ -120,7 +120,7 @@ export const $unbanUser = createServerFn({
 })
   .validator(zodValidator(UserIdSchema))
   .middleware([adminMiddleware])
-  .handler(async ({ data, context }) => {
+  .handler(async ({ data }) => {
     try {
       await unbanUser(data.userId)
       return { success: true }

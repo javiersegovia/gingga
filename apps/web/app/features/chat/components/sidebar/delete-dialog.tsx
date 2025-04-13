@@ -1,4 +1,3 @@
-import { z } from 'zod'
 import { Button } from '@gingga/ui/components/button'
 import {
   DialogClose,
@@ -7,9 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@gingga/ui/components/dialog'
-import { useRouter } from '@tanstack/react-router'
 import { useDeleteChatMutation } from '@/features/chat/chat.query'
-import { RenameChatSchema } from '@/features/chat/chat.schema'
 import { Chat } from '@/db/types'
 
 export function DeleteChatDialog({

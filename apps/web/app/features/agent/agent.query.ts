@@ -13,7 +13,6 @@ import {
   $updateAgentById,
   $getRecentChatsWithAgents,
 } from './agent.api'
-import { useAuthQuery } from '../auth/auth.query'
 
 // Query options for fetching agents list
 export const agentsQueryOptions = () =>
