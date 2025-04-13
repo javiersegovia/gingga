@@ -1,0 +1,40 @@
+---
+description: Design System and Theme Variables
+globs: 
+alwaysApply: false
+---
+## UI Theming and Styling Standards
+
+<shadcn_theming>
+1. **Theme Variable Usage**:
+   - NEVER use direct color values (e.g., `text-gray-500`, `bg-gray-100`) in component styling
+   - ALWAYS use ShadcnUI theme variables for consistent theming:
+     - `bg-background`, `text-foreground` - For primary surfaces
+     - `bg-muted`, `text-muted-foreground` - For secondary/disabled elements
+     - `bg-primary`, `text-primary-foreground` - For primary interactive elements
+     - `bg-secondary`, `text-secondary-foreground` - For secondary interactive elements
+     - `bg-accent`, `text-accent-foreground` - For subtle background highlights
+     - `bg-destructive`, `text-destructive-foreground` - For errors/destructive actions
+     - `border-border` - For borders (not `border-gray-200`)
+
+2. **Brand Colors**:
+   - Use semantic brand colors defined in our theme when appropriate:
+     - `brand-blue` - Primary brand color
+     - `brand-green` - Attention-grabbing elements
+     - `brand-pink` - Feminine/creative elements
+     - `brand-purple` - Premium/exclusive features
+
+3. **Component Design Language**:
+   - If the route/component have a defined primary accent color documented at the top, we should prioritize it
+   - Maintain visual consistency within related UI elements
+   - Apply the same accent color to icons, borders, and interactive elements
+
+4. **Icon Usage**:
+   - Size icons appropriately to their context (e.g., `size={28}` for headings)
+   - Apply accent colors to icons using the theme variables
+   - Ensure icon and text alignment with proper spacing (e.g., `gap-3`)
+
+5. **Documentation**:
+   - Document the primary accent color at the top of component files with a STYLING NOTE comment
+   - Reference theme variables in component documentation where relevant
+</shadcn_theming>

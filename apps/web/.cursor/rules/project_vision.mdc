@@ -1,0 +1,70 @@
+---
+description: Context about the project purpose, vision, and technical features
+globs: 
+alwaysApply: false
+---
+---
+description: Context about the project purpose, vision, and technical features
+globs: 
+alwaysApply: false
+---
+# Project Vision Framework
+
+At Gingga, we empower entrepreneurs with digital ideas to turn them into market-ready products faster and more affordably than ever. Our platform leverages advanced artificial intelligence to guide users through every step of the process, from validating initial concepts to developing scalable minimum viable products (MVPs). Gingga's end-to-end solution provides personalized support, collaborative tools, and streamlined workflows, ensuring entrepreneurs can focus on building and launching their products without unnecessary delays or costs. With development timelines up to 10 times faster and more economical than traditional methods, Gingga is the ultimate partner for transforming innovative ideas into successful, market-ready solutions.
+
+## Solutions
+
+1. **End-to-end collaboration**: We partner with entrepreneurs as an agency, helping them with the software development of their products, from design to implementation. 
+
+2. **Agents**: Specialized AI Agents trained to automate and accelerate the development of products, at a fraction of the usual cost.
+
+## Target Audience
+
+We primarily serve Small and Medium Businesses that already have established clients and are looking to scale their operations. Our solutions are designed to be accessible to non-technical users, making advanced AI technology approachable and useful for businesses of all technical capabilities.
+
+## Value Proposition
+
+Our competitive edge comes from five key differentiators:
+- **Personalized AI Agents**: Custom-built for each client's specific workflows
+- **Unique UI/UX**: Intuitive, playful interfaces that make working with AI enjoyable
+- **Low Cost**: Significantly more affordable than traditional automation solutions
+- **End-to-end Customization**: Full adaptation to existing business processes
+- **Rapid Deployment**: From discovery to deployment in just 3-5 days
+
+## Technical Approach
+
+### Technology Stack
+- **AI Models**: Flexible integration with OpenAI, Anthropic, Google, xAI, and open-source models
+- **Data Privacy**: Each agent operates with an isolated database to ensure client data security
+- **Customization Method**: Retrieval-Augmented Generation (RAG) for tailoring responses to client-specific information
+- **Future Capabilities**: Planning for Model-Control-Panel (MCP) servers to enhance agent interactions with external systems
+
+### Integrations
+Our priority integrations include:
+- **WhatsApp**: Primary focus for customer support automation
+- **Website Embeds**: Direct chat integration for client websites
+- **Additional Channels**: Telegram, Slack, Email systems, and CRMs
+
+## Business Model
+
+- **Initial Setup**: One-time fee for custom agent creation and training
+- **Ongoing Service**: Subscription-based model for maintenance and updates
+- **ROI Measurement**: Tracking time saved by automated interactions to demonstrate concrete cost savings
+
+## Brand Personality
+
+We aim to make AI approachable and friendly through:
+- **Playful Interaction**: Game-like experience when using our agents
+- **Friendly Interface**: Visually appealing and non-intimidating design
+- **Conversational Tone**: Accessible language that demystifies AI technology
+
+## Process Flow
+
+1. **Discovery**: Initial consultation to understand client needs and identify AI opportunities
+2. **Agent Training**: Custom configuration of AI solutions for specific workflows
+3. **Handoff**: Seamless integration into client operations with performance monitoring
+4. **Evolution**: Continuous improvement based on user feedback and emerging capabilities
+
+## Current Focus
+
+Our initial market focus is on Customer Support agents, particularly for businesses managing multiple client interactions via WhatsApp. We plan to expand our agent capabilities and explore industry-specific solutions as we grow.

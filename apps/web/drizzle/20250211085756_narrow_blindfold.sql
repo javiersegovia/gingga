@@ -1,0 +1,20 @@
+CREATE TABLE `ai_token_usage` (
+	`created_at` integer DEFAULT (unixepoch() * 1000) NOT NULL,
+	`updated_at` integer DEFAULT (unixepoch() * 1000),
+	`id` text PRIMARY KEY NOT NULL,
+	`user_id` text NOT NULL,
+	`project_id` text,
+	`chat_message_id` text,
+	`operation_type` text NOT NULL,
+	`model_id` text NOT NULL,
+	`status` text NOT NULL,
+	`prompt_tokens` integer DEFAULT 0,
+	`completion_tokens` integer DEFAULT 0,
+	`total_tokens` integer DEFAULT 0,
+	`estimated_cost` real DEFAULT 0,
+	`retries` integer DEFAULT 0,
+	`last_error` text,
+	FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade,
+	FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`) ON UPDATE no action ON DELETE cascade,
+	FOREIGN KEY (`chat_message_id`) REFERENCES `chat_messages`(`id`) ON UPDATE no action ON DELETE cascade
+);

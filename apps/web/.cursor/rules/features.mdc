@@ -1,0 +1,241 @@
+---
+description: Instructions for developing features (api, server, query and components) inside the features folder
+globs: 
+alwaysApply: false
+---
+# Feature Development Rules
+
+Features should be placed in the app/features/ directory and should be named after the feature they are related to. (e.g., app/features/projects, app/features/auth, etc.)
+
+There are multiple types of files inside the features directory:
+
+<feature_development>
+
+- **Layer Separation:**
+  -- API files: Thin wrappers for route handlers + middleware orchestration. **Should delegate business/database logic to Services.**
+  -- Services: Contain pure business logic, database interactions, and interactions with external services. Framework-agnostic.
+  -- Schemas: Define shared validation contracts (Zod).
+  -- Queries: TanStack Query hooks for data fetching/mutation, calling API functions.
+  -- Components: React components specific to the feature.
+
+- **Dependency Flow:**
+  -- Components → Queries → API → Services → Schemas
+  (No reverse dependencies allowed. Services should not import from API/Query/Components).
+
+- **Feature Files:**
+  -- API files: `$actionName` server functions.
+  -- Query files: `useFeatureAction` hooks.
+  -- Services: NounVerb or VerbNoun naming (e.g., `projectStore`, `getRecentAgentsForUser`).
+  -- Schema files: `*Schema` naming (e.g., `ProjectSchema`).
+
+</feature_development>
+
+### API ({feature}.api.ts)
+
+This file contains Server Functions for the feature.
+
+<api_rules>
+1. Use `$` prefix and verb-noun naming (e.g., `$getProjects`).
+2. Declare middleware chain explicitly using `.middleware()`.
+3. Reference Zod schemas from sibling schema files (`*.schema.ts`) for validation via `zodValidator`.
+4. **Keep handlers concise (ideally < 50 lines). Delegate complex logic, database operations, or interactions with external APIs to functions within sibling Service files (`*.service.ts`).**
+5. API handlers receive HTTP context and validated data, then pass necessary, primitive data (like user ID, validated input) to service functions. Avoid passing the entire HTTP `context` to services.
+</api_rules>
+
+Example: (Illustrative - showing service delegation)
+
+```typescript
+// app/features/projects/project.api.ts
+import { createServerFn } from '@tanstack/react-start'
+import { GetProjectsSchema } from './project.schema' // Assume schema exists
+import { authMiddleware } from '@/middleware/auth-guard'
+import { zodValidator } from '@tanstack/zod-adapter'
+import { getProjectsForUser } from './project.service' // Import service function
+
+export const $getProjects = createServerFn({
+  method: 'GET',
+})
+  // Optional: Define input schema if needed, e.g. for filtering/pagination
+  // .validator(zodValidator(GetProjectsSchema))
+  .middleware([authMiddleware])
+  .handler(async ({ context /*, data */ }) => {
+    // Keep API handler simple: Auth check is done by middleware.
+    // Delegate the core logic to the service layer.
+    // The "data" will match the schema passed in the validator
+    const userId = context.auth.session.userId
+    try {
+      // Call the service function with necessary parameters
+      const projects = await getProjectsForUser(userId /*, data?.filterOptions */); 
+      return { projects }
+    } catch (error) {
+        // Handle potential errors from the service layer
+        console.error("Error fetching projects in API handler:", error);
+        // Re-throw or return a structured error response
+        throw new Error('Failed to retrieve projects.'); 
+    }
+  })
+
+// ... other API functions ($deleteProject, etc. also calling service functions)
+```
+
+### Query ({feature}.query.ts)
+
+This file contains React Query hooks for data fetching and mutations. Follow these patterns:
+
+<query_requirements>
+- Follow TanStack Query v5 conventions
+- Use factory pattern for query options (`featureQueryOptions`)
+- Use query key factories to manage query keys
+- Invalidations must target queryOptions .queryKey property
+- Mutations should handle cache updates appropriately
+</query_requirements>
+
+Example:
+
+```typescript
+// app/features/users/user.query.ts
+import { queryOptions, useMutation, useQueryClient } from '@tanstack/react-query'
+import {
+  $getUsers,
+  $getUserDetails,
+  $updateUser,
+  $deleteUser,
+} from './user.api'
+import type { UpdateUserInput, UserDetails } from './user.schema'
+
+// Query Key Factory - Centralize and type your query keys
+export const userKeys = {
+  all: ['users'] as const,
+  lists: () => [...userKeys.all, 'list'] as const,
+  details: () => [...userKeys.all, 'detail'] as const,
+  detail: (id: string) => [...userKeys.details(), id] as const,
+}
+
+// Query Options Factory - Reusable query configurations
+export const usersQueryOptions = queryOptions({
+  queryKey: userKeys.lists(),
+  queryFn: () => $getUsers(),
+})
+
+export const userDetailsQueryOptions = (userId: string) => queryOptions({
+  queryKey: userKeys.detail(userId),
+  queryFn: () => $getUserDetails({ data: { userId } }),
+  enabled: !!userId,
+})
+
+// Mutations with proper cache handling
+export function useUpdateUser() {
+  const queryClient = useQueryClient()
+  return useMutation<UserDetails, Error, UpdateUserInput>({
+    mutationFn: async (userData) => {
+      return $updateUser({ data: userData })
+    },
+    onSuccess: (data) => {
+      // Invalidate affected queries using query key factory
+      queryClient.invalidateQueries({ queryKey: userKeys.lists() })
+      queryClient.invalidateQueries({ queryKey: userKeys.detail(data.id) })
+    },
+  })
+}
+
+export function useDeleteUser() {
+  const queryClient = useQueryClient()
+  return useMutation<{ success: boolean }, Error, { userId: string }>({
+    mutationFn: async ({ userId }) => {
+      return $deleteUser({ data: { userId } })
+    },
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: userKeys.lists() })
+      queryClient.removeQueries({ queryKey: userKeys.detail(variables.userId) })
+    },
+  })
+}
+```
+
+Key patterns demonstrated:
+1. Query key factories for consistent key management
+2. Reusable query options with proper typing
+3. Mutations with appropriate cache invalidation
+4. Type safety throughout the query layer
+5. Clear separation of concerns (data fetching/caching only)
+
+### Schema ({feature}.schema.ts)
+
+(No changes from the previous plan)
+
+<schema_requirements>
+- Share types across FE/BE using Zod schemas.
+- Define clear, specific schemas for API inputs/outputs.
+- Prefer composition over inheritance for complex types.
+</schema_requirements>
+
+### Service ({feature}.service.ts)
+
+This file contains business logic for the feature. Functions here are called by API handlers or potentially other services.
+
+<service_requirements>
+- **Must be framework-agnostic (no direct dependency on React, TanStack Start/Router context, etc.).**
+- Accept necessary, validated data as parameters (e.g., `userId: string`, `projectData: ValidatedProjectData`). Do not accept raw HTTP request/context objects.
+- Perform database operations using Drizzle ORM (imported via `@/db`).
+- Implement core business rules and logic.
+- Throw specific, meaningful errors (e.g., `NotFoundError`, `ValidationError`, `PermissionError`) or return result objects (`{ success: boolean, data?, error? }`).
+- Can import and use functions from other service files if needed, respecting dependency flow.
+- Follow consistent naming for CRUD functions. (e.g., getUserById, deleteUserById, getUsers, getUsersByMembershipId, createUser, updateUserById, getProjectsByAuthorId)
+</service_requirements>
+
+Example:
+
+```ts
+// app/features/projects/project.service.ts
+import { getDatabase } from '@/db';
+import { Projects } from '@/db/schema';
+import { eq, and, isNull } from 'drizzle-orm';
+// Potentially import custom error types
+// import { NotFoundError } from '@/lib/errors'; 
+
+// Example service function called by $getProjects API
+export async function getProjectsByUserId(userId: string) {
+  const db = getDatabase();
+  try {
+    const projects = await db
+      .select({
+        id: Projects.id,
+        name: Projects.name,
+        slug: Projects.slug,
+      })
+      .from(Projects)
+      .where(and(eq(Projects.userId, userId), isNull(Projects.deletedAt)));
+      
+    return projects;
+  } catch (dbError) {
+      console.error(`Database error fetching projects for user ${userId}:`, dbError);
+      // Wrap or re-throw a more specific error
+      throw new Error('Database query failed while fetching projects.');
+  }
+}
+
+// Example service function called by $deleteProject API
+export async function deleteProjectById(projectId: string, userId: string): Promise<boolean> {
+    const db = getDatabase();
+    try {
+        const result = await db
+            .update(Projects)
+            .set({ deletedAt: new Date() })
+            .where(and(eq(Projects.id, projectId), eq(Projects.userId, userId)))
+            .returning({ id: Projects.id }); // Check if update affected rows
+
+        if (result.length === 0) {
+            // throw new NotFoundError(`Project with id ${projectId} not found or permission denied.`);
+             throw new Error(`Project with id ${projectId} not found or permission denied.`);
+        }
+        return true; // Indicate success
+    } catch (error) {
+        console.error(`Failed to delete project ${projectId} for user ${userId}:`, error);
+        // Re-throw or handle specific errors (like NotFoundError from above)
+        if (error instanceof Error /*&& !(error instanceof NotFoundError)*/) {
+             throw new Error('Database query failed during project deletion.');
+        }
+        throw error; // Re-throw original if it's already specific enough
+    }
+}
+```

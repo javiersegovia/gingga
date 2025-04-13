@@ -1,0 +1,100 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Gingga Agents Vision & Overview
+
+> A playful, casual (yet developer-friendly) guide to what Gingga Agents are all about.
+
+## Who’s This For?
+
+We’re aiming Gingga Agents squarely at **small and medium businesses** (SMBs). In particular, **non-technical users** who just want to solve everyday problems (think customer support, content generation, or personal assistant tasks). That said, we also see **end consumers** benefiting from these agents, whether for daily productivity or fun.
+
+Despite the non-technical end user focus, this doc is **developer-oriented**. Why? Because developers and technical folks might ultimately build the custom logic, define advanced prompts, and handle more complex workflows in the background.
+
+## What Are Gingga Agents?
+
+Gingga Agents are user-friendly AIs that can tackle tasks like:
+- **Customer Support** – Answer routine questions and troubleshoot common issues.
+- **Content Creation** – Brainstorm article ideas, craft quick social media posts, or outline blog content.
+- **Personal Assistance** – Keep track of reminders, schedules, or even provide a daily dose of entertaining banter.
+
+### How They’re Built: The BRAIN (Quick Recap)
+
+1. **Instructions**: The system prompts and general config used to “steer” agent responses.  
+2. **Skills (Tools)**: Curated, predefined “power-ups” that let an agent do things like query a database, post to Slack, or trigger a workflow in n8n.  
+3. **Workflows**: Actual sequences of tasks or external calls. We plan to integrate n8n or custom endpoints.  
+4. **Knowledge**: A mini data engine—upload files, store them as vector embeddings, and enable the agent to reference them with RAG (Retrieval-Augmented Generation).  
+
+## Customization & Control
+
+Our goal: **Make AI accessible** to everyday users through a friendly UI. Here’s how:
+
+- **UI-First** Customization: Users can tweak everything—prompts, instructions, knowledge sources—right in the interface.  
+- **Predefined Skills**: Instead of letting agents roam free on the open internet, we offer a curated library of “skills” to ensure more predictable behavior and secure external integrations.  
+- **Embeds & RAG**: Got PDFs, text files, or images you want your agent to “know?” Drag-and-drop file uploads seamlessly become part of the agent’s knowledge base (yay for vector indexing).
+
+## Tooling & Integrations
+
+We’re using [composio.dev](mdc:https:/composio.dev) for auth integrations and plan to leverage **n8n** for advanced workflows (triggered inside agent “skills”). Agents will only call external APIs if those APIs are part of the curated skills library—no free-for-all HTTP requests.
+
+## Privacy & Data Handling
+
+For now, data privacy is fairly minimal: every agent instance “owns” its own data. In the future, we’ll refine:
+- **Role-Based Access** or more advanced encryption.  
+- **Filtering Tools** that detect or block sensitive user data before storage.  
+- **Multi-Tenant** data separation at scale.
+
+*(Got suggestions? We’re all ears!)*
+
+## Commercial Strategy & Marketplace
+
+### Monetization
+
+- **Setup Fee**: We’ll build out an agent for clients and charge a one-time setup.  
+- **Subscription Tiers**: Ongoing usage with monthly message limits.  
+- **Revenue Sharing**: Agent creators who share their agents via our marketplace can earn a portion of the revenue.
+
+### Marketplace
+
+- **Curation**: Every new agent that wants a listing in the marketplace must be approved by our admin team (no wild west scenario).  
+- **Success Stories**: We’ll spotlight testimonials and case studies on our public landing page.  
+
+## Gamification Layer
+
+We’ve got big dreams of:
+- **Levels**  
+- **Achievements**  
+- **Reputation**
+
+But for now, these features are on the backburner. Expect them down the road as we solidify the platform and user base.
+
+## The Platform API & MCP
+
+Yes, we’re developer-minded. We want an external API that:
+- **Allows** you to manage agents, handle chat messages, and integrate them into your existing systems.  
+- **Speaks** the Model Context Protocol (MCP), so you can talk to your Gingga Agents from places like Claude, Cursor, or other MCP-savvy clients.
+
+## Brand & Tone
+
+We aim to keep it **playful and casual**—lighthearted and engaging for non-technical folks—while still providing the depth needed for devs. Expect friendly language, minimal jargon, and some quirky references sprinkled in.
+
+## Looking Ahead
+
+- **Voice Mode** and **Advanced LLM Fine-Tuning** are on the horizon (long-term).  
+- Short-term, we’re prioritizing basic agent skill expansions, marketplace curation, and better UI for non-tech users.
+
+**In a Year or Two?**  
+We see ourselves refining the entire “agent-building” pipeline, possibly exploring new frontiers (e.g., advanced analytics, vertical solutions) but always staying true to our original mission: create accessible AI for SMBs and beyond.
+
+---
+
+### Summary
+
+- **Main Audience**: SMBs + end consumers (non-technical).  
+- **Key Features**: Agent building in a friendly UI, curated skill calls, knowledge ingestion via file uploads, optional marketplace listing.  
+- **Monetization**: Setup fees, subscriptions, revenue sharing.  
+- **Long-Term Vision**: Gamification, voice mode, advanced LLM fine-tuning, an MCP-savvy ecosystem.  
+
+Have questions? Found a bug? Want to tweak an agent’s personality? That’s the spirit of Gingga Agents—easy to build, easy to play with, and open to your ideas!

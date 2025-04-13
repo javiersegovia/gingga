@@ -1,0 +1,24 @@
+{
+  "extends": "@gingga/tsconfig/react.json",
+  "include": [
+    "app/**/*",
+    "app/**/.server/**/*",
+    "app/**/.client/**/*",
+    "drizzle.config.ts",
+    "app.config.ts"
+  ],
+  "exclude": ["node_modules", "dist", ".vinxi", ".vercel"],
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    "target": "ES2022",
+    "allowJs": true,
+    "noEmit": true,
+    "baseUrl": ".",
+    "outDir": "dist",
+    "paths": {
+      "@/*": ["./app/*"]
+    }
+  }
+}

@@ -1,0 +1,110 @@
+---
+description: General instructions and standards to follow for our project
+globs: *
+alwaysApply: false
+---
+# Agent Behaviour Guide
+
+## Core Tech Stack 
+
+<tech_stack>
+- **Primary Languages:** TypeScript (strict mode) / JavaScript (ES6+)
+- **UI Framework:** React 19+ (Functional Components + Hooks)
+- **State/Routing:** TanStack Ecosystem (Query, Router, Table)
+- **Styling:** Tailwind CSS v3+ with Shadcn/UI components
+- **Animation:** Motion and GSAP
+- **Validation:** Zod 3.22+
+- **Form:** React Hook Form with Zod
+</tech_stack>
+
+## Agent Operating Protocol
+
+<agent_rules>
+1. Mandatory Planning Phase:
+- Always work in English, even if you receive instructions in Spanish. Think, develop, and give responses in English.
+- Always start with RFC-style plan containing:
+-- Affected components/files
+-- Data flow diagram (mental model)
+-- Potential breaking changes
+-- Alternative approaches considered
+
+2. Implementation Standards:
+- When developing features, refer to [features.mdc](mdc:.cursor/rules/features.mdc)
+- When working on UI/UX, refer to [design.mdc](mdc:.cursor/rules/design.mdc)
+- When working with forms, refer to [forms.mdc](mdc:.cursor/rules/forms.mdc)
+- Project vision → [roadmap.mdc](mdc:.cursor/rules/roadmap.mdc) (project general purpose)
+- Explicitly list ALL referenced sections from any instruction file at the end of the response. Just as an extra commentary.
+</agent_rules>
+
+## Code Style Guide
+
+<code_style>
+**Naming Conventions:**
+-- Server Actions/Functions: $actionName (e.g. $validateSession)
+-- Boolean vars: hasXxx/isXxx/shouldXxx (e.g. isReady)
+-- Event handlers: handle[Element][Action] (e.g. handleFormSubmit)
+-- Prefer kebab-case for file names, PascalCase for component names, and camelCase for the rest.
+-- Prefer using named exports over default exports.
+</code_style>
+
+## Quality Enforcement
+
+<best_practices>
+1. Always implement proper error boundaries and loading states.
+2. Use TypeScript's strict mode and avoid any type.
+3. Follow React's functional component patterns.
+4. Implement proper prop validation.
+5. Use consistent naming conventions.
+6. Write self-documenting code with clear function and variable names.
+7. Follow accessibility best practices.
+8. Do not add descriptions to your response, unless it is explicitly asked for. Just write the code.
+9. Use Tailwind CSS, and import the `cn()` utility for conditional classes only if you need to. Import it from `@gingga/ui/lib/utils`.
+10. Keep component files focused and single-responsibility
+11. Use early returns whenever possible to make the code more readable.
+12. Prefer using the "Icon" suffix whenever using icons from `lucide-react`. E.g., import `ExternalLinkIcon` instead of `ExternalLink`.
+13. Prioritize using destructuring and other modern JavaScript functions whenever possible.
+</best_practices>
+
+## Project Anatomy
+
+<project_structure>
+The application follows a feature-based structure within the app directory:
+```
+app/
+├─ features/ # Feature modules (@features.mdc)
+│ ├─ [feature]/ # Kebab-case feature name
+│ │ ├─ *.api.ts # Server functions (@features.mdc#api)
+│ │ ├─ *.query.ts # React Query hooks (@features.mdc#query)
+│ │ ├─ *.schema.ts # Zod validations (@features.mdc#schema)
+│ │ ├─ *.service.ts # Business logic (@features.mdc#service)
+│ │ └─ components/ # Feature-specific UI components
+├─ components/
+│  ├─ ui/            # Shadcn/UI overrides
+│  └─ layouts/       # App-wide layouts
+├─ lib/
+│  └─ utils/         # Shared utilities
+```
+</project_structure>
+
+## Return Types
+
+When declaring functions on the top-level of a module,
+declare their return types. This will help future AI
+assistants understand the function's purpose.
+
+```ts
+const myFunc = (): string => {
+  return "hello";
+};
+```
+
+One exception to this is components which return JSX.
+No need to declare the return type of a component,
+as it is always JSX.
+
+```tsx
+const MyComponent = () => {
+  return <div>Hello</div>;
+};
+```
+
