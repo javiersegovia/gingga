@@ -20,11 +20,13 @@
     "db:migrate": "pnpm --filter @gingga/db db:migrate",
     "db:push": "pnpm --filter @gingga/db db:push",
     "db:studio": "pnpm --filter @gingga/db db:studio",
-    "db:turso": "pnpm --filter @gingga/db db:turso"
+    "db:turso": "pnpm --filter @gingga/db db:turso",
+    "prepare": "husky"
   },
   "license": "MIT",
   "devDependencies": {
     "@commitlint/cli": "^19.8.0",
-    "@commitlint/config-conventional": "^19.8.0"
+    "@commitlint/config-conventional": "^19.8.0",
+    "husky": "^9.1.7"
   }
 }
