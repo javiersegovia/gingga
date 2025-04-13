@@ -1,0 +1,13 @@
+{
+  "name": "@gingga/db",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "drizzle-kit": "drizzle-kit",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
+    "db:turso": "turso dev --db-file local.db"
+  }
+}

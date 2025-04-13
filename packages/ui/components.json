@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "default",
+  "rsc": false,
+  "tsx": true,
+  "tailwind": {
+    "config": "",
+    "css": "styles/app.css",
+    "baseColor": "neutral",
+    "cssVariables": true,
+    "prefix": ""
+  },
+  "aliases": {
+    "components": "@gingga/ui/components",
+    "utils": "@gingga/ui/lib/utils",
+    "ui": "@gingga/ui/components",
+    "hooks": "@gingga/ui/hooks",
+    "lib": "@gingga/ui/lib"
+  },
+  "iconLibrary": "lucide"
+}

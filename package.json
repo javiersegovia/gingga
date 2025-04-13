@@ -1,0 +1,30 @@
+{
+  "name": "gingga",
+  "private": true,
+  "type": "module",
+  "version": "1.0.0",
+  "author": "Javier Segovia <javier@gingga.com>",
+  "packageManager": "pnpm@10.8.0",
+  "engines": {
+    "node": ">=23.8.0"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "dev": "pnpm --parallel dev",
+    "dev:web": "pnpm --filter @gingga/api dev",
+    "dev:db": "pnpm --filter @gingga/db dev",
+    "build:web": "pnpm --filter @gingga/api build",
+    "start:web": "pnpm --filter @gingga/api start",
+    "db:generate": "pnpm --filter @gingga/db db:generate",
+    "db:migrate": "pnpm --filter @gingga/db db:migrate",
+    "db:push": "pnpm --filter @gingga/db db:push",
+    "db:studio": "pnpm --filter @gingga/db db:studio",
+    "db:turso": "pnpm --filter @gingga/db db:turso"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@commitlint/cli": "^19.8.0",
+    "@commitlint/config-conventional": "^19.8.0"
+  }
+}
