@@ -6,7 +6,6 @@ import {
   Share,
   MessageSquarePlusIcon,
   TelescopeIcon,
-  SettingsIcon,
   Loader2Icon,
   LogInIcon,
 } from 'lucide-react'
@@ -29,7 +28,6 @@ import {
   SidebarMenuAction,
   SidebarMenuItem,
   SidebarMenuButton,
-  useSidebar,
 } from '@gingga/ui/components/sidebar'
 import { Card, CardContent } from '@gingga/ui/components/card'
 import { cn, getInitials } from '@gingga/ui/lib/utils'
@@ -275,8 +273,6 @@ interface NavUserProps {
 }
 
 function NavUser({ user }: NavUserProps) {
-  const { isMobile } = useSidebar()
-
   return (
     <SidebarMenu>
       <SidebarMenuItem>
