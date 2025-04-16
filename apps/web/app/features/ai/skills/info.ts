@@ -1,37 +1,34 @@
-import { SkillId, SkillInfo, ToolInfo, ToolName } from './skill.types'
-import { getLocalTimeSkillInfo, getLocalTimeToolInfo } from './get-local-time/info'
-import {
-  getWeatherInformationSkillInfo,
-  getWeatherInformationToolInfo,
-} from './get-weather-information/info'
-
-export const skillsInfo: Record<SkillId, SkillInfo> = {
-  getWeatherInformationSkill: getWeatherInformationSkillInfo,
-  getLocalTimeSkill: getLocalTimeSkillInfo,
-}
-
-export const toolsInfo: Record<ToolName, ToolInfo> = {
-  getWeatherInformationTool: getWeatherInformationToolInfo,
-  getLocalTimeTool: getLocalTimeToolInfo,
-}
-
-export const getSkillInfo = (skillId: SkillId) => {
-  return skillsInfo[skillId]
-}
-
-export const getToolInfo = (toolName: ToolName) => {
-  return toolsInfo[toolName]
-}
+// import { getSkillOptions } from './skill.options'
+import { SkillId, SkillOption, ToolName } from './skill.types'
 
 export function getToolsRequiringConfirmation(): ToolName[] {
-  return Object.values(toolsInfo)
-    .filter((tool) => tool.requiresConfirmation)
-    .map((tool) => tool.id)
+  return []
 }
 
-export const toolsRequiringConfirmation = getToolsRequiringConfirmation()
+// Export as used in message.tsx
+export const toolsRequiringConfirmation: ToolName[] = getToolsRequiringConfirmation()
 
 export const APPROVAL = {
-  YES: 'Yes, confirmed.',
-  NO: 'No, denied.',
+  YES: 'yes',
+  NO: 'no',
 } as const
+
+// All ToolName values must be present
+export const toolsInfo: Record<ToolName, { approval: string; success: string }> = {
+  getWeatherInformationTool: {
+    approval: 'Do you want to get the weather information?',
+    success: 'Weather information retrieved successfully!',
+  },
+  getLocalTimeTool: {
+    approval: 'Do you want to get the local time?',
+    success: 'Local time retrieved successfully!',
+  },
+  readSpreadsheetTool: {
+    approval: 'Do you want to read the spreadsheet?',
+    success: 'Spreadsheet read successfully!',
+  },
+}
+
+// export const skillsInfo: Record<SkillId, SkillOption> = Object.fromEntries(
+//   // getSkillOptions().map((skill) => [skill.id, skill]),
+// )

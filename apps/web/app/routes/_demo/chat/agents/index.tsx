@@ -154,7 +154,10 @@ function AgentCard({ agent, isAdmin }: { agent: Agent; isAdmin?: boolean }) {
             className="absolute top-2 right-2 h-8 w-8 rounded-full p-0"
             asChild
           >
-            <Link to="/chat/agent/$agentId/edit" params={{ agentId: agent.id }}>
+            <Link
+              to="/chat/agent/$agentId/edit/instructions"
+              params={{ agentId: agent.id }}
+            >
               <EditIcon className="h-4 w-4" />
               <span className="sr-only">Edit agent</span>
             </Link>

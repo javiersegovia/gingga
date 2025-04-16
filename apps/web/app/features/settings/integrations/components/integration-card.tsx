@@ -26,16 +26,23 @@ export function IntegrationCard({ integration, userConnection }: IntegrationCard
 
   const { mutate: initiateConnection, isPending: isConnecting } = useMutation({
     mutationFn: initiateConnectionMutationFn,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: composioQueryKeys.connections() })
+    onSuccess: (data) => {
+      if (data?.redirectUrl) {
+        console.log('Redirecting user to:', data.redirectUrl)
+        window.history.pushState({}, '', data.redirectUrl)
+      } else {
+        console.error('Composio connection initiated but no redirect URL received.')
+        queryClient.invalidateQueries({ queryKey: composioQueryKeys.connections() })
+      }
     },
     onError: (error) => {
       console.error('Error initiating Composio connection:', error)
-      // Handle error display in the component
     },
   })
 
-  const { mutate: deleteConnection, isPending: disconnecting } =
+  console.log({ integration, userConnection })
+
+  const { mutate: deleteConnection, isPending: isDisconnecting } =
     useDeleteUserComposioConnection()
 
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false)
@@ -46,8 +53,14 @@ export function IntegrationCard({ integration, userConnection }: IntegrationCard
 
   const handleConfirmDisconnect = () => {
     if (userConnection) {
-      deleteConnection({ data: { connectionId: userConnection.id } })
-      setConfirmDialogOpen(false)
+      deleteConnection(
+        { data: { connectionId: userConnection.id } },
+        {
+          onSettled: () => {
+            setConfirmDialogOpen(false)
+          },
+        },
+      )
     }
   }
 
@@ -71,19 +84,19 @@ export function IntegrationCard({ integration, userConnection }: IntegrationCard
           <>
             <Button
               variant="destructive"
-              isPending={disconnecting}
+              isPending={isDisconnecting}
               onClick={() => setConfirmDialogOpen(true)}
             >
-              {disconnecting ? 'Disconnecting...' : 'Disconnect'}
+              {isDisconnecting ? 'Disconnecting...' : 'Disconnect'}
             </Button>
+
             <Dialog open={confirmDialogOpen} onOpenChange={setConfirmDialogOpen}>
               <DialogContent>
                 <DialogHeader>
-                  <DialogTitle>Confirm Disconnect</DialogTitle>
-                  <DialogDescription>
+                  <DialogTitle>Disconnect from {integration.label}</DialogTitle>
+                  <DialogDescription className="mt-2">
                     Removing an integration will automatically remove tools from the
-                    agents that require that integration. Are you sure you want to
-                    proceed?
+                    agents that require it. Are you sure you want to proceed?
                   </DialogDescription>
                 </DialogHeader>
                 <DialogFooter>
@@ -94,21 +107,19 @@ export function IntegrationCard({ integration, userConnection }: IntegrationCard
                   </DialogClose>
                   <Button
                     variant="destructive"
-                    isPending={disconnecting}
+                    isPending={isDisconnecting}
                     onClick={handleConfirmDisconnect}
                   >
-                    Confirm
+                    Remove Integration
                   </Button>
                 </DialogFooter>
               </DialogContent>
             </Dialog>
           </>
         ) : (
-          <form onSubmit={handleConnect}>
-            <Button variant="primary" isPending={isConnecting} onClick={handleConnect}>
-              {isConnecting ? 'Connecting...' : 'Connect'}
-            </Button>
-          </form>
+          <Button variant="primary" isPending={isConnecting} onClick={handleConnect}>
+            {isConnecting ? 'Connecting...' : 'Connect'}
+          </Button>
         )}
       </div>
     </div>

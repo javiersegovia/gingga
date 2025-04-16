@@ -41,7 +41,7 @@ function IntegrationList() {
   const { data: userConnectionsData } = useSuspenseQuery(
     userComposioConnectionsQueryOptions,
   )
-  const connections = userConnectionsData?.connections || []
+  const connections = userConnectionsData || []
 
   if (!integrations || !userConnectionsData) {
     return (
@@ -57,7 +57,9 @@ function IntegrationList() {
   return (
     <div className="space-y-4">
       {integrations.map((integration) => {
-        const connection = connections.find((c) => c.appName === integration.appName)
+        const connection = connections.find(
+          (c: (typeof connections)[number]) => c.appName === integration.appName,
+        )
         return (
           <IntegrationCard
             key={integration.appName}

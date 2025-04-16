@@ -7,6 +7,7 @@ import {
   getUserComposioConnections,
   initiateComposioConnection,
   deleteUserComposioConnection,
+  getVercelToolset,
 } from './composio.service'
 import {
   InitiateConnectionSchema,
@@ -35,7 +36,7 @@ export const $getComposioIntegrations = createServerFn({
  * API Function: Get details for a specific Composio integration by appName.
  * Uses validator for input schema.
  */
-export const $getComposioIntegration = createServerFn({
+export const $getComposioIntegrationByAppName = createServerFn({
   method: 'GET',
 })
   .validator(zodValidator(GetIntegrationSchema))
@@ -72,11 +73,22 @@ export const $getUserComposioConnections = createServerFn({
       throw new Error('Authentication required.')
     }
     try {
-      // Correctly type the expected return shape if needed, or let inference work
-      // const connections: ExpectedConnectionType[] = await getUserComposioConnections(userId)
-      const connections = await getUserComposioConnections(userId)
-      // console.log("Connections API return:", connections);
-      return { connections } // Ensure the structure matches query expectations
+      const toolset = getVercelToolset({ entityId: userId })
+      const connections = await toolset.client.connectedAccounts.list({
+        entityId: userId,
+      })
+      console.log('Connections API return:', connections)
+
+      return connections.items?.map((conn) => ({
+        id: conn.id,
+        appName: conn.appName ?? null,
+        appUniqueId: conn.appUniqueId ?? null,
+        status: conn.status,
+        createdAt: conn.createdAt,
+        integrationId: conn.integrationId,
+        logo: conn.logo,
+        isDisabled: conn.isDisabled,
+      }))
     } catch (error) {
       console.error(`Error fetching connections for user ${userId}:`, error)
       throw new Error('Failed to retrieve user connections.')
@@ -85,11 +97,10 @@ export const $getUserComposioConnections = createServerFn({
 
 /**
  * API Function: Initiate a new Composio connection for the logged-in user.
- * Uses validator for input schema.
+ * Uses validator for input schema. Returns the redirect URL needed for OAuth.
  */
 export const $initiateComposioConnection = createServerFn({
   method: 'POST',
-  response: 'raw',
 })
   .validator(zodValidator(InitiateConnectionSchema))
   .middleware([authMiddleware])
@@ -115,17 +126,12 @@ export const $initiateComposioConnection = createServerFn({
         error,
       )
       if (error instanceof Error) {
-        throw error
+        throw new Error(error.message || 'Failed to initiate connection.')
       }
       throw new Error('Failed to initiate connection.')
     }
 
-    throw new Response(null, {
-      status: 302,
-      headers: {
-        Location: redirectUrl,
-      },
-    })
+    return { redirectUrl }
   })
 
 /**

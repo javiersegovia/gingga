@@ -16,14 +16,14 @@ import {
 } from './composio.schema'
 
 // Helper to initialize the Composio SDK
-function getVercelToolset(): VercelAIToolSet {
+export function getVercelToolset({ entityId }: { entityId?: string }): VercelAIToolSet {
   const env = getServerEnv()
   if (!env.COMPOSIO_API_KEY) {
     console.error('COMPOSIO_API_KEY is missing from the environment.')
     throw new Error('Composio API key is not configured.')
   }
   try {
-    return new VercelAIToolSet({ apiKey: env.COMPOSIO_API_KEY })
+    return new VercelAIToolSet({ apiKey: env.COMPOSIO_API_KEY, entityId })
   } catch (error) {
     console.error('Failed to initialize Composio SDK:', error)
     throw new Error('Could not initialize Composio SDK.')
@@ -83,9 +83,13 @@ export async function getComposioIntegrations() {
     showDisabled: true,
   })
 
-  const filteredIntegrations = integrations.items.filter((integration) =>
-    ComposioAppNameEnum.options.includes(integration.appName as ComposioAppName),
+  const filteredIntegrations = integrations.items.filter(
+    (integration) =>
+      ComposioAppNameEnum.options.includes(integration.appName as ComposioAppName) &&
+      integration.enabled,
   )
+  console.log('integrations.items[1]')
+  console.log(integrations.items[1])
   console.log({ integrations: integrations.items[1]?.connections })
 
   return filteredIntegrations.map(formatIntegration)
@@ -106,7 +110,7 @@ export async function getComposioIntegrationByAppName(appName: ComposioAppName) 
 export async function getUserComposioConnections(
   userId: string,
 ): Promise<UserConnection[]> {
-  const toolset = getVercelToolset()
+  const toolset = getVercelToolset({ entityId: userId })
   try {
     const response = await toolset.client.connectedAccounts.list({ entityId: userId })
     const sdkConnections = response?.items ?? []
@@ -155,8 +159,7 @@ export async function initiateComposioConnection({
   integrationId: string
   redirectUri: string
 }): Promise<{ redirectUrl: string }> {
-  const toolset = getVercelToolset()
-  const entity = toolset.client.getEntity(userId)
+  const toolset = getVercelToolset({ entityId: userId })
 
   // Check for an existing active connection
   if (await hasActiveConnection({ userId, integrationId, toolset })) {
@@ -169,7 +172,8 @@ export async function initiateComposioConnection({
     console.log(
       `[Composio Service] Initiating connection for user ${userId}, integration ${integrationId}...`,
     )
-    const connectionRequest = await entity.initiateConnection({
+    const connectionRequest = await toolset.client.connectedAccounts.initiate({
+      entityId: userId,
       integrationId,
       redirectUri,
     })
@@ -202,14 +206,16 @@ export async function initiateComposioConnection({
 export async function deleteUserComposioConnection(
   connectionId: string,
 ): Promise<boolean> {
-  if (!connectionId) {
-    throw new Error('Connection ID is required for deletion.')
-  }
-  const toolset = getVercelToolset()
+  // const toolset = getVercelToolset({ entityId: undefined })
   console.log(`[Composio Service] Attempting deletion of connection ${connectionId}...`)
+
+  const composio = new Composio({ apiKey: getServerEnv().COMPOSIO_API_KEY })
+
   try {
-    await toolset.client.connectedAccounts.delete({ connectedAccountId: connectionId })
+    await composio.connectedAccounts.delete({ connectedAccountId: connectionId })
+
     console.log(`[Composio Service] Successfully deleted connection ${connectionId}.`)
+
     return true
   } catch (error) {
     console.error(`[Composio Service] Error deleting connection ${connectionId}:`, error)

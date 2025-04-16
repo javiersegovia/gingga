@@ -2,7 +2,8 @@ import { sqliteTable, text, integer, primaryKey } from 'drizzle-orm/sqlite-core'
 import { relations, sql } from 'drizzle-orm'
 import { nanoid } from 'nanoid'
 import { Attachment } from 'ai'
-import { SkillId } from '../features/ai/skills/skill.types'
+import { SkillId, ToolName } from '../features/ai/skills/skill.types'
+import { ComposioAppNames } from '../features/settings/integrations/composio.schema'
 
 // Helper for NanoId default values
 const nanoIdDefault = () => text('id').notNull().$defaultFn(nanoid)
@@ -277,13 +278,17 @@ export const AgentSkills = sqliteTable('agent_skills', {
     .notNull()
     .references(() => Agents.id, { onDelete: 'cascade' }),
 
-  skillIdentifier: text('skill_identifier').$type<SkillId>().notNull(),
-
-  configurationData: text('configuration_data', { mode: 'json' }).$type<
-    Record<string, unknown>
-  >(),
-
+  instructions: text('instructions'),
+  skillId: text('skill_id').$type<SkillId>().notNull(),
+  tools: text('tools', { mode: 'json' }).$type<ToolName[]>(),
+  variables: text('variables', { mode: 'json' }).$type<Record<string, string | null>>(),
   isEnabled: integer('is_enabled', { mode: 'boolean' }).default(true),
+
+  // integrationAppName: text('integration_app_name', { enum: ComposioAppNames }),
+  composioIntegrationAppName: text('composio_integration_app_name', {
+    enum: ComposioAppNames,
+  }),
+  composioToolNames: text('composio_tool_names', { mode: 'json' }).$type<string[]>(),
 })
 
 export const agentSkillsRelations = relations(AgentSkills, ({ one }) => ({

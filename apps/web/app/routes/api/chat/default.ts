@@ -12,7 +12,7 @@ import {
 } from '@/features/chat/chat.service'
 import { setupAppContext } from '@/middleware/setup-context.server'
 import { modelProvider } from '@/features/ai/utils/providers'
-import { tools, executions } from '@/features/ai/skills'
+// import { tools, executions } from '@/features/ai/skills/index'
 import { processToolCalls } from '@/features/ai/utils/human-in-the-loop'
 import { nanoid } from 'nanoid'
 
@@ -80,8 +80,8 @@ export const APIRoute = createAPIFileRoute('/api/chat/default')({
             chatId: chat.id,
             dataStream,
             messages,
-            tools,
-            executions,
+            tools: {},
+            executions: {},
           })
 
           // Now call the LLM with the potentially modified messages
@@ -89,7 +89,7 @@ export const APIRoute = createAPIFileRoute('/api/chat/default')({
             model: modelProvider.languageModel('chat-agent'),
             abortSignal: request.signal,
             messages: proccesedMessages,
-            tools,
+            tools: {},
             experimental_generateMessageId: nanoid,
             maxSteps: 10, // Consider if maxSteps is appropriate here
             async onFinish({ response }) {

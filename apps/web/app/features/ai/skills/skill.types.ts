@@ -1,5 +1,6 @@
 import { Tool, ToolExecutionOptions } from 'ai'
 import { z } from 'zod'
+import { ComposioAppName } from '../../settings/integrations/composio.schema'
 
 // export const ComposioAppNameEnum = z.enum(['googlesheets', 'googlecalendar', 'gmail'])
 // export type ComposioAppName = z.infer<typeof ComposioAppNameEnum>
@@ -30,16 +31,33 @@ export interface ToolResponse<TOutput = any> {
 /**
  * Schema for valid skill IDs in the system
  */
-export const SkillIdsSchema = z.enum(['getWeatherInformationSkill', 'getLocalTimeSkill'])
+export const skillIds = [
+  /** CUSTOM SKILLS */
+  'getWeatherInformationSkill',
+  'getLocalTimeSkill',
+
+  /** INTEGRATION SKILLS */
+  'googlesheets-skill',
+  'googlecalendar-skill',
+  'googledocs-skill',
+  'gmail-skill',
+] as const
+
 /**
  * Type alias for valid skill ID values
  */
-export type SkillId = z.infer<typeof SkillIdsSchema>
+export type SkillId = (typeof skillIds)[number]
+
+export const toolNames = [
+  'getWeatherInformationTool',
+  'getLocalTimeTool',
+  'readSpreadsheetTool',
+] as const
 
 /**
  * Schema for valid tool names in the system
  */
-export const ToolNamesSchema = z.enum(['getWeatherInformationTool', 'getLocalTimeTool'])
+export const ToolNamesSchema = z.enum(toolNames)
 /**
  * Type alias for valid tool name values
  */
@@ -58,14 +76,6 @@ export type AnyTool = Tool<z.ZodTypeAny, ToolResponse>
  */
 type ToolWithExecute<T extends AnyTool> = T & {
   execute: NonNullable<AnyTool['execute']>
-}
-
-/**
- * Tool type that must not include an execute function
- * @template T Base tool type
- */
-type ToolWithoutExecute<T extends AnyTool> = T & {
-  execute?: never
 }
 
 /**
@@ -114,7 +124,11 @@ export interface SkillConfigWithConfirmation<
   version: string
   image: string
   instructions: string
-  requiresConfirmation: true
+  integration: {
+    required: boolean
+    integrationAppName: ComposioAppName
+  }
+  toolsRequiringConfirmation: ToolName[]
   tools: {
     [K in keyof TTools & ToolName]?: TTools extends { [key: string]: infer U } ? U : never
   }
@@ -139,7 +153,11 @@ export interface SkillConfigWithoutConfirmation<
   version: string
   image: string
   instructions: string
-  requiresConfirmation: false
+  integration: {
+    required: boolean
+    integrationAppName: ComposioAppName
+  }
+  toolsRequiringConfirmation: ToolName[]
   tools: {
     [K in keyof TTools & ToolName]?: TTools extends { [key: string]: infer U } ? U : never
   }
@@ -184,42 +202,19 @@ type CreateSkillParams<
   version: string
   image: string
   instructions: string
-  requiresConfirmation: boolean
+  integration: {
+    required: boolean
+    integrationAppName: ComposioAppName
+  }
   tools: TTools
-
+  integrationToolNames: ToolName[]
+  toolsRequiringConfirmation: ToolName[]
   /**
    * The execution functions that require approval from the user before execution
    */
   executions: TExecutions
 }
 
-/**
- * Creates a skill configuration based on provided parameters
- *
- * @template TTools Record mapping tool names to tool definitions
- * @template TExecutions Record mapping tool names to execution functions
- * @param params Configuration parameters for the skill
- * @returns A properly structured SkillConfig object
- *
- * @example
- * ```ts
- * const getWeatherInformationSkill = createSkill({
- *   id: 'getWeatherInformationSkill',
- *   name: 'Get Weather Information',
- *   description: 'Get the weather information for a given city',
- *   version: '1.0',
- *   image: '',
- *   instructions: '[getWeatherInformationTool]: show the weather in a given city to the user.',
- *   requiresConfirmation: true,
- *   tools: {
- *     getWeatherInformationTool,
- *   },
- *   executions: {
- *     getWeatherInformationTool: getWeatherInformationExecution,
- *   },
- * })
- * ```
- */
 export function createSkill<
   TTools extends Partial<Record<ToolName, AnyTool>>,
   TExecutions extends {
@@ -233,9 +228,9 @@ export function createSkill<
     version,
     image,
     instructions,
-    requiresConfirmation,
+    toolsRequiringConfirmation,
     tools,
-    executions,
+    integration,
   } = params
 
   const toolNames = Object.keys(tools) as ToolName[]
@@ -251,69 +246,22 @@ export function createSkill<
     }
   })
 
-  if (requiresConfirmation) {
-    // Create a new object to store tools without execute
-    const toolsWithoutExecute: Partial<Record<ToolName, ToolWithoutExecute<AnyTool>>> = {}
-
-    // Process each tool
-    for (const key of toolNames) {
-      const tool = tools[key]
-
-      if (!tool) {
-        throw new Error(`Tool "${key}" is undefined.`)
-      }
-
-      // Remove execute property
-      const { execute: _, ...restProps } = tool
-      toolsWithoutExecute[key] = restProps as ToolWithoutExecute<AnyTool>
-    }
-
-    // Return the config with confirmation structure
-    return {
-      id,
-      name,
-      description,
-      version,
-      image,
-      instructions,
-      requiresConfirmation: true,
-      tools: toolsWithoutExecute,
-      executions,
-    } as SkillConfigWithConfirmation<Partial<Record<ToolName, AnyTool>>>
-  } else {
-    // For tools without confirmation, ensure they all have execute functions
-    const toolsWithExecute: Record<ToolName, ToolWithExecute<AnyTool>> = {} as Record<
-      ToolName,
-      ToolWithExecute<AnyTool>
-    >
-
-    // Process each tool
-    for (const key of Object.keys(tools) as ToolName[]) {
-      const tool = tools[key]
-
-      // Check that execute is present at runtime
-      if (typeof (tool as { execute?: unknown }).execute !== 'function') {
-        throw new Error(
-          `Tool "${key}" passed to createSkill with requiresConfirmation: false is missing the execute function.`,
-        )
-      }
-
-      toolsWithExecute[key] = tool as unknown as ToolWithExecute<AnyTool>
-    }
-
-    // Return the config without confirmation structure
-    return {
-      id,
-      name,
-      description,
-      version,
-      image,
-      instructions,
-      requiresConfirmation: false,
-      tools: toolsWithExecute,
-      executions: undefined,
-    } as SkillConfigWithoutConfirmation<Record<ToolName, ToolWithExecute<AnyTool>>>
+  if (integration.required) {
+    // TODO
   }
+
+  return {
+    id,
+    name,
+    description,
+    version,
+    image,
+    instructions,
+    integration,
+    toolsRequiringConfirmation,
+    tools,
+    executions: undefined,
+  } as SkillConfigWithoutConfirmation<Record<ToolName, ToolWithExecute<AnyTool>>>
 }
 
 /**
@@ -342,4 +290,24 @@ export interface SkillInfo {
   image: string
   instructions: string
   requiresConfirmation: boolean
+}
+
+/**
+ * Represents a static skill template option for the UI.
+ * Used to define the available skills that can be configured by admins.
+ * Extensible for future integrations and tool types.
+ */
+export type SkillOption = {
+  id: SkillId
+  name: string
+  description: string
+  image: string
+  version: string
+  availableToolNames?: ToolName[]
+  integration?: {
+    required: boolean
+    integrationAppName: ComposioAppName
+    integrationId: string
+    availableComposioToolNames: string[]
+  }
 }

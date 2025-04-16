@@ -28,10 +28,6 @@ const ServerEnvSchema = createEnvSchema('server', {
   OPENAI_API_KEY: z.string().startsWith('sk-'),
   OPENROUTER_API_KEY: z.string().min(1),
 
-  // ADMIN CREDENTIALS
-  ADMIN_USER_EMAIL: z.string().email().optional(),
-  ADMIN_USER_PASSWORD: z.string().min(6).optional(),
-
   // UPSTASH REDIS
   KV_URL: z.string().url(),
   KV_REST_API_READ_ONLY_TOKEN: z.string().min(1),
@@ -47,7 +43,13 @@ const ServerEnvSchema = createEnvSchema('server', {
   NODE_ENV: z.enum(['development', 'production', 'test']).optional(),
 
   COMPOSIO_API_KEY: z.string().min(1),
+
+  COMPOSIO_GOOGLESHEETS_INTEGRATION_ID: z.string().min(1),
+  COMPOSIO_GOOGLECALENDAR_INTEGRATION_ID: z.string().min(1),
+  COMPOSIO_GMAIL_INTEGRATION_ID: z.string().min(1),
+  COMPOSIO_GOOGLEDOCS_INTEGRATION_ID: z.string().min(1),
 })
+export type ServerEnv = z.infer<typeof ServerEnvSchema>
 
 const ClientEnvSchema = createEnvSchema('client', {
   VITE_SITE_URL: z.string().url(),

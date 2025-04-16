@@ -19,6 +19,7 @@ export const Route = createFileRoute('/_demo/chat')({
     return { isSidebarOpened: await $isSidebarOpened() }
   },
   staleTime: 10_000,
+  preloadStaleTime: 10_000,
 })
 
 function ChatLayout() {

@@ -2,7 +2,13 @@ import { z } from 'zod'
 
 // Define allowed app names (exclude 'googledrive' if not active)
 // export type ComposioAppName = 'googlesheets' | 'googlecalendar' | 'gmail'
-export const ComposioAppNameEnum = z.enum(['googlesheets', 'googlecalendar', 'gmail'])
+export const ComposioAppNames = [
+  'googlesheets',
+  'googlecalendar',
+  'gmail',
+  'googledocs',
+] as const
+export const ComposioAppNameEnum = z.enum(ComposioAppNames)
 export type ComposioAppName = z.infer<typeof ComposioAppNameEnum>
 
 // Integration details used by our UI
@@ -35,17 +41,26 @@ export const INTEGRATIONS_INFO: Record<
     label: 'Google Sheets',
     appName: 'googlesheets',
     description: 'Agents will be able to read, write, and manage your spreadsheets.',
+    integrationId: process.env.COMPOSIO_GOOGLESHEETS_INTEGRATION_ID,
   },
   googlecalendar: {
     label: 'Google Calendar',
     appName: 'googlecalendar',
     description:
       'Agents will be able to schedule events, set reminders, and manage your calendar.',
+    integrationId: process.env.COMPOSIO_GOOGLECALENDAR_INTEGRATION_ID,
   },
   gmail: {
     label: 'Gmail',
     appName: 'gmail',
     description: 'Agents will be able to send, receive, and manage your emails.',
+    integrationId: process.env.COMPOSIO_GMAIL_INTEGRATION_ID,
+  },
+  googledocs: {
+    label: 'Google Docs',
+    appName: 'googledocs',
+    description: 'Agents will be able to create, edit, and manage your documents.',
+    integrationId: process.env.COMPOSIO_GOOGLEDOCS_INTEGRATION_ID,
   },
 }
 

@@ -26,7 +26,10 @@ import { MessageReasoning } from './message-reasoning'
 import { UseChatHelpers } from '@ai-sdk/react'
 import { Avatar, AvatarFallback } from '@gingga/ui/components/avatar'
 import { ToolName, ToolResponse } from '../../../ai/skills/skill.types'
-import { toolsInfo, toolsRequiringConfirmation, APPROVAL } from '../../../ai/skills/info'
+import {
+  toolsRequiringConfirmation,
+  APPROVAL /*skillsInfo*/,
+} from '../../../ai/skills/info'
 
 interface MessageProps {
   chatId: string
@@ -161,7 +164,7 @@ const PurePreviewMessage = ({
                             'text-foreground flex flex-col gap-4',
 
                             message.role === 'user' &&
-                              'bg-accent text-accent-foreground border-border rounded-xl border-2 px-3 py-2',
+                              'bg-accent text-accent-foreground border-border rounded-md border-2 px-3 py-2',
                           )}
                         >
                           <Markdown>{part.text}</Markdown>
@@ -187,147 +190,147 @@ const PurePreviewMessage = ({
                   }
                 }
 
-                if (type === 'tool-invocation') {
-                  const { toolInvocation } = part
-                  const { toolName, toolCallId, state } = toolInvocation
-                  const toolInfo = toolsInfo[toolName as ToolName]
+                // if (type === 'tool-invocation') {
+                //   const { toolInvocation } = part
+                //   const { toolName, toolCallId, state } = toolInvocation
+                //   const toolInfo = toolsInfo[toolName as ToolName]
 
-                  if (!toolInfo) {
-                    return null
-                  }
+                //   if (!toolInfo) {
+                //     return null
+                //   }
 
-                  if (
-                    toolsRequiringConfirmation.includes(toolName as ToolName) &&
-                    state === 'call'
-                  ) {
-                    return (
-                      <div key={toolCallId}>
-                        <p>{toolInfo.approval}</p>
+                //   if (
+                //     toolsRequiringConfirmation.includes(toolName as ToolName) &&
+                //     state === 'call'
+                //   ) {
+                //     return (
+                //       <div key={toolCallId}>
+                //         <p>{toolInfo.approval}</p>
 
-                        {/* <div className="text-muted-foreground mt-2 text-sm">
-                          Type <span className="font-semibold">yes</span> or{' '}
-                          <span className="font-semibold">no</span> in your next message,
-                          or click below:
-                        </div> */}
+                //         {/* <div className="text-muted-foreground mt-2 text-sm">
+                //           Type <span className="font-semibold">yes</span> or{' '}
+                //           <span className="font-semibold">no</span> in your next message,
+                //           or click below:
+                //         </div> */}
 
-                        <div className="flex gap-2 pt-2">
-                          <Button
-                            className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-                            isPending={isChatLoading}
-                            disabled={isChatLoading}
-                            onClick={() => {
-                              addToolResult({
-                                toolCallId,
-                                result: {
-                                  success: true,
-                                  output: APPROVAL.YES,
-                                },
-                              })
-                              // reload()
-                            }}
-                          >
-                            Yes
-                          </Button>
-                          <Button
-                            className="rounded bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-700"
-                            isPending={isChatLoading}
-                            disabled={isChatLoading}
-                            onClick={() => {
-                              addToolResult({
-                                toolCallId,
-                                result: {
-                                  success: false,
-                                  output: APPROVAL.NO,
-                                },
-                              })
-                              // reload()
-                            }}
-                          >
-                            No
-                          </Button>
-                        </div>
-                      </div>
-                    )
-                  }
+                //         <div className="flex gap-2 pt-2">
+                //           <Button
+                //             className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+                //             isPending={isChatLoading}
+                //             disabled={isChatLoading}
+                //             onClick={() => {
+                //               addToolResult({
+                //                 toolCallId,
+                //                 result: {
+                //                   success: true,
+                //                   output: APPROVAL.YES,
+                //                 },
+                //               })
+                //               // reload()
+                //             }}
+                //           >
+                //             Yes
+                //           </Button>
+                //           <Button
+                //             className="rounded bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-700"
+                //             isPending={isChatLoading}
+                //             disabled={isChatLoading}
+                //             onClick={() => {
+                //               addToolResult({
+                //                 toolCallId,
+                //                 result: {
+                //                   success: false,
+                //                   output: APPROVAL.NO,
+                //                 },
+                //               })
+                //               // reload()
+                //             }}
+                //           >
+                //             No
+                //           </Button>
+                //         </div>
+                //       </div>
+                //     )
+                //   }
 
-                  if (state === 'call') {
-                    // const { args } = toolInvocation
+                //   if (state === 'call') {
+                //     // const { args } = toolInvocation
 
-                    return (
-                      <div
-                        key={toolCallId}
-                        className={cn({
-                          skeleton: ['getWeather'].includes(toolName),
-                        })}
-                      >
-                        {/* {toolName === 'getWeather' ? (
-                        <Weather />
-                      ) : toolName === 'createDocument' ? (
-                        <DocumentPreview isReadonly={isReadonly} args={args} />
-                      ) : toolName === 'updateDocument' ? (
-                        <DocumentToolCall
-                          type="update"
-                          args={args}
-                          isReadonly={isReadonly}
-                        />
-                      ) : toolName === 'requestSuggestions' ? (
-                        <DocumentToolCall
-                          type="request-suggestions"
-                          args={args}
-                          isReadonly={isReadonly}
-                        />
-                      ) : null} */}
-                        {toolName === '' && <div></div>}
-                        {/* todo: add tool UI */}
-                        <div>
-                          <p>Tool call is loading...:</p>
-                          <span>{JSON.stringify(toolInvocation, null, 2)}</span>
-                        </div>
-                      </div>
-                    )
-                  }
+                //     return (
+                //       <div
+                //         key={toolCallId}
+                //         className={cn({
+                //           skeleton: ['getWeather'].includes(toolName),
+                //         })}
+                //       >
+                //         {/* {toolName === 'getWeather' ? (
+                //         <Weather />
+                //       ) : toolName === 'createDocument' ? (
+                //         <DocumentPreview isReadonly={isReadonly} args={args} />
+                //       ) : toolName === 'updateDocument' ? (
+                //         <DocumentToolCall
+                //           type="update"
+                //           args={args}
+                //           isReadonly={isReadonly}
+                //         />
+                //       ) : toolName === 'requestSuggestions' ? (
+                //         <DocumentToolCall
+                //           type="request-suggestions"
+                //           args={args}
+                //           isReadonly={isReadonly}
+                //         />
+                //       ) : null} */}
+                //         {toolName === '' && <div></div>}
+                //         {/* todo: add tool UI */}
+                //         <div>
+                //           <p>Tool call is loading...:</p>
+                //           <span>{JSON.stringify(toolInvocation, null, 2)}</span>
+                //         </div>
+                //       </div>
+                //     )
+                //   }
 
-                  if (state === 'result') {
-                    const { result } = toolInvocation
+                //   if (state === 'result') {
+                //     const { result } = toolInvocation
 
-                    if (!isToolResponse(result)) {
-                      return <div key={toolCallId} />
-                    }
+                //     if (!isToolResponse(result)) {
+                //       return <div key={toolCallId} />
+                //     }
 
-                    return (
-                      <div key={toolCallId}>
-                        {/* {toolName === 'getWeather' ? (
-                        <Weather weatherAtLocation={result} />
-                      ) : toolName === 'createDocument' ? (
-                        <DocumentPreview isReadonly={isReadonly} result={result} />
-                      ) : toolName === 'updateDocument' ? (
-                        <DocumentToolResult
-                          type="update"
-                          result={result}
-                          isReadonly={isReadonly}
-                        />
-                      ) : toolName === 'requestSuggestions' ? (
-                        <DocumentToolResult
-                          type="request-suggestions"
-                          result={result}
-                          isReadonly={isReadonly}
-                        />
-                      ) : (
-                        <pre>{JSON.stringify(result, null, 2)}</pre>
-                      )} */}
-                        {/* todo: add tool UI */}
-                        <div
-                          className={cn(
-                            'bg-secondary/10 inline-flex flex-col gap-2 rounded-md border px-4 py-2',
-                            result.success ? 'bg-brand-green/20' : 'bg-brand-red/20',
-                          )}
-                        >
-                          <span>{result.label || toolInfo.success}</span>
-                        </div>
-                      </div>
-                    )
-                  }
-                }
+                //     return (
+                //       <div key={toolCallId}>
+                //         {/* {toolName === 'getWeather' ? (
+                //         <Weather weatherAtLocation={result} />
+                //       ) : toolName === 'createDocument' ? (
+                //         <DocumentPreview isReadonly={isReadonly} result={result} />
+                //       ) : toolName === 'updateDocument' ? (
+                //         <DocumentToolResult
+                //           type="update"
+                //           result={result}
+                //           isReadonly={isReadonly}
+                //         />
+                //       ) : toolName === 'requestSuggestions' ? (
+                //         <DocumentToolResult
+                //           type="request-suggestions"
+                //           result={result}
+                //           isReadonly={isReadonly}
+                //         />
+                //       ) : (
+                //         <pre>{JSON.stringify(result, null, 2)}</pre>
+                //       )} */}
+                //         {/* todo: add tool UI */}
+                //         <div
+                //           className={cn(
+                //             'bg-secondary/10 rounded-base inline-flex flex-col gap-2 border px-4 py-2',
+                //             result.success ? 'bg-brand-green/20' : 'bg-brand-red/20',
+                //           )}
+                //         >
+                //           <span>{result.label || toolInfo.success}</span>
+                //         </div>
+                //       </div>
+                //     )
+                //   }
+                // }
               })}
 
               {/* {!isReadonly && (

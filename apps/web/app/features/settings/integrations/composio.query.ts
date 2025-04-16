@@ -6,7 +6,7 @@ import {
 } from '@tanstack/react-query'
 import {
   $getComposioIntegrations,
-  $getComposioIntegration,
+  $getComposioIntegrationByAppName,
   $getUserComposioConnections,
   $deleteUserComposioConnection,
 } from './composio.api' // Assuming API functions are exported
@@ -33,7 +33,7 @@ export const composioIntegrationsQueryOptions = queryOptions({
 export const composioIntegrationQueryOptions = (appName: ComposioAppName) =>
   queryOptions({
     queryKey: composioQueryKeys.integration(appName),
-    queryFn: async () => $getComposioIntegration({ data: { appName } }),
+    queryFn: async () => $getComposioIntegrationByAppName({ data: { appName } }),
     enabled: !!appName, // Only run if appName is provided
   })
 

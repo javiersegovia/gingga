@@ -17,7 +17,8 @@ import { z } from 'zod'
 import { getServerEnv } from '@/server/env'
 import { createOpenRouter } from '@openrouter/ai-sdk-provider'
 import { processToolCalls } from '@/features/ai/utils/human-in-the-loop'
-import { tools, executions } from '@/features/ai/skills'
+// import { tools, executions } from '@/features/ai/skills'
+import { getVercelToolset } from '../../../features/settings/integrations/composio.service'
 
 export const APIRoute = createAPIFileRoute('/api/agents/custom/$agentId')({
   POST: async ({ request, params }) => {
@@ -82,73 +83,103 @@ export const APIRoute = createAPIFileRoute('/api/agents/custom/$agentId')({
       ],
     })
 
-    return createDataStreamResponse({
-      execute: async (dataStream) => {
-        const { proccesedMessages } = await processToolCalls({
-          chatId: chat.id,
-          dataStream,
-          messages,
-          tools,
-          executions,
-        })
+    if (!process.env.COMPOSIO_GMAIL_INTEGRATION_ID) {
+      throw new Error('COMPOSIO_GMAIL_INTEGRATION_ID is not set')
+    }
 
-        const result = streamText({
-          model: agentModelId
-            ? openrouter(agentModelId)
-            : modelProvider.languageModel('chat-agent'),
-
-          abortSignal: request.signal,
-          messages: agentInstructions
-            ? [
-                { role: 'system', content: agentInstructions, id: 'system-instruction' },
-                ...proccesedMessages,
-              ]
-            : proccesedMessages,
-          tools,
-          experimental_activeTools: [],
-          experimental_generateMessageId: nanoid,
-          maxSteps: 10,
-          async onFinish({ response }) {
-            try {
-              const assistantId = getTrailingMessageId({
-                messages: response.messages.filter(
-                  (message) => message.role === 'assistant',
-                ),
-              })
-              if (assistantId) {
-                const [, assistantMessage] = appendResponseMessages({
-                  messages: [lastUserMessage],
-                  responseMessages: response.messages,
-                })
-                await saveChatMessages({
-                  messages: [
-                    {
-                      id: assistantId,
-                      chatId: chat.id,
-                      role: 'assistant',
-                      parts: assistantMessage.parts ?? [],
-                      attachments: assistantMessage.experimental_attachments ?? [],
-                      modelId:
-                        agentModelId || modelProvider.languageModel('chat-basic').modelId,
-                    },
-                  ],
-                })
-              }
-            } catch (error) {
-              console.error(
-                `Failed to save assistant message for chat ${chat.id}:`,
-                error,
-              )
-            }
-          },
-        })
-        result.consumeStream()
-        result.mergeIntoDataStream(dataStream)
-      },
-      onError(error) {
-        console.error(`Error during AI stream for agent ${agentId}:`, error)
-        throw error
-      },
+    const toolset = getVercelToolset({
+      entityId: authSession?.isAuthenticated ? authSession.user.id : undefined,
     })
+    const composioTools = await toolset.getTools({
+      apps: ['GMAIL', 'GOOGLESHEETS', 'GOOGLECALENDAR'],
+      integrationId: process.env.COMPOSIO_GOOGLESHEETS_INTEGRATION_ID,
+      // actions: [''],
+    })
+
+    try {
+      return createDataStreamResponse({
+        execute: async (dataStream) => {
+          const { proccesedMessages } = await processToolCalls({
+            chatId: chat.id,
+            dataStream,
+            messages,
+            tools: composioTools,
+            executions: {},
+          })
+
+          const instructions = agentInstructions
+            ? [
+                {
+                  role: 'system' as const,
+                  content: `${agentInstructions}
+
+                  ## TOOL CALLING INSTRUCTIONS
+
+                  If you receive Composio errors during the execution of a tool related to the user's credentials, please ask the user to re-authenticate. For example, if the error says anything about not finding a connection, you should ask the user to go to their settings and setup their specific integration again.`,
+                },
+              ]
+            : []
+
+          const result = streamText({
+            model: modelProvider.languageModel('chat-agent-tools'),
+
+            // model: agentModelId
+            //   ? openrouter(agentModelId)
+            //   : modelProvider.languageModel('chat-agent'),
+
+            abortSignal: request.signal,
+            messages: [...instructions, ...proccesedMessages],
+            tools: composioTools,
+            // experimental_activeTools: [],
+            experimental_generateMessageId: nanoid,
+            maxSteps: 10,
+            async onFinish({ response }) {
+              try {
+                const assistantId = getTrailingMessageId({
+                  messages: response.messages.filter(
+                    (message) => message.role === 'assistant',
+                  ),
+                })
+                if (assistantId) {
+                  const [, assistantMessage] = appendResponseMessages({
+                    messages: [lastUserMessage],
+                    responseMessages: response.messages,
+                  })
+                  await saveChatMessages({
+                    messages: [
+                      {
+                        id: assistantId,
+                        chatId: chat.id,
+                        role: 'assistant',
+                        parts: assistantMessage.parts ?? [],
+                        attachments: assistantMessage.experimental_attachments ?? [],
+                        modelId:
+                          agentModelId ||
+                          modelProvider.languageModel('chat-basic').modelId,
+                      },
+                    ],
+                  })
+                }
+              } catch (error) {
+                console.error(
+                  `Failed to save assistant message for chat ${chat.id}:`,
+                  error,
+                )
+              }
+            },
+          })
+          result.consumeStream()
+          result.mergeIntoDataStream(dataStream)
+        },
+        onError(error) {
+          console.error(`[1] Error during AI stream for agent ${agentId}:`, error)
+          throw error
+        },
+      })
+    } catch (error) {
+      console.error(`[2] Error during AI stream for agent ${agentId}:`, error)
+
+      return json({ result: 'Error during AI stream' }, { status: 500 })
+    }
   },
 })

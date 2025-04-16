@@ -4,8 +4,8 @@ A minimal starter template made for the edge.
 
 - TanStack [Start](https://tanstack.com/start/latest) + [Router](https://tanstack.com/router/latest) + [Query](https://tanstack.com/query/latest)
 - [Tailwind CSS](https://tailwindcss.com/) + [shadcn/ui](https://ui.shadcn.com/)
-- [Drizzle ORM](https://orm.drizzle.team/) + PostgreSQL
-- Auth based on [Lucia](https://lucia-auth.com/)
+- [Drizzle ORM](https://orm.drizzle.team/) + SQLite (turso)
+- Auth based on [Better Auth](https://better-auth.com/)
 
 Auth providers:
 
@@ -20,13 +20,13 @@ A modern web application built with TanStack Start, made for the edge. It is mad
 ## 🚀 Technologies
 
 - **Framework**: TanStack [Start](https://tanstack.com/start/latest/) + [Query](https://tanstack.com/query/latest)
-- **Platform**: [Cloudflare Workers](https://workers.cloudflare.com/)
+- **Platform**: Vercel
 - **Database**: Serverless SQLite on [Turso](https://turso.tech/) with [Drizzle ORM](https://orm.drizzle.team/)
 - **Authentication**: OAuth based on [Better Auth](https://better-auth.com/)
 - **Email**: [Resend](https://resend.com/)
 - **UI Components**: [ShadcnUI](https://ui.shadcn.com/)
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/)
-- **Form Handling**: [React Hook Form](https://react-hook-form.com/) with [Zod](https://zod.dev/) validation
+- **Form Handling**: [React Hook Form](https://react-hook-form.com/) with [Zod](https://zod.dev/) validation / TanStack Form
 
 ## 📋 Prerequisites
 
