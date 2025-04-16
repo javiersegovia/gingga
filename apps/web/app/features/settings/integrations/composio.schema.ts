@@ -22,6 +22,7 @@ export interface ComposioIntegration {
   logo?: string
   enabled?: boolean
   deleted?: boolean
+  image?: string
 }
 
 // Flattened type for connection information returned to our API/UI
@@ -33,36 +34,6 @@ export interface UserConnection {
 }
 
 /** Here we add static information about the integrations */
-export const INTEGRATIONS_INFO: Record<
-  ComposioAppName,
-  Pick<ComposioIntegration, 'label' | 'description' | 'appName'>
-> = {
-  googlesheets: {
-    label: 'Google Sheets',
-    appName: 'googlesheets',
-    description: 'Agents will be able to read, write, and manage your spreadsheets.',
-    integrationId: process.env.COMPOSIO_GOOGLESHEETS_INTEGRATION_ID,
-  },
-  googlecalendar: {
-    label: 'Google Calendar',
-    appName: 'googlecalendar',
-    description:
-      'Agents will be able to schedule events, set reminders, and manage your calendar.',
-    integrationId: process.env.COMPOSIO_GOOGLECALENDAR_INTEGRATION_ID,
-  },
-  gmail: {
-    label: 'Gmail',
-    appName: 'gmail',
-    description: 'Agents will be able to send, receive, and manage your emails.',
-    integrationId: process.env.COMPOSIO_GMAIL_INTEGRATION_ID,
-  },
-  googledocs: {
-    label: 'Google Docs',
-    appName: 'googledocs',
-    description: 'Agents will be able to create, edit, and manage your documents.',
-    integrationId: process.env.COMPOSIO_GOOGLEDOCS_INTEGRATION_ID,
-  },
-}
 
 /**
  * Schema for initiating a new connection.

@@ -62,17 +62,15 @@ export const APIRoute = createAPIFileRoute('/api/chat/default')({
         return new Response('Failed to create or retrieve chat', { status: 500 })
       }
 
-      try {
-        await upsertChatMessage({
-          id: lastUserMessage.id,
-          role: 'user',
-          chatId: chat.id,
-          parts: lastUserMessage.parts,
-          attachments: lastUserMessage.experimental_attachments ?? [],
-        })
-      } catch (error) {
-        console.error('Failed to save user message:', error)
-      }
+      // Removed the specific try-catch here. Let errors bubble up before streaming.
+      // If this fails, the main try-catch at the bottom will handle it.
+      await upsertChatMessage({
+        id: lastUserMessage.id,
+        role: 'user',
+        chatId: chat.id,
+        parts: lastUserMessage.parts,
+        attachments: lastUserMessage.experimental_attachments ?? [],
+      })
 
       return createDataStreamResponse({
         execute: async (dataStream) => {
@@ -94,29 +92,52 @@ export const APIRoute = createAPIFileRoute('/api/chat/default')({
             maxSteps: 10, // Consider if maxSteps is appropriate here
             async onFinish({ response }) {
               console.log('~~~~ STARTING ON FINISH ~~~~')
+              console.log(
+                `[Chat ${chat.id}] onFinish received response with ${response.messages.length} messages.`,
+              )
+              // Detailed log of assistant messages received
+              const assistantMessages = response.messages.filter(
+                (m) => m.role === 'assistant',
+              )
+              console.log(
+                `[Chat ${chat.id}] Assistant messages in response:`,
+                JSON.stringify(assistantMessages, null, 2), // Log structure
+              )
+
               try {
                 const newAssistantMessageId = getTrailingMessageId({
-                  messages: response.messages.filter(
-                    (message) => message.role === 'assistant',
-                  ),
+                  messages: assistantMessages, // Use filtered list
                 })
 
                 if (!newAssistantMessageId) {
-                  console.error('No assistant message ID found after streaming.')
-                  // Decide how to handle this - maybe don't save?
+                  console.error(
+                    `[Chat ${chat.id}] No assistant message ID found after streaming. Not saving.`,
+                  )
                   return
-                  // throw new Error('No assistant message found!') // Avoid throwing here unless necessary
                 }
+                console.log(
+                  `[Chat ${chat.id}] Found assistant message ID: ${newAssistantMessageId}`,
+                )
 
                 const [, newAssistantMessage] = appendResponseMessages({
-                  messages: [lastUserMessage], // Pass only the last user message? Check SDK docs
+                  // Consider if passing more history is needed by appendResponseMessages
+                  messages: [lastUserMessage],
                   responseMessages: response.messages,
                 })
 
+                console.log(
+                  `[Chat ${chat.id}] Message prepared for saving:`,
+                  JSON.stringify(newAssistantMessage, null, 2),
+                )
+
                 if (
                   newAssistantMessage?.role === 'assistant' &&
-                  newAssistantMessage.parts
+                  newAssistantMessage.parts &&
+                  newAssistantMessage.id === newAssistantMessageId // Sanity check ID
                 ) {
+                  console.log(
+                    `[Chat ${chat.id}] Attempting to save assistant message ${newAssistantMessage.id}...`,
+                  )
                   await upsertChatMessage({
                     id: newAssistantMessage.id,
                     chatId: chat.id,
@@ -125,8 +146,13 @@ export const APIRoute = createAPIFileRoute('/api/chat/default')({
                     attachments: newAssistantMessage.experimental_attachments ?? [],
                     modelId: modelProvider.languageModel('chat-agent').modelId,
                   })
+                  console.log(
+                    `[Chat ${chat.id}] Successfully saved assistant message ${newAssistantMessage.id}.`,
+                  )
                 } else {
-                  console.log('No new assistant message found in onFinish response.')
+                  console.log(
+                    `[Chat ${chat.id}] No valid assistant message found in onFinish response or ID mismatch. Not saving. ID found: ${newAssistantMessageId}, Message processed: ${JSON.stringify(newAssistantMessage)}`,
+                  )
                 }
               } catch (error) {
                 console.error(

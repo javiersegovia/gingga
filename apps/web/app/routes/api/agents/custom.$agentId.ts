@@ -14,11 +14,8 @@ import { setupAppContext } from '@/middleware/setup-context.server'
 import { modelProvider } from '@/features/ai/utils/providers'
 import { getAgentById } from '@/features/agent/agent.service'
 import { z } from 'zod'
-import { getServerEnv } from '@/server/env'
-import { createOpenRouter } from '@openrouter/ai-sdk-provider'
 import { processToolCalls } from '@/features/ai/utils/human-in-the-loop'
-// import { tools, executions } from '@/features/ai/skills'
-import { getVercelToolset } from '../../../features/settings/integrations/composio.service'
+import { getVercelToolset } from '@/features/settings/integrations/composio.service'
 
 export const APIRoute = createAPIFileRoute('/api/agents/custom/$agentId')({
   POST: async ({ request, params }) => {
@@ -54,11 +51,6 @@ export const APIRoute = createAPIFileRoute('/api/agents/custom/$agentId')({
       return json({ result: `Agent with ID '${agentId}' not found.` }, { status: 404 })
     }
     const { instructions: agentInstructions, modelId: agentModelId } = agentInfo
-
-    const env = getServerEnv()
-    const openrouter = createOpenRouter({
-      apiKey: env.OPENROUTER_API_KEY,
-    })
 
     let chat: { id: string } | undefined = await getChatById({ id })
     if (!chat) {
@@ -134,17 +126,49 @@ export const APIRoute = createAPIFileRoute('/api/agents/custom/$agentId')({
             experimental_generateMessageId: nanoid,
             maxSteps: 10,
             async onFinish({ response }) {
+              console.log(`[Agent Chat ${chat.id}] ~~~~ STARTING ON FINISH ~~~~`)
+              console.log(
+                `[Agent Chat ${chat.id}] onFinish received response with ${response.messages.length} messages.`,
+              )
+              const assistantMessages = response.messages.filter(
+                (m) => m.role === 'assistant',
+              )
+              console.log(
+                `[Agent Chat ${chat.id}] Assistant messages in response:`,
+                JSON.stringify(assistantMessages, null, 2),
+              )
               try {
                 const assistantId = getTrailingMessageId({
-                  messages: response.messages.filter(
-                    (message) => message.role === 'assistant',
-                  ),
+                  messages: assistantMessages,
                 })
-                if (assistantId) {
-                  const [, assistantMessage] = appendResponseMessages({
-                    messages: [lastUserMessage],
-                    responseMessages: response.messages,
-                  })
+
+                if (!assistantId) {
+                  console.error(
+                    `[Agent Chat ${chat.id}] No assistant message ID found after streaming. Not saving.`,
+                  )
+                  return
+                }
+                console.log(
+                  `[Agent Chat ${chat.id}] Found assistant message ID: ${assistantId}`,
+                )
+
+                const [, assistantMessage] = appendResponseMessages({
+                  messages: [lastUserMessage], // Consider if more context needed
+                  responseMessages: response.messages,
+                })
+                console.log(
+                  `[Agent Chat ${chat.id}] Message prepared for saving:`,
+                  JSON.stringify(assistantMessage, null, 2),
+                )
+
+                if (
+                  assistantMessage?.role === 'assistant' &&
+                  assistantMessage.parts &&
+                  assistantMessage.id === assistantId // Sanity check ID
+                ) {
+                  console.log(
+                    `[Agent Chat ${chat.id}] Attempting to save assistant message ${assistantId}...`,
+                  )
                   await saveChatMessages({
                     messages: [
                       {
@@ -159,6 +183,13 @@ export const APIRoute = createAPIFileRoute('/api/agents/custom/$agentId')({
                       },
                     ],
                   })
+                  console.log(
+                    `[Agent Chat ${chat.id}] Successfully saved assistant message ${assistantId}.`,
+                  )
+                } else {
+                  console.log(
+                    `[Agent Chat ${chat.id}] No valid assistant message found in onFinish response or ID mismatch. Not saving. ID found: ${assistantId}, Message processed: ${JSON.stringify(assistantMessage)}`,
+                  )
                 }
               } catch (error) {
                 console.error(

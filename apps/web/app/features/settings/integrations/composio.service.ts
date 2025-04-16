@@ -3,7 +3,6 @@ import {
   COMPOSIO_SDK_ERROR_CODES,
   VercelAIToolSet,
   Composio,
-  ConnectorListItemDTO,
 } from 'composio-core'
 
 import { getServerEnv } from '@/server/env'
@@ -11,7 +10,6 @@ import {
   ComposioAppName,
   ComposioAppNameEnum,
   ComposioIntegration,
-  INTEGRATIONS_INFO,
   UserConnection,
 } from './composio.schema'
 
@@ -60,18 +58,6 @@ async function hasActiveConnection({
   }
 }
 
-const formatIntegration = (integration: ConnectorListItemDTO): ComposioIntegration => ({
-  ...INTEGRATIONS_INFO[integration.appName as ComposioAppName],
-  integrationId: integration.id,
-  appId: integration.appId,
-  appName: integration.appName as ComposioAppName,
-  enabled: integration.enabled,
-  deleted: integration.deleted,
-  logo:
-    'logo' in integration && typeof integration.logo === 'string' ? integration.logo : '',
-  authScheme: integration.authScheme,
-})
-
 // --- Service Functions ---
 
 /**
@@ -79,20 +65,81 @@ const formatIntegration = (integration: ConnectorListItemDTO): ComposioIntegrati
  */
 export async function getComposioIntegrations() {
   const composio = new Composio({ apiKey: getServerEnv().COMPOSIO_API_KEY })
-  const integrations = await composio.integrations.list({
+  const composioIntegrations = await composio.integrations.list({
     showDisabled: true,
   })
 
-  const filteredIntegrations = integrations.items.filter(
+  const filteredIntegrations = composioIntegrations.items.filter(
     (integration) =>
       ComposioAppNameEnum.options.includes(integration.appName as ComposioAppName) &&
       integration.enabled,
   )
-  console.log('integrations.items[1]')
-  console.log(integrations.items[1])
-  console.log({ integrations: integrations.items[1]?.connections })
 
-  return filteredIntegrations.map(formatIntegration)
+  const getIntegrationsInfo = (): Record<
+    ComposioAppName,
+    Pick<
+      ComposioIntegration,
+      'label' | 'description' | 'appName' | 'integrationId' | 'image'
+    >
+  > => {
+    const env = getServerEnv()
+    return {
+      googlesheets: {
+        label: 'Google Sheets',
+        appName: 'googlesheets',
+        description: 'Agents will be able to read, write, and manage your spreadsheets.',
+        integrationId: env.COMPOSIO_GOOGLESHEETS_INTEGRATION_ID,
+        image: '',
+      },
+      googlecalendar: {
+        label: 'Google Calendar',
+        appName: 'googlecalendar',
+        description:
+          'Agents will be able to schedule events, set reminders, and manage your calendar.',
+        integrationId: env.COMPOSIO_GOOGLECALENDAR_INTEGRATION_ID,
+        image: '',
+      },
+      gmail: {
+        label: 'Gmail',
+        appName: 'gmail',
+        description: 'Agents will be able to send, receive, and manage your emails.',
+        integrationId: env.COMPOSIO_GMAIL_INTEGRATION_ID,
+        image: '',
+      },
+      googledocs: {
+        label: 'Google Docs',
+        appName: 'googledocs',
+        description: 'Agents will be able to create, edit, and manage your documents.',
+        integrationId: env.COMPOSIO_GOOGLEDOCS_INTEGRATION_ID,
+        image: '',
+      },
+    }
+  }
+
+  const integrations = getIntegrationsInfo()
+
+  return filteredIntegrations.map(
+    ({ appName, appId, enabled, deleted, authScheme, ...otherProps }) => {
+      const { label, description, integrationId, image } =
+        integrations[appName as ComposioAppName]
+
+      return {
+        label,
+        description,
+        integrationId,
+        appId,
+        appName: appName as ComposioAppName,
+        enabled,
+        deleted,
+        authScheme,
+        image,
+        logo:
+          'logo' in otherProps && typeof otherProps.logo === 'string'
+            ? otherProps.logo
+            : '',
+      }
+    },
+  )
 }
 
 /**

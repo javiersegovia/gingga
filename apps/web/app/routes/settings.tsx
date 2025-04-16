@@ -4,7 +4,8 @@ import { Badge } from '@gingga/ui/components/badge'
 import { Button } from '@gingga/ui/components/button'
 import { useAuthedQuery, useSignOutMutation } from '@/features/auth/auth.query'
 import { ArrowLeftIcon, LogOutIcon } from 'lucide-react'
-import { AnimatedLinkTabs } from '@gingga/ui/components/animated-link-tabs'
+import { AnimatedLinkTabs } from '@/components/ui/animated-link-tabs'
+import type { Tab } from '@/components/ui/animated-link-tabs'
 
 export const Route = createFileRoute('/settings')({
   component: SettingsLayoutComponent,
@@ -31,11 +32,19 @@ function SettingsLayoutComponent() {
   const { user, membership } = authData // Assuming membership is part of authData now
 
   // Updated navItems structure for AnimatedLinkTabs
-  const navItems = [
-    { to: '/settings/account', label: 'Account' },
-    { to: '/settings/preferences', label: 'Preferences' },
-    { to: '/settings/integrations', label: 'Integrations' },
-    { to: '/settings/contact', label: 'Contact' },
+  const navItems: Tab[] = [
+    { to: '/settings/account', pathname: '/settings/account', label: 'Account' },
+    {
+      to: '/settings/preferences',
+      pathname: '/settings/preferences',
+      label: 'Preferences',
+    },
+    {
+      to: '/settings/integrations',
+      pathname: '/settings/integrations',
+      label: 'Integrations',
+    },
+    { to: '/settings/contact', pathname: '/settings/contact', label: 'Contact' },
   ]
 
   return (
@@ -48,7 +57,7 @@ function SettingsLayoutComponent() {
             variant="ghost"
             size="md"
             hover="reverseShadow"
-            className="w-auto hover:bg-white"
+            className="w-auto"
           >
             <Link to="/chat">
               <ArrowLeftIcon className="mr-2 h-4 w-4" />
@@ -94,12 +103,7 @@ function SettingsLayoutComponent() {
 
       {/* Right Content Area */}
       <main className="flex flex-1 flex-col">
-        <AnimatedLinkTabs
-          tabs={navItems}
-          className="mr-auto"
-          pathname={pathname}
-          Link={Link}
-        />
+        <AnimatedLinkTabs tabs={navItems} className="mr-auto" pathname={pathname} />
         <Outlet />
       </main>
     </div>
