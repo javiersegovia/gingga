@@ -2,7 +2,13 @@ import type { Tab } from '@/components/ui/animated-link-tabs'
 import { createFileRoute, Link, Outlet } from '@tanstack/react-router'
 import { $getAgentById } from '@/features/agent/agent.api'
 import { Button } from '@gingga/ui/components/button'
-import { ArrowLeftIcon } from 'lucide-react'
+import {
+  ArrowLeftIcon,
+  BookIcon,
+  BrainIcon,
+  LightbulbIcon,
+  WorkflowIcon,
+} from 'lucide-react'
 import { AnimatedLinkTabs } from '@/components/ui/animated-link-tabs'
 import { Avatar, AvatarFallback, AvatarImage } from '@gingga/ui/components/avatar'
 import { cn } from '@gingga/ui/lib/utils'
@@ -32,21 +38,25 @@ function RouteComponent() {
       to: '/chat/agent/$agentId/edit/instructions',
       pathname: `/chat/agent/${agent.id}/edit/instructions`,
       label: 'Instructions',
+      icon: <BrainIcon className="h-4 w-4" />,
     },
     {
       to: '/chat/agent/$agentId/edit/skills',
       pathname: `/chat/agent/${agent.id}/edit/skills`,
       label: 'Skills',
+      icon: <LightbulbIcon className="h-4 w-4" />,
     },
     {
       to: '/chat/agent/$agentId/edit/knowledge',
       pathname: `/chat/agent/${agent.id}/edit/knowledge`,
       label: 'Knowledge',
+      icon: <BookIcon className="h-4 w-4" />,
     },
     {
       to: '/chat/agent/$agentId/edit/workflows',
       pathname: `/chat/agent/${agent.id}/edit/workflows`,
       label: 'Workflows',
+      icon: <WorkflowIcon className="h-4 w-4" />,
     },
   ]
 

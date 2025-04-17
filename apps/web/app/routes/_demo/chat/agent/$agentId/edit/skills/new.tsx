@@ -83,8 +83,12 @@ const SkillSheetContent = ({ handleClose }: { handleClose: () => void }) => {
             />
           )}
           <div>
-            <SheetTitle className="text-lg font-semibold">Unlock Skill</SheetTitle>
-            <SheetDescription className="text-lg">{`${selectedSkillOption.name} v${selectedSkillOption.version}`}</SheetDescription>
+            <SheetTitle className="text-xs font-semibold uppercase">
+              Unlock Skill
+            </SheetTitle>
+            <SheetDescription className="text-lg">
+              {`${selectedSkillOption.name} v${selectedSkillOption.version}`}
+            </SheetDescription>
           </div>
         </div>
       </SheetHeader>

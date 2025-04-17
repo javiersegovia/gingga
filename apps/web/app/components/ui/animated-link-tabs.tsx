@@ -3,6 +3,7 @@ import { cn } from '@gingga/ui/lib/utils'
 import type { ReactNode } from 'react'
 import { Button } from '@gingga/ui/components/button'
 import { Link, LinkOptions } from '@tanstack/react-router'
+import { Card } from '@gingga/ui/components/card'
 
 export type Tab = {
   label: string
@@ -20,9 +21,11 @@ interface AnimatedLinkTabsProps {
 
 function AnimatedLinkTabs({ tabs, className, pathname }: AnimatedLinkTabsProps) {
   return (
-    <div
+    <Card
+      design="grid"
+      hover="reverse"
       className={cn(
-        'bg-card border-shadow-border shadow-shadow relative mb-6 inline-flex w-auto space-x-1 rounded-sm border-2 px-1.5 py-1.5',
+        'relative mb-6 inline-flex w-auto space-x-1 rounded-lg border-2 px-1.5 py-1.5',
         className,
       )}
     >
@@ -47,7 +50,7 @@ function AnimatedLinkTabs({ tabs, className, pathname }: AnimatedLinkTabsProps) 
                 <motion.span
                   layoutId="active-tab-bubble"
                   className={cn(
-                    'bg-primary dark:bg-primary/20 dark:border-primary dark:text-primary border-shadow-border absolute inset-0 z-10 rounded-sm border-2',
+                    'bg-primary dark:bg-primary/20 dark:border-primary dark:text-primary border-shadow-border absolute inset-0 z-10 rounded-lg border-2',
                   )}
                   transition={{ type: 'spring', bounce: 0.15, duration: 0.6 }}
                 />
@@ -58,7 +61,7 @@ function AnimatedLinkTabs({ tabs, className, pathname }: AnimatedLinkTabsProps) 
           </Button>
         )
       })}
-    </div>
+    </Card>
   )
 }
 

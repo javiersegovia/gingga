@@ -7,13 +7,9 @@ import {
   CardHeader,
   CardTitle,
 } from '@gingga/ui/components/card'
-import {
-  $getComposioIntegrations,
-  $getUserComposioConnections,
-} from '@/features/settings/integrations/composio.api'
+
 import { IntegrationCard } from '@/features/settings/integrations/components/integration-card'
 import {
-  composioQueryKeys,
   composioIntegrationsQueryOptions,
   userComposioConnectionsQueryOptions,
 } from '@/features/settings/integrations/composio.query'
@@ -23,14 +19,8 @@ import { PlugZapIcon } from 'lucide-react'
 export const Route = createFileRoute('/settings/integrations')({
   component: IntegrationsSettingsComponent,
   loader: async ({ context }) => {
-    context.queryClient.prefetchQuery({
-      queryKey: composioQueryKeys.integrations(),
-      queryFn: $getComposioIntegrations,
-    })
-    context.queryClient.prefetchQuery({
-      queryKey: composioQueryKeys.connections(),
-      queryFn: $getUserComposioConnections,
-    })
+    context.queryClient.prefetchQuery(composioIntegrationsQueryOptions)
+    context.queryClient.prefetchQuery(userComposioConnectionsQueryOptions)
     return null
   },
 })

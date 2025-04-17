@@ -57,7 +57,10 @@ export function SkillForm({
   agentSkill,
   onClose,
 }: SkillFormProps) {
-  const [tab, setTab] = useState<'tools' | 'instructions' | 'variables'>('tools')
+  const [tab, setTab] = useState<'tools' | 'instructions' | 'variables' | 'settings'>(
+    'tools',
+  )
+  const [formError, setFormError] = useState<string | null>(null)
   const upsertMutation = useUpsertSkillMutation()
 
   const formOpts = formOptions({
@@ -78,6 +81,7 @@ export function SkillForm({
   const form = useAppForm({
     ...formOpts,
     onSubmit: async ({ value }) => {
+      setFormError(null)
       upsertMutation.mutate(
         {
           data: {
@@ -96,7 +100,18 @@ export function SkillForm({
             )
             onClose()
           },
-          onError: (err) => {
+          onError: (err: unknown) => {
+            let message = 'Failed to save skill.'
+            function isErrorWithMessage(e: unknown): e is { message: string } {
+              return (
+                typeof e === 'object' &&
+                e !== null &&
+                'message' in e &&
+                typeof (e as { message: unknown }).message === 'string'
+              )
+            }
+            if (isErrorWithMessage(err)) message = err.message
+            setFormError(message)
             console.error('Failed to save skill:', err)
             toast.error('Failed to save skill.')
           },
@@ -116,10 +131,24 @@ export function SkillForm({
           className="mt-4 flex flex-1 flex-col"
         >
           <TabsList className="mb-4 shrink-0">
-            <TabsTrigger value="tools">Tools</TabsTrigger>
-            <TabsTrigger value="instructions">Instructions</TabsTrigger>
-            <TabsTrigger value="variables">Variables</TabsTrigger>
+            <TabsTrigger isActive={tab === 'tools'} value="tools">
+              Tools
+            </TabsTrigger>
+            <TabsTrigger isActive={tab === 'instructions'} value="instructions">
+              Instructions
+            </TabsTrigger>
+            <TabsTrigger isActive={tab === 'variables'} value="variables">
+              Variables
+            </TabsTrigger>
+            <TabsTrigger isActive={tab === 'settings'} value="settings">
+              Settings
+            </TabsTrigger>
           </TabsList>
+          {formError && (
+            <div className="border-destructive bg-destructive/10 text-destructive mb-4 rounded border px-4 py-2 text-sm font-medium">
+              {formError}
+            </div>
+          )}
           <div className="flex-grow pr-2">
             <TabsContent value="tools">
               <form.AppField name="composioToolNames">
@@ -146,7 +175,7 @@ export function SkillForm({
                                 className={cn(
                                   'border-input flex items-start space-x-4 rounded-md border p-4 transition-colors',
                                   isChecked
-                                    ? 'border-secondary dark:bg-secondary-accent bg-secondary-accent'
+                                    ? 'border-secondary dark:bg-secondary/5 bg-secondary/10'
                                     : 'hover:bg-muted/50',
                                 )}
                               >
@@ -245,15 +274,19 @@ export function SkillForm({
                     </field.FormFieldItem>
                   )}
                 </form.AppField>
+              </div>
+            </TabsContent>
+            <TabsContent value="settings">
+              <div className="space-y-4">
                 <form.AppField name="name">
                   {(field) => (
                     <field.FormFieldItem>
-                      <field.FormFieldLabel>Skill Name (Optional)</field.FormFieldLabel>
+                      <field.FormFieldLabel>Skill Name</field.FormFieldLabel>
                       <field.FormFieldControl>
                         <Input
                           id={field.name}
                           name={field.name}
-                          placeholder="Enter a custom name for this skill instance"
+                          placeholder="Enter a custom skill name (e.g., Email Assistant)"
                           value={field.state.value}
                           onChange={(e) => field.handleChange(e.target.value)}
                           disabled={isSaving}
@@ -269,14 +302,12 @@ export function SkillForm({
                 <form.AppField name="description">
                   {(field) => (
                     <field.FormFieldItem>
-                      <field.FormFieldLabel>
-                        Skill Description (Optional)
-                      </field.FormFieldLabel>
+                      <field.FormFieldLabel>Skill Description</field.FormFieldLabel>
                       <field.FormFieldControl>
                         <Input
                           id={field.name}
                           name={field.name}
-                          placeholder="Enter a custom description"
+                          placeholder="Enter a custom description (e.g., Sends emails, creates contacts, etc.)"
                           value={field.state.value}
                           onChange={(e) => field.handleChange(e.target.value)}
                           disabled={isSaving}
@@ -295,12 +326,35 @@ export function SkillForm({
               <form.AppField name="variables" mode="array">
                 {(field) => {
                   if (field.state.value.length === 0) {
-                    field.pushValue({ key: '', value: null })
-                    return null
+                    return (
+                      <field.FormFieldItem>
+                        <p>Variables</p>
+                        <p className="text-muted-foreground mb-4 text-sm">
+                          Define variables here that can be used in the skill&apos;s
+                          instructions. Save your changes for the variables to be
+                          available in the Instructions tab.
+                        </p>
+                        <div className="rounded-base flex min-h-[100px] flex-col items-center justify-center border border-dashed p-4">
+                          <div className="text-muted-foreground mb-2 text-sm">
+                            No variables defined yet.
+                          </div>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            className="w-auto"
+                            onClick={() => field.pushValue({ key: '', value: null })}
+                            disabled={isSaving}
+                          >
+                            Add Variable
+                          </Button>
+                        </div>
+                        <field.FormFieldMessage />
+                      </field.FormFieldItem>
+                    )
                   }
                   return (
                     <field.FormFieldItem>
-                      <field.FormFieldLabel>Variables</field.FormFieldLabel>
+                      <p>Variables</p>
                       <p className="text-muted-foreground mb-4 text-sm">
                         Define variables here that can be used in the skill&apos;s
                         instructions. Save your changes for the variables to be available
@@ -346,7 +400,7 @@ export function SkillForm({
                               variant="ghost"
                               size="sm"
                               onClick={() => field.removeValue(idx)}
-                              disabled={field.state.value.length <= 1 || isSaving}
+                              disabled={isSaving}
                             >
                               Remove
                             </Button>
@@ -373,15 +427,11 @@ export function SkillForm({
           </div>
         </Tabs>
         <div className="mt-6 mb-2 px-2">
-          <Button
-            variant="primary"
-            size="xl"
-            className="w-full"
-            onClick={() => form.handleSubmit()}
-            disabled={!form.state.canSubmit || form.state.isSubmitting}
-          >
-            {form.state.isSubmitting ? 'Saving...' : 'Save'}
-          </Button>
+          <form.AppForm>
+            <form.FormButton variant="primary" size="xl" className="w-full">
+              {({ isSubmitting }) => (isSubmitting ? 'Saving...' : 'Save')}
+            </form.FormButton>
+          </form.AppForm>
         </div>
       </formContext.Provider>
     </>

@@ -4,10 +4,11 @@ import {
   skillOptionsQueryOptions,
   skillsByAgentIdQueryOptions,
 } from '@/features/ai/skills/skill.query'
-import { Card, CardContent, CardHeader, CardTitle } from '@gingga/ui/components/card'
+import { Card, CardTitle } from '@gingga/ui/components/card'
 import { CheckIcon, ImageIcon, LightbulbIcon } from 'lucide-react'
 import { Skeleton } from '@gingga/ui/components/skeleton'
 import { AvailableSkillCard } from '@/features/ai/skills/components/available-skill-card'
+import { ComposioToolName } from '@/features/settings/integrations/composio.schema'
 
 export const Route = createFileRoute('/_demo/chat/agent/$agentId/edit/skills')({
   component: RouteComponent,
@@ -73,12 +74,22 @@ function RouteComponent() {
             {activeSkills && activeSkills.length > 0 ? (
               activeSkills.map((skill) => {
                 const skillOption = skillOptions?.find((opt) => opt.id === skill.skillId)
-                // Prioritize agent skill name/description, fallback to skill option
                 const displayName = skill.name || skillOption?.name || skill.skillId
-                // const displayDescription =
-                //   skill.description ||
-                //   skillOption?.description ||
-                //   'No description available.'
+                const displayDescription =
+                  skill.description ||
+                  skillOption?.description ||
+                  'No description available.'
+                // Integration block logic
+                const integrationRequired =
+                  skillOption?.integration?.required &&
+                  skill.composioIntegrationAppName &&
+                  skill.composioToolNames &&
+                  skill.composioToolNames.length > 0
+                const integration = skillOption?.integration
+                const availableTools =
+                  integration?.availableComposioToolNames?.filter((tool) =>
+                    skill.composioToolNames?.includes(tool.id as ComposioToolName),
+                  ) || []
                 return (
                   <Link
                     key={skill.id}
@@ -86,35 +97,53 @@ function RouteComponent() {
                     params={{ agentId, skillId: skill.id }}
                     className="block"
                   >
-                    {/* Added hover shadow, removed default */}
-                    <Card className="flex h-full flex-col transition-shadow hover:shadow-md">
-                      <CardHeader className="flex flex-row items-center justify-between gap-4 space-y-0 pb-2">
-                        <div className="flex items-center gap-3">
+                    <Card
+                      design="grid"
+                      hover="reverse"
+                      className="flex flex-col px-4 py-4"
+                    >
+                      <div className="flex items-center gap-2">
+                        <div className="mr-2 flex-shrink-0">
                           {skillOption?.image ? (
                             <img
                               src={skillOption.image}
                               alt={`${displayName} logo`}
-                              className="h-6 w-6 object-contain"
+                              className="h-16 w-16 object-contain"
                             />
                           ) : (
-                            <ImageIcon className="text-muted-foreground h-6 w-6" />
+                            <ImageIcon className="text-muted-foreground h-8 w-8" />
                           )}
-                          <CardTitle className="text-sm font-medium">
+                        </div>
+                        <div className="flex flex-grow flex-col">
+                          <CardTitle className="text-base leading-tight font-semibold">
                             {displayName}
                           </CardTitle>
+                          <p className="text-muted-foreground text-sm leading-4">
+                            {displayDescription}
+                          </p>
                         </div>
                         <CheckIcon className="text-success h-5 w-5 shrink-0" />
-                      </CardHeader>
-                      <CardContent className="pt-1">
-                        {/* Use displayDescription here if needed, currently shows status */}
-                        <p className="text-success text-xs">
-                          {/* TODO: Show connection status dynamically */}
-                          Ready for action!
-                        </p>
-                        {/* Example of using displayDescription:
-                        <p className="text-muted-foreground text-xs">{displayDescription}</p>
-                        */}
-                      </CardContent>
+                      </div>
+                      {/* Integration block */}
+                      {integrationRequired && (
+                        <div className="bg-muted/50 mt-4 flex flex-col gap-2 rounded-lg border px-4 py-3">
+                          <div className="flex items-center gap-2">
+                            {integration?.appImage && (
+                              <img
+                                src={integration.appImage}
+                                alt={`${integration.appDisplayName} logo`}
+                                className="h-6 w-6 object-contain"
+                              />
+                            )}
+                            <span className="text-success font-medium">Connected</span>
+                          </div>
+                          <ul className="text-muted-foreground ml-8 list-disc space-y-1 text-xs">
+                            {availableTools.map((tool) => (
+                              <li key={tool.id}>{tool.description}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
                     </Card>
                   </Link>
                 )

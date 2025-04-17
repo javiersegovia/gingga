@@ -80,12 +80,14 @@ const SkillSheetContent = ({ handleClose }: { handleClose: () => void }) => {
             <img
               src={skillOption.image}
               alt={skillOption.name}
-              className="h-12 w-12 rounded border object-cover"
+              className="h-20 w-20 rounded object-contain"
             />
           )}
           <div>
-            <SheetTitle>Edit Skill</SheetTitle>
-            <SheetDescription>{`${skillOption.name} v${skillOption.version}`}</SheetDescription>
+            <SheetTitle className="text-xs font-semibold uppercase">
+              Edit Skill
+            </SheetTitle>
+            <SheetDescription className="text-lg">{`${skillOption.name} v${skillOption.version}`}</SheetDescription>
           </div>
         </div>
       </SheetHeader>
