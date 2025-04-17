@@ -51,7 +51,7 @@ function RouteComponent() {
   ]
 
   return (
-    <div className="mx-auto flex min-h-screen w-full max-w-4xl flex-col gap-12 py-10 lg:flex-row">
+    <div className="mx-auto flex min-h-screen w-full max-w-4xl flex-col gap-4 py-10 lg:flex-row">
       <aside className="w-full shrink-0 lg:w-64">
         <div className="sticky top-10 space-y-6">
           <Button variant="outline" size="sm" asChild>
@@ -62,7 +62,7 @@ function RouteComponent() {
           </Button>
 
           <div className="flex flex-col items-center space-y-3 pt-4">
-            <Avatar className="border-border h-full w-full rounded-sm border-2">
+            <Avatar className="border-border h-full w-full rounded-sm border">
               <AvatarImage
                 src={agent.image || ''}
                 className="object-contain"
@@ -104,7 +104,7 @@ function RouteComponent() {
         </div>
       </aside>
 
-      <main className="flex flex-1 flex-col space-y-6">
+      <main className="flex flex-1 flex-col">
         <div className="relative block w-auto">
           <AnimatedLinkTabs tabs={navItems} pathname={pathname} />
         </div>

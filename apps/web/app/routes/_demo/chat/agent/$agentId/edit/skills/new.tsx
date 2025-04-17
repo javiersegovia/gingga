@@ -79,12 +79,12 @@ const SkillSheetContent = ({ handleClose }: { handleClose: () => void }) => {
             <img
               src={selectedSkillOption.image}
               alt={selectedSkillOption.name}
-              className="h-12 w-12 rounded border object-cover"
+              className="h-20 w-20 rounded object-contain"
             />
           )}
           <div>
-            <SheetTitle>Add New Skill</SheetTitle>
-            <SheetDescription>{`${selectedSkillOption.name} v${selectedSkillOption.version}`}</SheetDescription>
+            <SheetTitle className="text-lg font-semibold">Unlock Skill</SheetTitle>
+            <SheetDescription className="text-lg">{`${selectedSkillOption.name} v${selectedSkillOption.version}`}</SheetDescription>
           </div>
         </div>
       </SheetHeader>

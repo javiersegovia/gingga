@@ -5,13 +5,16 @@ export const getSkills = (): SkillOption[] => {
   return [
     {
       id: 'googlesheets-skill',
-      name: 'Google Sheets',
-      description: 'Read, write, and update data from Google Sheets',
-      image: 'https://cdn.jsdelivr.net/gh/ComposioHQ/open-logos@master/google-sheets.svg', // Add an image path or URL if available
+      name: 'Spreadsheet Editor',
+      description: 'Read, write, and update data from your spreadsheets',
+      image: `${import.meta.env.VITE_ASSETS_URL}/agents/skill_icons/spreadsheet-1.png`,
       version: '1.0',
       integration: {
         required: true,
-        integrationAppName: 'googlesheets',
+        appName: 'googlesheets',
+        appDisplayName: 'Google Sheets',
+        appImage:
+          'https://cdn.jsdelivr.net/gh/ComposioHQ/open-logos@master/google-sheets.svg',
         integrationId: getServerEnv().COMPOSIO_GOOGLESHEETS_INTEGRATION_ID,
         availableComposioToolNames: [
           {
@@ -34,14 +37,16 @@ export const getSkills = (): SkillOption[] => {
     },
     {
       id: 'googlecalendar-skill',
-      name: 'Google Calendar',
+      name: 'Meeting Scheduler',
       description: 'Schedule events, set reminders, and manage your calendar',
-      image:
-        'https://cdn.jsdelivr.net/gh/ComposioHQ/open-logos@master/google-calendar.svg',
+      image: `${import.meta.env.VITE_ASSETS_URL}/agents/skill_icons/calendar-1.png`,
       version: '1.0',
       integration: {
         required: true,
-        integrationAppName: 'googlecalendar',
+        appName: 'googlecalendar',
+        appDisplayName: 'Google Calendar',
+        appImage:
+          'https://cdn.jsdelivr.net/gh/ComposioHQ/open-logos@master/google-calendar.svg',
         integrationId: getServerEnv().COMPOSIO_GOOGLECALENDAR_INTEGRATION_ID,
         availableComposioToolNames: [
           {
@@ -109,13 +114,16 @@ export const getSkills = (): SkillOption[] => {
     },
     {
       id: 'googledocs-skill',
-      name: 'Google Docs',
-      description: 'Create, edit, and manage your Google Docs documents',
-      image: 'https://cdn.jsdelivr.net/gh/ComposioHQ/open-logos@master/google-docs.svg',
+      name: 'Document Editor',
+      description: 'Create, edit, and manage your documents',
+      image: `${import.meta.env.VITE_ASSETS_URL}/agents/skill_icons/docs-1.png`,
       version: '1.0',
       integration: {
         required: true,
-        integrationAppName: 'googledocs',
+        appName: 'googledocs',
+        appDisplayName: 'Google Docs',
+        appImage:
+          'https://cdn.jsdelivr.net/gh/ComposioHQ/open-logos@master/google-docs.svg',
         integrationId: getServerEnv().COMPOSIO_GOOGLEDOCS_INTEGRATION_ID,
         availableComposioToolNames: [
           {
@@ -148,13 +156,15 @@ export const getSkills = (): SkillOption[] => {
     },
     {
       id: 'gmail-skill',
-      name: 'Gmail',
+      name: 'Email Assistant',
       description: 'Send, receive, and manage your emails',
-      image: 'https://cdn.jsdelivr.net/gh/ComposioHQ/open-logos@master/gmail.svg',
+      image: `${import.meta.env.VITE_ASSETS_URL}/agents/skill_icons/email-1.png`,
       version: '1.0',
       integration: {
         required: true,
-        integrationAppName: 'gmail',
+        appName: 'gmail',
+        appDisplayName: 'Gmail',
+        appImage: 'https://cdn.jsdelivr.net/gh/ComposioHQ/open-logos@master/gmail.svg',
         integrationId: getServerEnv().COMPOSIO_GMAIL_INTEGRATION_ID,
         availableComposioToolNames: [
           {
