@@ -19,9 +19,12 @@ const formComponents = {
   FormButton,
 }
 
+// Revert: Remove explicit typing
 export const { fieldContext, formContext, useFieldContext, useFormContext } =
   createFormHookContexts()
 
+// Only export the hooks and contexts needed
+// Revert: Remove explicit typing
 export const { withForm, useAppForm } = createFormHook({
   fieldComponents,
   formComponents,

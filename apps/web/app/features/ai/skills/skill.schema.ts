@@ -1,5 +1,8 @@
 import { z } from 'zod'
-import { ComposioAppNames } from '@/features/settings/integrations/composio.schema'
+import {
+  ComposioAppNames,
+  ComposioToolNameEnum,
+} from '@/features/settings/integrations/composio.schema'
 import { skillIds, toolNames } from './skill.types'
 
 /**
@@ -16,14 +19,16 @@ export const SkillIdParamSchema = z.object({
 export const CreateSkillInputSchema = z.object({
   agentId: z.string(),
   skillId: z.enum(skillIds),
-  composioIntegrationAppName: z.enum(ComposioAppNames),
-  composioToolNames: z.array(z.enum(toolNames)).default([]),
-  variables: z.record(z.string(), z.string().nullable()),
-  instructions: z.string(),
-  tools: z.array(z.enum(toolNames)),
+  composioIntegrationAppName: z.enum(ComposioAppNames).nullable().optional(),
+
+  composioToolNames: z.array(ComposioToolNameEnum).default([]).nullable().optional(),
+  variables: z.record(z.string(), z.string().nullable()).optional(),
+  instructions: z.string().optional(),
+  tools: z.array(z.enum(toolNames)).optional().nullable(),
   isEnabled: z.boolean().default(true),
-  version: z.string(),
+  version: z.string().optional(),
 })
+export type CreateSkillInput = z.infer<typeof CreateSkillInputSchema>
 
 /**
  * Input schema for updating an existing AgentSkill.

@@ -43,8 +43,8 @@ import { Route as DemoChatAgentsCreateImport } from './routes/_demo/chat/agents/
 import { Route as DemoChatAgentAgentIdImport } from './routes/_demo/chat/agent/$agentId_'
 import { Route as DemoChatAgentAgentIdEditImport } from './routes/_demo/chat/agent/$agentId/edit'
 import { Route as DemoChatAgentAgentIdChatChatIdImport } from './routes/_demo/chat/agent/$agentId_.chat.$chatId'
+import { Route as DemoChatAgentAgentIdEditSkillsImport } from './routes/_demo/chat/agent/$agentId/edit/skills'
 import { Route as DemoChatAgentAgentIdEditWorkflowsIndexImport } from './routes/_demo/chat/agent/$agentId/edit/workflows/index'
-import { Route as DemoChatAgentAgentIdEditSkillsIndexImport } from './routes/_demo/chat/agent/$agentId/edit/skills/index'
 import { Route as DemoChatAgentAgentIdEditKnowledgeIndexImport } from './routes/_demo/chat/agent/$agentId/edit/knowledge/index'
 import { Route as DemoChatAgentAgentIdEditInstructionsIndexImport } from './routes/_demo/chat/agent/$agentId/edit/instructions/index'
 import { Route as DemoChatAgentAgentIdEditSkillsNewImport } from './routes/_demo/chat/agent/$agentId/edit/skills/new'
@@ -243,17 +243,17 @@ const DemoChatAgentAgentIdChatChatIdRoute =
     getParentRoute: () => DemoChatAgentAgentIdRoute,
   } as any)
 
+const DemoChatAgentAgentIdEditSkillsRoute =
+  DemoChatAgentAgentIdEditSkillsImport.update({
+    id: '/skills',
+    path: '/skills',
+    getParentRoute: () => DemoChatAgentAgentIdEditRoute,
+  } as any)
+
 const DemoChatAgentAgentIdEditWorkflowsIndexRoute =
   DemoChatAgentAgentIdEditWorkflowsIndexImport.update({
     id: '/workflows/',
     path: '/workflows/',
-    getParentRoute: () => DemoChatAgentAgentIdEditRoute,
-  } as any)
-
-const DemoChatAgentAgentIdEditSkillsIndexRoute =
-  DemoChatAgentAgentIdEditSkillsIndexImport.update({
-    id: '/skills/',
-    path: '/skills/',
     getParentRoute: () => DemoChatAgentAgentIdEditRoute,
   } as any)
 
@@ -273,16 +273,16 @@ const DemoChatAgentAgentIdEditInstructionsIndexRoute =
 
 const DemoChatAgentAgentIdEditSkillsNewRoute =
   DemoChatAgentAgentIdEditSkillsNewImport.update({
-    id: '/skills/new',
-    path: '/skills/new',
-    getParentRoute: () => DemoChatAgentAgentIdEditRoute,
+    id: '/new',
+    path: '/new',
+    getParentRoute: () => DemoChatAgentAgentIdEditSkillsRoute,
   } as any)
 
 const DemoChatAgentAgentIdEditSkillsSkillIdRoute =
   DemoChatAgentAgentIdEditSkillsSkillIdImport.update({
-    id: '/skills/$skillId',
-    path: '/skills/$skillId',
-    getParentRoute: () => DemoChatAgentAgentIdEditRoute,
+    id: '/$skillId',
+    path: '/$skillId',
+    getParentRoute: () => DemoChatAgentAgentIdEditSkillsRoute,
   } as any)
 
 // Populate the FileRoutesByPath interface
@@ -506,6 +506,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoChatAgentAgentIdEditImport
       parentRoute: typeof DemoChatImport
     }
+    '/_demo/chat/agent/$agentId/edit/skills': {
+      id: '/_demo/chat/agent/$agentId/edit/skills'
+      path: '/skills'
+      fullPath: '/chat/agent/$agentId/edit/skills'
+      preLoaderRoute: typeof DemoChatAgentAgentIdEditSkillsImport
+      parentRoute: typeof DemoChatAgentAgentIdEditImport
+    }
     '/_demo/chat/agent/$agentId_/chat/$chatId': {
       id: '/_demo/chat/agent/$agentId_/chat/$chatId'
       path: '/chat/$chatId'
@@ -515,17 +522,17 @@ declare module '@tanstack/react-router' {
     }
     '/_demo/chat/agent/$agentId/edit/skills/$skillId': {
       id: '/_demo/chat/agent/$agentId/edit/skills/$skillId'
-      path: '/skills/$skillId'
+      path: '/$skillId'
       fullPath: '/chat/agent/$agentId/edit/skills/$skillId'
       preLoaderRoute: typeof DemoChatAgentAgentIdEditSkillsSkillIdImport
-      parentRoute: typeof DemoChatAgentAgentIdEditImport
+      parentRoute: typeof DemoChatAgentAgentIdEditSkillsImport
     }
     '/_demo/chat/agent/$agentId/edit/skills/new': {
       id: '/_demo/chat/agent/$agentId/edit/skills/new'
-      path: '/skills/new'
+      path: '/new'
       fullPath: '/chat/agent/$agentId/edit/skills/new'
       preLoaderRoute: typeof DemoChatAgentAgentIdEditSkillsNewImport
-      parentRoute: typeof DemoChatAgentAgentIdEditImport
+      parentRoute: typeof DemoChatAgentAgentIdEditSkillsImport
     }
     '/_demo/chat/agent/$agentId/edit/instructions/': {
       id: '/_demo/chat/agent/$agentId/edit/instructions/'
@@ -539,13 +546,6 @@ declare module '@tanstack/react-router' {
       path: '/knowledge'
       fullPath: '/chat/agent/$agentId/edit/knowledge'
       preLoaderRoute: typeof DemoChatAgentAgentIdEditKnowledgeIndexImport
-      parentRoute: typeof DemoChatAgentAgentIdEditImport
-    }
-    '/_demo/chat/agent/$agentId/edit/skills/': {
-      id: '/_demo/chat/agent/$agentId/edit/skills/'
-      path: '/skills'
-      fullPath: '/chat/agent/$agentId/edit/skills'
-      preLoaderRoute: typeof DemoChatAgentAgentIdEditSkillsIndexImport
       parentRoute: typeof DemoChatAgentAgentIdEditImport
     }
     '/_demo/chat/agent/$agentId/edit/workflows/': {
@@ -637,27 +637,39 @@ const DemoChatAgentAgentIdRouteChildren: DemoChatAgentAgentIdRouteChildren = {
 const DemoChatAgentAgentIdRouteWithChildren =
   DemoChatAgentAgentIdRoute._addFileChildren(DemoChatAgentAgentIdRouteChildren)
 
-interface DemoChatAgentAgentIdEditRouteChildren {
+interface DemoChatAgentAgentIdEditSkillsRouteChildren {
   DemoChatAgentAgentIdEditSkillsSkillIdRoute: typeof DemoChatAgentAgentIdEditSkillsSkillIdRoute
   DemoChatAgentAgentIdEditSkillsNewRoute: typeof DemoChatAgentAgentIdEditSkillsNewRoute
-  DemoChatAgentAgentIdEditInstructionsIndexRoute: typeof DemoChatAgentAgentIdEditInstructionsIndexRoute
-  DemoChatAgentAgentIdEditKnowledgeIndexRoute: typeof DemoChatAgentAgentIdEditKnowledgeIndexRoute
-  DemoChatAgentAgentIdEditSkillsIndexRoute: typeof DemoChatAgentAgentIdEditSkillsIndexRoute
-  DemoChatAgentAgentIdEditWorkflowsIndexRoute: typeof DemoChatAgentAgentIdEditWorkflowsIndexRoute
 }
 
-const DemoChatAgentAgentIdEditRouteChildren: DemoChatAgentAgentIdEditRouteChildren =
+const DemoChatAgentAgentIdEditSkillsRouteChildren: DemoChatAgentAgentIdEditSkillsRouteChildren =
   {
     DemoChatAgentAgentIdEditSkillsSkillIdRoute:
       DemoChatAgentAgentIdEditSkillsSkillIdRoute,
     DemoChatAgentAgentIdEditSkillsNewRoute:
       DemoChatAgentAgentIdEditSkillsNewRoute,
+  }
+
+const DemoChatAgentAgentIdEditSkillsRouteWithChildren =
+  DemoChatAgentAgentIdEditSkillsRoute._addFileChildren(
+    DemoChatAgentAgentIdEditSkillsRouteChildren,
+  )
+
+interface DemoChatAgentAgentIdEditRouteChildren {
+  DemoChatAgentAgentIdEditSkillsRoute: typeof DemoChatAgentAgentIdEditSkillsRouteWithChildren
+  DemoChatAgentAgentIdEditInstructionsIndexRoute: typeof DemoChatAgentAgentIdEditInstructionsIndexRoute
+  DemoChatAgentAgentIdEditKnowledgeIndexRoute: typeof DemoChatAgentAgentIdEditKnowledgeIndexRoute
+  DemoChatAgentAgentIdEditWorkflowsIndexRoute: typeof DemoChatAgentAgentIdEditWorkflowsIndexRoute
+}
+
+const DemoChatAgentAgentIdEditRouteChildren: DemoChatAgentAgentIdEditRouteChildren =
+  {
+    DemoChatAgentAgentIdEditSkillsRoute:
+      DemoChatAgentAgentIdEditSkillsRouteWithChildren,
     DemoChatAgentAgentIdEditInstructionsIndexRoute:
       DemoChatAgentAgentIdEditInstructionsIndexRoute,
     DemoChatAgentAgentIdEditKnowledgeIndexRoute:
       DemoChatAgentAgentIdEditKnowledgeIndexRoute,
-    DemoChatAgentAgentIdEditSkillsIndexRoute:
-      DemoChatAgentAgentIdEditSkillsIndexRoute,
     DemoChatAgentAgentIdEditWorkflowsIndexRoute:
       DemoChatAgentAgentIdEditWorkflowsIndexRoute,
   }
@@ -720,12 +732,12 @@ export interface FileRoutesByFullPath {
   '/chat/agents/create': typeof DemoChatAgentsCreateRoute
   '/chat/agents': typeof DemoChatAgentsIndexRoute
   '/chat/agent/$agentId/edit': typeof DemoChatAgentAgentIdEditRouteWithChildren
+  '/chat/agent/$agentId/edit/skills': typeof DemoChatAgentAgentIdEditSkillsRouteWithChildren
   '/chat/agent/$agentId/chat/$chatId': typeof DemoChatAgentAgentIdChatChatIdRoute
   '/chat/agent/$agentId/edit/skills/$skillId': typeof DemoChatAgentAgentIdEditSkillsSkillIdRoute
   '/chat/agent/$agentId/edit/skills/new': typeof DemoChatAgentAgentIdEditSkillsNewRoute
   '/chat/agent/$agentId/edit/instructions': typeof DemoChatAgentAgentIdEditInstructionsIndexRoute
   '/chat/agent/$agentId/edit/knowledge': typeof DemoChatAgentAgentIdEditKnowledgeIndexRoute
-  '/chat/agent/$agentId/edit/skills': typeof DemoChatAgentAgentIdEditSkillsIndexRoute
   '/chat/agent/$agentId/edit/workflows': typeof DemoChatAgentAgentIdEditWorkflowsIndexRoute
 }
 
@@ -758,12 +770,12 @@ export interface FileRoutesByTo {
   '/chat/agents/create': typeof DemoChatAgentsCreateRoute
   '/chat/agents': typeof DemoChatAgentsIndexRoute
   '/chat/agent/$agentId/edit': typeof DemoChatAgentAgentIdEditRouteWithChildren
+  '/chat/agent/$agentId/edit/skills': typeof DemoChatAgentAgentIdEditSkillsRouteWithChildren
   '/chat/agent/$agentId/chat/$chatId': typeof DemoChatAgentAgentIdChatChatIdRoute
   '/chat/agent/$agentId/edit/skills/$skillId': typeof DemoChatAgentAgentIdEditSkillsSkillIdRoute
   '/chat/agent/$agentId/edit/skills/new': typeof DemoChatAgentAgentIdEditSkillsNewRoute
   '/chat/agent/$agentId/edit/instructions': typeof DemoChatAgentAgentIdEditInstructionsIndexRoute
   '/chat/agent/$agentId/edit/knowledge': typeof DemoChatAgentAgentIdEditKnowledgeIndexRoute
-  '/chat/agent/$agentId/edit/skills': typeof DemoChatAgentAgentIdEditSkillsIndexRoute
   '/chat/agent/$agentId/edit/workflows': typeof DemoChatAgentAgentIdEditWorkflowsIndexRoute
 }
 
@@ -800,12 +812,12 @@ export interface FileRoutesById {
   '/_demo/chat/agents/create': typeof DemoChatAgentsCreateRoute
   '/_demo/chat/agents/': typeof DemoChatAgentsIndexRoute
   '/_demo/chat/agent/$agentId/edit': typeof DemoChatAgentAgentIdEditRouteWithChildren
+  '/_demo/chat/agent/$agentId/edit/skills': typeof DemoChatAgentAgentIdEditSkillsRouteWithChildren
   '/_demo/chat/agent/$agentId_/chat/$chatId': typeof DemoChatAgentAgentIdChatChatIdRoute
   '/_demo/chat/agent/$agentId/edit/skills/$skillId': typeof DemoChatAgentAgentIdEditSkillsSkillIdRoute
   '/_demo/chat/agent/$agentId/edit/skills/new': typeof DemoChatAgentAgentIdEditSkillsNewRoute
   '/_demo/chat/agent/$agentId/edit/instructions/': typeof DemoChatAgentAgentIdEditInstructionsIndexRoute
   '/_demo/chat/agent/$agentId/edit/knowledge/': typeof DemoChatAgentAgentIdEditKnowledgeIndexRoute
-  '/_demo/chat/agent/$agentId/edit/skills/': typeof DemoChatAgentAgentIdEditSkillsIndexRoute
   '/_demo/chat/agent/$agentId/edit/workflows/': typeof DemoChatAgentAgentIdEditWorkflowsIndexRoute
 }
 
@@ -842,12 +854,12 @@ export interface FileRouteTypes {
     | '/chat/agents/create'
     | '/chat/agents'
     | '/chat/agent/$agentId/edit'
+    | '/chat/agent/$agentId/edit/skills'
     | '/chat/agent/$agentId/chat/$chatId'
     | '/chat/agent/$agentId/edit/skills/$skillId'
     | '/chat/agent/$agentId/edit/skills/new'
     | '/chat/agent/$agentId/edit/instructions'
     | '/chat/agent/$agentId/edit/knowledge'
-    | '/chat/agent/$agentId/edit/skills'
     | '/chat/agent/$agentId/edit/workflows'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -879,12 +891,12 @@ export interface FileRouteTypes {
     | '/chat/agents/create'
     | '/chat/agents'
     | '/chat/agent/$agentId/edit'
+    | '/chat/agent/$agentId/edit/skills'
     | '/chat/agent/$agentId/chat/$chatId'
     | '/chat/agent/$agentId/edit/skills/$skillId'
     | '/chat/agent/$agentId/edit/skills/new'
     | '/chat/agent/$agentId/edit/instructions'
     | '/chat/agent/$agentId/edit/knowledge'
-    | '/chat/agent/$agentId/edit/skills'
     | '/chat/agent/$agentId/edit/workflows'
   id:
     | '__root__'
@@ -919,12 +931,12 @@ export interface FileRouteTypes {
     | '/_demo/chat/agents/create'
     | '/_demo/chat/agents/'
     | '/_demo/chat/agent/$agentId/edit'
+    | '/_demo/chat/agent/$agentId/edit/skills'
     | '/_demo/chat/agent/$agentId_/chat/$chatId'
     | '/_demo/chat/agent/$agentId/edit/skills/$skillId'
     | '/_demo/chat/agent/$agentId/edit/skills/new'
     | '/_demo/chat/agent/$agentId/edit/instructions/'
     | '/_demo/chat/agent/$agentId/edit/knowledge/'
-    | '/_demo/chat/agent/$agentId/edit/skills/'
     | '/_demo/chat/agent/$agentId/edit/workflows/'
   fileRoutesById: FileRoutesById
 }
@@ -1124,12 +1136,18 @@ export const routeTree = rootRoute
       "filePath": "_demo/chat/agent/$agentId/edit.tsx",
       "parent": "/_demo/chat",
       "children": [
-        "/_demo/chat/agent/$agentId/edit/skills/$skillId",
-        "/_demo/chat/agent/$agentId/edit/skills/new",
+        "/_demo/chat/agent/$agentId/edit/skills",
         "/_demo/chat/agent/$agentId/edit/instructions/",
         "/_demo/chat/agent/$agentId/edit/knowledge/",
-        "/_demo/chat/agent/$agentId/edit/skills/",
         "/_demo/chat/agent/$agentId/edit/workflows/"
+      ]
+    },
+    "/_demo/chat/agent/$agentId/edit/skills": {
+      "filePath": "_demo/chat/agent/$agentId/edit/skills.tsx",
+      "parent": "/_demo/chat/agent/$agentId/edit",
+      "children": [
+        "/_demo/chat/agent/$agentId/edit/skills/$skillId",
+        "/_demo/chat/agent/$agentId/edit/skills/new"
       ]
     },
     "/_demo/chat/agent/$agentId_/chat/$chatId": {
@@ -1138,11 +1156,11 @@ export const routeTree = rootRoute
     },
     "/_demo/chat/agent/$agentId/edit/skills/$skillId": {
       "filePath": "_demo/chat/agent/$agentId/edit/skills/$skillId.tsx",
-      "parent": "/_demo/chat/agent/$agentId/edit"
+      "parent": "/_demo/chat/agent/$agentId/edit/skills"
     },
     "/_demo/chat/agent/$agentId/edit/skills/new": {
       "filePath": "_demo/chat/agent/$agentId/edit/skills/new.tsx",
-      "parent": "/_demo/chat/agent/$agentId/edit"
+      "parent": "/_demo/chat/agent/$agentId/edit/skills"
     },
     "/_demo/chat/agent/$agentId/edit/instructions/": {
       "filePath": "_demo/chat/agent/$agentId/edit/instructions/index.tsx",
@@ -1150,10 +1168,6 @@ export const routeTree = rootRoute
     },
     "/_demo/chat/agent/$agentId/edit/knowledge/": {
       "filePath": "_demo/chat/agent/$agentId/edit/knowledge/index.tsx",
-      "parent": "/_demo/chat/agent/$agentId/edit"
-    },
-    "/_demo/chat/agent/$agentId/edit/skills/": {
-      "filePath": "_demo/chat/agent/$agentId/edit/skills/index.tsx",
       "parent": "/_demo/chat/agent/$agentId/edit"
     },
     "/_demo/chat/agent/$agentId/edit/workflows/": {

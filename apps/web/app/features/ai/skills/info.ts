@@ -1,5 +1,4 @@
-// import { getSkillOptions } from './skill.options'
-import { SkillId, SkillOption, ToolName } from './skill.types'
+import { ToolName } from './skill.types'
 
 export function getToolsRequiringConfirmation(): ToolName[] {
   return []
@@ -28,7 +27,3 @@ export const toolsInfo: Record<ToolName, { approval: string; success: string }> 
     success: 'Spreadsheet read successfully!',
   },
 }
-
-// export const skillsInfo: Record<SkillId, SkillOption> = Object.fromEntries(
-//   // getSkillOptions().map((skill) => [skill.id, skill]),
-// )

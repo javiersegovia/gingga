@@ -22,7 +22,7 @@ function AnimatedLinkTabs({ tabs, className, pathname }: AnimatedLinkTabsProps) 
   return (
     <div
       className={cn(
-        'bg-card border-shadow-border shadow-shadow relative mb-6 flex w-auto space-x-1 rounded-sm border-2 px-1.5 py-1.5',
+        'bg-card border-shadow-border shadow-shadow relative mb-6 inline-flex w-auto space-x-1 rounded-sm border-2 px-1.5 py-1.5',
         className,
       )}
     >

@@ -11,6 +11,45 @@ export const ComposioAppNames = [
 export const ComposioAppNameEnum = z.enum(ComposioAppNames)
 export type ComposioAppName = z.infer<typeof ComposioAppNameEnum>
 
+export const ComposioToolNames = [
+  // Google Sheets
+  'GOOGLESHEETS_CREATE_SHEET',
+  'GOOGLESHEETS_UPDATE_SHEET',
+  'GOOGLESHEETS_READ_SHEET',
+  // Google Calendar
+  'GOOGLECALENDAR_DUPLICATE_CALENDAR',
+  'GOOGLECALENDAR_QUICK_ADD',
+  'GOOGLECALENDAR_FIND_EVENT',
+  'GOOGLECALENDAR_FIND_FREE_SLOTS',
+  'GOOGLECALENDAR_GET_CURRENT_DATE_TIME',
+  'GOOGLECALENDAR_CREATE_EVENT',
+  'GOOGLECALENDAR_REMOVE_ATTENDEE',
+  'GOOGLECALENDAR_GET_CALENDAR',
+  'GOOGLECALENDAR_LIST_CALENDARS',
+  'GOOGLECALENDAR_UPDATE_EVENT',
+  'GOOGLECALENDAR_PATCH_CALENDAR',
+  'GOOGLECALENDAR_DELETE_EVENT',
+  // Google Docs
+  'GOOGLEDOCS_CREATE_DOCUMENT_MARKDOWN',
+  'GOOGLEDOCS_UPDATE_DOCUMENT_MARKDOWN',
+  'GOOGLEDOCS_CREATE_DOCUMENT',
+  'GOOGLEDOCS_GET_DOCUMENT_BY_ID',
+  'GOOGLEDOCS_UPDATE_EXISTING_DOCUMENT',
+  // Gmail
+  'GMAIL_SEND_EMAIL',
+  'GMAIL_LIST_EMAILS',
+  'GMAIL_GET_EMAIL',
+  'GMAIL_DELETE_EMAIL',
+  'GMAIL_REPLY_EMAIL',
+  'GMAIL_CREATE_DRAFT',
+  'GMAIL_LIST_LABELS',
+  'GMAIL_MODIFY_EMAIL',
+  'GMAIL_LIST_THREADS',
+  'GMAIL_GET_THREAD',
+] as const
+export const ComposioToolNameEnum = z.enum(ComposioToolNames)
+export type ComposioToolName = z.infer<typeof ComposioToolNameEnum>
+
 // Integration details used by our UI
 export interface ComposioIntegration {
   label: string

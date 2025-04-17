@@ -4,7 +4,6 @@ import { authMiddleware } from '@/middleware/auth-guard' // Assuming this exists
 import {
   getComposioIntegrations,
   getComposioIntegrationByAppName,
-  getUserComposioConnections,
   initiateComposioConnection,
   deleteUserComposioConnection,
   getVercelToolset,

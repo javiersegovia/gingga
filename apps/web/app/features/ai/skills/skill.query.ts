@@ -4,6 +4,7 @@ import {
   $getSkillById,
   $createSkill,
   $updateSkillById,
+  $upsertSkill,
   $deleteSkillById,
   $getSkillsByAgentId,
 } from './skill.api'
@@ -49,6 +50,7 @@ export const skillsByAgentIdQueryOptions = (agentId: string) =>
 
 /**
  * Hook to create a new AgentSkill.
+ * @deprecated Prefer useUpsertSkillMutation
  */
 export function useCreateSkillMutation(options?: Parameters<typeof useMutation>[0]) {
   const queryClient = useQueryClient()
@@ -66,6 +68,7 @@ export function useCreateSkillMutation(options?: Parameters<typeof useMutation>[
 
 /**
  * Hook to update an AgentSkill by id.
+ * @deprecated Prefer useUpsertSkillMutation
  */
 export function useUpdateSkillById(options?: Parameters<typeof useMutation>[0]) {
   const queryClient = useQueryClient()
@@ -75,6 +78,25 @@ export function useUpdateSkillById(options?: Parameters<typeof useMutation>[0]) 
     mutationFn: $updateSkillById,
     onSuccess: (...args) => {
       queryClient.invalidateQueries({ queryKey: skillQueryKeys.all })
+      router.invalidate()
+      options?.onSuccess?.(...args)
+    },
+  })
+}
+
+/**
+ * Hook to upsert (create or update) an AgentSkill.
+ */
+export function useUpsertSkillMutation(options?: Parameters<typeof useMutation>[0]) {
+  const queryClient = useQueryClient()
+  const router = useRouter()
+  return useMutation({
+    ...options,
+    mutationFn: $upsertSkill,
+    onSuccess: (...args) => {
+      // Invalidate all queries related to agent skills
+      queryClient.invalidateQueries({ queryKey: skillQueryKeys.all })
+      // Invalidate the router to potentially refetch loader data
       router.invalidate()
       options?.onSuccess?.(...args)
     },

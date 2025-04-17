@@ -1,11 +1,11 @@
-import { createFileRoute, Link, Outlet, useRouter } from '@tanstack/react-router'
+import type { Tab } from '@/components/ui/animated-link-tabs'
+import { createFileRoute, Link, Outlet } from '@tanstack/react-router'
 import { $getAgentById } from '@/features/agent/agent.api'
 import { Button } from '@gingga/ui/components/button'
 import { ArrowLeftIcon } from 'lucide-react'
-import { DeleteAgentDialog } from '@/features/agent/components/delete-agent-dialog'
 import { AnimatedLinkTabs } from '@/components/ui/animated-link-tabs'
-import type { Tab } from '@/components/ui/animated-link-tabs'
 import { Avatar, AvatarFallback, AvatarImage } from '@gingga/ui/components/avatar'
+import { cn } from '@gingga/ui/lib/utils'
 
 export const Route = createFileRoute('/_demo/chat/agent/$agentId/edit')({
   loader: async ({
@@ -50,10 +50,6 @@ function RouteComponent() {
     },
   ]
 
-  const router = useRouter()
-
-  console.log({ pathname })
-
   return (
     <div className="mx-auto flex min-h-screen w-full max-w-4xl flex-col gap-12 py-10 lg:flex-row">
       <aside className="w-full shrink-0 lg:w-64">
@@ -76,29 +72,50 @@ function RouteComponent() {
                 {agent.name?.charAt(0).toUpperCase() || 'A'}
               </AvatarFallback>
             </Avatar>
-            <h2 className="mb-0 text-center text-lg font-semibold">{agent.name}</h2>
-            <p className="text-muted-foreground text-center text-sm">
-              {agent.description || 'Agent Description'}
-            </p>
+            <div className="w-full text-left">
+              <h2 className="mb-0 text-xl font-semibold">{agent.name}</h2>
+              <p className="text-muted-foreground text-sm">
+                {agent.description || 'Agent Description'}
+              </p>
+
+              <h4 className="font-title mt-4 text-xs uppercase">Skills</h4>
+              {agent.agentSkills.length > 0 ? (
+                <ul className="mt-2 flex flex-col items-start justify-start gap-2 text-xs">
+                  {agent.agentSkills.map((skill) => (
+                    <li
+                      key={skill.id}
+                      className="flex items-center gap-2 rounded-md border px-4 py-2"
+                    >
+                      <div
+                        className={cn(
+                          'h-2 w-2 rounded-full',
+                          skill.isEnabled ? 'bg-green-500' : 'bg-red-500',
+                        )}
+                      />
+                      <span className="inline-block">{skill.name || skill.skillId}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-muted-foreground text-sm">No skills added yet.</p>
+              )}
+            </div>
           </div>
         </div>
       </aside>
 
       <main className="flex flex-1 flex-col space-y-6">
-        <div>
-          <span className="text-muted-foreground font-medium uppercase">The brain </span>
-          <h1 className="mb-4 text-3xl font-bold">{agent.name}</h1>
+        <div className="relative block w-auto">
+          <AnimatedLinkTabs tabs={navItems} pathname={pathname} />
         </div>
-
-        <AnimatedLinkTabs tabs={navItems} pathname={pathname} />
 
         <div className="rounded-md border p-6">
           <Outlet />
         </div>
 
-        <div className="pt-6">
+        {/* <div className="pt-6">
           <DeleteAgentDialog agent={agent} />
-        </div>
+        </div> */}
       </main>
     </div>
   )

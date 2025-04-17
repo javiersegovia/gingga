@@ -308,6 +308,10 @@ export type SkillOption = {
     required: boolean
     integrationAppName: ComposioAppName
     integrationId: string
-    availableComposioToolNames: string[]
+    availableComposioToolNames: {
+      id: string
+      name: string
+      description: string
+    }[]
   }
 }

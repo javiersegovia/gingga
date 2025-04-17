@@ -25,11 +25,11 @@ import { MessageEditor } from './message-editor'
 import { MessageReasoning } from './message-reasoning'
 import { UseChatHelpers } from '@ai-sdk/react'
 import { Avatar, AvatarFallback } from '@gingga/ui/components/avatar'
-import { ToolName, ToolResponse } from '../../../ai/skills/skill.types'
-import {
-  toolsRequiringConfirmation,
-  APPROVAL /*skillsInfo*/,
-} from '../../../ai/skills/info'
+import { /* ToolName, */ ToolResponse } from '../../../ai/skills/skill.types'
+// import {
+//   toolsRequiringConfirmation,
+//   APPROVAL /*skillsInfo*/,
+// } from '../../../ai/skills/info'
 
 interface MessageProps {
   chatId: string
@@ -49,28 +49,28 @@ interface MessageProps {
   isReadonly: boolean
 }
 
-function isToolResponse(result: unknown): result is ToolResponse {
-  return (
-    typeof result === 'object' &&
-    result !== null &&
-    'success' in result &&
-    'output' in result &&
-    'label' in result
-  )
-}
+// function isToolResponse(result: unknown): result is ToolResponse {
+//   return (
+//     typeof result === 'object' &&
+//     result !== null &&
+//     'success' in result &&
+//     'output' in result &&
+//     'label' in result
+//   )
+// }
 
 const PurePreviewMessage = ({
   // chatId,
   message,
-  status,
+  // status,
   isLoading,
   setMessages,
   reload,
-  addToolResult,
+  // addToolResult,
   isReadonly,
 }: MessageProps) => {
   const [mode, setMode] = useState<'view' | 'edit'>('view')
-  const isChatLoading = status === 'streaming' || status === 'submitted'
+  // const isChatLoading = status === 'streaming' || status === 'submitted'
 
   return (
     <TooltipProvider delayDuration={0}>

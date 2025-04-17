@@ -39,7 +39,8 @@ function PureChatHeader({
   )
 }
 
-export const ChatHeader = memo(PureChatHeader, (prevProps, nextProps) => {
+// export const ChatHeader = memo(PureChatHeader, (prevProps, nextProps) => {
+export const ChatHeader = memo(PureChatHeader, () => {
   // return prevProps.selectedModelId === nextProps.selectedModelId
   return true
 })

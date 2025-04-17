@@ -40,6 +40,20 @@ export async function updateAgentSkillById(
 }
 
 /**
+ * Upsert an AgentSkill. Creates if id is not provided or doesn't exist,
+ * otherwise updates the existing skill based on the id.
+ */
+export async function upsertAgentSkill(data: typeof AgentSkills.$inferInsert) {
+  const db = getDatabase()
+  const [result] = await db
+    .insert(AgentSkills)
+    .values(data)
+    .onConflictDoUpdate({ target: AgentSkills.id, set: data })
+    .returning()
+  return result
+}
+
+/**
  * Delete an AgentSkill by id.
  */
 export async function deleteAgentSkillById(id: string) {

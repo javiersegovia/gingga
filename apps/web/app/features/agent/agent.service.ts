@@ -9,11 +9,14 @@ import { Agent } from '@/db/types'
  * @param agentId The ID of the agent
  * @returns The agent configuration object or null if not found.
  */
-export async function getAgentById(agentId: string): Promise<Agent | null> {
+export async function getAgentById(agentId: string) {
   try {
     const db = getDatabase()
     const agent = await db.query.Agents.findFirst({
       where: eq(Agents.id, agentId),
+      with: {
+        agentSkills: true,
+      },
     })
 
     if (!agent) {

@@ -1,5 +1,4 @@
 import { createServerFn } from '@tanstack/react-start'
-import { googlesheetsSkill } from './googlesheets/data'
 import { SkillOption } from './skill.types'
 import {
   SkillIdParamSchema,
@@ -13,13 +12,21 @@ import {
   updateAgentSkillById,
   deleteAgentSkillById,
   getAgentSkillsByAgentId,
+  upsertAgentSkill,
 } from './skill.service'
 import { zodValidator } from '@tanstack/zod-adapter'
 import { z } from 'zod'
+import { getSkills } from './skill.list'
+import { AgentSkills } from '@/db/schema'
+
+// Define schema for upsert, making id optional
+const UpsertSkillInputSchema = CreateSkillInputSchema.extend({
+  id: z.string().optional(),
+})
 
 export const $getSkillOptions = createServerFn({ method: 'GET' }).handler<SkillOption[]>(
   async () => {
-    return [googlesheetsSkill()]
+    return getSkills()
   },
 )
 
@@ -34,6 +41,7 @@ export const $getSkillById = createServerFn({ method: 'GET' })
 
 /**
  * Server function to create a new AgentSkill.
+ * @deprecated Use $upsertSkill instead
  */
 export const $createSkill = createServerFn({ method: 'POST' })
   .validator(zodValidator(CreateSkillInputSchema))
@@ -43,12 +51,23 @@ export const $createSkill = createServerFn({ method: 'POST' })
 
 /**
  * Server function to update an AgentSkill by id.
+ * @deprecated Use $upsertSkill instead
  */
 export const $updateSkillById = createServerFn({ method: 'POST' })
   .validator(zodValidator(UpdateSkillInputSchema))
   .handler(async ({ data }) => {
     const { id, ...updateData } = data
     return updateAgentSkillById(id, updateData)
+  })
+
+/**
+ * Server function to upsert (create or update) an AgentSkill.
+ */
+export const $upsertSkill = createServerFn({ method: 'POST' })
+  .validator(zodValidator(UpsertSkillInputSchema))
+  .handler(async ({ data }) => {
+    // The id might be undefined for creation, which is handled by the service
+    return upsertAgentSkill(data as typeof AgentSkills.$inferInsert)
   })
 
 /**

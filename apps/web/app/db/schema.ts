@@ -3,7 +3,10 @@ import { relations, sql } from 'drizzle-orm'
 import { nanoid } from 'nanoid'
 import { Attachment } from 'ai'
 import { SkillId, ToolName } from '../features/ai/skills/skill.types'
-import { ComposioAppNames } from '../features/settings/integrations/composio.schema'
+import {
+  ComposioAppNames,
+  ComposioToolName,
+} from '../features/settings/integrations/composio.schema'
 
 // Helper for NanoId default values
 const nanoIdDefault = () => text('id').notNull().$defaultFn(nanoid)
@@ -278,6 +281,9 @@ export const AgentSkills = sqliteTable('agent_skills', {
     .notNull()
     .references(() => Agents.id, { onDelete: 'cascade' }),
 
+  name: text('name'),
+  description: text('description'),
+
   instructions: text('instructions'),
   skillId: text('skill_id').$type<SkillId>().notNull(),
   tools: text('tools', { mode: 'json' }).$type<ToolName[]>(),
@@ -288,7 +294,9 @@ export const AgentSkills = sqliteTable('agent_skills', {
   composioIntegrationAppName: text('composio_integration_app_name', {
     enum: ComposioAppNames,
   }),
-  composioToolNames: text('composio_tool_names', { mode: 'json' }).$type<string[]>(),
+  composioToolNames: text('composio_tool_names', { mode: 'json' }).$type<
+    ComposioToolName[]
+  >(),
 })
 
 export const agentSkillsRelations = relations(AgentSkills, ({ one }) => ({
