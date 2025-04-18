@@ -1,6 +1,5 @@
 import type { Tab } from '@/components/ui/animated-link-tabs'
 import { createFileRoute, Link, Outlet } from '@tanstack/react-router'
-import { $getAgentById } from '@/features/agent/agent.api'
 import { Button } from '@gingga/ui/components/button'
 import {
   ArrowLeftIcon,
@@ -12,19 +11,18 @@ import {
 import { AnimatedLinkTabs } from '@/components/ui/animated-link-tabs'
 import { Avatar, AvatarFallback, AvatarImage } from '@gingga/ui/components/avatar'
 import { cn } from '@gingga/ui/lib/utils'
+import { agentQueryOptions } from '@/features/agent/agent.query'
+import { skillOptionsQueryOptions } from '@/features/ai/skills/skill.query'
+import { useSuspenseQuery } from '@tanstack/react-query'
 
 export const Route = createFileRoute('/_demo/chat/agent/$agentId/edit')({
-  loader: async ({
-    params,
-    location,
-  }: {
-    params: { agentId: string }
-    location: { pathname: string }
-  }) => {
-    const agent = await $getAgentById({ data: { id: params.agentId } })
+  loader: async ({ params, location, context }) => {
+    const agent = await context.queryClient.fetchQuery(agentQueryOptions(params.agentId))
     if (!agent) {
       throw new Error('Agent not found')
     }
+    await context.queryClient.prefetchQuery(skillOptionsQueryOptions)
+
     return { agent, pathname: location.pathname }
   },
   component: RouteComponent,
@@ -32,6 +30,7 @@ export const Route = createFileRoute('/_demo/chat/agent/$agentId/edit')({
 
 function RouteComponent() {
   const { agent, pathname } = Route.useLoaderData()
+  const { data: skillOptions } = useSuspenseQuery(skillOptionsQueryOptions)
 
   const navItems: Tab[] = [
     {
@@ -91,20 +90,26 @@ function RouteComponent() {
               <h4 className="font-title mt-4 text-xs uppercase">Skills</h4>
               {agent.agentSkills.length > 0 ? (
                 <ul className="mt-2 flex flex-col items-start justify-start gap-2 text-xs">
-                  {agent.agentSkills.map((skill) => (
-                    <li
-                      key={skill.id}
-                      className="flex items-center gap-2 rounded-md border px-4 py-2"
-                    >
-                      <div
-                        className={cn(
-                          'h-2 w-2 rounded-full',
-                          skill.isEnabled ? 'bg-green-500' : 'bg-red-500',
-                        )}
-                      />
-                      <span className="inline-block">{skill.name || skill.skillId}</span>
-                    </li>
-                  ))}
+                  {agent.agentSkills.map((skill) => {
+                    const skillOption = skillOptions?.find(
+                      (opt) => opt.id === skill.skillId,
+                    )
+                    const displayName = skill.name || skillOption?.name || skill.skillId
+                    return (
+                      <li
+                        key={skill.id}
+                        className="flex items-center gap-2 rounded-md border px-4 py-2"
+                      >
+                        <div
+                          className={cn(
+                            'h-2 w-2 rounded-full',
+                            skill.isEnabled ? 'bg-green-500' : 'bg-red-500',
+                          )}
+                        />
+                        <span className="inline-block">{displayName}</span>
+                      </li>
+                    )
+                  })}
                 </ul>
               ) : (
                 <p className="text-muted-foreground text-sm">No skills added yet.</p>
@@ -119,13 +124,9 @@ function RouteComponent() {
           <AnimatedLinkTabs tabs={navItems} pathname={pathname} />
         </div>
 
-        <div className="rounded-md border p-6">
+        <div className="rounded-md p-6">
           <Outlet />
         </div>
-
-        {/* <div className="pt-6">
-          <DeleteAgentDialog agent={agent} />
-        </div> */}
       </main>
     </div>
   )

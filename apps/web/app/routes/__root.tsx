@@ -13,6 +13,10 @@ import globalCss from '@/styles/globals.css?url'
 import { ThemeProvider, useTheme } from '@/components/shared/theme'
 import fontsourceOutfit from '@fontsource-variable/outfit?url'
 import fontsourceUnbounded from '@fontsource-variable/unbounded?url'
+import fontsourceVariableManrope from '@fontsource-variable/manrope?url'
+import fontsourceVariableGeist from '@fontsource-variable/geist?url'
+import fontsourceVariableNunito from '@fontsource-variable/nunito?url'
+import fontsourceVariableDMSans from '@fontsource-variable/dm-sans?url'
 
 import { Toaster } from '@gingga/ui/components/sonner'
 import { authQueryOptions } from '@/features/auth/auth.query'
@@ -57,9 +61,22 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: 'stylesheet',
         href: fontsourceUnbounded,
       },
+
       {
         rel: 'stylesheet',
-        href: 'https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@1&display=swap',
+        href: fontsourceVariableManrope,
+      },
+      {
+        rel: 'stylesheet',
+        href: fontsourceVariableGeist,
+      },
+      {
+        rel: 'stylesheet',
+        href: fontsourceVariableNunito,
+      },
+      {
+        rel: 'stylesheet',
+        href: fontsourceVariableDMSans,
       },
     ],
   }),
@@ -77,7 +94,7 @@ function RootComponent() {
 
 export function ToasterWrapper() {
   const { resolved } = useTheme()
-  return <Toaster theme={resolved} />
+  return <Toaster position="top-center" theme={resolved} />
 }
 
 function RootDocument({ children }: { children: React.ReactNode }) {

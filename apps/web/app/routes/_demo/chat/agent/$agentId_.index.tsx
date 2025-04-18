@@ -3,7 +3,7 @@ import { nanoid } from 'nanoid'
 import { BaseChat } from '@/features/chat/components/base-chat'
 import { agentQueryOptions } from '@/features/agent/agent.query'
 
-export const Route = createFileRoute('/_demo/chat/agent/$agentId_')({
+export const Route = createFileRoute('/_demo/chat/agent/$agentId_/')({
   component: AgentChatRoute,
   loader: async ({ params, context: { queryClient } }) => {
     try {
@@ -21,16 +21,18 @@ function AgentChatRoute() {
   const chatId = nanoid()
 
   return (
-    <BaseChat
-      key={chatId}
-      id={chatId}
-      agentId={agentId}
-      endpoint={`/api/agents/custom/${agentId}`}
-      initialMessages={[]}
-      selectedVisibilityType="private"
-      isReadonly={false}
-      isNewChat
-      isAgent
-    />
+    <>
+      <BaseChat
+        key={chatId}
+        id={chatId}
+        agentId={agentId}
+        endpoint={`/api/agents/custom/${agentId}`}
+        initialMessages={[]}
+        selectedVisibilityType="private"
+        isReadonly={false}
+        isNewChat
+        isAgent
+      />
+    </>
   )
 }

@@ -38,7 +38,7 @@ export const EmptyOverview = ({ setInput, agentId }: EmptyOverviewProps) => {
           <img
             src={agentInfo.image}
             alt={agentInfo.name}
-            className="rounded-base mx-auto size-32"
+            className="rounded-base mx-auto size-40 object-contain"
           />
         )}
 

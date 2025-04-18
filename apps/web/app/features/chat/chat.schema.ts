@@ -9,6 +9,19 @@ export const ChatSchema = z.object({
   agentId: z.string().nullable(),
 })
 
+export const AIChatSchema = z.object({
+  id: z.string(),
+  messages: z.array(
+    z.object({
+      id: z.string(),
+      role: z.enum(['system', 'user', 'assistant']),
+      content: z.string(),
+      parts: z.array(z.any()),
+    }),
+  ),
+  agentId: z.string().optional(),
+})
+
 export const RenameChatSchema = z.object({
   id: z.string(),
   title: z

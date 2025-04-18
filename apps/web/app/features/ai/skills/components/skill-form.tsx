@@ -82,7 +82,7 @@ export function SkillForm({
     ...formOpts,
     onSubmit: async ({ value }) => {
       setFormError(null)
-      upsertMutation.mutate(
+      await upsertMutation.mutateAsync(
         {
           data: {
             ...value,
@@ -124,13 +124,21 @@ export function SkillForm({
 
   return (
     <>
-      <formContext.Provider value={form}>
+      <form
+        className="flex flex-1 flex-col"
+        onSubmit={(e) => {
+          e.preventDefault()
+          e.stopPropagation()
+          void form.handleSubmit()
+        }}
+      >
+        {/* <formContext.Provider value={form}> */}
         <Tabs
           value={tab}
           onValueChange={(value) => setTab(value as typeof tab)}
           className="mt-4 flex flex-1 flex-col"
         >
-          <TabsList className="mb-4 shrink-0">
+          <TabsList className="mr-auto mb-4">
             <TabsTrigger isActive={tab === 'tools'} value="tools">
               Tools
             </TabsTrigger>
@@ -240,7 +248,7 @@ export function SkillForm({
                       Variables tab.
                     </div>
                   ) : (
-                    <div className="flex flex-wrap gap-2">
+                    <div className="mt-2 flex flex-wrap gap-2">
                       {(form.state.values.variables ?? [])
                         .map((v) => v.key)
                         .filter((k) => k)
@@ -429,11 +437,12 @@ export function SkillForm({
         <div className="mt-6 mb-2 px-2">
           <form.AppForm>
             <form.FormButton variant="primary" size="xl" className="w-full">
-              {({ isSubmitting }) => (isSubmitting ? 'Saving...' : 'Save')}
+              Save
             </form.FormButton>
           </form.AppForm>
         </div>
-      </formContext.Provider>
+        {/* </formContext.Provider> */}
+      </form>
     </>
   )
 }

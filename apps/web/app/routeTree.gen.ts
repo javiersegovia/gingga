@@ -40,7 +40,7 @@ import { Route as AdminUsersUserIdImport } from './routes/admin/users/$userId'
 import { Route as DemoChatChatIdImport } from './routes/_demo/chat/$chatId'
 import { Route as DemoChatAgentsIndexImport } from './routes/_demo/chat/agents/index'
 import { Route as DemoChatAgentsCreateImport } from './routes/_demo/chat/agents/create'
-import { Route as DemoChatAgentAgentIdImport } from './routes/_demo/chat/agent/$agentId_'
+import { Route as DemoChatAgentAgentIdIndexImport } from './routes/_demo/chat/agent/$agentId_.index'
 import { Route as DemoChatAgentAgentIdEditImport } from './routes/_demo/chat/agent/$agentId/edit'
 import { Route as DemoChatAgentAgentIdChatChatIdImport } from './routes/_demo/chat/agent/$agentId_.chat.$chatId'
 import { Route as DemoChatAgentAgentIdEditSkillsImport } from './routes/_demo/chat/agent/$agentId/edit/skills'
@@ -224,9 +224,9 @@ const DemoChatAgentsCreateRoute = DemoChatAgentsCreateImport.update({
   getParentRoute: () => DemoChatRoute,
 } as any)
 
-const DemoChatAgentAgentIdRoute = DemoChatAgentAgentIdImport.update({
-  id: '/agent/$agentId_',
-  path: '/agent/$agentId',
+const DemoChatAgentAgentIdIndexRoute = DemoChatAgentAgentIdIndexImport.update({
+  id: '/agent/$agentId_/',
+  path: '/agent/$agentId/',
   getParentRoute: () => DemoChatRoute,
 } as any)
 
@@ -238,9 +238,9 @@ const DemoChatAgentAgentIdEditRoute = DemoChatAgentAgentIdEditImport.update({
 
 const DemoChatAgentAgentIdChatChatIdRoute =
   DemoChatAgentAgentIdChatChatIdImport.update({
-    id: '/chat/$chatId',
-    path: '/chat/$chatId',
-    getParentRoute: () => DemoChatAgentAgentIdRoute,
+    id: '/agent/$agentId_/chat/$chatId',
+    path: '/agent/$agentId/chat/$chatId',
+    getParentRoute: () => DemoChatRoute,
   } as any)
 
 const DemoChatAgentAgentIdEditSkillsRoute =
@@ -478,13 +478,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminUsersIndexImport
       parentRoute: typeof AdminImport
     }
-    '/_demo/chat/agent/$agentId_': {
-      id: '/_demo/chat/agent/$agentId_'
-      path: '/agent/$agentId'
-      fullPath: '/chat/agent/$agentId'
-      preLoaderRoute: typeof DemoChatAgentAgentIdImport
-      parentRoute: typeof DemoChatImport
-    }
     '/_demo/chat/agents/create': {
       id: '/_demo/chat/agents/create'
       path: '/agents/create'
@@ -506,6 +499,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoChatAgentAgentIdEditImport
       parentRoute: typeof DemoChatImport
     }
+    '/_demo/chat/agent/$agentId_/': {
+      id: '/_demo/chat/agent/$agentId_/'
+      path: '/agent/$agentId'
+      fullPath: '/chat/agent/$agentId'
+      preLoaderRoute: typeof DemoChatAgentAgentIdIndexImport
+      parentRoute: typeof DemoChatImport
+    }
     '/_demo/chat/agent/$agentId/edit/skills': {
       id: '/_demo/chat/agent/$agentId/edit/skills'
       path: '/skills'
@@ -515,10 +515,10 @@ declare module '@tanstack/react-router' {
     }
     '/_demo/chat/agent/$agentId_/chat/$chatId': {
       id: '/_demo/chat/agent/$agentId_/chat/$chatId'
-      path: '/chat/$chatId'
+      path: '/agent/$agentId/chat/$chatId'
       fullPath: '/chat/agent/$agentId/chat/$chatId'
       preLoaderRoute: typeof DemoChatAgentAgentIdChatChatIdImport
-      parentRoute: typeof DemoChatAgentAgentIdImport
+      parentRoute: typeof DemoChatImport
     }
     '/_demo/chat/agent/$agentId/edit/skills/$skillId': {
       id: '/_demo/chat/agent/$agentId/edit/skills/$skillId'
@@ -626,17 +626,6 @@ const SettingsRouteWithChildren = SettingsRoute._addFileChildren(
   SettingsRouteChildren,
 )
 
-interface DemoChatAgentAgentIdRouteChildren {
-  DemoChatAgentAgentIdChatChatIdRoute: typeof DemoChatAgentAgentIdChatChatIdRoute
-}
-
-const DemoChatAgentAgentIdRouteChildren: DemoChatAgentAgentIdRouteChildren = {
-  DemoChatAgentAgentIdChatChatIdRoute: DemoChatAgentAgentIdChatChatIdRoute,
-}
-
-const DemoChatAgentAgentIdRouteWithChildren =
-  DemoChatAgentAgentIdRoute._addFileChildren(DemoChatAgentAgentIdRouteChildren)
-
 interface DemoChatAgentAgentIdEditSkillsRouteChildren {
   DemoChatAgentAgentIdEditSkillsSkillIdRoute: typeof DemoChatAgentAgentIdEditSkillsSkillIdRoute
   DemoChatAgentAgentIdEditSkillsNewRoute: typeof DemoChatAgentAgentIdEditSkillsNewRoute
@@ -682,19 +671,21 @@ const DemoChatAgentAgentIdEditRouteWithChildren =
 interface DemoChatRouteChildren {
   DemoChatChatIdRoute: typeof DemoChatChatIdRoute
   DemoChatIndexRoute: typeof DemoChatIndexRoute
-  DemoChatAgentAgentIdRoute: typeof DemoChatAgentAgentIdRouteWithChildren
   DemoChatAgentsCreateRoute: typeof DemoChatAgentsCreateRoute
   DemoChatAgentsIndexRoute: typeof DemoChatAgentsIndexRoute
   DemoChatAgentAgentIdEditRoute: typeof DemoChatAgentAgentIdEditRouteWithChildren
+  DemoChatAgentAgentIdIndexRoute: typeof DemoChatAgentAgentIdIndexRoute
+  DemoChatAgentAgentIdChatChatIdRoute: typeof DemoChatAgentAgentIdChatChatIdRoute
 }
 
 const DemoChatRouteChildren: DemoChatRouteChildren = {
   DemoChatChatIdRoute: DemoChatChatIdRoute,
   DemoChatIndexRoute: DemoChatIndexRoute,
-  DemoChatAgentAgentIdRoute: DemoChatAgentAgentIdRouteWithChildren,
   DemoChatAgentsCreateRoute: DemoChatAgentsCreateRoute,
   DemoChatAgentsIndexRoute: DemoChatAgentsIndexRoute,
   DemoChatAgentAgentIdEditRoute: DemoChatAgentAgentIdEditRouteWithChildren,
+  DemoChatAgentAgentIdIndexRoute: DemoChatAgentAgentIdIndexRoute,
+  DemoChatAgentAgentIdChatChatIdRoute: DemoChatAgentAgentIdChatChatIdRoute,
 }
 
 const DemoChatRouteWithChildren = DemoChatRoute._addFileChildren(
@@ -728,10 +719,10 @@ export interface FileRoutesByFullPath {
   '/chat/': typeof DemoChatIndexRoute
   '/exsis': typeof ProposalsExsisIndexRoute
   '/admin/users': typeof AdminUsersIndexRoute
-  '/chat/agent/$agentId': typeof DemoChatAgentAgentIdRouteWithChildren
   '/chat/agents/create': typeof DemoChatAgentsCreateRoute
   '/chat/agents': typeof DemoChatAgentsIndexRoute
   '/chat/agent/$agentId/edit': typeof DemoChatAgentAgentIdEditRouteWithChildren
+  '/chat/agent/$agentId': typeof DemoChatAgentAgentIdIndexRoute
   '/chat/agent/$agentId/edit/skills': typeof DemoChatAgentAgentIdEditSkillsRouteWithChildren
   '/chat/agent/$agentId/chat/$chatId': typeof DemoChatAgentAgentIdChatChatIdRoute
   '/chat/agent/$agentId/edit/skills/$skillId': typeof DemoChatAgentAgentIdEditSkillsSkillIdRoute
@@ -766,10 +757,10 @@ export interface FileRoutesByTo {
   '/chat': typeof DemoChatIndexRoute
   '/exsis': typeof ProposalsExsisIndexRoute
   '/admin/users': typeof AdminUsersIndexRoute
-  '/chat/agent/$agentId': typeof DemoChatAgentAgentIdRouteWithChildren
   '/chat/agents/create': typeof DemoChatAgentsCreateRoute
   '/chat/agents': typeof DemoChatAgentsIndexRoute
   '/chat/agent/$agentId/edit': typeof DemoChatAgentAgentIdEditRouteWithChildren
+  '/chat/agent/$agentId': typeof DemoChatAgentAgentIdIndexRoute
   '/chat/agent/$agentId/edit/skills': typeof DemoChatAgentAgentIdEditSkillsRouteWithChildren
   '/chat/agent/$agentId/chat/$chatId': typeof DemoChatAgentAgentIdChatChatIdRoute
   '/chat/agent/$agentId/edit/skills/$skillId': typeof DemoChatAgentAgentIdEditSkillsSkillIdRoute
@@ -808,10 +799,10 @@ export interface FileRoutesById {
   '/_demo/chat/': typeof DemoChatIndexRoute
   '/_proposals/exsis/': typeof ProposalsExsisIndexRoute
   '/admin/users/': typeof AdminUsersIndexRoute
-  '/_demo/chat/agent/$agentId_': typeof DemoChatAgentAgentIdRouteWithChildren
   '/_demo/chat/agents/create': typeof DemoChatAgentsCreateRoute
   '/_demo/chat/agents/': typeof DemoChatAgentsIndexRoute
   '/_demo/chat/agent/$agentId/edit': typeof DemoChatAgentAgentIdEditRouteWithChildren
+  '/_demo/chat/agent/$agentId_/': typeof DemoChatAgentAgentIdIndexRoute
   '/_demo/chat/agent/$agentId/edit/skills': typeof DemoChatAgentAgentIdEditSkillsRouteWithChildren
   '/_demo/chat/agent/$agentId_/chat/$chatId': typeof DemoChatAgentAgentIdChatChatIdRoute
   '/_demo/chat/agent/$agentId/edit/skills/$skillId': typeof DemoChatAgentAgentIdEditSkillsSkillIdRoute
@@ -850,10 +841,10 @@ export interface FileRouteTypes {
     | '/chat/'
     | '/exsis'
     | '/admin/users'
-    | '/chat/agent/$agentId'
     | '/chat/agents/create'
     | '/chat/agents'
     | '/chat/agent/$agentId/edit'
+    | '/chat/agent/$agentId'
     | '/chat/agent/$agentId/edit/skills'
     | '/chat/agent/$agentId/chat/$chatId'
     | '/chat/agent/$agentId/edit/skills/$skillId'
@@ -887,10 +878,10 @@ export interface FileRouteTypes {
     | '/chat'
     | '/exsis'
     | '/admin/users'
-    | '/chat/agent/$agentId'
     | '/chat/agents/create'
     | '/chat/agents'
     | '/chat/agent/$agentId/edit'
+    | '/chat/agent/$agentId'
     | '/chat/agent/$agentId/edit/skills'
     | '/chat/agent/$agentId/chat/$chatId'
     | '/chat/agent/$agentId/edit/skills/$skillId'
@@ -927,10 +918,10 @@ export interface FileRouteTypes {
     | '/_demo/chat/'
     | '/_proposals/exsis/'
     | '/admin/users/'
-    | '/_demo/chat/agent/$agentId_'
     | '/_demo/chat/agents/create'
     | '/_demo/chat/agents/'
     | '/_demo/chat/agent/$agentId/edit'
+    | '/_demo/chat/agent/$agentId_/'
     | '/_demo/chat/agent/$agentId/edit/skills'
     | '/_demo/chat/agent/$agentId_/chat/$chatId'
     | '/_demo/chat/agent/$agentId/edit/skills/$skillId'
@@ -1053,10 +1044,11 @@ export const routeTree = rootRoute
       "children": [
         "/_demo/chat/$chatId",
         "/_demo/chat/",
-        "/_demo/chat/agent/$agentId_",
         "/_demo/chat/agents/create",
         "/_demo/chat/agents/",
-        "/_demo/chat/agent/$agentId/edit"
+        "/_demo/chat/agent/$agentId/edit",
+        "/_demo/chat/agent/$agentId_/",
+        "/_demo/chat/agent/$agentId_/chat/$chatId"
       ]
     },
     "/_home/cookies": {
@@ -1117,13 +1109,6 @@ export const routeTree = rootRoute
       "filePath": "admin/users/index.tsx",
       "parent": "/admin"
     },
-    "/_demo/chat/agent/$agentId_": {
-      "filePath": "_demo/chat/agent/$agentId_.tsx",
-      "parent": "/_demo/chat",
-      "children": [
-        "/_demo/chat/agent/$agentId_/chat/$chatId"
-      ]
-    },
     "/_demo/chat/agents/create": {
       "filePath": "_demo/chat/agents/create.tsx",
       "parent": "/_demo/chat"
@@ -1142,6 +1127,10 @@ export const routeTree = rootRoute
         "/_demo/chat/agent/$agentId/edit/workflows/"
       ]
     },
+    "/_demo/chat/agent/$agentId_/": {
+      "filePath": "_demo/chat/agent/$agentId_.index.tsx",
+      "parent": "/_demo/chat"
+    },
     "/_demo/chat/agent/$agentId/edit/skills": {
       "filePath": "_demo/chat/agent/$agentId/edit/skills.tsx",
       "parent": "/_demo/chat/agent/$agentId/edit",
@@ -1152,7 +1141,7 @@ export const routeTree = rootRoute
     },
     "/_demo/chat/agent/$agentId_/chat/$chatId": {
       "filePath": "_demo/chat/agent/$agentId_.chat.$chatId.tsx",
-      "parent": "/_demo/chat/agent/$agentId_"
+      "parent": "/_demo/chat"
     },
     "/_demo/chat/agent/$agentId/edit/skills/$skillId": {
       "filePath": "_demo/chat/agent/$agentId/edit/skills/$skillId.tsx",

@@ -80,7 +80,7 @@
   --brand-pink-foreground: #000000;
   --brand-purple: #9a62fc;
   --brand-purple-foreground: #fff;
-  --brand-green: #69ee7d;
+  --brand-green: #2ca04f;
   --brand-green-foreground: #000;
   --brand-sky: #42d3db;
   --brand-sky-foreground: #000;
@@ -195,6 +195,9 @@
 
   --font-title: "Unbounded Variable", ui-sans-serif, system-ui, sans-serif;
   --font-body: "Outfit Variable", ui-sans-serif, system-ui, sans-serif;
+  /* --font-body: "Geist Variable", ui-sans-serif, system-ui, sans-serif; */
+  /* --font-body: "DM Sans Variable", ui-sans-serif, system-ui, sans-serif; */
+  /* --font-body: "Nunito Variable", ui-sans-serif, system-ui, sans-serif; */
 
   /* Font weights */
   --font-weight-base: 400;

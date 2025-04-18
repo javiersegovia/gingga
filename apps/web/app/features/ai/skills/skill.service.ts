@@ -69,3 +69,16 @@ export async function getAgentSkillsByAgentId(agentId: string) {
   const db = getDatabase()
   return db.query.AgentSkills.findMany({ where: eq(AgentSkills.agentId, agentId) })
 }
+
+/**
+ * Updates the enabled status of a specific AgentSkill.
+ */
+export async function updateAgentSkillEnabledStatus(id: string, isEnabled: boolean) {
+  const db = getDatabase()
+  const [updated] = await db
+    .update(AgentSkills)
+    .set({ isEnabled, updatedAt: new Date() }) // Ensure updatedAt is also updated
+    .where(eq(AgentSkills.id, id))
+    .returning()
+  return updated
+}

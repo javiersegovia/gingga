@@ -17,23 +17,23 @@ export function AvailableSkillCard({ skillOption, agentId }: AvailableSkillCardP
       search={{ skillOptionId: skillOption.id }}
       className="block"
     >
-      <Card design="grid" hover="reverse" className="flex flex-col px-4 py-4">
+      <Card design="grid" hover="reverse" className="flex flex-col px-8 py-4">
         {/* Image/Icon on the left */}
-        <div className="flex items-center gap-2">
+        <div className="flex flex-col items-center justify-center gap-2">
           <div className="mr-2 flex-shrink-0">
             {skillOption.image ? (
               <img
                 src={skillOption.image}
                 alt={`${skillOption.name} logo`}
-                className="h-16 w-16 object-contain"
+                className="h-40 w-40 object-contain"
               />
             ) : (
               <ImageIcon className="text-muted-foreground h-8 w-8" />
             )}
           </div>
           {/* Title and Description on the right */}
-          <div className="flex flex-grow flex-col">
-            <CardTitle className="text-base leading-tight font-semibold">
+          <div className="flex flex-grow flex-col text-center">
+            <CardTitle className="text-base leading-normal font-semibold">
               {skillOption.name}
             </CardTitle>
             <p className="text-muted-foreground text-sm leading-4">
@@ -43,7 +43,7 @@ export function AvailableSkillCard({ skillOption, agentId }: AvailableSkillCardP
         </div>
 
         {skillOption.integration?.required && (
-          <Badge className="my-0 ml-auto inline-flex w-auto items-center gap-1 px-2 py-0">
+          <Badge className="mx-auto mt-6 inline-flex w-auto items-center gap-1 px-2 py-0">
             {skillOption.integration.appImage && (
               <img
                 src={skillOption.integration.appImage}

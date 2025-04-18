@@ -95,7 +95,7 @@ export function useUpsertSkillMutation(options?: Parameters<typeof useMutation>[
     mutationFn: $upsertSkill,
     onSuccess: (...args) => {
       // Invalidate all queries related to agent skills
-      queryClient.invalidateQueries({ queryKey: skillQueryKeys.all })
+      queryClient.refetchQueries({ queryKey: skillQueryKeys.all })
       // Invalidate the router to potentially refetch loader data
       router.invalidate()
       options?.onSuccess?.(...args)
@@ -113,7 +113,7 @@ export function useDeleteSkillById(options?: Parameters<typeof useMutation>[0]) 
     ...options,
     mutationFn: $deleteSkillById,
     onSuccess: (...args) => {
-      queryClient.invalidateQueries({ queryKey: skillQueryKeys.all })
+      queryClient.refetchQueries({ queryKey: skillQueryKeys.all })
       router.invalidate()
       options?.onSuccess?.(...args)
     },

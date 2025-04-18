@@ -13,6 +13,7 @@ import {
   deleteAgentSkillById,
   getAgentSkillsByAgentId,
   upsertAgentSkill,
+  updateAgentSkillEnabledStatus,
 } from './skill.service'
 import { zodValidator } from '@tanstack/zod-adapter'
 import { z } from 'zod'
@@ -22,6 +23,12 @@ import { AgentSkills } from '@/db/schema'
 // Define schema for upsert, making id optional
 const UpsertSkillInputSchema = CreateSkillInputSchema.extend({
   id: z.string().optional(),
+})
+
+// Schema for updating only the enabled status
+const UpdateSkillEnabledStatusSchema = z.object({
+  id: z.string(),
+  isEnabled: z.boolean(),
 })
 
 export const $getSkillOptions = createServerFn({ method: 'GET' }).handler<SkillOption[]>(
@@ -68,6 +75,15 @@ export const $upsertSkill = createServerFn({ method: 'POST' })
   .handler(async ({ data }) => {
     // The id might be undefined for creation, which is handled by the service
     return upsertAgentSkill(data as typeof AgentSkills.$inferInsert)
+  })
+
+/**
+ * Server function to update the enabled status of an AgentSkill.
+ */
+export const $updateSkillEnabledStatus = createServerFn({ method: 'POST' })
+  .validator(zodValidator(UpdateSkillEnabledStatusSchema))
+  .handler(async ({ data }) => {
+    return updateAgentSkillEnabledStatus(data.id, data.isEnabled)
   })
 
 /**

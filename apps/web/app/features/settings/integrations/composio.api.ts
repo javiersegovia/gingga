@@ -68,7 +68,6 @@ export const $getUserComposioConnections = createServerFn({
   .handler(async ({ context }) => {
     const userId = context.auth?.session?.userId
     if (!userId) {
-      // This should technically be caught by authMiddleware, but belts and suspenders
       throw new Error('Authentication required.')
     }
     try {
@@ -78,18 +77,21 @@ export const $getUserComposioConnections = createServerFn({
       })
       console.log('Connections API return:', connections)
 
-      return connections.items?.map((conn) => ({
-        id: conn.id,
-        appName: conn.appName ?? null,
-        appUniqueId: conn.appUniqueId ?? null,
-        status: conn.status,
-        createdAt: conn.createdAt,
-        integrationId: conn.integrationId,
-        logo: conn.logo,
-        isDisabled: conn.isDisabled,
-      }))
+      return (
+        connections.items?.map((conn) => ({
+          id: conn.id,
+          appName: conn.appName ?? null,
+          appUniqueId: conn.appUniqueId ?? null,
+          status: conn.status,
+          createdAt: conn.createdAt,
+          integrationId: conn.integrationId,
+          logo: conn.logo,
+          isDisabled: conn.isDisabled,
+        })) || []
+      )
     } catch (error) {
       console.error(`Error fetching connections for user ${userId}:`, error)
+      // Instead of throwing, return empty items and error message
       throw new Error('Failed to retrieve user connections.')
     }
   })

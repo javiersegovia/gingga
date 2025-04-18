@@ -18,7 +18,7 @@ export const modelProvider = customProvider({
 
     'chat-basic': openrouter('meta-llama/llama-3.3-70b-instruct:free'),
     'chat-agent': openrouter('google/gemini-2.0-flash-001'),
-    'chat-agent-tools': openrouter('openai/gpt-4.1-mini'),
+    'chat-agent-tools': openrouter('openai/gpt-4.1'),
 
     'artifact-basic': openrouter('meta-llama/llama-3.3-70b-instruct:free'),
   },
