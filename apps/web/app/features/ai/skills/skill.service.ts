@@ -45,11 +45,18 @@ export async function updateAgentSkillById(
  */
 export async function upsertAgentSkill(data: typeof AgentSkills.$inferInsert) {
   const db = getDatabase()
+
+  console.log('data')
+  console.log(data)
+
   const [result] = await db
     .insert(AgentSkills)
     .values(data)
     .onConflictDoUpdate({ target: AgentSkills.id, set: data })
     .returning()
+
+  console.log(result)
+
   return result
 }
 

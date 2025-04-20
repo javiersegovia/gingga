@@ -16,10 +16,6 @@ import {
 // Helper to initialize the Composio SDK
 export function getVercelToolset({ entityId }: { entityId?: string }): VercelAIToolSet {
   const env = getServerEnv()
-  if (!env.COMPOSIO_API_KEY) {
-    console.error('COMPOSIO_API_KEY is missing from the environment.')
-    throw new Error('Composio API key is not configured.')
-  }
   try {
     return new VercelAIToolSet({ apiKey: env.COMPOSIO_API_KEY, entityId })
   } catch (error) {
@@ -28,93 +24,91 @@ export function getVercelToolset({ entityId }: { entityId?: string }): VercelAIT
   }
 }
 
-// Helper to check if the user already has an active connection for a given app
-async function hasActiveConnection({
-  userId,
-  integrationId,
-  toolset,
-}: {
-  userId: string
-  integrationId: string
-  toolset: VercelAIToolSet
-}): Promise<boolean> {
-  try {
-    const { items } = await toolset.client.connectedAccounts.list({ entityId: userId })
-    return (
-      items?.some(
-        (conn) =>
-          conn.integrationId === integrationId && conn.status?.toUpperCase() === 'ACTIVE',
-      ) || false
-    )
-  } catch (error) {
-    if (
-      error instanceof ComposioError &&
-      (error.errCode === COMPOSIO_SDK_ERROR_CODES.SDK.NO_CONNECTED_ACCOUNT_FOUND ||
-        error.message.includes('entity not found'))
-    ) {
-      return false
-    }
-    throw error
-  }
-}
+// // Helper to check if the user already has an active connection for a given app
+// async function hasActiveConnection({
+//   userId,
+//   integrationId,
+//   toolset,
+// }: {
+//   userId: string
+//   integrationId: string
+//   toolset: VercelAIToolSet
+// }): Promise<boolean> {
+//   try {
+//     const { items } = await toolset.client.connectedAccounts.list({ entityId: userId })
+//     return (
+//       items?.some(
+//         (conn) =>
+//           conn.integrationId === integrationId && conn.status?.toUpperCase() === 'ACTIVE',
+//       ) || false
+//     )
+//   } catch (error) {
+//     if (
+//       error instanceof ComposioError &&
+//       (error.errCode === COMPOSIO_SDK_ERROR_CODES.SDK.NO_CONNECTED_ACCOUNT_FOUND ||
+//         error.message.includes('entity not found'))
+//     ) {
+//       return false
+//     }
+//     throw error
+//   }
+// }
 
 // --- Service Functions ---
 
+const getIntegrationsInfo = (): Record<
+  ComposioAppName,
+  Pick<
+    ComposioIntegration,
+    'label' | 'description' | 'appName' | 'integrationId' | 'image'
+  >
+> => {
+  const env = getServerEnv()
+  return {
+    googlesheets: {
+      label: 'Google Sheets',
+      appName: 'googlesheets',
+      description: 'Agents will be able to read, write, and manage your spreadsheets.',
+      integrationId: env.COMPOSIO_GOOGLESHEETS_INTEGRATION_ID,
+      image: '',
+    },
+    googlecalendar: {
+      label: 'Google Calendar',
+      appName: 'googlecalendar',
+      description:
+        'Agents will be able to schedule events, set reminders, and manage your calendar.',
+      integrationId: env.COMPOSIO_GOOGLECALENDAR_INTEGRATION_ID,
+      image: '',
+    },
+    gmail: {
+      label: 'Gmail',
+      appName: 'gmail',
+      description: 'Agents will be able to send, receive, and manage your emails.',
+      integrationId: env.COMPOSIO_GMAIL_INTEGRATION_ID,
+      image: '',
+    },
+    googledocs: {
+      label: 'Google Docs',
+      appName: 'googledocs',
+      description: 'Agents will be able to create, edit, and manage your documents.',
+      integrationId: env.COMPOSIO_GOOGLEDOCS_INTEGRATION_ID,
+      image: '',
+    },
+  }
+}
+
 /**
- * Retrieves the static list of available Composio integrations.
+ * Retrieves the list of available Composio integrations directly from their Server.
  */
 export async function getComposioIntegrations() {
-  const composio = new Composio({ apiKey: getServerEnv().COMPOSIO_API_KEY })
-  const composioIntegrations = await composio.integrations.list({
+  const toolset = getVercelToolset({ entityId: undefined })
+  const composioIntegrations = await toolset.client.integrations.list({
     showDisabled: true,
   })
 
-  const filteredIntegrations = composioIntegrations.items.filter(
-    (integration) =>
-      ComposioAppNameEnum.options.includes(integration.appName as ComposioAppName) &&
-      integration.enabled,
+  const filteredIntegrations = composioIntegrations.items.filter((integration) =>
+    ComposioAppNameEnum.options.includes(integration.appName as ComposioAppName),
   )
-
-  const getIntegrationsInfo = (): Record<
-    ComposioAppName,
-    Pick<
-      ComposioIntegration,
-      'label' | 'description' | 'appName' | 'integrationId' | 'image'
-    >
-  > => {
-    const env = getServerEnv()
-    return {
-      googlesheets: {
-        label: 'Google Sheets',
-        appName: 'googlesheets',
-        description: 'Agents will be able to read, write, and manage your spreadsheets.',
-        integrationId: env.COMPOSIO_GOOGLESHEETS_INTEGRATION_ID,
-        image: '',
-      },
-      googlecalendar: {
-        label: 'Google Calendar',
-        appName: 'googlecalendar',
-        description:
-          'Agents will be able to schedule events, set reminders, and manage your calendar.',
-        integrationId: env.COMPOSIO_GOOGLECALENDAR_INTEGRATION_ID,
-        image: '',
-      },
-      gmail: {
-        label: 'Gmail',
-        appName: 'gmail',
-        description: 'Agents will be able to send, receive, and manage your emails.',
-        integrationId: env.COMPOSIO_GMAIL_INTEGRATION_ID,
-        image: '',
-      },
-      googledocs: {
-        label: 'Google Docs',
-        appName: 'googledocs',
-        description: 'Agents will be able to create, edit, and manage your documents.',
-        integrationId: env.COMPOSIO_GOOGLEDOCS_INTEGRATION_ID,
-        image: '',
-      },
-    }
-  }
 
   const integrations = getIntegrationsInfo()
 
@@ -173,6 +167,9 @@ export async function getUserComposioConnections(
       integrationId: conn.integrationId,
       logo: conn.logo,
       isDisabled: conn.isDisabled,
+
+      deleted: conn.deleted,
+      enabled: conn.enabled,
     }))
   } catch (error) {
     if (
@@ -207,14 +204,6 @@ export async function initiateComposioConnection({
   redirectUri: string
 }): Promise<{ redirectUrl: string }> {
   const toolset = getVercelToolset({ entityId: userId })
-
-  // Check for an existing active connection
-  if (await hasActiveConnection({ userId, integrationId, toolset })) {
-    throw new Error(
-      `An active connection for ${integrationId} already exists for this user.`,
-    )
-  }
-
   try {
     console.log(
       `[Composio Service] Initiating connection for user ${userId}, integration ${integrationId}...`,

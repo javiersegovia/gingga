@@ -1,10 +1,6 @@
 import { createFileRoute, Link, useParams, Outlet } from '@tanstack/react-router'
-import {
-  useSuspenseQuery,
-  useMutation,
-  useQueryClient,
-  useQuery,
-} from '@tanstack/react-query'
+import { useSuspenseQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import type { AgentSkillWithStatus } from '@/features/ai/skills/skill.api'
 import {
   skillOptionsQueryOptions,
   skillsByAgentIdQueryOptions,
@@ -19,8 +15,9 @@ import {
   LightbulbIcon,
   XIcon,
   CircleHelpIcon,
-  ExternalLinkIcon,
   SettingsIcon,
+  InfoIcon,
+  WrenchIcon,
 } from 'lucide-react'
 import { Skeleton } from '@gingga/ui/components/skeleton'
 import { AvailableSkillCard } from '@/features/ai/skills/components/available-skill-card'
@@ -34,6 +31,8 @@ import {
   AccordionTrigger,
 } from '@gingga/ui/components/accordion'
 import { toast } from 'sonner'
+import { Badge } from '@gingga/ui/components/badge'
+import { ConnectionStatus } from '@/features/settings/integrations/components/connection-status'
 
 export const Route = createFileRoute('/_demo/chat/agent/$agentId/edit/skills')({
   component: RouteComponent,
@@ -77,9 +76,6 @@ function RouteComponent() {
 
   const { data: activeSkills } = useSuspenseQuery(skillsByAgentIdQueryOptions(agentId))
   const { data: skillOptions } = useSuspenseQuery(skillOptionsQueryOptions)
-  const { data: userConnectionsData } = useQuery(userComposioConnectionsQueryOptions)
-
-  const connections = userConnectionsData || []
 
   const updateSkillEnabledMutation = useMutation({
     mutationFn: $updateSkillEnabledStatus,
@@ -88,18 +84,16 @@ function RouteComponent() {
         queryKey: skillsByAgentIdQueryOptions(agentId).queryKey,
       })
 
-      const previousSkills = queryClient.getQueryData<typeof activeSkills>(
+      const previousSkills = queryClient.getQueryData(
         skillsByAgentIdQueryOptions(agentId).queryKey,
       )
 
-      queryClient.setQueryData<typeof activeSkills>(
-        skillsByAgentIdQueryOptions(agentId).queryKey,
-        (oldData) =>
-          oldData?.map((skill) =>
-            skill.id === variables.data.id
-              ? { ...skill, isEnabled: variables.data.isEnabled }
-              : skill,
-          ),
+      queryClient.setQueryData(skillsByAgentIdQueryOptions(agentId).queryKey, (oldData) =>
+        oldData?.map((skill) =>
+          skill.id === variables.data.id
+            ? { ...skill, isEnabled: variables.data.isEnabled }
+            : skill,
+        ),
       )
 
       return { previousSkills }
@@ -124,6 +118,8 @@ function RouteComponent() {
 
   const activeSkillCount = activeSkills?.length ?? 0
   const maxSkills = 5
+  const availableSkillOptions = skillOptions
+  const isAddSkillDisabled = activeSkillCount >= maxSkills
 
   return (
     <>
@@ -143,15 +139,14 @@ function RouteComponent() {
             </div>
           </div>
           <p className="text-muted-foreground mb-4 text-sm">
-            These are the superpowers your agent currently wields. Click to fine-tune
-            them!
+            These are the superpowers your agent currently wields. Click to fine-tune them
+            or toggle their status.
           </p>
 
-          {/* Active skills list remains structurally similar */}
           <div className="grid grid-cols-1 gap-4">
             {activeSkills && activeSkills.length > 0 ? (
               activeSkills.map((skill) => {
-                const skillOption = skillOptions?.find((opt) => opt.id === skill.skillId)
+                const skillOption = skill.skillOption
                 const displayName = skill.name || skillOption?.name || skill.skillId
 
                 const displayDescription =
@@ -162,12 +157,9 @@ function RouteComponent() {
                 const isIntegrationRequired = !!skillOption?.integration?.required
                 const integration = skillOption?.integration
 
-                const relevantConnection = connections.find(
-                  (c) => c.appName === integration?.appName,
-                )
-
-                const isConnected =
-                  relevantConnection && relevantConnection.status === 'ACTIVE'
+                const isConnected = skill.isConnected
+                const isEnabledComposio = skill.isEnabledComposio
+                const isDeletedComposio = skill.isDeletedComposio
 
                 const availableTools =
                   integration?.availableComposioToolNames?.filter((tool) =>
@@ -179,12 +171,23 @@ function RouteComponent() {
                   ? Object.keys(skill.variables).length
                   : 0
 
+                const toolsCount =
+                  (skill.composioToolNames?.length ?? 0) + (skill.tools?.length ?? 0)
+
+                const isSwitchDisabled =
+                  isIntegrationRequired && (isDeletedComposio || isConnected === false)
+
                 return (
                   <div key={skill.id} className="relative">
                     <Card
                       design="grid"
                       hover="noShadow"
-                      className="hover:border-shadow-border flex flex-col px-4 py-4"
+                      className={cn(
+                        'hover:border-shadow-border flex flex-col px-4 py-4',
+                        {
+                          'opacity-70 grayscale': isSwitchDisabled,
+                        },
+                      )}
                     >
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex flex-grow items-center gap-2">
@@ -214,6 +217,7 @@ function RouteComponent() {
                             size="icon"
                             asChild
                             className="h-8 w-8 flex-shrink-0"
+                            disabled={isSwitchDisabled}
                           >
                             <Link
                               to="/chat/agent/$agentId/edit/skills/$skillId"
@@ -223,10 +227,11 @@ function RouteComponent() {
                               <SettingsIcon className="h-4 w-4" />
                             </Link>
                           </Button>
-                          {isIntegrationRequired && (
+                          {isIntegrationRequired ? (
                             <Switch
                               variant="status"
                               checked={skill.isEnabled ?? true}
+                              disabled={isSwitchDisabled}
                               onCheckedChange={(checked) => {
                                 updateSkillEnabledMutation.mutate({
                                   data: {
@@ -237,11 +242,67 @@ function RouteComponent() {
                               }}
                               aria-label={`Enable/Disable ${displayName} skill`}
                             />
+                          ) : (
+                            <div className="h-8 w-[44px]"></div>
                           )}
                         </div>
                       </div>
+                      <div className="mb-3 flex gap-2 text-sm">
+                        <Badge
+                          size="xs"
+                          variant="outline"
+                          className="flex items-center gap-1"
+                        >
+                          {hasInstructions ? (
+                            <CheckIcon className="text-brand-green h-4 w-4 flex-shrink-0" />
+                          ) : (
+                            <XIcon className="text-destructive h-4 w-4 flex-shrink-0" />
+                          )}
+                          <span
+                            className={cn({
+                              'text-muted-foreground': !hasInstructions,
+                            })}
+                          >
+                            {hasInstructions
+                              ? 'Has instructions'
+                              : 'Instructions are missing'}
+                          </span>
+                        </Badge>
 
-                      {isIntegrationRequired && (
+                        <Badge
+                          size="xs"
+                          variant="outline"
+                          className="flex items-center gap-1"
+                        >
+                          {variableCount > 0 ? (
+                            <CheckIcon className="text-brand-green h-4 w-4 flex-shrink-0" />
+                          ) : (
+                            <CircleHelpIcon className="text-muted-foreground h-4 w-4 flex-shrink-0" />
+                          )}
+                          <span
+                            className={cn({
+                              'text-muted-foreground': variableCount === 0,
+                            })}
+                          >
+                            {variableCount > 0
+                              ? `${variableCount} Variable${variableCount > 1 ? 's' : ''} found`
+                              : 'No variables in use'}
+                          </span>
+                        </Badge>
+
+                        {toolsCount === 0 && (
+                          <Badge
+                            size="xs"
+                            variant="outline"
+                            className="flex items-center gap-1"
+                          >
+                            <XIcon className="text-destructive h-4 w-4 flex-shrink-0" />
+                            No tools
+                          </Badge>
+                        )}
+                      </div>
+
+                      {isIntegrationRequired && toolsCount > 0 && (
                         <Accordion type="single" collapsible className="mt-4 w-full">
                           <AccordionItem
                             variant="ghost"
@@ -249,94 +310,40 @@ function RouteComponent() {
                             className="border-b-0"
                           >
                             <AccordionTrigger
-                              // variant="ghost"
-                              className="text-foreground border p-3 hover:no-underline"
+                              className={cn(
+                                'text-foreground bg-accent border py-1 pr-3 pl-1 font-semibold hover:no-underline',
+                                {
+                                  'cursor-default hover:bg-transparent': isSwitchDisabled,
+                                },
+                              )}
+                              disabled={isSwitchDisabled}
                             >
-                              <div className="flex flex-grow items-center justify-between gap-2">
-                                <div className="flex items-center gap-2">
-                                  {integration?.appImage && (
-                                    <img
-                                      src={integration.appImage}
-                                      alt={`${integration.appDisplayName} logo`}
-                                      className="h-10 w-10 object-contain"
-                                    />
-                                  )}
-                                  <div className="flex items-center gap-2 text-sm">
-                                    <span>{integration?.appDisplayName}</span>
-                                    <p className="m-0 text-sm leading-4 font-medium">
-                                      {isConnected ? (
-                                        <div className="text-brand-green flex animate-pulse items-center gap-1">
-                                          <div className="bg-brand-green h-1 w-1 rounded-full" />
-                                          Connected
-                                        </div>
-                                      ) : (
-                                        <div className="text-destructive flex animate-pulse items-center gap-1">
-                                          <div className="bg-destructive h-1 w-1 rounded-full" />
-                                          Not Connected
-                                        </div>
-                                      )}
-                                    </p>
-                                  </div>
-                                </div>
-                                {!isConnected && integration?.appName && (
-                                  <Button
-                                    variant="outline"
-                                    size="sm"
-                                    asChild
-                                    onClick={(e) => e.stopPropagation()}
-                                    className="mr-2"
-                                  >
-                                    <Link to="/settings/integrations">
-                                      Connect
-                                      <ExternalLinkIcon className="ml-1.5 h-3 w-3" />
-                                    </Link>
-                                  </Button>
-                                )}
-                              </div>
+                              <span className="bg-card border-border rounded-base mr-2 inline-flex items-center gap-1 border px-2 py-0.5">
+                                <WrenchIcon className="h-4 w-4" />
+                                {toolsCount}
+                              </span>
+                              Show {toolsCount > 1 ? ' Tools' : ' Tool'}
                             </AccordionTrigger>
-                            <AccordionContent className="border p-4">
-                              <div className="mb-3 flex flex-col gap-1 text-sm">
-                                <div className="flex items-center gap-1.5">
-                                  {hasInstructions ? (
-                                    <CheckIcon className="text-brand-green h-4 w-4 flex-shrink-0" />
-                                  ) : (
-                                    <XIcon className="text-destructive h-4 w-4 flex-shrink-0" />
-                                  )}
-                                  <span
-                                    className={cn({
-                                      'text-muted-foreground': !hasInstructions,
-                                    })}
-                                  >
-                                    {hasInstructions
-                                      ? 'Has instructions'
-                                      : 'Instructions are missing'}
+                            <AccordionContent className="bg-muted border p-4">
+                              {isSwitchDisabled && (
+                                <div className="bg-destructive/10 text-destructive mb-3 flex items-start gap-2 rounded-md p-3 text-sm">
+                                  <InfoIcon className="mt-0.5 h-4 w-4 flex-shrink-0" />
+                                  <span>
+                                    {isDeletedComposio
+                                      ? 'The connection for this integration has been deleted.'
+                                      : 'This integration is not connected.'}{' '}
+                                    Please connect or manage the integration in settings
+                                    to enable this skill.
                                   </span>
                                 </div>
-
-                                <div className="flex items-center gap-1.5">
-                                  {variableCount > 0 ? (
-                                    <CheckIcon className="text-brand-green h-4 w-4 flex-shrink-0" />
-                                  ) : (
-                                    <CircleHelpIcon className="text-muted-foreground h-4 w-4 flex-shrink-0" />
-                                  )}
-                                  <span
-                                    className={cn({
-                                      'text-muted-foreground': variableCount === 0,
-                                    })}
-                                  >
-                                    {variableCount > 0
-                                      ? `${variableCount} Variable${variableCount > 1 ? 's' : ''} found`
-                                      : 'No variables in use'}
-                                  </span>
-                                </div>
-                              </div>
+                              )}
 
                               {availableTools.length > 0 && (
                                 <div>
                                   <p className="mb-1 text-sm font-medium">
                                     Enabled tools:
                                   </p>
-                                  <ul className="text-muted-foreground list-disc space-y-1 pl-4 text-xs">
+                                  <ul className="text-muted-foreground list-disc space-y-1 pl-4 text-sm">
                                     {availableTools.map((tool) => (
                                       <li key={tool.id}>{tool.description}</li>
                                     ))}
@@ -347,6 +354,15 @@ function RouteComponent() {
                           </AccordionItem>
                         </Accordion>
                       )}
+
+                      <div className="mt-4 ml-auto">
+                        <ConnectionStatus
+                          integration={integration}
+                          isDeletedComposio={isDeletedComposio}
+                          isConnected={isConnected}
+                          isEnabledComposio={isEnabledComposio}
+                        />
+                      </div>
                     </Card>
                   </div>
                 )
@@ -367,17 +383,37 @@ function RouteComponent() {
             Power up your agent! Choose from these available skills.
           </p>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            {skillOptions && skillOptions.length > 0 ? (
-              skillOptions.map((option) => (
-                <AvailableSkillCard
-                  key={option.id}
-                  skillOption={option}
-                  agentId={agentId}
-                />
-              ))
+            {availableSkillOptions && availableSkillOptions.length > 0 ? (
+              availableSkillOptions.map((option) => {
+                let initialConnectionStatus: Pick<
+                  AgentSkillWithStatus,
+                  'isConnected' | 'isEnabledComposio' | 'isDeletedComposio'
+                > | null = null
+                const relevantActiveSkill = activeSkills?.find(
+                  (s) =>
+                    s.skillOption?.integration?.appName === option.integration?.appName,
+                )
+                if (option.integration?.required && relevantActiveSkill) {
+                  initialConnectionStatus = {
+                    isConnected: relevantActiveSkill.isConnected,
+                    isEnabledComposio: relevantActiveSkill.isEnabledComposio,
+                    isDeletedComposio: relevantActiveSkill.isDeletedComposio,
+                  }
+                }
+
+                return (
+                  <AvailableSkillCard
+                    key={option.id}
+                    skillOption={option}
+                    agentId={agentId}
+                    initialConnectionStatus={initialConnectionStatus}
+                    isDisabledByLimit={isAddSkillDisabled}
+                  />
+                )
+              })
             ) : (
               <p className="text-muted-foreground text-center text-sm">
-                No skills available.
+                No skill templates available.
               </p>
             )}
           </div>

@@ -19,7 +19,7 @@ const switchVariants = cva(
           "data-[state=checked]:bg-accent data-[state=unchecked]:bg-secondary",
         theme: "data-[state=checked]:bg-blank data-[state=unchecked]:bg-blank",
         status:
-          "data-[state=checked]:bg-brand-green data-[state=unchecked]:bg-destructive/80 border-border",
+          "data-[state=checked]:bg-success data-[state=unchecked]:bg-destructive/80 border-border",
       },
     },
     defaultVariants: {

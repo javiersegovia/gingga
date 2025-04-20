@@ -66,14 +66,20 @@ export function SkillForm({
   const formOpts = formOptions({
     defaultValues: {
       ...agentSkill,
+
       agentId,
       skillId: skillOption.id,
-      variables: recordToArray(agentSkill?.variables),
+
+      tools: agentSkill?.tools ?? [],
       composioToolNames: agentSkill?.composioToolNames,
+      composioIntegrationAppName:
+        agentSkill?.composioIntegrationAppName || skillOption.integration?.appName,
+
+      instructions: agentSkill?.instructions ?? '',
+      variables: recordToArray(agentSkill?.variables),
+
       name: agentSkill?.name ?? '',
       description: agentSkill?.description ?? '',
-      instructions: agentSkill?.instructions ?? '',
-      tools: agentSkill?.tools ?? [],
     },
   })
 
@@ -82,6 +88,8 @@ export function SkillForm({
     ...formOpts,
     onSubmit: async ({ value }) => {
       setFormError(null)
+      console.log('value')
+      console.log(value)
       await upsertMutation.mutateAsync(
         {
           data: {
@@ -181,9 +189,9 @@ export function SkillForm({
                               <div
                                 key={tool.id}
                                 className={cn(
-                                  'border-input flex items-start space-x-4 rounded-md border p-4 transition-colors',
+                                  'border-border flex items-start space-x-4 rounded-md border p-4 transition-colors',
                                   isChecked
-                                    ? 'border-secondary dark:bg-secondary/5 bg-secondary/10'
+                                    ? 'border-border dark:bg-secondary/5 dark:border-secondary bg-secondary/30'
                                     : 'hover:bg-muted/50',
                                 )}
                               >

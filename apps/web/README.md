@@ -13,7 +13,7 @@ Auth providers:
 - [x] Google
 - [x] Discord
 
-# Edgestart
+# Gingga Dev
 
 A modern web application built with TanStack Start, made for the edge. It is made primarily for Cloudflare Workers, but it can be deployed anywhere.
 

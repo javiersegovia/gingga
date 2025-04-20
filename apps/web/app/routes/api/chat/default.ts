@@ -15,26 +15,14 @@ import { modelProvider } from '@/features/ai/utils/providers'
 // import { tools, executions } from '@/features/ai/skills/index'
 import { processToolCalls } from '@/features/ai/utils/human-in-the-loop'
 import { nanoid } from 'nanoid'
-
-const ChatSchema = z.object({
-  id: z.string(),
-  messages: z.array(
-    z.object({
-      id: z.string(),
-      role: z.enum(['system', 'user', 'assistant']),
-      content: z.string(),
-      parts: z.array(z.any()),
-    }),
-  ),
-  agentId: z.string().optional(),
-})
+import { AIChatSchema } from '../../../features/chat/chat.schema'
 
 export const APIRoute = createAPIFileRoute('/api/chat/default')({
   POST: async ({ request }) => {
     try {
       const { authSession } = await setupAppContext()
 
-      const parsed = ChatSchema.safeParse(await request.json())
+      const parsed = AIChatSchema.safeParse(await request.json())
 
       if (!parsed.success) {
         // Return a proper Response object for stream compatibility

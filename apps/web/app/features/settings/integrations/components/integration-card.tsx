@@ -29,7 +29,7 @@ export function IntegrationCard({ integration, userConnection }: IntegrationCard
     onSuccess: (data) => {
       if (data?.redirectUrl) {
         console.log('Redirecting user to:', data.redirectUrl)
-        window.history.pushState({}, '', data.redirectUrl)
+        window.location.href = data.redirectUrl
       } else {
         console.error('Composio connection initiated but no redirect URL received.')
         queryClient.invalidateQueries({ queryKey: composioQueryKeys.connections() })

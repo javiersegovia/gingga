@@ -19,8 +19,11 @@ export const SkillIdParamSchema = z.object({
 export const CreateSkillInputSchema = z.object({
   agentId: z.string(),
   skillId: z.enum(skillIds),
-  composioIntegrationAppName: z.enum(ComposioAppNames).nullable().optional(),
 
+  name: z.string().optional(),
+  description: z.string().optional(),
+
+  composioIntegrationAppName: z.enum(ComposioAppNames).nullable().optional(),
   composioToolNames: z.array(ComposioToolNameEnum).default([]).nullable().optional(),
   variables: z.record(z.string(), z.string().nullable()).optional(),
   instructions: z.string().optional(),

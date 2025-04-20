@@ -16,21 +16,49 @@ export const getSkills = (): SkillOption[] => {
         appImage:
           'https://cdn.jsdelivr.net/gh/ComposioHQ/open-logos@master/google-sheets.svg',
         integrationId: getServerEnv().COMPOSIO_GOOGLESHEETS_INTEGRATION_ID,
+
         availableComposioToolNames: [
           {
-            id: 'GOOGLESHEETS_CREATE_SHEET',
-            name: 'Create Sheet',
-            description: 'Create a new spreadsheet.',
+            id: 'GOOGLESHEETS_BATCH_GET',
+            name: 'Batch Get Spreadsheet Data',
+            description:
+              "Perform a batch get on a specific spreadsheet. Note: if ranges aren't provided, data from the first sheet will be returned.",
           },
           {
-            id: 'GOOGLESHEETS_UPDATE_SHEET',
-            name: 'Update Sheet',
-            description: 'Update data within an existing sheet.',
+            id: 'GOOGLESHEETS_SHEET_FROM_JSON',
+            name: 'Create Sheet From JSON',
+            description: 'Create a new google sheet from a json object.',
           },
           {
-            id: 'GOOGLESHEETS_READ_SHEET',
-            name: 'Read Sheet',
-            description: 'Read data from a sheet.',
+            id: 'GOOGLESHEETS_LOOKUP_SPREADSHEET_ROW',
+            name: 'Lookup Spreadsheet Row',
+            description: 'Lookup a row in a specific spreadsheet by a column and value.',
+          },
+          {
+            id: 'GOOGLESHEETS_GET_SHEET_NAMES',
+            name: 'Get Sheet Names',
+            description: 'Get all the worksheet names in a spreadsheet.',
+          },
+          {
+            id: 'GOOGLESHEETS_BATCH_UPDATE',
+            name: 'Batch Update Spreadsheet',
+            description:
+              'Perform a batch update operation on a specified google sheets spreadsheet.',
+          },
+          {
+            id: 'GOOGLESHEETS_CREATE_GOOGLE_SHEET1',
+            name: 'Create Google Sheet',
+            description: 'Create a new google sheet.',
+          },
+          {
+            id: 'GOOGLESHEETS_CLEAR_VALUES',
+            name: 'Clear Sheet Values',
+            description: 'Clear values from a specified range in a spreadsheet.',
+          },
+          {
+            id: 'GOOGLESHEETS_GET_SPREADSHEET_INFO',
+            name: 'Get Spreadsheet Info',
+            description: 'Retrieve information about an existing google sheet.',
           },
         ],
       },
@@ -56,7 +84,7 @@ export const getSkills = (): SkillOption[] => {
           },
           {
             id: 'GOOGLECALENDAR_QUICK_ADD',
-            name: 'Quick Add',
+            name: 'Quick Add Event',
             description: 'Quickly add an event using natural language.',
           },
           {
@@ -86,7 +114,7 @@ export const getSkills = (): SkillOption[] => {
           },
           {
             id: 'GOOGLECALENDAR_GET_CALENDAR',
-            name: 'Get Calendar',
+            name: 'Get Calendar Details',
             description: 'Retrieve details of a specific calendar.',
           },
           {
@@ -101,7 +129,7 @@ export const getSkills = (): SkillOption[] => {
           },
           {
             id: 'GOOGLECALENDAR_PATCH_CALENDAR',
-            name: 'Patch Calendar',
+            name: 'Update Calendar Properties',
             description: 'Update specific properties of a calendar.',
           },
           {
@@ -129,27 +157,31 @@ export const getSkills = (): SkillOption[] => {
           {
             id: 'GOOGLEDOCS_CREATE_DOCUMENT_MARKDOWN',
             name: 'Create Document (Markdown)',
-            description: 'Create a new Google Doc from Markdown content.',
+            description:
+              'Creates a new google docs document with an optional title and markdown text.',
           },
           {
             id: 'GOOGLEDOCS_UPDATE_DOCUMENT_MARKDOWN',
             name: 'Update Document (Markdown)',
-            description: 'Update an existing Google Doc with Markdown content.',
+            description:
+              'Updates an existing google docs document created using markdown with new markdown text.',
           },
           {
             id: 'GOOGLEDOCS_CREATE_DOCUMENT',
             name: 'Create Document',
-            description: 'Create a new blank Google Doc.',
+            description:
+              'Creates a new google docs document with an optional title and text.',
           },
           {
             id: 'GOOGLEDOCS_GET_DOCUMENT_BY_ID',
-            name: 'Get Document By Id',
-            description: 'Retrieve a Google Doc by its ID.',
+            name: 'Get Document By ID',
+            description: 'Retrieves a specific google document by its ID.',
           },
           {
             id: 'GOOGLEDOCS_UPDATE_EXISTING_DOCUMENT',
             name: 'Update Existing Document',
-            description: 'Update the content of an existing Google Doc.',
+            description:
+              'Updates an existing google docs document with the provided edits.',
           },
         ],
       },
@@ -168,54 +200,112 @@ export const getSkills = (): SkillOption[] => {
         integrationId: getServerEnv().COMPOSIO_GMAIL_INTEGRATION_ID,
         availableComposioToolNames: [
           {
+            id: 'GMAIL_MODIFY_THREAD_LABELS',
+            name: 'Modify Thread Labels',
+            description: 'Action to modify labels of a thread in gmail.',
+          },
+          {
             id: 'GMAIL_SEND_EMAIL',
             name: 'Send Email',
-            description: 'Send a new email.',
+            description: "Send an email using gmail's api.",
           },
           {
-            id: 'GMAIL_LIST_EMAILS',
-            name: 'List Emails',
-            description: 'List emails in your inbox or with specific labels.',
+            id: 'GMAIL_MOVE_TO_TRASH',
+            name: 'Move Email to Trash',
+            description: "Move an email message to trash using gmail's api.",
           },
           {
-            id: 'GMAIL_GET_EMAIL',
-            name: 'Get Email',
-            description: 'Retrieve a specific email by its ID.',
+            id: 'GMAIL_FETCH_MESSAGE_BY_MESSAGE_ID',
+            name: 'Fetch Message by Message ID',
+            description: 'Fetch messages by message id from gmail.',
           },
           {
-            id: 'GMAIL_DELETE_EMAIL',
-            name: 'Delete Email',
-            description: 'Delete an email.',
+            id: 'GMAIL_LIST_DRAFTS',
+            name: 'List Drafts',
+            description: "List all email drafts using gmail's api.",
           },
           {
-            id: 'GMAIL_REPLY_EMAIL',
-            name: 'Reply Email',
-            description: 'Reply to an existing email.',
-          },
-          {
-            id: 'GMAIL_CREATE_DRAFT',
-            name: 'Create Draft',
-            description: 'Create a new draft email.',
-          },
-          {
-            id: 'GMAIL_LIST_LABELS',
-            name: 'List Labels',
-            description: 'List all your Gmail labels.',
-          },
-          {
-            id: 'GMAIL_MODIFY_EMAIL',
-            name: 'Modify Email',
-            description: 'Modify labels or status of an email.',
+            id: 'GMAIL_GET_ATTACHMENT',
+            name: 'Get Attachment',
+            description: 'Get an attachment from a mail.',
           },
           {
             id: 'GMAIL_LIST_THREADS',
             name: 'List Threads',
-            description: 'List email threads.',
+            description: 'Action to list threads in gmail.',
           },
           {
-            id: 'GMAIL_GET_THREAD',
-            name: 'Get Thread',
-            description: 'Retrieve a specific email thread.',
+            id: 'GMAIL_FETCH_MESSAGE_BY_THREAD_ID',
+            name: 'Fetch Message by Thread ID',
+            description:
+              'Fetch messages by thread id from gmail with pagination support.',
+          },
+          {
+            id: 'GMAIL_LIST_LABELS',
+            name: 'List Labels',
+            description: "List all labels in the user's gmail account.",
+          },
+          {
+            id: 'GMAIL_DELETE_DRAFT',
+            name: 'Delete Draft',
+            description: "Delete an email draft using gmail's api.",
+          },
+          {
+            id: 'GMAIL_SEARCH_PEOPLE',
+            name: 'Search People',
+            description:
+              "Provides a list of contacts in the authenticated user's grouped contacts that matches the search query.",
+          },
+          {
+            id: 'GMAIL_REPLY_TO_THREAD',
+            name: 'Reply to Thread',
+            description: 'Action to reply to an email thread in gmail.',
+          },
+          {
+            id: 'GMAIL_GET_PROFILE',
+            name: 'Get Profile',
+            description: 'Get the profile of the authenticated user.',
+          },
+          {
+            id: 'GMAIL_REMOVE_LABEL',
+            name: 'Remove Label',
+            description: 'Action to remove a label in gmail.',
+          },
+          {
+            id: 'GMAIL_GET_CONTACTS',
+            name: 'Get Contacts',
+            description:
+              'Action to get info of contacts saved in google for an authorized account.',
+          },
+          {
+            id: 'GMAIL_FETCH_EMAILS',
+            name: 'Fetch Emails',
+            description: 'Action to fetch all emails from gmail.',
+          },
+          {
+            id: 'GMAIL_CREATE_LABEL',
+            name: 'Create Label',
+            description: 'Action to create a new label in gmail.',
+          },
+          {
+            id: 'GMAIL_CREATE_EMAIL_DRAFT',
+            name: 'Create Email Draft',
+            description: "Create a draft email using gmail's api.",
+          },
+          {
+            id: 'GMAIL_DELETE_MESSAGE',
+            name: 'Delete Message',
+            description: "Delete an email message using gmail's api.",
+          },
+          {
+            id: 'GMAIL_GET_PEOPLE',
+            name: 'Get People',
+            description: 'Action to get contacts info of people.',
+          },
+          {
+            id: 'GMAIL_ADD_LABEL_TO_EMAIL',
+            name: 'Add Label to Email',
+            description: 'Modify a label to an email in gmail.',
           },
         ],
       },

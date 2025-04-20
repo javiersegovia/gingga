@@ -1,6 +1,6 @@
 import { json } from '@tanstack/react-start'
 import { createAPIFileRoute } from '@tanstack/react-start/api'
-import { streamText, appendResponseMessages, createDataStreamResponse } from 'ai'
+import { streamText, appendResponseMessages, createDataStreamResponse, Tool } from 'ai'
 import { nanoid } from 'nanoid'
 import {
   generateChatTitleFromUserMessage,
@@ -8,33 +8,28 @@ import {
   getMostRecentUserMessage,
   getTrailingMessageId,
   saveChat,
-  saveChatMessages,
+  upsertChatMessage,
 } from '@/features/chat/chat.service'
 import { setupAppContext } from '@/middleware/setup-context.server'
 import { modelProvider } from '@/features/ai/utils/providers'
 import { getAgentById } from '@/features/agent/agent.service'
-import { z } from 'zod'
 import { processToolCalls } from '@/features/ai/utils/human-in-the-loop'
 import { getVercelToolset } from '@/features/settings/integrations/composio.service'
+import {
+  ComposioAppName,
+  ComposioToolName,
+} from '@/features/settings/integrations/composio.schema'
+import { AIChatSchema } from '@/features/chat/chat.schema'
+import {
+  getSystemPrompt,
+  SkillInstruction,
+} from '@/features/ai/utils/compose-system-message'
 
 export const APIRoute = createAPIFileRoute('/api/agents/custom/$agentId')({
-  POST: async ({ request, params }) => {
-    // This route is available for unauthenticated users, so no authentication check is enforced.
+  POST: async ({ request, params: { agentId } }) => {
     const { authSession } = await setupAppContext()
 
-    const ChatSchema = z.object({
-      id: z.string(),
-      messages: z.array(
-        z.object({
-          id: z.string(),
-          role: z.enum(['system', 'user', 'assistant']),
-          content: z.string(),
-          parts: z.array(z.any()),
-        }),
-      ),
-    })
-
-    const parsed = ChatSchema.safeParse(await request.json())
+    const parsed = AIChatSchema.safeParse(await request.json())
     if (!parsed.success) {
       return json({ result: parsed.error.message }, { status: 400 })
     }
@@ -45,12 +40,11 @@ export const APIRoute = createAPIFileRoute('/api/agents/custom/$agentId')({
       return new Response('No user message found', { status: 400 })
     }
 
-    const agentId = params.agentId
-    const agentInfo = await getAgentById(agentId)
-    if (!agentInfo) {
+    const agent = await getAgentById(agentId)
+    if (!agent) {
       return json({ result: `Agent with ID '${agentId}' not found.` }, { status: 404 })
     }
-    const { instructions: agentInstructions, modelId: agentModelId } = agentInfo
+    const { instructions: agentInstructions, modelId: agentModelId, agentSkills } = agent
 
     let chat: { id: string } | undefined = await getChatById({ id })
     if (!chat) {
@@ -62,31 +56,124 @@ export const APIRoute = createAPIFileRoute('/api/agents/custom/$agentId')({
       })
     }
 
-    // Save user message
-    await saveChatMessages({
-      messages: [
-        {
-          id: lastUserMessage.id,
-          role: 'user',
-          chatId: chat.id,
-          parts: lastUserMessage.parts,
-          attachments: lastUserMessage.experimental_attachments ?? [],
-        },
-      ],
-    })
-
-    if (!process.env.COMPOSIO_GMAIL_INTEGRATION_ID) {
-      throw new Error('COMPOSIO_GMAIL_INTEGRATION_ID is not set')
+    try {
+      await upsertChatMessage({
+        id: lastUserMessage.id,
+        role: 'user',
+        chatId: chat.id,
+        parts: lastUserMessage.parts,
+        attachments: lastUserMessage.experimental_attachments ?? [],
+      })
+    } catch (error) {
+      console.error(`[1] Error during AI stream for agent ${agentId}:`, error)
+      throw error
     }
 
+    const userId = authSession?.isAuthenticated ? authSession.user.id : undefined
+
+    console.log('[!!! - User ID]:', userId)
+
     const toolset = getVercelToolset({
+      entityId: userId,
+    })
+    const appToolsMap = new Map<ComposioAppName, Set<ComposioToolName>>()
+    const skillInstructions: SkillInstruction[] = []
+
+    for (const skill of agentSkills) {
+      if (
+        !skill.isEnabled ||
+        !skill.composioIntegrationAppName ||
+        !skill.composioToolNames
+      ) {
+        continue
+      }
+
+      const appName = skill.composioIntegrationAppName
+      const toolNames = skill.composioToolNames
+
+      const currentToolSet = appToolsMap.get(appName) ?? new Set<ComposioToolName>()
+      toolNames.forEach((toolName) => currentToolSet.add(toolName))
+      appToolsMap.set(appName, currentToolSet)
+
+      if (skill.instructions) {
+        skillInstructions.push({
+          skillName: skill.name ?? skill.skillId,
+          instructions: skill.instructions,
+          appName,
+          toolNames,
+        })
+      }
+    }
+
+    const uniqueAppNames = Array.from(appToolsMap.keys())
+    const connections = await toolset.client.connectedAccounts.list({
       entityId: authSession?.isAuthenticated ? authSession.user.id : undefined,
+      appUniqueKeys: uniqueAppNames,
+      showActiveOnly: true,
+      showDisabled: false,
     })
-    const composioTools = await toolset.getTools({
-      apps: ['GMAIL', 'GOOGLESHEETS', 'GOOGLECALENDAR'],
-      integrationId: process.env.COMPOSIO_GOOGLESHEETS_INTEGRATION_ID,
-      // actions: [''],
+
+    // // Extract active app unique IDs
+    const activeAppIds = new Set(
+      connections.items
+        .filter((conn) => conn.status === 'ACTIVE')
+        .map((conn) => conn.appUniqueId),
+    )
+
+    // // Fetch tools concurrently for each app
+    const toolPromises = uniqueAppNames.map(async (appName) => {
+      const toolNamesSet = appToolsMap.get(appName)
+      if (!toolNamesSet) return {} // Should not happen, but safeguard
+
+      const toolNamesArray = Array.from(toolNamesSet)
+
+      try {
+        const tools = await toolset.getTools({
+          apps: [appName],
+          actions: toolNamesArray,
+        })
+        return tools
+      } catch (error) {
+        console.error(`Error fetching tools for ${appName}:`, error)
+        return {} // Return empty object on error to avoid breaking Promise.all
+      }
     })
+
+    const toolsResults = await Promise.all(toolPromises)
+
+    // // Merge the results into a single object
+    const composioTools: Record<string, Tool> = toolsResults.reduce(
+      (acc, tools) => ({ ...acc, ...tools }),
+      {},
+    )
+
+    // // Filter tools to include only those associated with active connections
+    const activeTools = Object.entries(composioTools)
+      .filter(([toolKey]) => {
+        // Extract appName from the toolKey (e.g., 'googlesheets_create_spreadsheet')
+        const appName = toolKey.split('_')[0]
+        return activeAppIds.has(appName)
+      })
+      .reduce(
+        (acc, [key, tool]) => {
+          acc[key] = tool
+          return acc
+        },
+        {} as Record<string, Tool>,
+      )
+
+    const systemMessage = {
+      role: 'system' as const,
+      content: getSystemPrompt({
+        agentName: agent.name,
+        agentInstructions,
+        skillInstructions,
+        tools: Object.keys(activeTools),
+        languagePref: 'English',
+      }),
+    }
+
+    console.log('System Message:', systemMessage)
 
     try {
       return createDataStreamResponse({
@@ -95,101 +182,59 @@ export const APIRoute = createAPIFileRoute('/api/agents/custom/$agentId')({
             chatId: chat.id,
             dataStream,
             messages,
-            tools: composioTools,
+            tools: activeTools,
             executions: {},
           })
-
-          const instructions = agentInstructions
-            ? [
-                {
-                  role: 'system' as const,
-                  content: `${agentInstructions}
-
-                  ## TOOL CALLING INSTRUCTIONS
-
-                  If you receive Composio errors during the execution of a tool related to the user's credentials, please ask the user to re-authenticate. For example, if the error says anything about not finding a connection, you should ask the user to go to their settings and setup their specific integration again.`,
-                },
-              ]
-            : []
 
           const result = streamText({
             model: modelProvider.languageModel('chat-agent-tools'),
 
+            // TODO: Later on we will enable this. For now, let's use the default model.
             // model: agentModelId
             //   ? openrouter(agentModelId)
             //   : modelProvider.languageModel('chat-agent'),
 
             abortSignal: request.signal,
-            messages: [...instructions, ...proccesedMessages],
-            tools: composioTools,
-            // experimental_activeTools: [],
+            messages: [systemMessage, ...proccesedMessages], // Use the composed system message
+            // messages: [...proccesedMessages], // Use the composed system message
+
+            tools: activeTools, // Still pass all fetched tools
             experimental_generateMessageId: nanoid,
             maxSteps: 10,
             async onFinish({ response }) {
-              console.log(`[Agent Chat ${chat.id}] ~~~~ STARTING ON FINISH ~~~~`)
-              console.log(
-                `[Agent Chat ${chat.id}] onFinish received response with ${response.messages.length} messages.`,
-              )
               const assistantMessages = response.messages.filter(
                 (m) => m.role === 'assistant',
               )
-              console.log(
-                `[Agent Chat ${chat.id}] Assistant messages in response:`,
-                JSON.stringify(assistantMessages, null, 2),
-              )
+
               try {
                 const assistantId = getTrailingMessageId({
                   messages: assistantMessages,
                 })
 
                 if (!assistantId) {
-                  console.error(
-                    `[Agent Chat ${chat.id}] No assistant message ID found after streaming. Not saving.`,
-                  )
                   return
                 }
-                console.log(
-                  `[Agent Chat ${chat.id}] Found assistant message ID: ${assistantId}`,
-                )
 
-                const [, assistantMessage] = appendResponseMessages({
+                const [, newAssistantMessage] = appendResponseMessages({
                   messages: [lastUserMessage], // Consider if more context needed
                   responseMessages: response.messages,
                 })
-                console.log(
-                  `[Agent Chat ${chat.id}] Message prepared for saving:`,
-                  JSON.stringify(assistantMessage, null, 2),
-                )
 
                 if (
-                  assistantMessage?.role === 'assistant' &&
-                  assistantMessage.parts &&
-                  assistantMessage.id === assistantId // Sanity check ID
+                  newAssistantMessage?.role === 'assistant' &&
+                  newAssistantMessage.parts &&
+                  newAssistantMessage.id === assistantId // Sanity check ID
                 ) {
-                  console.log(
-                    `[Agent Chat ${chat.id}] Attempting to save assistant message ${assistantId}...`,
-                  )
-                  await saveChatMessages({
-                    messages: [
-                      {
-                        id: assistantId,
-                        chatId: chat.id,
-                        role: 'assistant',
-                        parts: assistantMessage.parts ?? [],
-                        attachments: assistantMessage.experimental_attachments ?? [],
-                        modelId:
-                          agentModelId ||
-                          modelProvider.languageModel('chat-basic').modelId,
-                      },
-                    ],
+                  await upsertChatMessage({
+                    id: newAssistantMessage.id,
+                    chatId: chat.id,
+                    role: 'assistant',
+                    parts: newAssistantMessage.parts ?? [],
+                    attachments: newAssistantMessage.experimental_attachments ?? [],
+                    modelId:
+                      agentModelId ||
+                      modelProvider.languageModel('chat-agent-tools').modelId,
                   })
-                  console.log(
-                    `[Agent Chat ${chat.id}] Successfully saved assistant message ${assistantId}.`,
-                  )
-                } else {
-                  console.log(
-                    `[Agent Chat ${chat.id}] No valid assistant message found in onFinish response or ID mismatch. Not saving. ID found: ${assistantId}, Message processed: ${JSON.stringify(assistantMessage)}`,
-                  )
                 }
               } catch (error) {
                 console.error(

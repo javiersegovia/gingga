@@ -19,17 +19,15 @@ import {
  */
 export const $getComposioIntegrations = createServerFn({
   method: 'GET',
+}).handler(async () => {
+  try {
+    const integrations = await getComposioIntegrations()
+    return integrations
+  } catch (error) {
+    console.error('Error fetching composio integrations:', error)
+    throw new Error('Failed to retrieve integrations list.')
+  }
 })
-  // No middleware needed - public list
-  .handler(async () => {
-    try {
-      const integrations = await getComposioIntegrations() // Synchronous call
-      return integrations
-    } catch (error) {
-      console.error('Error fetching composio integrations:', error)
-      throw new Error('Failed to retrieve integrations list.')
-    }
-  })
 
 /**
  * API Function: Get details for a specific Composio integration by appName.
@@ -64,18 +62,14 @@ export const $getComposioIntegrationByAppName = createServerFn({
 export const $getUserComposioConnections = createServerFn({
   method: 'GET',
 })
-  .middleware([authMiddleware]) // Requires user to be logged in
+  .middleware([authMiddleware])
   .handler(async ({ context }) => {
-    const userId = context.auth?.session?.userId
-    if (!userId) {
-      throw new Error('Authentication required.')
-    }
+    const { userId } = context.auth.session
     try {
       const toolset = getVercelToolset({ entityId: userId })
       const connections = await toolset.client.connectedAccounts.list({
         entityId: userId,
       })
-      console.log('Connections API return:', connections)
 
       return (
         connections.items?.map((conn) => ({
@@ -106,33 +100,28 @@ export const $initiateComposioConnection = createServerFn({
   .validator(zodValidator(InitiateConnectionSchema))
   .middleware([authMiddleware])
   .handler(async ({ context, data }) => {
-    // Use 'input' from context
-    const userId = context.auth?.session?.userId
-    if (!userId) {
-      throw new Error('Authentication required.')
-    }
-
-    let redirectUrl = ''
+    const userId = context.auth.session.userId
 
     try {
-      const { redirectUrl: composioRedirectUrl } = await initiateComposioConnection({
+      const { redirectUrl } = await initiateComposioConnection({
         userId,
         integrationId: data.integrationId,
         redirectUri: `${import.meta.env.VITE_SITE_URL}/settings/integrations`,
       })
-      redirectUrl = composioRedirectUrl
+
+      return { redirectUrl }
     } catch (error) {
       console.error(
         `Error initiating connection for user ${userId}, integration ${data.integrationId}:`,
         error,
       )
+
       if (error instanceof Error) {
         throw new Error(error.message || 'Failed to initiate connection.')
       }
+
       throw new Error('Failed to initiate connection.')
     }
-
-    return { redirectUrl }
   })
 
 /**

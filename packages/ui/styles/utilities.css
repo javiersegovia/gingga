@@ -6,8 +6,7 @@
 /* Line stroke utility for creating outlined text */
 @utility line-stroke {
   color: var(--foreground);
-  text-shadow:
-    var(--color-line-stroke) 2px 0px 0px,
+  text-shadow: var(--color-line-stroke) 2px 0px 0px,
     var(--color-line-stroke) 1.75517px 0.958851px 0px,
     var(--color-line-stroke) 1.0806px 1.68294px 0px,
     var(--color-line-stroke) 0.141474px 1.99499px 0px,
@@ -40,7 +39,7 @@
   filter: brightness(0) invert(1);
 }
 
-[data-theme='dark'] {
+[data-theme="dark"] {
   .diagonal-pattern {
     background-image: repeating-linear-gradient(
       315deg,
@@ -55,7 +54,6 @@
 /* Box shadow utilities */
 @utility reverse-box-shadow {
   box-shadow: var(--shadow-expanded);
-  transform: translate(var(--reverse-box-shadow-x), var(--reverse-box-shadow-y));
 }
 
 /* Shadow styles for hover effects */

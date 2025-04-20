@@ -13,9 +13,14 @@ export type ComposioAppName = z.infer<typeof ComposioAppNameEnum>
 
 export const ComposioToolNames = [
   // Google Sheets
-  'GOOGLESHEETS_CREATE_SHEET',
-  'GOOGLESHEETS_UPDATE_SHEET',
-  'GOOGLESHEETS_READ_SHEET',
+  'GOOGLESHEETS_BATCH_GET',
+  'GOOGLESHEETS_SHEET_FROM_JSON',
+  'GOOGLESHEETS_LOOKUP_SPREADSHEET_ROW',
+  'GOOGLESHEETS_GET_SHEET_NAMES',
+  'GOOGLESHEETS_BATCH_UPDATE',
+  'GOOGLESHEETS_CREATE_GOOGLE_SHEET1',
+  'GOOGLESHEETS_CLEAR_VALUES',
+  'GOOGLESHEETS_GET_SPREADSHEET_INFO',
   // Google Calendar
   'GOOGLECALENDAR_DUPLICATE_CALENDAR',
   'GOOGLECALENDAR_QUICK_ADD',
@@ -36,16 +41,27 @@ export const ComposioToolNames = [
   'GOOGLEDOCS_GET_DOCUMENT_BY_ID',
   'GOOGLEDOCS_UPDATE_EXISTING_DOCUMENT',
   // Gmail
+  'GMAIL_MODIFY_THREAD_LABELS',
   'GMAIL_SEND_EMAIL',
-  'GMAIL_LIST_EMAILS',
-  'GMAIL_GET_EMAIL',
-  'GMAIL_DELETE_EMAIL',
-  'GMAIL_REPLY_EMAIL',
-  'GMAIL_CREATE_DRAFT',
-  'GMAIL_LIST_LABELS',
-  'GMAIL_MODIFY_EMAIL',
+  'GMAIL_MOVE_TO_TRASH',
+  'GMAIL_FETCH_MESSAGE_BY_MESSAGE_ID',
+  'GMAIL_LIST_DRAFTS',
+  'GMAIL_GET_ATTACHMENT',
   'GMAIL_LIST_THREADS',
-  'GMAIL_GET_THREAD',
+  'GMAIL_FETCH_MESSAGE_BY_THREAD_ID',
+  'GMAIL_LIST_LABELS',
+  'GMAIL_DELETE_DRAFT',
+  'GMAIL_SEARCH_PEOPLE',
+  'GMAIL_REPLY_TO_THREAD',
+  'GMAIL_GET_PROFILE',
+  'GMAIL_REMOVE_LABEL',
+  'GMAIL_GET_CONTACTS',
+  'GMAIL_FETCH_EMAILS',
+  'GMAIL_CREATE_LABEL',
+  'GMAIL_CREATE_EMAIL_DRAFT',
+  'GMAIL_DELETE_MESSAGE',
+  'GMAIL_GET_PEOPLE',
+  'GMAIL_ADD_LABEL_TO_EMAIL',
 ] as const
 export const ComposioToolNameEnum = z.enum(ComposioToolNames)
 export type ComposioToolName = z.infer<typeof ComposioToolNameEnum>
@@ -70,6 +86,8 @@ export interface UserConnection {
   appName: string | null
   status: string
   createdAt: string
+  enabled?: boolean
+  deleted?: boolean
 }
 
 /** Here we add static information about the integrations */

@@ -1,6 +1,9 @@
 import { Tool, ToolExecutionOptions } from 'ai'
 import { z } from 'zod'
-import { ComposioAppName } from '../../settings/integrations/composio.schema'
+import {
+  ComposioAppName,
+  ComposioToolName,
+} from '../../settings/integrations/composio.schema'
 
 // export const ComposioAppNameEnum = z.enum(['googlesheets', 'googlecalendar', 'gmail'])
 // export type ComposioAppName = z.infer<typeof ComposioAppNameEnum>
@@ -312,7 +315,7 @@ export type SkillOption = {
 
     integrationId: string
     availableComposioToolNames: {
-      id: string
+      id: ComposioToolName
       name: string
       description: string
     }[]

@@ -290,7 +290,6 @@ export const AgentSkills = sqliteTable('agent_skills', {
   variables: text('variables', { mode: 'json' }).$type<Record<string, string | null>>(),
   isEnabled: integer('is_enabled', { mode: 'boolean' }).default(true),
 
-  // integrationAppName: text('integration_app_name', { enum: ComposioAppNames }),
   composioIntegrationAppName: text('composio_integration_app_name', {
     enum: ComposioAppNames,
   }),

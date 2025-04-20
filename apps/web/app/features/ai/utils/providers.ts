@@ -5,6 +5,7 @@ import { getServerEnv } from '@/server/env'
 const env = getServerEnv()
 const openrouter = createOpenRouter({
   apiKey: env.OPENROUTER_API_KEY,
+  baseURL: env.GATEWAY_BASE_OPENROUTER_URL,
 })
 
 export const modelProvider = customProvider({
@@ -18,7 +19,9 @@ export const modelProvider = customProvider({
 
     'chat-basic': openrouter('meta-llama/llama-3.3-70b-instruct:free'),
     'chat-agent': openrouter('google/gemini-2.0-flash-001'),
-    'chat-agent-tools': openrouter('openai/gpt-4.1'),
+    // 'chat-agent-tools': openrouter('openai/gpt-4.1'),
+    // 'chat-agent-tools': openrouter('openai/gpt-4.1'),
+    'chat-agent-tools': openrouter('google/gemini-2.0-flash-001'),
 
     'artifact-basic': openrouter('meta-llama/llama-3.3-70b-instruct:free'),
   },

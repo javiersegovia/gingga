@@ -27,6 +27,8 @@ const ServerEnvSchema = createEnvSchema('server', {
   // AI SERVICES
   OPENAI_API_KEY: z.string().startsWith('sk-'),
   OPENROUTER_API_KEY: z.string().min(1),
+  GATEWAY_BASE_OPENAI_URL: z.string().url(),
+  GATEWAY_BASE_OPENROUTER_URL: z.string().url(),
 
   // UPSTASH REDIS
   KV_URL: z.string().url(),
