@@ -1,14 +1,14 @@
-import { createFileRoute } from '@tanstack/react-router'
 import { DotPattern } from '@gingga/ui/components/dot-pattern'
+import { createFileRoute } from '@tanstack/react-router'
 import { CoverSection } from './_components/CoverSection'
-import { WhoIAmSection } from './_components/WhoIAmSection'
-import { SharedOpportunitySection } from './_components/SharedOpportunitySection'
-import { WhatIsGinggaSection } from './_components/WhatIsGinggaSection'
-import { WhyNowSection } from './_components/WhyNowSection'
-import { TheTeamSection } from './_components/TheTeamSection'
-import { RoadmapSection } from './_components/RoadmapSection'
-import { StrategicAllianceSection } from './_components/StrategicAllianceSection'
 import { FinalThoughtSection } from './_components/FinalThoughtSection'
+import { RoadmapSection } from './_components/RoadmapSection'
+import { SharedOpportunitySection } from './_components/SharedOpportunitySection'
+import { StrategicAllianceSection } from './_components/StrategicAllianceSection'
+import { TheTeamSection } from './_components/TheTeamSection'
+import { WhatIsGinggaSection } from './_components/WhatIsGinggaSection'
+import { WhoIAmSection } from './_components/WhoIAmSection'
+import { WhyNowSection } from './_components/WhyNowSection'
 
 export const Route = createFileRoute('/_proposals/exsis/')({
   component: ExsisProposalPage,

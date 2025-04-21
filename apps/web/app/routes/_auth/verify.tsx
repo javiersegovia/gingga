@@ -1,4 +1,5 @@
-import { createFileRoute, redirect } from '@tanstack/react-router'
+import type { z } from 'zod'
+import { VerifySchema } from '@gingga/api/src/lib/auth/auth.schema'
 import {
   Form,
   FormControl,
@@ -8,11 +9,11 @@ import {
   FormMessage,
 } from '@gingga/ui/components/form'
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@gingga/ui/components/input-otp'
-import { VerifySchema } from '~/features/auth/auth.schema'
-import { useForm } from 'react-hook-form'
-import { zodValidator } from '@tanstack/zod-adapter'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { FormStatusButton } from '@gingga/ui/components/status-button'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { createFileRoute, redirect } from '@tanstack/react-router'
+import { zodValidator } from '@tanstack/zod-adapter'
+import { useForm } from 'react-hook-form'
 
 const VerifySearchParams = VerifySchema.partial()
 
@@ -30,8 +31,7 @@ export const Route = createFileRoute('/_auth/verify')({
 
 function VerifyPage() {
   const { code, type } = Route.useSearch()
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const form = useForm<any>({
+  const form = useForm<z.infer<typeof VerifySchema>>({
     resolver: zodResolver(VerifySchema),
     defaultValues: {
       code,

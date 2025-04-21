@@ -1,5 +1,5 @@
-import { memo } from 'react'
 import type { VisibilityType } from './visibility-selector'
+import { memo } from 'react'
 import { VisibilitySelector } from './visibility-selector'
 
 function PureChatHeader({

@@ -1,8 +1,9 @@
-import { Card, CardContent } from '@gingga/ui/components/card'
-import { ExternalLinkIcon, Linkedin, StarIcon } from 'lucide-react'
+/* eslint-disable react/no-unstable-default-props */
 import { Avatar, AvatarFallback, AvatarImage } from '@gingga/ui/components/avatar'
 import { Button } from '@gingga/ui/components/button'
+import { Card, CardContent } from '@gingga/ui/components/card'
 import { cn } from '@gingga/ui/lib/utils'
+import { ExternalLinkIcon, Linkedin, StarIcon } from 'lucide-react'
 
 const teamMembers = [
   {
@@ -84,20 +85,22 @@ function TeamMemberCard({
         <div className="flex h-full flex-1 flex-col items-center">
           <div className="bg-muted ring-primary/50 relative mb-4 h-24 w-24 overflow-hidden rounded-full ring-2">
             <Avatar className="h-full w-full object-cover">
-              {avatar ? (
-                <AvatarImage
-                  src={avatar}
-                  alt={name}
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                <AvatarFallback className="bg-muted text-muted-foreground text-lg font-semibold">
-                  {name
-                    .split(' ')
-                    .map((n) => n[0])
-                    .join('')}
-                </AvatarFallback>
-              )}
+              {avatar
+                ? (
+                    <AvatarImage
+                      src={avatar}
+                      alt={name}
+                      className="h-full w-full object-cover"
+                    />
+                  )
+                : (
+                    <AvatarFallback className="bg-muted text-muted-foreground text-lg font-semibold">
+                      {name
+                        .split(' ')
+                        .map(n => n[0])
+                        .join('')}
+                    </AvatarFallback>
+                  )}
             </Avatar>
           </div>
           <h3 className="mb-1 text-xl font-bold">{name}</h3>
@@ -108,9 +111,9 @@ function TeamMemberCard({
           </div>
 
           <div className="mb-6 w-full space-y-2">
-            {tags.map((tag, index) => (
+            {tags.map(tag => (
               <div
-                key={index}
+                key={tag}
                 className={cn(
                   'flex items-center justify-between rounded-lg px-3 py-1.5 text-sm',
                   tag === signatureSkill
@@ -180,14 +183,15 @@ function CredentialCard({ title, description, link, logo }: CredentialCardProps)
         rel="noopener noreferrer"
         className="text-primary group mt-4 inline-flex items-center text-sm font-medium hover:underline"
       >
-        Visit website{' '}
+        Visit website
+        {' '}
         <ExternalLinkIcon className="ml-1 h-3 w-3 transition-transform group-hover:translate-x-0.5" />
       </a>
     </div>
   )
 }
 
-export const TheTeamSection = () => {
+export function TheTeamSection() {
   return (
     <section className="bg-background relative flex min-h-screen flex-col items-center justify-center gap-12 overflow-hidden p-8">
       <h2 className="text-center text-5xl font-bold tracking-tight lg:text-7xl">
@@ -195,7 +199,7 @@ export const TheTeamSection = () => {
       </h2>
 
       <div className="grid w-full max-w-6xl grid-cols-1 gap-6 md:grid-cols-3">
-        {teamMembers.map((member) => (
+        {teamMembers.map(member => (
           <TeamMemberCard
             key={member.name}
             name={member.name}
@@ -212,7 +216,7 @@ export const TheTeamSection = () => {
       <div className="z-10 mt-10 w-full max-w-4xl">
         <h3 className="mb-6 text-center text-3xl font-semibold">Team Credentials</h3>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          {credentials.map((cred) => (
+          {credentials.map(cred => (
             <CredentialCard
               key={cred.name}
               title={cred.name}

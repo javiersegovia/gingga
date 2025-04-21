@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '@gingga/ui/components/avatar'
 import {
   DropdownMenu,
@@ -7,12 +8,11 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from '@gingga/ui/components/dropdown-menu'
-import { LogOut, PaletteIcon, ChevronsUpDown } from 'lucide-react'
-import { ThemeSwitch } from './theme-switch'
-import { cn, getInitials } from '@gingga/ui/lib/utils'
-import { useAuthedQuery, useSignOutMutation } from '~/features/auth/auth.query'
 import { SidebarMenuButton } from '@gingga/ui/components/sidebar'
-import type { ReactNode } from 'react'
+import { cn, getInitials } from '@gingga/ui/lib/utils'
+import { ChevronsUpDown, LogOut, PaletteIcon } from 'lucide-react'
+import { useAuthedQuery, useSignOutMutation } from '~/features/auth/auth.query'
+import { ThemeSwitch } from './theme-switch'
 
 // Common dropdown content component
 function UserDropdownContent({
@@ -119,7 +119,8 @@ function UserDropdownBase({
 // Avatar variant
 export function UserDropdownAvatar() {
   const { data } = useAuthedQuery()
-  if (!data?.isAuthenticated) return null
+  if (!data?.isAuthenticated)
+    return null
   const { user } = data
 
   return (
@@ -140,7 +141,8 @@ export function UserDropdownAvatar() {
 // Sidebar variant
 export function UserDropdownSidebar({ isMobile }: { isMobile?: boolean }) {
   const { data } = useAuthedQuery()
-  if (!data?.isAuthenticated) return null
+  if (!data?.isAuthenticated)
+    return null
   const { user } = data
 
   return (

@@ -1,18 +1,18 @@
 import { createServerFn } from '@tanstack/react-start'
-import { z } from 'zod'
+import { setResponseStatus } from '@tanstack/react-start/server'
 import { zodValidator } from '@tanstack/zod-adapter'
+import { z } from 'zod'
+import { contextMiddleware } from '~/global-middleware'
 import { authMiddleware } from '~/middleware/auth-guard'
 import { AgentFormSchema } from './agent.schema'
 import {
   createAgent,
-  getAgents,
-  getAgentById,
-  updateAgentById,
   deleteAgentById,
+  getAgentById,
+  getAgents,
   getRecentAgentsForUser,
+  updateAgentById,
 } from './agent.service'
-import { contextMiddleware } from '~/global-middleware'
-import { setResponseStatus } from '@tanstack/react-start/server'
 
 export const $getAgentById = createServerFn({
   method: 'GET',
@@ -51,7 +51,8 @@ export const $getRecentChatsWithAgents = createServerFn({
       // Call the service function to fetch recent agents
       const agents = await getRecentAgentsForUser(userId)
       return { agents }
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Error fetching recent agents in API handler:', error)
       // Re-throw or return a structured error response
       // Consider using a more specific error type if available
@@ -68,7 +69,8 @@ export const $createAgent = createServerFn({
     try {
       const agent = await createAgent(data)
       return agent
-    } catch (e) {
+    }
+    catch (e) {
       console.error(e)
       setResponseStatus(500)
       return { error: 'Failed to create agent due to a server error.' }

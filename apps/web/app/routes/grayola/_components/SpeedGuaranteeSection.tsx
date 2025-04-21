@@ -1,6 +1,6 @@
 import { Badge } from '@gingga/ui/components/badge'
+import { Card, CardContent, CardDescription, CardTitle } from '@gingga/ui/components/card'
 import { Clock, TrendingUp, Zap } from 'lucide-react'
-import { Card, CardContent, CardTitle, CardDescription } from '@gingga/ui/components/card'
 
 export function SpeedGuaranteeSection() {
   return (
@@ -13,7 +13,9 @@ export function SpeedGuaranteeSection() {
               Our Guarantee
             </Badge>
             <h2 className="text-foreground mx-auto mb-4 max-w-3xl text-3xl font-bold tracking-tight md:text-4xl">
-              Results at <br />
+              Results at
+              {' '}
+              <br />
               <span className="text-brand-pink line-stroke">Maximum Speed</span>
             </h2>
             <p className="text-muted-foreground mx-auto max-w-[800px] text-xl">

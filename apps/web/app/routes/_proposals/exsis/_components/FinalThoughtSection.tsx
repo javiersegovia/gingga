@@ -1,4 +1,4 @@
-export const FinalThoughtSection = () => {
+export function FinalThoughtSection() {
   return (
     <section className="bg-muted/40 flex min-h-screen flex-col items-center justify-center gap-12 p-8 text-center">
       <h2 className="text-5xl font-bold tracking-tight lg:text-7xl">Final Thought</h2>

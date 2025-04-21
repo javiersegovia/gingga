@@ -1,9 +1,9 @@
-/// <reference types="vinxi/types/client" />
-import { scan } from 'react-scan' // must be imported before React and React DOM
+import { StartClient } from '@tanstack/react-start'
 
 import { StrictMode } from 'react'
-import { StartClient } from '@tanstack/react-start'
 import { hydrateRoot } from 'react-dom/client'
+/// <reference types="vinxi/types/client" />
+import { scan } from 'react-scan' // must be imported before React and React DOM
 import { createRouter } from './router'
 
 scan({

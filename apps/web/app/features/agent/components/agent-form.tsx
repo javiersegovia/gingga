@@ -1,14 +1,14 @@
+import type { availableModelIds } from '@gingga/db/schema'
 import type React from 'react'
+import type { AgentFormValues } from '../agent.schema'
+import { Input } from '@gingga/ui/components/input'
+import { Skeleton } from '@gingga/ui/components/skeleton'
+import { Textarea } from '@gingga/ui/components/textarea'
 import { Suspense } from 'react'
 import { useAppForm } from '~/components/form/tanstack-form'
-import { Input } from '@gingga/ui/components/input'
-import { Textarea } from '@gingga/ui/components/textarea'
-import { Skeleton } from '@gingga/ui/components/skeleton'
-import type { AgentFormValues } from '../agent.schema'
-import { agentFormOptions, AgentFormSchema } from '../agent.schema'
-import type { availableModelIds } from '@gingga/db/schema'
-import { availableModels } from '~/features/ai/utils/ai-models'
 import { SelectAIModel } from '~/components/ui/select-ai-model'
+import { availableModels } from '~/features/ai/utils/ai-models'
+import { agentFormOptions, AgentFormSchema } from '../agent.schema'
 
 interface AgentFormProps {
   initialValues?: Partial<AgentFormValues>
@@ -51,19 +51,19 @@ export function AgentForm({
       className="space-y-4"
     >
       <Suspense
-        fallback={
+        fallback={(
           <div className="space-y-4">
             <Skeleton className="h-10 w-full" />
             <Skeleton className="h-20 w-full" />
           </div>
-        }
+        )}
       >
         <form.AppField
           name="name"
           validators={{
             onChange: AgentFormSchema.shape.name,
           }}
-          children={(field) => (
+          children={field => (
             <field.FormFieldItem>
               <field.FormFieldLabel>Agent Name</field.FormFieldLabel>
               <field.FormFieldControl>
@@ -71,7 +71,7 @@ export function AgentForm({
                   name={field.name}
                   value={field.state.value}
                   onBlur={field.handleBlur}
-                  onChange={(e) => field.handleChange(e.target.value)}
+                  onChange={e => field.handleChange(e.target.value)}
                   disabled={isSubmitting}
                   placeholder="e.g., Customer Support Pro"
                   aria-invalid={!!field.state.meta.errors.length}
@@ -90,7 +90,7 @@ export function AgentForm({
           validators={{
             onChange: AgentFormSchema.shape.description,
           }}
-          children={(field) => (
+          children={field => (
             <field.FormFieldItem>
               <field.FormFieldLabel>Description</field.FormFieldLabel>
               <field.FormFieldControl>
@@ -98,7 +98,7 @@ export function AgentForm({
                   name={field.name}
                   value={field.state.value ?? ''}
                   onBlur={field.handleBlur}
-                  onChange={(e) => field.handleChange(e.target.value)}
+                  onChange={e => field.handleChange(e.target.value)}
                   disabled={isSubmitting}
                   placeholder="Describe the agent's purpose and capabilities..."
                   rows={4}
@@ -119,7 +119,7 @@ export function AgentForm({
           validators={{
             onChange: AgentFormSchema.shape.instructions,
           }}
-          children={(field) => (
+          children={field => (
             <field.FormFieldItem>
               <field.FormFieldLabel>Instructions</field.FormFieldLabel>
               <field.FormFieldControl>
@@ -127,7 +127,7 @@ export function AgentForm({
                   name={field.name}
                   value={field.state.value}
                   onBlur={field.handleBlur}
-                  onChange={(e) => field.handleChange(e.target.value)}
+                  onChange={e => field.handleChange(e.target.value)}
                   disabled={isSubmitting}
                   placeholder="Define the agent core behavior..."
                   rows={6}
@@ -148,7 +148,7 @@ export function AgentForm({
           validators={{
             onChange: AgentFormSchema.shape.modelId,
           }}
-          children={(field) => (
+          children={field => (
             <field.FormFieldItem>
               <field.FormFieldLabel>Model</field.FormFieldLabel>
               <field.FormFieldControl>
@@ -172,7 +172,7 @@ export function AgentForm({
           validators={{
             onChange: AgentFormSchema.shape.image,
           }}
-          children={(field) => (
+          children={field => (
             <field.FormFieldItem>
               <field.FormFieldLabel>Image URL</field.FormFieldLabel>
               <field.FormFieldControl>
@@ -180,7 +180,7 @@ export function AgentForm({
                   name={field.name}
                   value={field.state.value ?? ''}
                   onBlur={field.handleBlur}
-                  onChange={(e) => field.handleChange(e.target.value)}
+                  onChange={e => field.handleChange(e.target.value)}
                   disabled={isSubmitting}
                   placeholder="https://example.com/agent.png"
                   aria-invalid={!!field.state.meta.errors.length}

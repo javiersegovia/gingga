@@ -1,16 +1,16 @@
-import { useDeleteAgentMutation } from '~/features/agent/agent.query'
+import { Button } from '@gingga/ui/components/button'
 import {
   Dialog,
-  DialogContent,
-  DialogTrigger,
   DialogClose,
-  DialogHeader,
-  DialogFooter,
-  DialogTitle,
+  DialogContent,
   DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
 } from '@gingga/ui/components/dialog'
-import { Button } from '@gingga/ui/components/button'
 import { useNavigate } from '@tanstack/react-router'
+import { useDeleteAgentMutation } from '~/features/agent/agent.query'
 
 interface DeleteAgentDialogProps {
   agent: {
@@ -37,8 +37,10 @@ export function DeleteAgentDialog({ agent }: DeleteAgentDialogProps) {
         <DialogHeader>
           <DialogTitle>Delete Agent</DialogTitle>
           <DialogDescription className="pt-4">
-            This action cannot be undone. Are you sure you want to delete agent{' '}
-            {agent.name || agent.id}?
+            This action cannot be undone. Are you sure you want to delete agent
+            {' '}
+            {agent.name || agent.id}
+            ?
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>

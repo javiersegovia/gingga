@@ -1,8 +1,8 @@
-import * as React from 'react'
+import { cn } from '@gingga/ui/lib/utils'
 import * as LabelPrimitive from '@radix-ui/react-label'
 import { cva } from 'class-variance-authority'
 
-import { cn } from '@gingga/ui/lib/utils'
+import * as React from 'react'
 
 const labelVariants = cva(
   'text-sm text-foreground font-medium ml-2 leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70',

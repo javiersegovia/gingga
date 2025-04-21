@@ -1,5 +1,7 @@
-import { Button, ButtonProps } from '@gingga/ui/components/button'
-import { PropsWithChildren } from 'react'
+/* eslint-disable react-dom/no-dangerously-set-innerhtml -- needed for cal.com */
+import type { ButtonProps } from '@gingga/ui/components/button'
+import type { PropsWithChildren } from 'react'
+import { Button } from '@gingga/ui/components/button'
 
 export function ContactButton({ children, ...props }: PropsWithChildren<ButtonProps>) {
   const script = `<script type="text/javascript">

@@ -1,4 +1,4 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { Button } from '@gingga/ui/components/button'
 import {
   Card,
   CardContent,
@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@gingga/ui/components/card'
-import { Button } from '@gingga/ui/components/button'
+import { createFileRoute } from '@tanstack/react-router'
 import { CalendarIcon, MailIcon, PhoneIcon } from 'lucide-react'
 
 export const Route = createFileRoute('/settings/contact')({
@@ -40,7 +40,9 @@ function ContactSettingsComponent() {
         <Card design="grid">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <MailIcon className="h-5 w-5" /> Email Support
+              <MailIcon className="h-5 w-5" />
+              {' '}
+              Email Support
             </CardTitle>
             <CardDescription>Best for non-urgent inquiries.</CardDescription>
           </CardHeader>
@@ -57,7 +59,9 @@ function ContactSettingsComponent() {
         <Card design="grid">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <PhoneIcon className="h-5 w-5" /> Phone Support
+              <PhoneIcon className="h-5 w-5" />
+              {' '}
+              Phone Support
             </CardTitle>
             <CardDescription>For more immediate assistance.</CardDescription>
           </CardHeader>

@@ -1,12 +1,12 @@
 import { createServerFn } from '@tanstack/react-start'
-import { z } from 'zod'
 import { zodValidator } from '@tanstack/zod-adapter'
+import { z } from 'zod'
 import { authMiddleware } from '~/middleware/auth-guard' // Assuming you have this
 import {
+  hasEnterpriseMembership,
+  hasProMembership,
   isAdmin,
   isAgentOwner,
-  hasProMembership,
-  hasEnterpriseMembership,
 } from './permission.service'
 
 /**

@@ -1,11 +1,8 @@
 import type React from 'react'
-import { Suspense } from 'react'
-import { useAppForm } from '~/components/form/tanstack-form'
-import { Input } from '@gingga/ui/components/input'
-import { Skeleton } from '@gingga/ui/components/skeleton'
-import { Users, UserMemberships } from '@gingga/db/schema'
 import type { UserFormValues } from '../user.schema'
-import { userFormOptions, UserFormSchema } from '../user.schema'
+import { UserMemberships, Users } from '@gingga/db/schema'
+import { Button } from '@gingga/ui/components/button'
+import { Input } from '@gingga/ui/components/input'
 import {
   Select,
   SelectContent,
@@ -13,8 +10,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@gingga/ui/components/select'
-import { Button } from '@gingga/ui/components/button'
-import { useImpersonateUser, useBanUser } from '../user.query'
+import { Skeleton } from '@gingga/ui/components/skeleton'
+import { Suspense } from 'react'
+import { useAppForm } from '~/components/form/tanstack-form'
+import { useBanUser, useImpersonateUser } from '../user.query'
+import { userFormOptions, UserFormSchema } from '../user.schema'
 
 interface UserFormProps {
   initialValues?: Partial<UserFormValues>
@@ -80,7 +80,7 @@ export function UserForm({
             onChange: UserFormSchema.shape.name,
           }}
         >
-          {(field) => (
+          {field => (
             <field.FormFieldItem>
               <field.FormFieldLabel>Name</field.FormFieldLabel>
               <field.FormFieldControl>
@@ -88,7 +88,7 @@ export function UserForm({
                   name={field.name}
                   value={field.state.value}
                   onBlur={field.handleBlur}
-                  onChange={(e) => field.handleChange(e.target.value)}
+                  onChange={e => field.handleChange(e.target.value)}
                   disabled={isSubmitting}
                   placeholder="Enter full name"
                   aria-invalid={!!field.state.meta.errors.length}
@@ -108,7 +108,7 @@ export function UserForm({
             onChange: UserFormSchema.shape.firstName,
           }}
         >
-          {(field) => (
+          {field => (
             <field.FormFieldItem>
               <field.FormFieldLabel>First Name</field.FormFieldLabel>
               <field.FormFieldControl>
@@ -116,7 +116,7 @@ export function UserForm({
                   name={field.name}
                   value={field.state.value ?? ''}
                   onBlur={field.handleBlur}
-                  onChange={(e) => field.handleChange(e.target.value)}
+                  onChange={e => field.handleChange(e.target.value)}
                   disabled={isSubmitting}
                   placeholder="Enter first name"
                   aria-invalid={!!field.state.meta.errors.length}
@@ -136,7 +136,7 @@ export function UserForm({
             onChange: UserFormSchema.shape.lastName,
           }}
         >
-          {(field) => (
+          {field => (
             <field.FormFieldItem>
               <field.FormFieldLabel>Last Name</field.FormFieldLabel>
               <field.FormFieldControl>
@@ -144,7 +144,7 @@ export function UserForm({
                   name={field.name}
                   value={field.state.value ?? ''}
                   onBlur={field.handleBlur}
-                  onChange={(e) => field.handleChange(e.target.value)}
+                  onChange={e => field.handleChange(e.target.value)}
                   disabled={isSubmitting}
                   placeholder="Enter last name"
                   aria-invalid={!!field.state.meta.errors.length}
@@ -164,7 +164,7 @@ export function UserForm({
             onChange: UserFormSchema.shape.email,
           }}
         >
-          {(field) => (
+          {field => (
             <field.FormFieldItem>
               <field.FormFieldLabel>Email</field.FormFieldLabel>
               <field.FormFieldControl>
@@ -173,7 +173,7 @@ export function UserForm({
                   name={field.name}
                   value={field.state.value}
                   onBlur={field.handleBlur}
-                  onChange={(e) => field.handleChange(e.target.value)}
+                  onChange={e => field.handleChange(e.target.value)}
                   disabled={isSubmitting}
                   placeholder="Enter email"
                   aria-invalid={!!field.state.meta.errors.length}
@@ -193,23 +193,22 @@ export function UserForm({
             onChange: UserFormSchema.shape.role,
           }}
         >
-          {(field) => (
+          {field => (
             <field.FormFieldItem>
               <field.FormFieldLabel>Role</field.FormFieldLabel>
               <field.FormFieldControl>
                 <Select
                   name={field.name}
                   value={field.state.value ?? ''}
-                  onValueChange={(value) =>
-                    field.handleChange(value as (typeof Users.role.enumValues)[number])
-                  }
+                  onValueChange={value =>
+                    field.handleChange(value as (typeof Users.role.enumValues)[number])}
                   disabled={isSubmitting}
                 >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select a role" />
                   </SelectTrigger>
                   <SelectContent>
-                    {Users.role.enumValues.map((role) => (
+                    {Users.role.enumValues.map(role => (
                       <SelectItem key={role} value={role}>
                         {role.charAt(0).toUpperCase() + role.slice(1)}
                       </SelectItem>
@@ -228,23 +227,22 @@ export function UserForm({
             onChange: UserFormSchema.shape.membershipTier,
           }}
         >
-          {(field) => (
+          {field => (
             <field.FormFieldItem>
               <field.FormFieldLabel>Membership Tier</field.FormFieldLabel>
               <field.FormFieldControl>
                 <Select
                   name={field.name}
                   value={field.state.value ?? ''}
-                  onValueChange={(value) =>
-                    field.handleChange(value as 'basic' | 'pro' | 'enterprise')
-                  }
+                  onValueChange={value =>
+                    field.handleChange(value as 'basic' | 'pro' | 'enterprise')}
                   disabled={isSubmitting}
                 >
                   <SelectTrigger className="w-full">
                     <SelectValue placeholder="Select a membership tier" />
                   </SelectTrigger>
                   <SelectContent>
-                    {UserMemberships.tier.enumValues.map((tier) => (
+                    {UserMemberships.tier.enumValues.map(tier => (
                       <SelectItem key={tier} value={tier}>
                         {tier.charAt(0).toUpperCase() + tier.slice(1)}
                       </SelectItem>

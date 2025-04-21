@@ -1,15 +1,15 @@
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 
-import { $signOut } from './auth.api'
 import { useRouter } from '@tanstack/react-router'
 import { useTRPC } from '~/lib/trpc'
+import { $signOut } from './auth.api'
 
-export const useAuthQuery = () => {
+export function useAuthQuery() {
   const trpc = useTRPC()
   return useSuspenseQuery(trpc.auth.getSession.queryOptions())
 }
 
-export const useAuthedQuery = () => {
+export function useAuthedQuery() {
   const authQuery = useAuthQuery()
   const router = useRouter()
 
@@ -20,7 +20,7 @@ export const useAuthedQuery = () => {
   return authQuery
 }
 
-export const useSignOutMutation = () => {
+export function useSignOutMutation() {
   const trpc = useTRPC()
   const router = useRouter()
   const queryClient = useQueryClient()

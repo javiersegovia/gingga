@@ -1,6 +1,10 @@
 import { json } from '@tanstack/react-start'
 import { createAPIFileRoute } from '@tanstack/react-start/api'
-import { streamText, appendResponseMessages, createDataStreamResponse } from 'ai'
+import { appendResponseMessages, createDataStreamResponse, streamText } from 'ai'
+import { nanoid } from 'nanoid'
+// import { tools, executions } from '~/features/ai/skills/index'
+import { processToolCalls } from '~/features/ai/utils/human-in-the-loop'
+import { modelProvider } from '~/features/ai/utils/providers'
 import {
   generateChatTitleFromUserMessage,
   getChatById,
@@ -10,10 +14,6 @@ import {
   upsertChatMessage,
 } from '~/features/chat/chat.service'
 import { setupAppContext } from '~/middleware/setup-context.server'
-import { modelProvider } from '~/features/ai/utils/providers'
-// import { tools, executions } from '~/features/ai/skills/index'
-import { processToolCalls } from '~/features/ai/utils/human-in-the-loop'
-import { nanoid } from 'nanoid'
 import { AIChatSchema } from '../../../features/chat/chat.schema'
 
 export const APIRoute = createAPIFileRoute('/api/chat/default')({
@@ -78,18 +78,18 @@ export const APIRoute = createAPIFileRoute('/api/chat/default')({
             experimental_generateMessageId: nanoid,
             maxSteps: 10, // Consider if maxSteps is appropriate here
             async onFinish({ response }) {
-              console.log('~~~~ STARTING ON FINISH ~~~~')
-              console.log(
-                `[Chat ${chat.id}] onFinish received response with ${response.messages.length} messages.`,
-              )
+              // console.log('~~~~ STARTING ON FINISH ~~~~')
+              // console.log(
+              //   `[Chat ${chat.id}] onFinish received response with ${response.messages.length} messages.`,
+              // )
               // Detailed log of assistant messages received
               const assistantMessages = response.messages.filter(
-                (m) => m.role === 'assistant',
+                m => m.role === 'assistant',
               )
-              console.log(
-                `[Chat ${chat.id}] Assistant messages in response:`,
-                JSON.stringify(assistantMessages, null, 2), // Log structure
-              )
+              // console.log(
+              //   `[Chat ${chat.id}] Assistant messages in response:`,
+              //   JSON.stringify(assistantMessages, null, 2), // Log structure
+              // )
 
               try {
                 const newAssistantMessageId = getTrailingMessageId({
@@ -97,14 +97,14 @@ export const APIRoute = createAPIFileRoute('/api/chat/default')({
                 })
 
                 if (!newAssistantMessageId) {
-                  console.error(
-                    `[Chat ${chat.id}] No assistant message ID found after streaming. Not saving.`,
-                  )
+                  // console.error(
+                  //   `[Chat ${chat.id}] No assistant message ID found after streaming. Not saving.`,
+                  // )
                   return
                 }
-                console.log(
-                  `[Chat ${chat.id}] Found assistant message ID: ${newAssistantMessageId}`,
-                )
+                // console.log(
+                //   `[Chat ${chat.id}] Found assistant message ID: ${newAssistantMessageId}`,
+                // )
 
                 const [, newAssistantMessage] = appendResponseMessages({
                   // Consider if passing more history is needed by appendResponseMessages
@@ -112,19 +112,19 @@ export const APIRoute = createAPIFileRoute('/api/chat/default')({
                   responseMessages: response.messages,
                 })
 
-                console.log(
-                  `[Chat ${chat.id}] Message prepared for saving:`,
-                  JSON.stringify(newAssistantMessage, null, 2),
-                )
+                // console.log(
+                //   `[Chat ${chat.id}] Message prepared for saving:`,
+                //   JSON.stringify(newAssistantMessage, null, 2),
+                // )
 
                 if (
-                  newAssistantMessage?.role === 'assistant' &&
-                  newAssistantMessage.parts &&
-                  newAssistantMessage.id === newAssistantMessageId // Sanity check ID
+                  newAssistantMessage?.role === 'assistant'
+                  && newAssistantMessage.parts
+                  && newAssistantMessage.id === newAssistantMessageId // Sanity check ID
                 ) {
-                  console.log(
-                    `[Chat ${chat.id}] Attempting to save assistant message ${newAssistantMessage.id}...`,
-                  )
+                  // console.log(
+                  //   `[Chat ${chat.id}] Attempting to save assistant message ${newAssistantMessage.id}...`,
+                  // )
                   await upsertChatMessage({
                     id: newAssistantMessage.id,
                     chatId: chat.id,
@@ -133,19 +133,21 @@ export const APIRoute = createAPIFileRoute('/api/chat/default')({
                     attachments: newAssistantMessage.experimental_attachments ?? [],
                     modelId: modelProvider.languageModel('chat-agent').modelId,
                   })
-                  console.log(
-                    `[Chat ${chat.id}] Successfully saved assistant message ${newAssistantMessage.id}.`,
-                  )
-                } else {
-                  console.log(
-                    `[Chat ${chat.id}] No valid assistant message found in onFinish response or ID mismatch. Not saving. ID found: ${newAssistantMessageId}, Message processed: ${JSON.stringify(newAssistantMessage)}`,
-                  )
+                  // console.log(
+                  //   `[Chat ${chat.id}] Successfully saved assistant message ${newAssistantMessage.id}.`,
+                  // )
                 }
-              } catch (error) {
-                console.error(
-                  'Failed to save new assistant chat message in onFinish:',
-                  error,
-                )
+                else {
+                  // console.log(
+                  //   `[Chat ${chat.id}] No valid assistant message found in onFinish response or ID mismatch. Not saving. ID found: ${newAssistantMessageId}, Message processed: ${JSON.stringify(newAssistantMessage)}`,
+                  // )
+                }
+              }
+              catch (_error) {
+                // console.error(
+                //   'Failed to save new assistant chat message in onFinish:',
+                //   _error,
+                // )
               }
             },
 
@@ -161,14 +163,15 @@ export const APIRoute = createAPIFileRoute('/api/chat/default')({
           result.mergeIntoDataStream(dataStream)
         },
         onError(error) {
-          console.error('Error in /api/chat/default:', error)
+          // console.error('Error in /api/chat/default:', error)
           throw error
         },
       })
-    } catch (err) {
-      console.error('Error in /api/agents/gingga:', err) // Log the full error server-side
-      const message =
-        err instanceof Error
+    }
+    catch (err) {
+      // console.error('Error in /api/agents/gingga:', err) // Log the full error server-side
+      const message
+        = err instanceof Error
           ? err.message
           : typeof err === 'string'
             ? err

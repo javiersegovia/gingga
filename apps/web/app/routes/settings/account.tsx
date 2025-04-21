@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { Button } from '@gingga/ui/components/button'
 import {
   Card,
   CardContent,
@@ -7,9 +7,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@gingga/ui/components/card'
-import { Button } from '@gingga/ui/components/button'
-import { useAuthedQuery } from '~/features/auth/auth.query'
 import { Progress } from '@gingga/ui/components/progress'
+import { createFileRoute, Link } from '@tanstack/react-router'
 import {
   AlertCircleIcon,
   ArrowRightIcon,
@@ -17,6 +16,7 @@ import {
   InfoIcon,
   Trash2Icon,
 } from 'lucide-react'
+import { useAuthedQuery } from '~/features/auth/auth.query'
 
 export const Route = createFileRoute('/settings/account')({
   component: AccountSettingsComponent,
@@ -27,7 +27,9 @@ function NoMembershipCard() {
     <Card design="grid" className="">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <InfoIcon className="text-brand-blue h-5 w-5" /> Basic Plan
+          <InfoIcon className="text-brand-blue h-5 w-5" />
+          {' '}
+          Basic Plan
         </CardTitle>
         <CardDescription>
           You are currently on our starting Basic plan. Upgrade to unlock more features
@@ -38,23 +40,33 @@ function NoMembershipCard() {
         <p className="text-sm font-medium">Upgrading gives you access to:</p>
         <ul className="text-muted-foreground ml-4 list-none space-y-1 text-sm">
           <li className="flex items-center gap-2">
-            <Check className="h-4 w-4 text-green-500" /> More agents & integrations
+            <Check className="h-4 w-4 text-green-500" />
+            {' '}
+            More agents & integrations
           </li>
           <li className="flex items-center gap-2">
-            <Check className="h-4 w-4 text-green-500" /> Custom knowledge bases
+            <Check className="h-4 w-4 text-green-500" />
+            {' '}
+            Custom knowledge bases
           </li>
           <li className="flex items-center gap-2">
-            <Check className="h-4 w-4 text-green-500" /> Priority support
+            <Check className="h-4 w-4 text-green-500" />
+            {' '}
+            Priority support
           </li>
           <li className="flex items-center gap-2">
-            <Check className="h-4 w-4 text-green-500" /> Faster deployment times
+            <Check className="h-4 w-4 text-green-500" />
+            {' '}
+            Faster deployment times
           </li>
         </ul>
       </CardContent>
       <CardFooter>
         <Button asChild className="w-full" size="lg" variant="primary">
           <Link to="/settings/contact">
-            Contact Us to Upgrade <ArrowRightIcon className="ml-2 h-4 w-4" />
+            Contact Us to Upgrade
+            {' '}
+            <ArrowRightIcon className="ml-2 h-4 w-4" />
           </Link>
         </Button>
       </CardFooter>
@@ -108,7 +120,8 @@ function AccountSettingsComponent() {
   }
 
   const calculatePercentage = (used: number, limit: number) => {
-    if (limit <= 0) return 0
+    if (limit <= 0)
+      return 0
     return Math.min((used / limit) * 100, 100)
   }
 
@@ -119,8 +132,11 @@ function AccountSettingsComponent() {
         <CardHeader>
           <CardTitle>Membership Details</CardTitle>
           <CardDescription>
-            You are currently on the{' '}
-            <span className="text-foreground font-semibold capitalize">{tier}</span> plan.
+            You are currently on the
+            {' '}
+            <span className="text-foreground font-semibold capitalize">{tier}</span>
+            {' '}
+            plan.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -128,7 +144,12 @@ function AccountSettingsComponent() {
             <div className="mb-1 flex justify-between text-sm">
               <span>Daily Usage</span>
               <span className="text-muted-foreground">
-                {dailyUsed} / {dailyLimit} tokens
+                {dailyUsed}
+                {' '}
+                /
+                {dailyLimit}
+                {' '}
+                tokens
               </span>
             </div>
             <Progress
@@ -136,7 +157,9 @@ function AccountSettingsComponent() {
               className="h-2"
             />
             <p className="text-muted-foreground mt-1 text-xs">
-              Resets on {formatResetDate(dailyResetAt.getTime())}
+              Resets on
+              {' '}
+              {formatResetDate(dailyResetAt.getTime())}
             </p>
           </div>
 
@@ -144,7 +167,12 @@ function AccountSettingsComponent() {
             <div className="mb-1 flex justify-between text-sm">
               <span>Monthly Standard Usage</span>
               <span className="text-muted-foreground">
-                {monthlyStandardUsed} / {monthlyStandardLimit} tokens
+                {monthlyStandardUsed}
+                {' '}
+                /
+                {monthlyStandardLimit}
+                {' '}
+                tokens
               </span>
             </div>
             <Progress
@@ -157,7 +185,12 @@ function AccountSettingsComponent() {
             <div className="mb-1 flex justify-between text-sm">
               <span>Monthly Premium Usage</span>
               <span className="text-muted-foreground">
-                {monthlyPremiumUsed} / {monthlyPremiumLimit} tokens
+                {monthlyPremiumUsed}
+                {' '}
+                /
+                {monthlyPremiumLimit}
+                {' '}
+                tokens
               </span>
             </div>
             <Progress
@@ -165,7 +198,9 @@ function AccountSettingsComponent() {
               className="h-2"
             />
             <p className="text-muted-foreground mt-1 text-xs">
-              Monthly usage resets on {formatResetDate(monthlyResetAt.getTime())}
+              Monthly usage resets on
+              {' '}
+              {formatResetDate(monthlyResetAt.getTime())}
             </p>
           </div>
         </CardContent>

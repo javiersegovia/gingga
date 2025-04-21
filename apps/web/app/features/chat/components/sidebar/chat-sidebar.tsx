@@ -1,15 +1,8 @@
-import { Link } from '@tanstack/react-router'
-import {
-  MoreVertical,
-  Trash2,
-  PencilIcon,
-  Share,
-  MessageSquarePlusIcon,
-  TelescopeIcon,
-  Loader2Icon,
-  LogInIcon,
-} from 'lucide-react'
+import type { Chat, User } from '@gingga/db/types'
+import { Avatar, AvatarFallback, AvatarImage } from '@gingga/ui/components/avatar'
 import { Button } from '@gingga/ui/components/button'
+import { Card, CardContent } from '@gingga/ui/components/card'
+import { Dialog, DialogContent, DialogTrigger } from '@gingga/ui/components/dialog'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,22 +19,29 @@ import {
   SidebarHeader,
   SidebarMenu,
   SidebarMenuAction,
-  SidebarMenuItem,
   SidebarMenuButton,
+  SidebarMenuItem,
 } from '@gingga/ui/components/sidebar'
-import { Card, CardContent } from '@gingga/ui/components/card'
 import { cn, getInitials } from '@gingga/ui/lib/utils'
+import { Link } from '@tanstack/react-router'
+import {
+  Loader2Icon,
+  LogInIcon,
+  MessageSquarePlusIcon,
+  MoreVertical,
+  PencilIcon,
+  Share,
+  TelescopeIcon,
+  Trash2,
+} from 'lucide-react'
 import { Fragment, Suspense, useState } from 'react'
-import { Dialog, DialogContent, DialogTrigger } from '@gingga/ui/components/dialog'
-import { useAuthQuery } from '~/features/auth/auth.query'
+import { ThemeSwitch } from '~/components/ui/theme-switch'
 import { useRecentChatsWithAgentsQuery } from '~/features/agent/agent.query'
+import { useAuthQuery } from '~/features/auth/auth.query'
 import { useUserChatsSuspenseQuery } from '~/features/chat/chat.query'
+import { DeleteChatDialog } from './delete-dialog'
 import { RenameChatDialog } from './rename-dialog'
 import { ShareChatDialog } from './share-dialog'
-import { DeleteChatDialog } from './delete-dialog'
-import { Avatar, AvatarFallback, AvatarImage } from '@gingga/ui/components/avatar'
-import { ThemeSwitch } from '~/components/ui/theme-switch'
-import type { Chat, User } from '@gingga/db/types'
 
 // --- Constants ---
 const MAX_RECENT_AGENTS_TO_SHOW = 3 as const
@@ -110,7 +110,8 @@ interface DialogState {
 function AuthenticatedHistoryListLoading() {
   return (
     <SidebarMenu className="gap-0">
-      {[...Array(5)].map((_, i) => (
+      {Array.from({ length: 5 }).map((_, i) => (
+        // eslint-disable-next-line react/no-array-index-key
         <SidebarMenuItem key={i} className="p-2">
           <div className="bg-muted h-5 w-full animate-pulse rounded" />
         </SidebarMenuItem>
@@ -240,29 +241,32 @@ function SidebarChats({ user }: SidebarChatsProps) {
     <SidebarGroup className="p-0">
       <SidebarGroupLabel className="text-foreground font-bold">History</SidebarGroupLabel>
       <SidebarGroupContent>
-        {user ? (
-          <Suspense fallback={<AuthenticatedHistoryListLoading />}>
-            <AuthenticatedHistoryList />
-          </Suspense>
-        ) : (
-          <SidebarMenu className="gap-0 p-2">
-            <Card
-              design="grid"
-              hover="noShadow"
-              className="border-border bg-muted/50 text-center"
-            >
-              <CardContent className="text-muted-foreground p-3 text-sm">
-                <Link
-                  to="/identify"
-                  className="text-brand-blue dark:text-primary font-medium hover:underline"
+        {user
+          ? (
+              <Suspense fallback={<AuthenticatedHistoryListLoading />}>
+                <AuthenticatedHistoryList />
+              </Suspense>
+            )
+          : (
+              <SidebarMenu className="gap-0 p-2">
+                <Card
+                  design="grid"
+                  hover="noShadow"
+                  className="border-border bg-muted/50 text-center"
                 >
-                  Log in
-                </Link>{' '}
-                to save your chat history.
-              </CardContent>
-            </Card>
-          </SidebarMenu>
-        )}
+                  <CardContent className="text-muted-foreground p-3 text-sm">
+                    <Link
+                      to="/identify"
+                      className="text-brand-blue dark:text-primary font-medium hover:underline"
+                    >
+                      Log in
+                    </Link>
+                    {' '}
+                    to save your chat history.
+                  </CardContent>
+                </Card>
+              </SidebarMenu>
+            )}
       </SidebarGroupContent>
     </SidebarGroup>
   )
@@ -276,34 +280,36 @@ function NavUser({ user }: NavUserProps) {
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        {user ? (
-          <Link to="/settings/account" className="w-full">
-            <SidebarMenuButton
-              size="lg"
-              className="hover:border-border hover:text-foreground data-[state=open]:border-y-border data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground cursor-pointer border border-transparent focus:ring-0 focus:outline-none focus-visible:ring-0 focus-visible:outline-none data-[state=open]:border-x-transparent"
-            >
-              <Avatar className="h-8 w-8 rounded-md">
-                {user.image && (
-                  <AvatarImage src={user.image} alt={user.name || user.email} />
-                )}
-                <AvatarFallback className="rounded-none">
-                  {getInitials(user.name || user.email)}
-                </AvatarFallback>
-              </Avatar>
-              <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">{user.name ?? user.email}</span>
-                <span className="truncate text-xs">Account Settings</span>
-              </div>
-            </SidebarMenuButton>
-          </Link>
-        ) : (
-          <Button variant="outline" className="w-full" asChild>
-            <Link to="/identify">
-              <LogInIcon className="mr-2 h-4 w-4" />
-              Log in
-            </Link>
-          </Button>
-        )}
+        {user
+          ? (
+              <Link to="/settings/account" className="w-full">
+                <SidebarMenuButton
+                  size="lg"
+                  className="hover:border-border hover:text-foreground data-[state=open]:border-y-border data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground cursor-pointer border border-transparent focus:ring-0 focus:outline-none focus-visible:ring-0 focus-visible:outline-none data-[state=open]:border-x-transparent"
+                >
+                  <Avatar className="h-8 w-8 rounded-md">
+                    {user.image && (
+                      <AvatarImage src={user.image} alt={user.name || user.email} />
+                    )}
+                    <AvatarFallback className="rounded-none">
+                      {getInitials(user.name || user.email)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="grid flex-1 text-left text-sm leading-tight">
+                    <span className="truncate font-semibold">{user.name ?? user.email}</span>
+                    <span className="truncate text-xs">Account Settings</span>
+                  </div>
+                </SidebarMenuButton>
+              </Link>
+            )
+          : (
+              <Button variant="outline" className="w-full" asChild>
+                <Link to="/identify">
+                  <LogInIcon className="mr-2 h-4 w-4" />
+                  Log in
+                </Link>
+              </Button>
+            )}
       </SidebarMenuItem>
     </SidebarMenu>
   )
@@ -339,14 +345,14 @@ function RecentAgentsSection() {
   )
 }
 
-export const RecentAgentsList = () => {
+export function RecentAgentsList() {
   const { data: recentChatsWithAgentsData } = useRecentChatsWithAgentsQuery()
   const allAgents = recentChatsWithAgentsData?.agents ?? []
   const agentsToShow = allAgents.slice(0, MAX_RECENT_AGENTS_TO_SHOW)
 
   return (
     <SidebarMenu className="gap-0">
-      {agentsToShow.map((agent) => (
+      {agentsToShow.map(agent => (
         <SidebarMenuItem key={agent.id}>
           <Link
             to="/chat/agent/$agentId"
@@ -354,11 +360,13 @@ export const RecentAgentsList = () => {
             className="flex items-center gap-3 p-2 hover:underline"
           >
             <Avatar className="h-8 w-8">
-              {agent.image ? (
-                <AvatarImage src={agent.image} alt={agent.name} />
-              ) : (
-                <div className="bg-muted h-8 w-8 rounded-full" />
-              )}
+              {agent.image
+                ? (
+                    <AvatarImage src={agent.image} alt={agent.name} />
+                  )
+                : (
+                    <div className="bg-muted h-8 w-8 rounded-full" />
+                  )}
             </Avatar>
             <span>{agent.name}</span>
           </Link>

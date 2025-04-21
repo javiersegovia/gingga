@@ -1,10 +1,10 @@
+import { eq } from '@gingga/db'
+import { AgentSkills } from '@gingga/db/schema'
 /**
  * Business logic for AgentSkill CRUD operations.
  * All database interaction for AgentSkills should be implemented here.
  */
 import { getDatabase } from '~/middleware/setup-context.server'
-import { AgentSkills } from '@gingga/db/schema'
-import { eq } from '@gingga/db'
 
 /**
  * Create a new AgentSkill in the database.
@@ -45,17 +45,11 @@ export async function updateAgentSkillById(
  */
 export async function upsertAgentSkill(data: typeof AgentSkills.$inferInsert) {
   const db = getDatabase()
-
-  console.log('data')
-  console.log(data)
-
   const [result] = await db
     .insert(AgentSkills)
     .values(data)
     .onConflictDoUpdate({ target: AgentSkills.id, set: data })
     .returning()
-
-  console.log(result)
 
   return result
 }

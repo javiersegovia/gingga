@@ -1,6 +1,7 @@
+/* eslint-disable jsdoc/check-param-names */
+import type { UserMemberships } from '@gingga/db/schema'
 import { Ratelimit } from '@upstash/ratelimit'
 import { Redis } from '@upstash/redis'
-import type { UserMemberships } from '@gingga/db/schema'
 import { getServerEnv } from '~/server/env'
 
 export type Tier = 'public' | (typeof UserMemberships.tier.enumValues)[number]
@@ -99,15 +100,15 @@ export async function rateLimit({
       break
 
     case 'pro':
-      limiter =
-        messageType === 'premium'
+      limiter
+        = messageType === 'premium'
           ? rateLimiterConfigs.pro.premium
           : rateLimiterConfigs.pro.standard
       break
 
     case 'enterprise':
-      limiter =
-        messageType === 'premium'
+      limiter
+        = messageType === 'premium'
           ? rateLimiterConfigs.enterprise.premium
           : rateLimiterConfigs.enterprise.standard
       break
@@ -140,14 +141,14 @@ export async function resetRateLimit({
       limiter = rateLimiterConfigs.basic
       break
     case 'pro':
-      limiter =
-        messageType === 'premium'
+      limiter
+        = messageType === 'premium'
           ? rateLimiterConfigs.pro.premium
           : rateLimiterConfigs.pro.standard
       break
     case 'enterprise':
-      limiter =
-        messageType === 'premium'
+      limiter
+        = messageType === 'premium'
           ? rateLimiterConfigs.enterprise.premium
           : rateLimiterConfigs.enterprise.standard
       break

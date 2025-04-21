@@ -1,9 +1,9 @@
-import { motion } from 'motion/react'
 import type { UseChatHelpers } from '@ai-sdk/react'
-import { useAuthQuery } from '~/features/auth/auth.query'
 import { Button } from '@gingga/ui/components/button'
-import { agentQueryOptions } from '~/features/agent/agent.query'
 import { useQuery } from '@tanstack/react-query'
+import { motion } from 'motion/react'
+import { agentQueryOptions } from '~/features/agent/agent.query'
+import { useAuthQuery } from '~/features/auth/auth.query'
 
 interface EmptyOverviewProps {
   setInput: UseChatHelpers['setInput']
@@ -11,7 +11,7 @@ interface EmptyOverviewProps {
   agentId?: string
 }
 
-export const EmptyOverview = ({ setInput, agentId }: EmptyOverviewProps) => {
+export function EmptyOverview({ setInput, agentId }: EmptyOverviewProps) {
   const { data: authData } = useAuthQuery()
   const user = authData?.isAuthenticated ? authData.user : null
   const userName = user?.name?.split(' ')[0] || 'there'
@@ -43,7 +43,13 @@ export const EmptyOverview = ({ setInput, agentId }: EmptyOverviewProps) => {
         )}
 
         <h1 className="text-xl font-bold sm:text-2xl">
-          Hello, {userName}! <br />{' '}
+          Hello,
+          {' '}
+          {userName}
+          !
+          {' '}
+          <br />
+          {' '}
         </h1>
         <h3 className="text-primary line-stroke text-2xl whitespace-pre-line sm:text-3xl">
           {chatIntroduction}
@@ -55,12 +61,13 @@ export const EmptyOverview = ({ setInput, agentId }: EmptyOverviewProps) => {
             className="grid w-full gap-2 sm:grid-cols-2"
           >
             {starters.map((starter: string, index: number) => (
+
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 20 }}
                 transition={{ delay: 0.05 * index }}
-                key={`suggested-action-${index}`}
+                key={starter}
                 className={index > 3 ? 'hidden sm:block' : 'block'}
               >
                 <Button

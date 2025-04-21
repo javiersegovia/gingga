@@ -82,11 +82,12 @@ export async function parseEnv() {
   const result = EnvSchema.safeParse({ ...process.env })
 
   if (result.error) {
-    console.log(result.error.message)
+    console.error(result.error.message)
     throw new Error('Invalid environment variables')
   }
 
   const total = Object.keys(result.data).length
+  // eslint-disable-next-line no-console -- its fine.
   console.log(`Environment variables parsed successfully (${total} variables)`)
 }
 

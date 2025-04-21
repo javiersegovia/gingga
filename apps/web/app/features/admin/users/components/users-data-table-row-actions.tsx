@@ -1,15 +1,7 @@
-import {
-  MoreHorizontalIcon,
-  BanIcon,
-  ClipboardCopyIcon,
-  EyeIcon,
-  TrashIcon,
-  UserCheckIcon,
-} from 'lucide-react'
 import type { Row } from '@tanstack/react-table'
-import { useRouter } from '@tanstack/react-router'
-
+import type { UserTableEntry } from './users-columns'
 import { Button } from '@gingga/ui/components/button'
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,7 +9,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@gingga/ui/components/dropdown-menu'
-import type { UserTableEntry } from './users-columns'
+import { useRouter } from '@tanstack/react-router'
+import {
+  BanIcon,
+  ClipboardCopyIcon,
+  EyeIcon,
+  MoreHorizontalIcon,
+  TrashIcon,
+  UserCheckIcon,
+} from 'lucide-react'
 import { toast } from 'sonner'
 
 interface DataTableRowActionsProps<TData> {
@@ -44,19 +44,19 @@ export function UsersDataTableRowActions<TData>({
 
   const handleBanUser = () => {
     // Implement ban logic (e.g., API call)
-    console.log('Ban user:', user.id)
+    // console.log('Ban user:', user.id)
     toast.error('User ban functionality not implemented yet.')
   }
 
   const handleUnbanUser = () => {
     // Implement unban logic
-    console.log('Unban user:', user.id)
+    // console.log('Unban user:', user.id)
     toast.error('User unban functionality not implemented yet.')
   }
 
   const handleDeleteUser = () => {
     // Implement delete logic (confirmation recommended)
-    console.log('Delete user:', user.id)
+    // console.log('Delete user:', user.id)
     toast.error('User delete functionality not implemented yet.')
   }
 
@@ -78,17 +78,19 @@ export function UsersDataTableRowActions<TData>({
           Copy email
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        {user.banned ? (
-          <DropdownMenuItem onClick={handleUnbanUser}>
-            <UserCheckIcon className="mr-2 size-4" />
-            Unban
-          </DropdownMenuItem>
-        ) : (
-          <DropdownMenuItem onClick={handleBanUser}>
-            <BanIcon className="mr-2 size-4" />
-            Ban user
-          </DropdownMenuItem>
-        )}
+        {user.banned
+          ? (
+              <DropdownMenuItem onClick={handleUnbanUser}>
+                <UserCheckIcon className="mr-2 size-4" />
+                Unban
+              </DropdownMenuItem>
+            )
+          : (
+              <DropdownMenuItem onClick={handleBanUser}>
+                <BanIcon className="mr-2 size-4" />
+                Ban user
+              </DropdownMenuItem>
+            )}
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleDeleteUser} className="text-destructive">
           <TrashIcon className="mr-2 size-4" />

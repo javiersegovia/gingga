@@ -1,21 +1,11 @@
-import * as React from 'react'
-import { useRouter } from '@tanstack/react-router'
 import type {
   ColumnDef,
   ColumnFiltersState,
+  Row,
   SortingState,
   VisibilityState,
-  Row,
 } from '@tanstack/react-table'
-import {
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from '@tanstack/react-table'
-
+import type { UserTableEntry } from './users-columns' // Import type
 import { Input } from '@gingga/ui/components/input'
 import {
   Table,
@@ -25,10 +15,20 @@ import {
   TableHeader,
   TableRow,
 } from '@gingga/ui/components/table'
+
+import { cn } from '@gingga/ui/lib/utils'
+import { useRouter } from '@tanstack/react-router'
+import {
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from '@tanstack/react-table'
+import * as React from 'react'
 import { UsersDataTablePagination } from './users-data-table-pagination'
 import { UsersDataTableViewOptions } from './users-data-table-view-options'
-import { cn } from '@gingga/ui/lib/utils'
-import type { UserTableEntry } from './users-columns' // Import type
 
 interface UsersDataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -81,9 +81,8 @@ export function UsersDataTable<TData, TValue>({
         <Input
           placeholder="Filter by email..."
           value={(table.getColumn('email')?.getFilterValue() as string) ?? ''}
-          onChange={(event) =>
-            table.getColumn('email')?.setFilterValue(event.target.value)
-          }
+          onChange={event =>
+            table.getColumn('email')?.setFilterValue(event.target.value)}
           className="max-w-sm"
         />
         <UsersDataTableViewOptions table={table} />
@@ -93,7 +92,7 @@ export function UsersDataTable<TData, TValue>({
       <div className="rounded-md border">
         <Table>
           <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
+            {table.getHeaderGroups().map(headerGroup => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
@@ -121,7 +120,7 @@ export function UsersDataTable<TData, TValue>({
                       user.banned && 'opacity-50 hover:opacity-70', // Add visual indicator for banned users
                     )}
                   >
-                    {row.getVisibleCells().map((cell) => (
+                    {row.getVisibleCells().map(cell => (
                       <TableCell key={cell.id}>
                         {flexRender(cell.column.columnDef.cell, cell.getContext())}
                       </TableCell>

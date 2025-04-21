@@ -1,7 +1,16 @@
+import { and, eq } from '@gingga/db'
+import { Chats } from '@gingga/db/schema'
+import { createServerFn } from '@tanstack/react-start'
+import { zodValidator } from '@tanstack/zod-adapter'
 import { z } from 'zod'
 import { authMiddleware } from '~/middleware/auth-guard'
-import { zodValidator } from '@tanstack/zod-adapter'
-import { createServerFn } from '@tanstack/react-start'
+import { getDatabase } from '~/middleware/setup-context.server'
+import {
+  ChatModelSchema,
+  DeleteChatSchema,
+  RenameChatSchema,
+  UpdateChatVisibilitySchema,
+} from './chat.schema'
 import {
   deleteChatById,
   deleteChatMessagesByChatIdAfterTimestamp,
@@ -13,15 +22,6 @@ import {
   saveChatModelInCookies,
   updateChatVisiblityById,
 } from './chat.service'
-import {
-  RenameChatSchema,
-  DeleteChatSchema,
-  UpdateChatVisibilitySchema,
-  ChatModelSchema,
-} from './chat.schema'
-import { getDatabase } from '~/middleware/setup-context.server'
-import { and, eq } from '@gingga/db'
-import { Chats } from '@gingga/db/schema'
 
 export const $getChatModelId = createServerFn({
   method: 'GET',

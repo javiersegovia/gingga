@@ -57,7 +57,7 @@ export const SignUpSchema = z
     password: PasswordSchema,
     passwordConfirm: PasswordSchema,
   })
-  .refine((values) => values.password === values.passwordConfirm, {
+  .refine(values => values.password === values.passwordConfirm, {
     path: ['passwordConfirm'],
     message: 'Passwords must match',
   })

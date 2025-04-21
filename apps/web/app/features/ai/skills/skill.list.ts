@@ -1,7 +1,7 @@
-import { getServerEnv } from '~/server/env'
 import type { SkillOption } from './skill.types'
+import { getServerEnv } from '~/server/env'
 
-export const getSkills = (): SkillOption[] => {
+export function getSkills(): SkillOption[] {
   return [
     {
       id: 'googlesheets-skill',
@@ -22,7 +22,7 @@ export const getSkills = (): SkillOption[] => {
             id: 'GOOGLESHEETS_BATCH_GET',
             name: 'Batch Get Spreadsheet Data',
             description:
-              "Perform a batch get on a specific spreadsheet. Note: if ranges aren't provided, data from the first sheet will be returned.",
+              'Perform a batch get on a specific spreadsheet. Note: if ranges aren\'t provided, data from the first sheet will be returned.',
           },
           {
             id: 'GOOGLESHEETS_SHEET_FROM_JSON',
@@ -207,12 +207,12 @@ export const getSkills = (): SkillOption[] => {
           {
             id: 'GMAIL_SEND_EMAIL',
             name: 'Send Email',
-            description: "Send an email using gmail's api.",
+            description: 'Send an email using gmail\'s api.',
           },
           {
             id: 'GMAIL_MOVE_TO_TRASH',
             name: 'Move Email to Trash',
-            description: "Move an email message to trash using gmail's api.",
+            description: 'Move an email message to trash using gmail\'s api.',
           },
           {
             id: 'GMAIL_FETCH_MESSAGE_BY_MESSAGE_ID',
@@ -222,7 +222,7 @@ export const getSkills = (): SkillOption[] => {
           {
             id: 'GMAIL_LIST_DRAFTS',
             name: 'List Drafts',
-            description: "List all email drafts using gmail's api.",
+            description: 'List all email drafts using gmail\'s api.',
           },
           {
             id: 'GMAIL_GET_ATTACHMENT',
@@ -243,18 +243,18 @@ export const getSkills = (): SkillOption[] => {
           {
             id: 'GMAIL_LIST_LABELS',
             name: 'List Labels',
-            description: "List all labels in the user's gmail account.",
+            description: 'List all labels in the user\'s gmail account.',
           },
           {
             id: 'GMAIL_DELETE_DRAFT',
             name: 'Delete Draft',
-            description: "Delete an email draft using gmail's api.",
+            description: 'Delete an email draft using gmail\'s api.',
           },
           {
             id: 'GMAIL_SEARCH_PEOPLE',
             name: 'Search People',
             description:
-              "Provides a list of contacts in the authenticated user's grouped contacts that matches the search query.",
+              'Provides a list of contacts in the authenticated user\'s grouped contacts that matches the search query.',
           },
           {
             id: 'GMAIL_REPLY_TO_THREAD',
@@ -290,12 +290,12 @@ export const getSkills = (): SkillOption[] => {
           {
             id: 'GMAIL_CREATE_EMAIL_DRAFT',
             name: 'Create Email Draft',
-            description: "Create a draft email using gmail's api.",
+            description: 'Create a draft email using gmail\'s api.',
           },
           {
             id: 'GMAIL_DELETE_MESSAGE',
             name: 'Delete Message',
-            description: "Delete an email message using gmail's api.",
+            description: 'Delete an email message using gmail\'s api.',
           },
           {
             id: 'GMAIL_GET_PEOPLE',

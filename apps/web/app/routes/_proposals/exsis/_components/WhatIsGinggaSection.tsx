@@ -1,4 +1,4 @@
-export const WhatIsGinggaSection = () => {
+export function WhatIsGinggaSection() {
   return (
     <section className="bg-muted/40 relative flex min-h-screen flex-col items-center justify-center gap-12 overflow-hidden p-8 py-20">
       <h2 className="text-center text-5xl font-bold tracking-tight lg:text-7xl">

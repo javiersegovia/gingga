@@ -1,6 +1,7 @@
-import * as React from 'react'
-import { Check, ChevronsUpDown, XIcon } from 'lucide-react'
-import { cn } from '@gingga/ui/lib/utils'
+/* eslint-disable react-hooks-extra/no-direct-set-state-in-use-effect */
+import type { AIModel } from '~/features/ai/utils/ai-models'
+import { Badge } from '@gingga/ui/components/badge'
+import { Button } from '@gingga/ui/components/button'
 import {
   Command,
   CommandEmpty,
@@ -10,9 +11,9 @@ import {
   CommandList,
 } from '@gingga/ui/components/command'
 import { Popover, PopoverContent, PopoverTrigger } from '@gingga/ui/components/popover'
-import { Badge } from '@gingga/ui/components/badge'
-import { Button } from '@gingga/ui/components/button'
-import type { AIModel } from '~/features/ai/utils/ai-models'
+import { cn } from '@gingga/ui/lib/utils'
+import { Check, ChevronsUpDown, XIcon } from 'lucide-react'
+import * as React from 'react'
 import { modelIconPaths } from '~/features/ai/utils/ai-models'
 
 interface SelectAIModelProps {
@@ -34,7 +35,7 @@ export function SelectAIModel({
 
   // Derive selectedModel from props
   const selectedModel = React.useMemo(
-    () => models.find((model) => model.id === value),
+    () => models.find(model => model.id === value),
     [models, value],
   )
 
@@ -49,15 +50,18 @@ export function SelectAIModel({
   }, [selectedModel, models])
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
-    if (!highlightedModel) return // Should not happen if models array is not empty
+    if (!highlightedModel)
+      return // Should not happen if models array is not empty
 
-    const currentIndex = models.findIndex((model) => model.id === highlightedModel.id)
-    if (currentIndex === -1) return // Should not happen
+    const currentIndex = models.findIndex(model => model.id === highlightedModel.id)
+    if (currentIndex === -1)
+      return // Should not happen
 
     let nextIndex = currentIndex
     if (event.key === 'ArrowUp' && currentIndex > 0) {
       nextIndex = currentIndex - 1
-    } else if (event.key === 'ArrowDown' && currentIndex < models.length - 1) {
+    }
+    else if (event.key === 'ArrowDown' && currentIndex < models.length - 1) {
       nextIndex = currentIndex + 1
     }
 
@@ -71,33 +75,35 @@ export function SelectAIModel({
     onChange(undefined)
   }
 
-  const triggerLabel = selectedModel ? (
-    <>
-      <img
-        src={modelIconPaths[selectedModel.provider]}
-        alt={selectedModel.provider}
-        width={20}
-        height={20}
-        className="rounded-full"
-      />
-      <span className="text-xs">{selectedModel.name}</span>
-      {selectedModel.tag && (
-        <Badge
-          variant="default"
-          size="xs"
-          className={cn(
-            'font-title ml-2',
-            selectedModel.tag === 'Premium' && 'bg-pink-400',
-            selectedModel.tag === 'Enterprise' && 'bg-purple-400',
+  const triggerLabel = selectedModel
+    ? (
+        <>
+          <img
+            src={modelIconPaths[selectedModel.provider]}
+            alt={selectedModel.provider}
+            width={20}
+            height={20}
+            className="rounded-full"
+          />
+          <span className="text-xs">{selectedModel.name}</span>
+          {selectedModel.tag && (
+            <Badge
+              variant="default"
+              size="xs"
+              className={cn(
+                'font-title ml-2',
+                selectedModel.tag === 'Premium' && 'bg-pink-400',
+                selectedModel.tag === 'Enterprise' && 'bg-purple-400',
+              )}
+            >
+              {selectedModel.tag}
+            </Badge>
           )}
-        >
-          {selectedModel.tag}
-        </Badge>
-      )}
-    </>
-  ) : (
-    <span className="text-muted-foreground text-xs">Auto-select</span>
-  )
+        </>
+      )
+    : (
+        <span className="text-muted-foreground text-xs">Auto-select</span>
+      )
 
   return (
     <div className="relative z-50 w-full">
@@ -148,7 +154,7 @@ export function SelectAIModel({
               <CommandList>
                 <CommandEmpty>No models found.</CommandEmpty>
                 <CommandGroup>
-                  {models.map((model) => (
+                  {models.map(model => (
                     <CommandItem
                       key={model.id}
                       value={model.name} // Use name for search filtering

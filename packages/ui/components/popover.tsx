@@ -1,7 +1,7 @@
-import * as React from 'react'
+import { cn } from '@gingga/ui/lib/utils'
 import * as PopoverPrimitive from '@radix-ui/react-popover'
 
-import { cn } from '@gingga/ui/lib/utils'
+import * as React from 'react'
 
 const Popover = PopoverPrimitive.Root
 
@@ -29,4 +29,4 @@ function PopoverContent({
   )
 }
 
-export { Popover, PopoverTrigger, PopoverContent }
+export { Popover, PopoverContent, PopoverTrigger }

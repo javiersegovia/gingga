@@ -1,7 +1,7 @@
 import type { StandardSchemaV1Issue } from '@tanstack/react-form'
 import React from 'react'
 
-export type FormFieldItemContextValues = {
+export interface FormFieldItemContextValues {
   id: string
   name: string
   hasError: boolean
@@ -15,11 +15,11 @@ export const FormFieldItemContext = React.createContext<
   FormFieldItemContextValues | undefined
 >(undefined)
 
-export const useFormFieldItemContext = () => {
-  const context = React.useContext(FormFieldItemContext)
+export function useFormFieldItemContext() {
+  const context = React.use(FormFieldItemContext)
 
   if (typeof context === 'undefined') {
-    throw new Error('useFormFieldItem should be used within <FormFieldItemContext/>')
+    throw new TypeError('useFormFieldItem should be used within <FormFieldItemContext/>')
   }
 
   return context

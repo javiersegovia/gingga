@@ -1,5 +1,6 @@
+/* eslint-disable no-alert */
 import { Button } from '@gingga/ui/components/button'
-import { ArrowRightIcon, Zap, Clock } from 'lucide-react'
+import { ArrowRightIcon, Clock, Zap } from 'lucide-react'
 
 export function HeroSection() {
   return (

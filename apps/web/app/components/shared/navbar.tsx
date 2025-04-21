@@ -1,11 +1,4 @@
-import { Link } from '@tanstack/react-router'
 import { Button } from '@gingga/ui/components/button'
-import { Menu, X, Settings, LogOut, ArrowRightIcon, BotIcon } from 'lucide-react'
-import { useState } from 'react'
-import { cn } from '@gingga/ui/lib/utils'
-import { Separator } from '@gingga/ui/components/separator'
-import { ThemeSwitch } from '~/components/ui/theme-switch'
-import { useAuthQuery, useSignOutMutation } from '~/features/auth/auth.query'
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -14,15 +7,22 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from '@gingga/ui/components/navigation-menu'
+import { Separator } from '@gingga/ui/components/separator'
+import { cn } from '@gingga/ui/lib/utils'
+import { Link } from '@tanstack/react-router'
+import { ArrowRightIcon, BotIcon, LogOut, Menu, Settings, X } from 'lucide-react'
+import { useState } from 'react'
+import { ThemeSwitch } from '~/components/ui/theme-switch'
+import { useAuthQuery, useSignOutMutation } from '~/features/auth/auth.query'
 
 // Define types for navigation items
-export type NavItem = {
+export interface NavItem {
   name: string
   href: string
   description?: string
 }
 
-export type NavItemWithDropdown = {
+export interface NavItemWithDropdown {
   name: string
   href?: string
   items: NavItem[]
@@ -107,12 +107,14 @@ export function Navbar({ navigation, variant = 'default' }: NavbarProps) {
                                         to={item.href}
                                         className="hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground block space-y-1 rounded-md p-3 leading-none font-medium no-underline transition-colors outline-none select-none"
                                       >
-                                        View All {item.name}
+                                        View All
+                                        {' '}
+                                        {item.name}
                                       </Link>
                                     </NavigationMenuLink>
                                   </li>
                                 )}
-                                {item.items.map((subItem) => (
+                                {item.items.map(subItem => (
                                   <li key={subItem.name}>
                                     <NavigationMenuLink asChild>
                                       <Link
@@ -158,33 +160,34 @@ export function Navbar({ navigation, variant = 'default' }: NavbarProps) {
             )}
             {/* Desktop Buttons */}
             <div className="hidden items-center gap-4 md:flex">
-              {!data?.isAuthenticated ? (
-                <>
-                  <Button
-                    variant="outline"
-                    hover="reverse"
-                    // className="hover:bg-brand-green hover:text-brand-green-foreground"
-                    asChild
-                  >
-                    <Link to="/identify">Sign in</Link>
-                  </Button>
-                </>
-              ) : (
-                <div className="flex items-center gap-4">
-                  <Button
-                    // variant="outline"
-                    variant="secondary"
-                    hover="reverse"
-                    // className="hover:bg-secondary hover:text-secondary-foreground dark:hover:text-secondary"
-                    asChild
-                  >
-                    <Link to="/chat">
-                      Open Chat
-                      <BotIcon size={16} />
-                    </Link>
-                  </Button>
-                </div>
-              )}
+              {!data?.isAuthenticated
+                ? (
+                    <>
+                      <Button
+                        variant="outline"
+                        hover="reverse"
+                        asChild
+                      >
+                        <Link to="/identify">Sign in</Link>
+                      </Button>
+                    </>
+                  )
+                : (
+                    <div className="flex items-center gap-4">
+                      <Button
+                      // variant="outline"
+                        variant="secondary"
+                        hover="reverse"
+                        // className="hover:bg-secondary hover:text-secondary-foreground dark:hover:text-secondary"
+                        asChild
+                      >
+                        <Link to="/chat">
+                          Open Chat
+                          <BotIcon size={16} />
+                        </Link>
+                      </Button>
+                    </div>
+                  )}
               <Button variant="primary" className="flex items-center gap-2" asChild>
                 <Link to="/contact">
                   Book a call
@@ -214,9 +217,9 @@ export function Navbar({ navigation, variant = 'default' }: NavbarProps) {
           <Separator className="bg-neutral-800" />
           <div className="space-y-4 pt-4">
             {/* Mobile navigation links */}
-            {navigation &&
-              navigation.length > 0 &&
-              navigation.map((item) => {
+            {navigation
+              && navigation.length > 0
+              && navigation.map((item) => {
                 if (hasDropdownItems(item)) {
                   return (
                     <div key={item.name} className="space-y-2">
@@ -230,10 +233,12 @@ export function Navbar({ navigation, variant = 'default' }: NavbarProps) {
                             className="text-muted-foreground hover:text-foreground block text-center text-sm transition-colors"
                             onClick={() => setIsOpen(false)}
                           >
-                            View All {item.name}
+                            View All
+                            {' '}
+                            {item.name}
                           </Link>
                         )}
-                        {item.items.map((subItem) => (
+                        {item.items.map(subItem => (
                           <Link
                             key={subItem.name}
                             to={subItem.href}
@@ -260,46 +265,48 @@ export function Navbar({ navigation, variant = 'default' }: NavbarProps) {
               })}
             <div className="flex flex-col gap-2 pt-2 pb-4">
               <Separator className="my-4 bg-neutral-800" />
-              {!data?.isAuthenticated ? (
-                <>
-                  <Button
-                    variant="outline"
-                    asChild
-                    className="w-full py-6 text-lg font-medium"
-                    size="lg"
-                  >
-                    <Link to="/identify">Sign in</Link>
-                  </Button>
-                </>
-              ) : (
-                <div className="space-y-2">
-                  <div className="pt-2" />
-                  <Separator className="bg-neutral-800" />
-                  <Link to="/" className="flex items-center justify-start">
-                    <Button
-                      variant="ghost"
-                      className="text-muted-foreground hover:text-foreground w-full justify-start text-left"
-                    >
-                      <Settings className="h-4 w-4" />
-                      <span>Settings</span>
-                    </Button>
-                  </Link>
-                  <Button
-                    variant="ghost"
-                    className="text-muted-foreground hover:text-foreground w-full justify-start"
-                    onClick={async () => await signOut()}
-                    disabled={isSigningOut}
-                  >
-                    <LogOut className="h-4 w-4" />
-                    <span>Sign out</span>
-                  </Button>
-                  {/* Added theme switch to mobile menu */}
-                  <div className="flex items-center justify-between px-3 py-2">
-                    <span className="text-muted-foreground text-sm">Theme</span>
-                    <ThemeSwitch />
-                  </div>
-                </div>
-              )}
+              {!data?.isAuthenticated
+                ? (
+                    <>
+                      <Button
+                        variant="outline"
+                        asChild
+                        className="w-full py-6 text-lg font-medium"
+                        size="lg"
+                      >
+                        <Link to="/identify">Sign in</Link>
+                      </Button>
+                    </>
+                  )
+                : (
+                    <div className="space-y-2">
+                      <div className="pt-2" />
+                      <Separator className="bg-neutral-800" />
+                      <Link to="/" className="flex items-center justify-start">
+                        <Button
+                          variant="ghost"
+                          className="text-muted-foreground hover:text-foreground w-full justify-start text-left"
+                        >
+                          <Settings className="h-4 w-4" />
+                          <span>Settings</span>
+                        </Button>
+                      </Link>
+                      <Button
+                        variant="ghost"
+                        className="text-muted-foreground hover:text-foreground w-full justify-start"
+                        onClick={async () => await signOut()}
+                        disabled={isSigningOut}
+                      >
+                        <LogOut className="h-4 w-4" />
+                        <span>Sign out</span>
+                      </Button>
+                      {/* Added theme switch to mobile menu */}
+                      <div className="flex items-center justify-between px-3 py-2">
+                        <span className="text-muted-foreground text-sm">Theme</span>
+                        <ThemeSwitch />
+                      </div>
+                    </div>
+                  )}
               <Button
                 asChild
                 variant="primary"

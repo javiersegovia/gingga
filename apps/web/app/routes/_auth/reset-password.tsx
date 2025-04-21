@@ -1,11 +1,4 @@
-import { zodResolver } from '@hookform/resolvers/zod'
-import { createFileRoute, redirect, useNavigate, Link } from '@tanstack/react-router'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
-import { toast } from 'sonner'
-
-import { PasswordSchema } from '~/features/auth/auth.schema'
-import { authClient } from '~/features/auth/auth.client'
+import { Alert, AlertDescription, AlertTitle } from '@gingga/ui/components/alert'
 import {
   Form,
   FormControl,
@@ -16,17 +9,24 @@ import {
 } from '@gingga/ui/components/form'
 import { Input } from '@gingga/ui/components/input'
 import { FormStatusButton } from '@gingga/ui/components/status-button'
-import { Alert, AlertDescription, AlertTitle } from '@gingga/ui/components/alert'
-import { TerminalIcon } from 'lucide-react'
+import { zodResolver } from '@hookform/resolvers/zod'
+
+import { createFileRoute, Link, redirect, useNavigate } from '@tanstack/react-router'
 import { zodValidator } from '@tanstack/zod-adapter'
+import { TerminalIcon } from 'lucide-react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import { z } from 'zod'
+import { authClient } from '~/features/auth/auth.client'
+import { PasswordSchema } from '~/features/auth/auth.schema'
 
 const ResetPasswordSchema = z
   .object({
     password: PasswordSchema,
     confirmPassword: PasswordSchema,
   })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
+  .refine(data => data.password === data.confirmPassword, {
+    message: 'Passwords don\'t match',
     path: ['confirmPassword'], // path of error
   })
 
@@ -71,7 +71,7 @@ function ResetPasswordPage() {
     await authClient.resetPassword(
       {
         newPassword: values.password,
-        token: token,
+        token,
       },
       {
         onSuccess: () => {

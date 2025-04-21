@@ -1,12 +1,12 @@
-import { createFileRoute, Outlet, redirect, useNavigate } from '@tanstack/react-router'
-import { AuthLayout } from './_auth/_components'
-import { Tabs, TabsList, TabsTrigger } from '@gingga/ui/components/tabs'
-import { GithubIcon, GoogleIcon } from '@gingga/ui/components/social-icons'
 import { Button } from '@gingga/ui/components/button'
-import { authClient } from '~/features/auth/auth.client'
+import { GithubIcon, GoogleIcon } from '@gingga/ui/components/social-icons'
+import { Tabs, TabsList, TabsTrigger } from '@gingga/ui/components/tabs'
+import { createFileRoute, Outlet, redirect, useNavigate } from '@tanstack/react-router'
 import { Loader2Icon } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
+import { authClient } from '~/features/auth/auth.client'
+import { AuthLayout } from './_auth/_components'
 
 export const Route = createFileRoute('/_auth')({
   component: RouteComponent,
@@ -34,7 +34,8 @@ function RouteComponent() {
   }
 
   const handleSocialSignIn = async (provider: 'github' | 'google') => {
-    if (loadingProvider) return // Prevent multiple clicks while loading
+    if (loadingProvider)
+      return // Prevent multiple clicks while loading
 
     setLoadingProvider(provider)
     try {
@@ -42,9 +43,11 @@ function RouteComponent() {
         provider,
         callbackURL: '/chat',
       })
-    } catch (error: unknown) {
+    }
+    catch (error: unknown) {
       toast.error(error instanceof Error ? error.message : 'Unknown error')
-    } finally {
+    }
+    finally {
       setLoadingProvider(null)
     }
   }
@@ -82,11 +85,13 @@ function RouteComponent() {
             disabled={loadingProvider !== null}
             className="border-shadow-border flex-1 bg-[#2b3137] px-0 text-white hover:bg-[#2b3137]/80 disabled:opacity-50"
           >
-            {loadingProvider === 'github' ? (
-              <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
-            ) : (
-              <GithubIcon />
-            )}
+            {loadingProvider === 'github'
+              ? (
+                  <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
+                )
+              : (
+                  <GithubIcon />
+                )}
             GitHub
           </Button>
           <Button
@@ -97,11 +102,13 @@ function RouteComponent() {
             disabled={loadingProvider !== null}
             className="border-shadow-border flex-1 bg-[#4285F4] px-0 hover:bg-[#4285F4]/80 disabled:opacity-50"
           >
-            {loadingProvider === 'google' ? (
-              <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
-            ) : (
-              <GoogleIcon />
-            )}
+            {loadingProvider === 'google'
+              ? (
+                  <Loader2Icon className="mr-2 h-4 w-4 animate-spin" />
+                )
+              : (
+                  <GoogleIcon />
+                )}
             Google
           </Button>
         </div>

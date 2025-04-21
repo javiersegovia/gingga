@@ -1,8 +1,8 @@
 import { createServerFn } from '@tanstack/react-start'
 import { zodValidator } from '@tanstack/zod-adapter'
-import { ContactFormSchema } from './contact.schema'
 import { sendEmail } from '~/server/email/email'
 import ContactFormEmail from '~/server/email/templates/contact-form-email'
+import { ContactFormSchema } from './contact.schema'
 
 /**
  * Server function to send contact form data to the contact email
@@ -33,7 +33,8 @@ export const $submitContactForm = createServerFn({
         success: true,
         message: 'Your message has been sent successfully. We will get back to you soon!',
       }
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Error sending contact email:', error)
       throw new Error('Failed to send your message. Please try again later.')
     }

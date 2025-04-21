@@ -1,8 +1,18 @@
+import type { Tool } from 'ai'
+import type { SkillInstruction } from '~/features/ai/utils/compose-system-message'
+import type {
+  ComposioAppName,
+  ComposioToolName,
+} from '~/features/settings/integrations/composio.schema'
 import { json } from '@tanstack/react-start'
 import { createAPIFileRoute } from '@tanstack/react-start/api'
-import type { Tool } from 'ai'
-import { streamText, appendResponseMessages, createDataStreamResponse } from 'ai'
+import { appendResponseMessages, createDataStreamResponse, streamText } from 'ai'
 import { nanoid } from 'nanoid'
+import { getAgentById } from '~/features/agent/agent.service'
+import { getSystemPrompt } from '~/features/ai/utils/compose-system-message'
+import { processToolCalls } from '~/features/ai/utils/human-in-the-loop'
+import { modelProvider } from '~/features/ai/utils/providers'
+import { AIChatSchema } from '~/features/chat/chat.schema'
 import {
   generateChatTitleFromUserMessage,
   getChatById,
@@ -11,18 +21,8 @@ import {
   saveChat,
   upsertChatMessage,
 } from '~/features/chat/chat.service'
-import { setupAppContext } from '~/middleware/setup-context.server'
-import { modelProvider } from '~/features/ai/utils/providers'
-import { getAgentById } from '~/features/agent/agent.service'
-import { processToolCalls } from '~/features/ai/utils/human-in-the-loop'
 import { getVercelToolset } from '~/features/settings/integrations/composio.service'
-import type {
-  ComposioAppName,
-  ComposioToolName,
-} from '~/features/settings/integrations/composio.schema'
-import { AIChatSchema } from '~/features/chat/chat.schema'
-import type { SkillInstruction } from '~/features/ai/utils/compose-system-message'
-import { getSystemPrompt } from '~/features/ai/utils/compose-system-message'
+import { setupAppContext } from '~/middleware/setup-context.server'
 
 export const APIRoute = createAPIFileRoute('/api/agents/custom/$agentId')({
   POST: async ({ request, params: { agentId } }) => {
@@ -55,22 +55,17 @@ export const APIRoute = createAPIFileRoute('/api/agents/custom/$agentId')({
       })
     }
 
-    try {
-      await upsertChatMessage({
-        id: lastUserMessage.id,
-        role: 'user',
-        chatId: chat.id,
-        parts: lastUserMessage.parts,
-        attachments: lastUserMessage.experimental_attachments ?? [],
-      })
-    } catch (error) {
-      console.error(`[1] Error during AI stream for agent ${agentId}:`, error)
-      throw error
-    }
+    await upsertChatMessage({
+      id: lastUserMessage.id,
+      role: 'user',
+      chatId: chat.id,
+      parts: lastUserMessage.parts,
+      attachments: lastUserMessage.experimental_attachments ?? [],
+    })
 
     const userId = authSession?.isAuthenticated ? authSession.user.id : undefined
 
-    console.log('[!!! - User ID]:', userId)
+    // console.log('[!!! - User ID]:', userId)
 
     const toolset = getVercelToolset({
       entityId: userId,
@@ -80,9 +75,9 @@ export const APIRoute = createAPIFileRoute('/api/agents/custom/$agentId')({
 
     for (const skill of agentSkills) {
       if (
-        !skill.isEnabled ||
-        !skill.composioIntegrationAppName ||
-        !skill.composioToolNames
+        !skill.isEnabled
+        || !skill.composioIntegrationAppName
+        || !skill.composioToolNames
       ) {
         continue
       }
@@ -91,7 +86,7 @@ export const APIRoute = createAPIFileRoute('/api/agents/custom/$agentId')({
       const toolNames = skill.composioToolNames
 
       const currentToolSet = appToolsMap.get(appName) ?? new Set<ComposioToolName>()
-      toolNames.forEach((toolName) => currentToolSet.add(toolName))
+      toolNames.forEach(toolName => currentToolSet.add(toolName))
       appToolsMap.set(appName, currentToolSet)
 
       if (skill.instructions) {
@@ -115,14 +110,15 @@ export const APIRoute = createAPIFileRoute('/api/agents/custom/$agentId')({
     // // Extract active app unique IDs
     const activeAppIds = new Set(
       connections.items
-        .filter((conn) => conn.status === 'ACTIVE')
-        .map((conn) => conn.appUniqueId),
+        .filter(conn => conn.status === 'ACTIVE')
+        .map(conn => conn.appUniqueId),
     )
 
     // // Fetch tools concurrently for each app
     const toolPromises = uniqueAppNames.map(async (appName) => {
       const toolNamesSet = appToolsMap.get(appName)
-      if (!toolNamesSet) return {} // Should not happen, but safeguard
+      if (!toolNamesSet)
+        return {} // Should not happen, but safeguard
 
       const toolNamesArray = Array.from(toolNamesSet)
 
@@ -132,8 +128,9 @@ export const APIRoute = createAPIFileRoute('/api/agents/custom/$agentId')({
           actions: toolNamesArray,
         })
         return tools
-      } catch (error) {
-        console.error(`Error fetching tools for ${appName}:`, error)
+      }
+      catch (_error) {
+        // console.error(`Error fetching tools for ${appName}:`, error)
         return {} // Return empty object on error to avoid breaking Promise.all
       }
     })
@@ -172,7 +169,7 @@ export const APIRoute = createAPIFileRoute('/api/agents/custom/$agentId')({
       }),
     }
 
-    console.log('System Message:', systemMessage)
+    // console.log('System Message:', systemMessage)
 
     try {
       return createDataStreamResponse({
@@ -202,7 +199,7 @@ export const APIRoute = createAPIFileRoute('/api/agents/custom/$agentId')({
             maxSteps: 10,
             async onFinish({ response }) {
               const assistantMessages = response.messages.filter(
-                (m) => m.role === 'assistant',
+                m => m.role === 'assistant',
               )
 
               try {
@@ -220,9 +217,9 @@ export const APIRoute = createAPIFileRoute('/api/agents/custom/$agentId')({
                 })
 
                 if (
-                  newAssistantMessage?.role === 'assistant' &&
-                  newAssistantMessage.parts &&
-                  newAssistantMessage.id === assistantId // Sanity check ID
+                  newAssistantMessage?.role === 'assistant'
+                  && newAssistantMessage.parts
+                  && newAssistantMessage.id === assistantId // Sanity check ID
                 ) {
                   await upsertChatMessage({
                     id: newAssistantMessage.id,
@@ -231,15 +228,16 @@ export const APIRoute = createAPIFileRoute('/api/agents/custom/$agentId')({
                     parts: newAssistantMessage.parts ?? [],
                     attachments: newAssistantMessage.experimental_attachments ?? [],
                     modelId:
-                      agentModelId ||
-                      modelProvider.languageModel('chat-agent-tools').modelId,
+                      agentModelId
+                      || modelProvider.languageModel('chat-agent-tools').modelId,
                   })
                 }
-              } catch (error) {
-                console.error(
-                  `Failed to save assistant message for chat ${chat.id}:`,
-                  error,
-                )
+              }
+              catch (_error) {
+                // console.error(
+                //   `Failed to save assistant message for chat ${chat.id}:`,
+                //   error,
+                // )
               }
             },
           })
@@ -247,12 +245,13 @@ export const APIRoute = createAPIFileRoute('/api/agents/custom/$agentId')({
           result.mergeIntoDataStream(dataStream)
         },
         onError(error) {
-          console.error(`[1] Error during AI stream for agent ${agentId}:`, error)
+          // console.error(`[1] Error during AI stream for agent ${agentId}:`, error)
           throw error
         },
       })
-    } catch (error) {
-      console.error(`[2] Error during AI stream for agent ${agentId}:`, error)
+    }
+    catch (_error) {
+      // console.error(`[2] Error during AI stream for agent ${agentId}:`, error)
 
       return json({ result: 'Error during AI stream' }, { status: 500 })
     }

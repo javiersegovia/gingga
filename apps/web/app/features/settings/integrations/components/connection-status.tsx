@@ -1,8 +1,6 @@
-import { Badge } from '@gingga/ui/components/badge'
-import { Link } from '@tanstack/react-router'
-import { ExternalLinkIcon, PlugZapIcon, AlertTriangleIcon, XIcon } from 'lucide-react'
 import type { AgentSkillWithStatus } from '../../../ai/skills/skill.api'
 import type { SkillOption } from '../../../ai/skills/skill.types'
+import { Badge } from '@gingga/ui/components/badge'
 import {
   Tooltip,
   TooltipContent,
@@ -10,6 +8,8 @@ import {
   TooltipTrigger,
 } from '@gingga/ui/components/tooltip'
 import { cn } from '@gingga/ui/lib/utils'
+import { Link } from '@tanstack/react-router'
+import { AlertTriangleIcon, ExternalLinkIcon, PlugZapIcon, XIcon } from 'lucide-react'
 
 type ConnectionStatusType = 'connected' | 'disabled' | 'deleted' | 'connection-required'
 
@@ -22,19 +22,19 @@ const statusData: Record<
     tooltipContent: string
   }
 > = {
-  connected: {
+  'connected': {
     statusText: 'Connected',
     statusIcon: <PlugZapIcon className="h-4 w-4" />,
     badgeVariant: 'success',
     tooltipContent: 'Connection is active.',
   },
-  disabled: {
+  'disabled': {
     statusText: 'Disabled',
     statusIcon: <AlertTriangleIcon className="h-4 w-4" />,
     badgeVariant: 'destructive',
     tooltipContent: 'This connection is disabled temporarily.',
   },
-  deleted: {
+  'deleted': {
     statusText: 'Connection Deleted',
     statusIcon: <XIcon className="h-3 w-3" />,
     badgeVariant: 'error',
@@ -48,7 +48,7 @@ const statusData: Record<
   },
 }
 
-export const ConnectionStatus = ({
+export function ConnectionStatus({
   integration,
   isDeletedComposio,
   isConnected,
@@ -58,14 +58,14 @@ export const ConnectionStatus = ({
   isDeletedComposio: AgentSkillWithStatus['isDeletedComposio']
   isConnected: AgentSkillWithStatus['isConnected']
   isEnabledComposio: AgentSkillWithStatus['isEnabledComposio']
-}) => {
+}) {
   const statusType: ConnectionStatusType = isDeletedComposio
     ? 'deleted'
     : !isEnabledComposio
-      ? 'disabled'
-      : isConnected
-        ? 'connected'
-        : 'connection-required'
+        ? 'disabled'
+        : isConnected
+          ? 'connected'
+          : 'connection-required'
 
   const StatusContent = (
     <span className={cn('flex items-center gap-1')}>
@@ -92,11 +92,13 @@ export const ConnectionStatus = ({
               )}
 
               <p className="m-0 flex flex-wrap items-center gap-x-2 leading-4 font-medium">
-                {statusType === 'connection-required' ? (
-                  <Link to="/settings/integrations">{StatusContent}</Link>
-                ) : (
-                  StatusContent
-                )}
+                {statusType === 'connection-required'
+                  ? (
+                      <Link to="/settings/integrations">{StatusContent}</Link>
+                    )
+                  : (
+                      StatusContent
+                    )}
               </p>
             </Badge>
           </div>

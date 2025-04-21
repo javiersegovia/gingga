@@ -1,7 +1,9 @@
-import { motion } from 'motion/react'
-import { RefObject, useEffect, useId, useState } from 'react'
-
+/* eslint-disable react-hooks-extra/no-direct-set-state-in-use-effect */
+import type { RefObject } from 'react'
 import { cn } from '@gingga/ui/lib/utils'
+
+import { motion } from 'motion/react'
+import { useEffect, useId, useState } from 'react'
 
 export interface AnimatedBeamProps {
   className?: string
@@ -23,7 +25,7 @@ export interface AnimatedBeamProps {
   endYOffset?: number
 }
 
-export const AnimatedBeam = ({
+export function AnimatedBeam({
   className,
   containerRef,
   fromRef,
@@ -41,7 +43,7 @@ export const AnimatedBeam = ({
   startYOffset = 0,
   endXOffset = 0,
   endYOffset = 0,
-}: AnimatedBeamProps) => {
+}: AnimatedBeamProps) {
   const id = useId()
   const [pathD, setPathD] = useState('')
   const [svgDimensions, setSvgDimensions] = useState({ width: 0, height: 0 })
@@ -146,7 +148,7 @@ export const AnimatedBeam = ({
         <motion.linearGradient
           className="transform-gpu"
           id={id}
-          gradientUnits={'userSpaceOnUse'}
+          gradientUnits="userSpaceOnUse"
           initial={{
             x1: '0%',
             x2: '0%',

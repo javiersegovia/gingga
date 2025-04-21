@@ -1,15 +1,15 @@
-import { Link } from '@tanstack/react-router'
-import { Card, CardTitle } from '@gingga/ui/components/card'
-import { ImageIcon } from 'lucide-react'
-import type { SkillOption } from '../skill.types'
 import type { AgentSkillWithStatus } from '../skill.api' // Import for connection status type
-import { cn } from '@gingga/ui/lib/utils'
+import type { SkillOption } from '../skill.types'
+import { Card, CardTitle } from '@gingga/ui/components/card'
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from '@gingga/ui/components/tooltip' // Import Tooltip components
+import { cn } from '@gingga/ui/lib/utils'
+import { Link } from '@tanstack/react-router'
+import { ImageIcon } from 'lucide-react'
 import { ConnectionStatus } from '~/features/settings/integrations/components/connection-status'
 
 // Type for the optional connection status prop
@@ -53,15 +53,17 @@ export function AvailableSkillCard({
       {/* Image/Icon */}
       <div className="flex flex-col items-center justify-center gap-2">
         <div className="mr-2 flex-shrink-0">
-          {skillOption.image ? (
-            <img
-              src={skillOption.image}
-              alt={`${skillOption.name} logo`}
-              className="h-40 w-40 object-contain"
-            />
-          ) : (
-            <ImageIcon className="text-muted-foreground h-8 w-8" />
-          )}
+          {skillOption.image
+            ? (
+                <img
+                  src={skillOption.image}
+                  alt={`${skillOption.name} logo`}
+                  className="h-40 w-40 object-contain"
+                />
+              )
+            : (
+                <ImageIcon className="text-muted-foreground h-8 w-8" />
+              )}
         </div>
         {/* Title and Description */}
         <div className="flex flex-grow flex-col text-center">
@@ -103,7 +105,13 @@ export function AvailableSkillCard({
             </div>
           </TooltipTrigger>
           <TooltipContent>
-            <p>Cannot add more skills. Limit of {5} reached.</p>{' '}
+            <p>
+              Cannot add more skills. Limit of
+              {5}
+              {' '}
+              reached.
+            </p>
+            {' '}
             {/* TODO: Get maxSkills dynamically? */}
           </TooltipContent>
         </Tooltip>

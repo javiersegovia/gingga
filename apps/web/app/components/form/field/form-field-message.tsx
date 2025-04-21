@@ -11,22 +11,24 @@ const FormFieldMessage: React.FC<FormFieldMessageProps> = ({
   const { hasError, errors, formFieldMessageId } = useFormFieldItemContext()
 
   // Prioritize children if provided, otherwise show joined errors
-  const body =
-    children ??
-    (errors.length > 0 ? errors.map((error) => error.message).join(', ') : null)
+  const body
+    = children
+      ?? (errors.length > 0 ? errors.map(error => error.message).join(', ') : null)
 
-  return hasError && body ? (
-    <p
-      id={formFieldMessageId}
-      className={cn(
-        'text-destructive -mt-1 ml-2 min-h-2 text-xs leading-3 font-medium',
-        className,
-      )}
-      {...props}
-    >
-      {body}
-    </p>
-  ) : null
+  return hasError && body
+    ? (
+        <p
+          id={formFieldMessageId}
+          className={cn(
+            'text-destructive -mt-1 ml-2 min-h-2 text-xs leading-3 font-medium',
+            className,
+          )}
+          {...props}
+        >
+          {body}
+        </p>
+      )
+    : null
 }
 
 export default FormFieldMessage

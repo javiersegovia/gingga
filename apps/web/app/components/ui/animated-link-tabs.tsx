@@ -1,12 +1,12 @@
-import { motion } from 'motion/react'
-import { cn } from '@gingga/ui/lib/utils'
+import type { LinkOptions } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
 import { Button } from '@gingga/ui/components/button'
-import type { LinkOptions } from '@tanstack/react-router'
-import { Link } from '@tanstack/react-router'
 import { Card } from '@gingga/ui/components/card'
+import { cn } from '@gingga/ui/lib/utils'
+import { Link } from '@tanstack/react-router'
+import { motion } from 'motion/react'
 
-export type Tab = {
+export interface Tab {
   label: string
   icon?: ReactNode // Optional icon
   to: LinkOptions['to']

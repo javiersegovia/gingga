@@ -1,7 +1,7 @@
-import * as React from 'react'
+import { cn } from '@gingga/ui/lib/utils'
 import * as AvatarPrimitive from '@radix-ui/react-avatar'
 
-import { cn } from '@gingga/ui/lib/utils'
+import * as React from 'react'
 
 function Avatar({
   className,
@@ -48,4 +48,4 @@ function AvatarFallback({
   )
 }
 
-export { Avatar, AvatarImage, AvatarFallback }
+export { Avatar, AvatarFallback, AvatarImage }

@@ -1,7 +1,4 @@
-import { createFileRoute, redirect, Link } from '@tanstack/react-router'
-import { useForm } from 'react-hook-form'
 import type { z } from 'zod'
-import { Input } from '@gingga/ui/components/input'
 import {
   Form,
   FormControl,
@@ -10,11 +7,14 @@ import {
   FormLabel,
   FormMessage,
 } from '@gingga/ui/components/form'
-import { SignInSchema } from '~/features/auth/auth.schema'
-import { authClient } from '~/features/auth/auth.client'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { Input } from '@gingga/ui/components/input'
 import { FormStatusButton } from '@gingga/ui/components/status-button'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { createFileRoute, Link, redirect } from '@tanstack/react-router'
+import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
+import { authClient } from '~/features/auth/auth.client'
+import { SignInSchema } from '~/features/auth/auth.schema'
 
 export const Route = createFileRoute('/_auth/identify')({
   component: AuthPage,

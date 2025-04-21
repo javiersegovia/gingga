@@ -1,8 +1,3 @@
-import { createFileRoute, redirect, Link } from '@tanstack/react-router'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-import { Input } from '@gingga/ui/components/input'
 import {
   Form,
   FormControl,
@@ -11,10 +6,15 @@ import {
   FormLabel,
   FormMessage,
 } from '@gingga/ui/components/form'
-import { EmailSchema } from '~/features/auth/auth.schema'
+import { Input } from '@gingga/ui/components/input'
 import { FormStatusButton } from '@gingga/ui/components/status-button'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { createFileRoute, Link, redirect } from '@tanstack/react-router'
+import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
+import { z } from 'zod'
 import { authClient } from '~/features/auth/auth.client'
+import { EmailSchema } from '~/features/auth/auth.schema'
 
 const ForgotPasswordSchema = z.object({
   email: EmailSchema,

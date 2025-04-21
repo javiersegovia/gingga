@@ -1,5 +1,5 @@
-import { motion } from 'motion/react'
 import { cn } from '@gingga/ui/lib/utils'
+import { motion } from 'motion/react'
 
 // ElegantShape component (provided by refiner tool)
 function ElegantShape({
@@ -27,7 +27,7 @@ function ElegantShape({
       animate={{
         opacity: 1,
         y: 0,
-        rotate: rotate,
+        rotate,
       }}
       transition={{
         duration: 2.4,
@@ -69,7 +69,7 @@ function ElegantShape({
 }
 
 // Renamed PitchDeckHero to CoverSection and adapted props
-export const CoverSection = () => {
+export function CoverSection() {
   // Content based on Slide 1
   const title = 'Strategic Partnership Conversation'
   const subtitle = 'Gingga × Exsis'

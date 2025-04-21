@@ -1,7 +1,7 @@
-import { createServerFn } from '@tanstack/react-start'
+import type { AppAuthSession } from '@gingga/api/src/lib/auth/auth.types'
 import { redirect } from '@tanstack/react-router'
+import { createServerFn } from '@tanstack/react-start'
 import { getWebRequest } from '@tanstack/react-start/server'
-import type { AppAuthSession } from '~/features/auth/auth.types'
 import { contextMiddleware } from '~/global-middleware'
 
 export const $getAuthSession = createServerFn({ method: 'GET' })

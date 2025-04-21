@@ -1,32 +1,32 @@
-import { cn } from '@gingga/ui/lib/utils'
-import { Button } from '@gingga/ui/components/button'
-import { DotPattern } from '@gingga/ui/components/dot-pattern'
-import { Card } from '@gingga/ui/components/card'
 import type { LucideProps } from 'lucide-react'
+import type { Agent } from '~/features/agent/components/agentic-employees'
+import { Button } from '@gingga/ui/components/button'
+import { Card } from '@gingga/ui/components/card'
+import { DotPattern } from '@gingga/ui/components/dot-pattern'
+import { cn } from '@gingga/ui/lib/utils'
+import { Link } from '@tanstack/react-router'
 import {
   ArrowRightIcon,
   BarChart2Icon,
   BrainCircuitIcon,
   CodeIcon,
-  LayoutGridIcon,
-  ZapIcon,
-  ShieldIcon,
-  SearchIcon,
-  TargetIcon,
   FileEditIcon,
-  TypeIcon,
-  TrendingUpIcon,
-  PieChartIcon,
-  MessageSquareIcon,
   HelpCircleIcon,
-  PackageIcon,
-  UserPlusIcon,
-  PaletteIcon,
-  SplitIcon,
+  LayoutGridIcon,
   LineChartIcon,
+  MessageSquareIcon,
+  PackageIcon,
+  PaletteIcon,
+  PieChartIcon,
+  SearchIcon,
+  ShieldIcon,
+  SplitIcon,
+  TargetIcon,
+  TrendingUpIcon,
+  TypeIcon,
+  UserPlusIcon,
+  ZapIcon,
 } from 'lucide-react'
-import type { Agent } from '~/features/agent/components/agentic-employees'
-import { Link } from '@tanstack/react-router'
 
 interface AgentInformationProps {
   agent: Agent
@@ -106,7 +106,11 @@ export function AgentInformation({ agent, className }: AgentInformationProps) {
                   'ml-0 inline-block text-base font-bold tracking-tight md:ml-2 md:text-xl',
                 )}
               >
-                <span className="hidden md:inline">~</span> {agent.title} Agent
+                <span className="hidden md:inline">~</span>
+                {' '}
+                {agent.title}
+                {' '}
+                Agent
               </h3>
             </div>
 
@@ -130,7 +134,8 @@ export function AgentInformation({ agent, className }: AgentInformationProps) {
                     `hover:${agent.theme.foreground}`,
                   )}
                 >
-                  Demo chat with<span className="font-bold">{agent.name}</span>
+                  Demo chat with
+                  <span className="font-bold">{agent.name}</span>
                   <ArrowRightIcon size={16} />
                 </Button>
               </Link>
@@ -141,12 +146,12 @@ export function AgentInformation({ agent, className }: AgentInformationProps) {
         {/* Features Section */}
         <div className="mx-auto mt-6 md:mt-8">
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-            {agent.features.slice(0, 4).map((feature, idx) => {
+            {agent.features.slice(0, 4).map((feature) => {
               const Icon = iconMap[feature.icon] || BrainCircuitIcon
 
               return (
                 <Card
-                  key={`feature-${idx}`}
+                  key={feature.title}
                   hover="reverse"
                   className="mx-auto flex flex-col items-center gap-3 p-3 transition-all duration-100 sm:p-4 md:flex-row"
                 >

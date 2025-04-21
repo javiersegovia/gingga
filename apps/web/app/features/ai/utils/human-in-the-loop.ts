@@ -1,11 +1,12 @@
+/* eslint-disable ts/no-unsafe-function-type */
 import type { Message } from '@ai-sdk/ui-utils'
 import type { DataStreamWriter, ToolExecutionOptions, ToolSet } from 'ai'
 import type { z } from 'zod'
+import type { ToolResponse } from '../skills/skill.types'
 import { formatDataStreamPart } from '@ai-sdk/ui-utils'
 import { convertToCoreMessages } from 'ai'
-import type { ToolResponse } from '../skills/skill.types'
-import { APPROVAL } from '../skills/info'
 import { upsertChatMessage } from '../../chat/chat.service'
+import { APPROVAL } from '../skills/info'
 
 function isValidToolName<K extends PropertyKey, T extends object>(
   key: K,
@@ -23,16 +24,16 @@ interface ProcessToolCallsResult {
  * Processes tool invocations where human input is required, executing tools when authorized.
  *
  * @param options - The function options
+ * @param options.chatId - The chat ID
  * @param options.tools - Map of tool names to Tool instances that may expose execute functions
  * @param options.dataStream - Data stream for sending results back to the client
  * @param options.messages - Array of messages to process
- * @param executionFunctions - Map of tool names to execute functions
+ * @param options.executions - Map of tool names to execute functions
  * @returns Promise resolving to the processed messages
  */
 export async function processToolCalls<
   Tools extends ToolSet,
   ExecutableTools extends {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
     [Tool in keyof Tools as Tools[Tool] extends { execute: Function }
       ? never
       : Tool]: Tools[Tool]
@@ -86,7 +87,8 @@ export async function processToolCalls<
             messages: convertToCoreMessages(messages),
             toolCallId: toolInvocation.toolCallId,
           })
-        } else {
+        }
+        else {
           result = {
             success: false,
             label: 'Sorry! I cannot execute that action.',
@@ -94,14 +96,16 @@ export async function processToolCalls<
             output: null,
           }
         }
-      } else if (toolInvocation.result?.output === APPROVAL.NO) {
+      }
+      else if (toolInvocation.result?.output === APPROVAL.NO) {
         result = {
           success: false,
           label: 'Aborted! I did not receive the proper authorization.',
           error: 'User denied access to tool execution',
           output: null,
         }
-      } else {
+      }
+      else {
         // For any unhandled responses, return the original part.
         return part
       }

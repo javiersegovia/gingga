@@ -1,5 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable max-params */
+/* eslint-disable no-console */
+/* eslint-disable ts/no-explicit-any */
+
 /**
  * console-logger.ts
  *
@@ -63,7 +64,7 @@ const ENV = env.NODE_ENV || 'development'
 const config = LOG_CONFIG[ENV] || LOG_CONFIG.development
 
 // Format objects for logging
-const formatObject = (obj: any): string => {
+function formatObject(obj: any): string {
   try {
     if (obj instanceof Error) {
       return JSON.stringify(
@@ -77,7 +78,8 @@ const formatObject = (obj: any): string => {
       )
     }
     return JSON.stringify(obj, null, ENV === 'development' ? 2 : 0)
-  } catch (_) {
+  }
+  catch (_) {
     return '[Circular or Non-Serializable Object]'
   }
 }
@@ -107,7 +109,8 @@ export class Logger {
    * @returns boolean indicating whether the log should be displayed
    */
   private shouldLog(level: LogLevel): boolean {
-    if (!config.enabled) return false
+    if (!config.enabled)
+      return false
 
     const levels = [LogLevel.DEBUG, LogLevel.INFO, LogLevel.WARN, LogLevel.ERROR]
     const minLevelIndex = levels.indexOf(config.minLevel)
@@ -124,8 +127,10 @@ export class Logger {
    */
   private formatArgs(args: any[]): any[] {
     return args.map((arg) => {
-      if (arg === null || arg === undefined) return arg
-      if (typeof arg === 'object') return formatObject(arg)
+      if (arg === null || arg === undefined)
+        return arg
+      if (typeof arg === 'object')
+        return formatObject(arg)
       return arg
     })
   }
@@ -138,7 +143,8 @@ export class Logger {
    * @param args Additional arguments to log
    */
   private log(level: LogLevel, message: string, ...args: any[]) {
-    if (!this.shouldLog(level)) return
+    if (!this.shouldLog(level))
+      return
 
     const timestamp = new Date().toISOString()
     const formattedArgs = this.formatArgs(args)
@@ -168,16 +174,19 @@ export class Logger {
 
       if (level === LogLevel.ERROR) {
         console.error(coloredPrefix, message, ...formattedArgs)
-      } else {
+      }
+      else {
         console.log(coloredPrefix, message, ...formattedArgs)
       }
-    } else {
+    }
+    else {
       // No colors in production
       const prefix = `[${timestamp}] [${level}] [${this.module}]`
 
       if (level === LogLevel.ERROR) {
         console.error(prefix, message, ...formattedArgs)
-      } else {
+      }
+      else {
         console.log(prefix, message, ...formattedArgs)
       }
     }

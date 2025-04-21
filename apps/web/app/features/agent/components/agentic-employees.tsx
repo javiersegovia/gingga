@@ -1,12 +1,12 @@
+import { Badge } from '@gingga/ui/components/badge'
 import { Button } from '@gingga/ui/components/button'
+import { Link } from '@tanstack/react-router'
 import { ArrowRightIcon, SparklesIcon } from 'lucide-react'
 import { AgentInformation } from './agent-information'
-import { Badge } from '@gingga/ui/components/badge'
-import { Link } from '@tanstack/react-router'
 
 // STYLING NOTE: Using brand colors as primary accent colors
 
-export type Agent = {
+export interface Agent {
   id: string
   title: string
   name: string
@@ -377,15 +377,21 @@ export function AgenticEmployees() {
 
                 <ul className="text-background/80 dark:text-foreground mb-6 list-disc space-y-3 pl-5 text-left text-base font-medium">
                   <li>
-                    <span className="text-brand-green">Personalized AI agents</span> built
+                    <span className="text-brand-green">Personalized AI agents</span>
+                    {' '}
+                    built
                     for your specific workflows
                   </li>
                   <li>
-                    <span className="text-brand-green">Rapid deployment</span> from
+                    <span className="text-brand-green">Rapid deployment</span>
+                    {' '}
+                    from
                     discovery to launch in just 3-5 days
                   </li>
                   <li>
-                    <span className="text-brand-green">Cost-effective solution</span> at a
+                    <span className="text-brand-green">Cost-effective solution</span>
+                    {' '}
+                    at a
                     fraction of traditional automation costs
                   </li>
                 </ul>

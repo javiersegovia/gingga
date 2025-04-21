@@ -1,6 +1,6 @@
 import { Button } from '@gingga/ui/components/button'
-import { ArrowRight } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
+import { ArrowRight } from 'lucide-react'
 
 export function CtaSection() {
   return (
@@ -41,7 +41,8 @@ export function CtaSection() {
                     Get started with a custom AI solution today
                   </p>
                   <div className="bg-brand-green/10 border-brand-green inline-block rounded-full border-2 px-3 py-1 text-sm">
-                    <span className="text-brand-green">Starting at</span>{' '}
+                    <span className="text-brand-green">Starting at</span>
+                    {' '}
                     <span className="text-brand-green font-bold">$50/month</span>
                   </div>
                 </div>

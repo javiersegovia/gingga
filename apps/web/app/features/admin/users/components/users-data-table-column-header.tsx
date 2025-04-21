@@ -1,8 +1,6 @@
 import type { Column } from '@tanstack/react-table'
-import { ArrowDownIcon, ArrowUpIcon, ChevronsUpDownIcon, EyeOffIcon } from 'lucide-react'
-
-import { cn } from '@gingga/ui/lib/utils'
 import { Button } from '@gingga/ui/components/button'
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,6 +8,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@gingga/ui/components/dropdown-menu'
+import { cn } from '@gingga/ui/lib/utils'
+import { ArrowDownIcon, ArrowUpIcon, ChevronsUpDownIcon, EyeOffIcon } from 'lucide-react'
 
 interface DataTableColumnHeaderProps<TData, TValue>
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -36,14 +36,18 @@ export function UsersDataTableColumnHeader<TData, TValue>({
             className="data-[state=open]:bg-accent -ml-3 h-8"
           >
             <span>{title}</span>
-            {column.getCanSort() &&
-              (column.getIsSorted() === 'desc' ? (
-                <ArrowDownIcon className="ml-2 size-4" />
-              ) : column.getIsSorted() === 'asc' ? (
-                <ArrowUpIcon className="ml-2 size-4" />
-              ) : (
-                <ChevronsUpDownIcon className="ml-2 size-4" />
-              ))}
+            {column.getCanSort()
+              && (column.getIsSorted() === 'desc'
+                ? (
+                    <ArrowDownIcon className="ml-2 size-4" />
+                  )
+                : column.getIsSorted() === 'asc'
+                  ? (
+                      <ArrowUpIcon className="ml-2 size-4" />
+                    )
+                  : (
+                      <ChevronsUpDownIcon className="ml-2 size-4" />
+                    ))}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start">

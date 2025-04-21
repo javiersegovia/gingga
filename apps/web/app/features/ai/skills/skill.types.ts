@@ -1,9 +1,10 @@
+/* eslint-disable ts/no-explicit-any */
 import type { Tool, ToolExecutionOptions } from 'ai'
-import { z } from 'zod'
 import type {
   ComposioAppName,
   ComposioToolName,
 } from '../../settings/integrations/composio.schema'
+import { z } from 'zod'
 
 // export const ComposioAppNameEnum = z.enum(['googlesheets', 'googlecalendar', 'gmail'])
 // export type ComposioAppName = z.infer<typeof ComposioAppNameEnum>
@@ -18,7 +19,6 @@ import type {
  * Response interface for AI tool executions
  * @template TOutput The type of data returned by the tool
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface ToolResponse<TOutput = any> {
   success: boolean // Whether the tool execution was successful
   output: TOutput // The structured output from the tool
@@ -180,7 +180,6 @@ export type SkillConfig =
  * Type for any function with any parameters
  * @template R Return type of the function
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type AnyFunction<R = any> = (...args: any[]) => R
 
 /**
@@ -193,12 +192,12 @@ type AnyExecutionFunction = AnyFunction<Promise<ToolResponse>>
  * @template TTools Record mapping tool names to tool definitions
  * @template TExecutions Record mapping tool names to execution functions
  */
-type CreateSkillParams<
+interface CreateSkillParams<
   TTools extends Partial<Record<ToolName, AnyTool>>,
   TExecutions extends {
     [K in keyof TTools & ToolName]?: AnyExecutionFunction
   },
-> = {
+> {
   id: SkillId
   name: string
   description: string
@@ -270,7 +269,7 @@ export function createSkill<
 /**
  * This is intended to be consumed by the UI to display information about the tool
  */
-export type ToolInfo = {
+export interface ToolInfo {
   id: ToolName
   name: string
   description: string
@@ -300,7 +299,7 @@ export interface SkillInfo {
  * Used to define the available skills that can be configured by admins.
  * Extensible for future integrations and tool types.
  */
-export type SkillOption = {
+export interface SkillOption {
   id: SkillId
   name: string
   description: string

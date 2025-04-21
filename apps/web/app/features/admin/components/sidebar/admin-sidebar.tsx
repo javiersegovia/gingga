@@ -1,5 +1,3 @@
-import { Link } from '@tanstack/react-router'
-import { LayoutDashboardIcon, UsersIcon, ArrowLeftIcon } from 'lucide-react'
 import { Button } from '@gingga/ui/components/button'
 import {
   Sidebar,
@@ -11,8 +9,10 @@ import {
   SidebarMenu,
   SidebarMenuItem,
 } from '@gingga/ui/components/sidebar'
-import { ThemeSwitch } from '~/components/ui/theme-switch'
 import { cn } from '@gingga/ui/lib/utils'
+import { Link } from '@tanstack/react-router'
+import { ArrowLeftIcon, LayoutDashboardIcon, UsersIcon } from 'lucide-react'
+import { ThemeSwitch } from '~/components/ui/theme-switch'
 
 export function AdminSidebar() {
   return (

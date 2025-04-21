@@ -1,6 +1,6 @@
-import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@gingga/ui/components/card'
 import { TrendingUp, Zap } from 'lucide-react'
+import React from 'react'
 
 interface Reason {
   title: string
@@ -19,13 +19,13 @@ const reasonsData: Reason[] = [
     icon: TrendingUp,
   },
   {
-    title: "Gingga's Role:",
+    title: 'Gingga\'s Role:',
     points: ['Gingga is the execution layer'],
     icon: Zap,
   },
 ]
 
-export const WhyNowSection = () => {
+export function WhyNowSection() {
   return (
     <section className="flex min-h-screen flex-col items-center justify-center gap-8 overflow-hidden p-8">
       <h2 className="text-center text-5xl font-bold tracking-tight lg:text-7xl">
@@ -33,10 +33,10 @@ export const WhyNowSection = () => {
       </h2>
 
       <div className="mt-6 grid w-full max-w-4xl grid-cols-1 gap-8 text-lg md:grid-cols-2 lg:text-xl">
-        {reasonsData.map((reason, index) => {
+        {reasonsData.map((reason) => {
           const IconComponent = reason.icon
           return (
-            <div key={index}>
+            <div key={reason.title}>
               <Card
                 className="h-full transform transition-all duration-300 hover:scale-[1.03] hover:shadow-lg"
                 design="grid"
@@ -52,44 +52,50 @@ export const WhyNowSection = () => {
                 </CardHeader>
                 <CardContent>
                   <ul className="text-muted-foreground list-disc space-y-2 pl-5">
-                    {reason.points.map((point, pIndex) => (
-                      <li key={pIndex}>
+                    {reason.points.map((point, _pIndex) => (
+                      <li key={point}>
                         {point.includes('work')
                           ? point.split('work').map((part, i) =>
-                              i < point.split('work').length - 1 ? (
-                                <React.Fragment key={i}>
-                                  {part}
-                                  <span className="text-primary font-semibold">work</span>
-                                </React.Fragment>
-                              ) : (
-                                part
-                              ),
+                              i < point.split('work').length - 1
+                                ? (
+                                    <React.Fragment key={part}>
+                                      {part}
+                                      <span className="text-primary font-semibold">work</span>
+                                    </React.Fragment>
+                                  )
+                                : (
+                                    part
+                                  ),
                             )
                           : point.includes('2025: execution')
                             ? point.split('2025: execution').map((part, i) =>
-                                i < point.split('2025: execution').length - 1 ? (
-                                  <React.Fragment key={i}>
-                                    {part}
-                                    <span className="text-primary font-semibold">
-                                      2025: execution
-                                    </span>
-                                  </React.Fragment>
-                                ) : (
-                                  part
-                                ),
+                                i < point.split('2025: execution').length - 1
+                                  ? (
+                                      <React.Fragment key={part}>
+                                        {part}
+                                        <span className="text-primary font-semibold">
+                                          2025: execution
+                                        </span>
+                                      </React.Fragment>
+                                    )
+                                  : (
+                                      part
+                                    ),
                               )
                             : point.includes('execution layer')
                               ? point.split('execution layer').map((part, i) =>
-                                  i < point.split('execution layer').length - 1 ? (
-                                    <React.Fragment key={i}>
-                                      {part}
-                                      <span className="text-primary font-semibold">
-                                        execution layer
-                                      </span>
-                                    </React.Fragment>
-                                  ) : (
-                                    part
-                                  ),
+                                  i < point.split('execution layer').length - 1
+                                    ? (
+                                        <React.Fragment key={part}>
+                                          {part}
+                                          <span className="text-primary font-semibold">
+                                            execution layer
+                                          </span>
+                                        </React.Fragment>
+                                      )
+                                    : (
+                                        part
+                                      ),
                                 )
                               : point}
                       </li>

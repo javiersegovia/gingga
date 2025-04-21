@@ -1,9 +1,9 @@
-import { useRef } from 'react'
-import { cn } from '@gingga/ui/lib/utils'
-import { Badge } from '@gingga/ui/components/badge'
-import { BotIcon } from 'lucide-react'
 import { AnimatedBeam } from '@gingga/ui/components/animated-beam'
+import { Badge } from '@gingga/ui/components/badge'
 import { Card, CardContent, CardDescription, CardTitle } from '@gingga/ui/components/card'
+import { cn } from '@gingga/ui/lib/utils'
+import { BotIcon } from 'lucide-react'
+import { useRef } from 'react'
 
 // Icons for integrations
 const Icons = {
@@ -190,10 +190,9 @@ export function IntegrationCapabilities() {
               {/* Beams Layer (Lower z-index) */}
               <div className="absolute inset-0 z-0">
                 {/* Beams from Tools to Agent */}
-                {/* eslint-disable-next-line react-compiler/react-compiler */}
                 {tools.map((tool, index) => (
                   <AnimatedBeam
-                    key={`tool-${index}`}
+                    key={`tool-${tool.name}`}
                     containerRef={containerRef}
                     fromRef={tool.ref}
                     toRef={agentRef}
@@ -259,10 +258,9 @@ export function IntegrationCapabilities() {
               </div>
 
               {/* Integration Tools - Scattered around right side */}
-              {/* eslint-disable-next-line react-compiler/react-compiler */}
-              {tools.map((tool, index) => (
+              {tools.map(tool => (
                 <div
-                  key={index}
+                  key={`tool-${tool.name}`}
                   className="absolute z-10"
                   style={{
                     top: tool.position.top,
@@ -295,8 +293,8 @@ export function IntegrationCapabilities() {
           </div>
 
           <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-            {commonIntegrations.map((integration, index) => (
-              <Card key={index} hover="default" design="grid" className="overflow-hidden">
+            {commonIntegrations.map(integration => (
+              <Card key={integration.name} hover="default" design="grid" className="overflow-hidden">
                 <CardContent className="flex flex-col items-center p-0">
                   <div
                     className={cn(

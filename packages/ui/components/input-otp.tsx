@@ -1,7 +1,7 @@
-import * as React from 'react'
+import { cn } from '@gingga/ui/lib/utils'
 import { OTPInput, OTPInputContext } from 'input-otp'
 import { Dot } from 'lucide-react'
-import { cn } from '@gingga/ui/lib/utils'
+import * as React from 'react'
 
 function InputOTP({
   className,
@@ -38,7 +38,7 @@ function InputOTPSlot({
 }: React.ComponentProps<'div'> & {
   index: number
 }) {
-  const inputOTPContext = React.useContext(OTPInputContext)
+  const inputOTPContext = React.use(OTPInputContext)
   const { char, hasFakeCaret, isActive } = inputOTPContext.slots[index]
 
   return (
@@ -69,4 +69,4 @@ function InputOTPSeparator({ ...props }: React.ComponentProps<'div'>) {
   )
 }
 
-export { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator }
+export { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot }

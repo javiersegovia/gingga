@@ -1,11 +1,11 @@
-import * as React from 'react'
-import { CheckIcon, LoaderCircleIcon, TriangleAlert } from 'lucide-react'
-import { useSpinDelay } from 'spin-delay'
-import { useFormContext } from 'react-hook-form'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './tooltip'
-import { Button } from './button'
 import type { ButtonProps } from './button'
 import { cn } from '@gingga/ui/lib/utils'
+import { CheckIcon, LoaderCircleIcon, TriangleAlert } from 'lucide-react'
+import * as React from 'react'
+import { useFormContext } from 'react-hook-form'
+import { useSpinDelay } from 'spin-delay'
+import { Button } from './button'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from './tooltip'
 
 type Status = 'pending' | 'success' | 'error' | 'idle'
 
@@ -32,11 +32,13 @@ function StatusButton({
   })
 
   const companion = {
-    pending: delayedPending ? (
-      <div role="status" className="inline-flex h-6 w-6 items-center justify-center">
-        {spinIcon ?? <LoaderCircleIcon className="animate-spin" />}
-      </div>
-    ) : null,
+    pending: delayedPending
+      ? (
+          <div role="status" className="inline-flex h-6 w-6 items-center justify-center">
+            {spinIcon ?? <LoaderCircleIcon className="animate-spin" />}
+          </div>
+        )
+      : null,
     success: (
       <div role="status" className="inline-flex h-6 w-6 items-center justify-center">
         <CheckIcon />
@@ -60,16 +62,18 @@ function StatusButton({
       {...props}
     >
       <div>{children}</div>
-      {message ? (
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger>{companion}</TooltipTrigger>
-            <TooltipContent>{message}</TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      ) : (
-        companion
-      )}
+      {message
+        ? (
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger>{companion}</TooltipTrigger>
+                <TooltipContent>{message}</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )
+        : (
+            companion
+          )}
     </Button>
   )
 }
@@ -103,5 +107,5 @@ function FormStatusButton({
   )
 }
 
-export { StatusButton, FormStatusButton }
-export type { StatusButtonProps, FormStatusButtonProps }
+export { FormStatusButton, StatusButton }
+export type { FormStatusButtonProps, StatusButtonProps }

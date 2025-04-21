@@ -1,29 +1,29 @@
 // import { scan } from 'react-scan' // react-scan must be imported before React and TanStack Start
 
-import { lazy, Suspense } from 'react'
+import type { AppRouterContext } from '../router'
+import fontsourceVariableDMSans from '@fontsource-variable/dm-sans?url'
+import fontsourceVariableGeist from '@fontsource-variable/geist?url'
+import fontsourceVariableManrope from '@fontsource-variable/manrope?url'
+import fontsourceVariableNunito from '@fontsource-variable/nunito?url'
+import fontsourceOutfit from '@fontsource-variable/outfit?url'
+import fontsourceUnbounded from '@fontsource-variable/unbounded?url'
+import { Toaster } from '@gingga/ui/components/sonner'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import {
   createRootRouteWithContext,
-  Outlet,
   HeadContent,
+  Outlet,
   Scripts,
 } from '@tanstack/react-router'
-import globalCss from '~/styles/globals.css?url'
-import { ThemeProvider, useTheme } from '~/components/shared/theme'
-import fontsourceOutfit from '@fontsource-variable/outfit?url'
-import fontsourceUnbounded from '@fontsource-variable/unbounded?url'
-import fontsourceVariableManrope from '@fontsource-variable/manrope?url'
-import fontsourceVariableGeist from '@fontsource-variable/geist?url'
-import fontsourceVariableNunito from '@fontsource-variable/nunito?url'
-import fontsourceVariableDMSans from '@fontsource-variable/dm-sans?url'
+import { lazy, Suspense } from 'react'
 
-import { Toaster } from '@gingga/ui/components/sonner'
-import type { AppRouterContext } from '../router'
+import { ThemeProvider, useTheme } from '~/components/shared/theme'
+import globalCss from '~/styles/globals.css?url'
 
 const TanStackRouterDevtools = import.meta.env.PROD
   ? () => null // Render nothing in production
   : lazy(() =>
-      import('@tanstack/react-router-devtools').then((res) => ({
+      import('@tanstack/react-router-devtools').then(res => ({
         default: res.TanStackRouterDevtools,
       })),
     )

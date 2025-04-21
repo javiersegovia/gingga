@@ -1,7 +1,7 @@
+import type { BanUserInput, BaseUser, UpdateUserInput } from './user.schema'
+import { count, desc, eq } from '@gingga/db'
+import { ChatMessages, Chats, UserMemberships, Users } from '@gingga/db/schema'
 import { getDatabase } from '~/middleware/setup-context.server'
-import { Users, UserMemberships, Chats, ChatMessages } from '@gingga/db/schema'
-import { eq, desc, count } from '@gingga/db'
-import type { UpdateUserInput, BanUserInput, BaseUser } from './user.schema'
 
 // Helper function to potentially throw specific errors (e.g., NotFoundError)
 class NotFoundError extends Error {
@@ -56,16 +56,17 @@ export async function getUsers() {
       .groupBy(Chats.userId)
 
     // Convert to maps for easier lookup
-    const chatCountMap = new Map(chatCounts.map((cc) => [cc.userId, cc.count]))
-    const messageCountMap = new Map(messageCounts.map((mc) => [mc.userId, mc.count]))
+    const chatCountMap = new Map(chatCounts.map(cc => [cc.userId, cc.count]))
+    const messageCountMap = new Map(messageCounts.map(mc => [mc.userId, mc.count]))
 
     // Merge the data
-    return users.map((user) => ({
+    return users.map(user => ({
       ...user,
       chatCount: chatCountMap.get(user.id) || 0,
       messageCount: messageCountMap.get(user.id) || 0,
     }))
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Error fetching users:', error)
     throw new Error('Failed to retrieve users.')
   }
@@ -110,7 +111,8 @@ export async function getUserById(userId: string): Promise<BaseUser | null> {
       chatCount: chatCountResult[0]?.count || 0,
       messageCount: messageCountResult[0]?.count || 0,
     }
-  } catch (error) {
+  }
+  catch (error) {
     console.error(`Error fetching user ${userId}:`, error)
     throw new Error('Failed to retrieve user details.')
   }
@@ -126,7 +128,8 @@ export async function updateUser(input: UpdateUserInput): Promise<BaseUser> {
     if (Object.keys(updateData).length === 0 && !membershipTier) {
       // Avoid empty update, fetch and return current user
       const currentUser = await getUserById(userId)
-      if (!currentUser) throw new NotFoundError(`User with id ${userId} not found.`)
+      if (!currentUser)
+        throw new NotFoundError(`User with id ${userId} not found.`)
       return currentUser
     }
 
@@ -158,7 +161,8 @@ export async function updateUser(input: UpdateUserInput): Promise<BaseUser> {
           .update(UserMemberships)
           .set({ tier: membershipTier })
           .where(eq(UserMemberships.userId, userId))
-      } else {
+      }
+      else {
         // Create new membership
         await db.insert(UserMemberships).values({
           userId,
@@ -169,9 +173,11 @@ export async function updateUser(input: UpdateUserInput): Promise<BaseUser> {
 
     // Get updated user with membership data
     return getUserById(userId) as Promise<BaseUser>
-  } catch (error) {
+  }
+  catch (error) {
     console.error(`Error updating user ${userId}:`, error)
-    if (error instanceof NotFoundError) throw error
+    if (error instanceof NotFoundError)
+      throw error
     throw new Error('Failed to update user.')
   }
 }
@@ -188,9 +194,11 @@ export async function deleteUser(userId: string): Promise<boolean> {
       throw new NotFoundError(`User with id ${userId} not found for deletion.`)
     }
     return true
-  } catch (error) {
+  }
+  catch (error) {
     console.error(`Error deleting user ${userId}:`, error)
-    if (error instanceof NotFoundError) throw error
+    if (error instanceof NotFoundError)
+      throw error
     throw new Error('Failed to delete user.')
   }
 }
@@ -210,8 +218,8 @@ export async function banUser(input: BanUserInput): Promise<boolean> {
       .update(Users)
       .set({
         banned: true,
-        banReason: banReason,
-        banExpires: banExpires,
+        banReason,
+        banExpires,
         updatedAt: new Date(),
       })
       .where(eq(Users.id, userId))
@@ -220,13 +228,15 @@ export async function banUser(input: BanUserInput): Promise<boolean> {
     if (result.length === 0) {
       throw new NotFoundError(`User with id ${userId} not found for banning.`)
     }
-    console.log(
-      `SERVICE: User ${userId} banned. Reason: ${banReason}, Expires: ${banExpires?.toISOString() ?? 'Never'}`,
-    )
+    // console.log(
+    //   `SERVICE: User ${userId} banned. Reason: ${banReason}, Expires: ${banExpires?.toISOString() ?? 'Never'}`,
+    // )
     return true
-  } catch (error) {
+  }
+  catch (error) {
     console.error(`Error banning user ${userId}:`, error)
-    if (error instanceof NotFoundError) throw error
+    if (error instanceof NotFoundError)
+      throw error
     throw new Error('Failed to ban user.')
   }
 }
@@ -248,21 +258,23 @@ export async function unbanUser(userId: string): Promise<boolean> {
     if (result.length === 0) {
       throw new NotFoundError(`User with id ${userId} not found for unbanning.`)
     }
-    console.log(`SERVICE: User ${userId} unbanned.`)
+    // console.log(`SERVICE: User ${userId} unbanned.`)
     return true
-  } catch (error) {
+  }
+  catch (error) {
     console.error(`Error unbanning user ${userId}:`, error)
-    if (error instanceof NotFoundError) throw error
+    if (error instanceof NotFoundError)
+      throw error
     throw new Error('Failed to unban user.')
   }
 }
 
 export async function impersonateUser(
   userId: string,
-  adminUserId: string,
+  // adminUserId: string,
 ): Promise<void> {
   // Placeholder for actual impersonation logic (e.g., using Better Auth)
-  console.log(`SERVICE: Admin ${adminUserId} attempting to impersonate user ${userId}`)
+  // console.log(`SERVICE: Admin ${adminUserId} attempting to impersonate user ${userId}`)
   // In a real scenario, this would likely involve:
   // 1. Verifying admin privileges (already done by middleware in API layer)
   // 2. Verifying target user exists and is not an admin themselves.
@@ -280,6 +292,6 @@ export async function impersonateUser(
   }
 
   // Simulate successful impersonation attempt
-  console.log(`SERVICE: Impersonation logic for user ${userId} would execute here.`)
-  // return Promise.resolve() // No return value needed typically
+  // console.log(`SERVICE: Impersonation logic for user ${userId} would execute here.`)
+  return Promise.resolve() // No return value needed typically
 }

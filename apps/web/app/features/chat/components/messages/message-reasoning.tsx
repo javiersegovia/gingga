@@ -1,6 +1,6 @@
-import { useState } from 'react'
 import { ChevronDownIcon, LoaderIcon } from 'lucide-react'
-import { motion, AnimatePresence } from 'motion/react'
+import { AnimatePresence, motion } from 'motion/react'
+import { useState } from 'react'
 import { Markdown } from '~/features/chat/components/markdown'
 
 interface MessageReasoningProps {
@@ -28,28 +28,30 @@ export function MessageReasoning({ isLoading, reasoning }: MessageReasoningProps
 
   return (
     <div className="flex flex-col">
-      {isLoading ? (
-        <div className="flex flex-row items-center gap-2">
-          <div className="font-medium">Reasoning</div>
-          <div className="animate-spin">
-            <LoaderIcon />
-          </div>
-        </div>
-      ) : (
-        <div className="flex flex-row items-center gap-2">
-          <div className="font-medium">Reasoned for a few seconds</div>
-          <button
-            data-testid="message-reasoning-toggle"
-            type="button"
-            className="cursor-pointer"
-            onClick={() => {
-              setIsExpanded(!isExpanded)
-            }}
-          >
-            <ChevronDownIcon />
-          </button>
-        </div>
-      )}
+      {isLoading
+        ? (
+            <div className="flex flex-row items-center gap-2">
+              <div className="font-medium">Reasoning</div>
+              <div className="animate-spin">
+                <LoaderIcon />
+              </div>
+            </div>
+          )
+        : (
+            <div className="flex flex-row items-center gap-2">
+              <div className="font-medium">Reasoned for a few seconds</div>
+              <button
+                data-testid="message-reasoning-toggle"
+                type="button"
+                className="cursor-pointer"
+                onClick={() => {
+                  setIsExpanded(!isExpanded)
+                }}
+              >
+                <ChevronDownIcon />
+              </button>
+            </div>
+          )}
 
       <AnimatePresence initial={false}>
         {isExpanded && (

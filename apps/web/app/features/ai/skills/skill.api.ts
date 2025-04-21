@@ -1,35 +1,35 @@
-import { createServerFn } from '@tanstack/react-start'
-import type { SkillId, SkillOption } from './skill.types'
-import {
-  SkillIdParamSchema,
-  CreateSkillInputSchema,
-  UpdateSkillInputSchema,
-  DeleteSkillInputSchema,
-} from './skill.schema'
-import {
-  createAgentSkill,
-  getAgentSkillById,
-  updateAgentSkillById,
-  deleteAgentSkillById,
-  getAgentSkillsByAgentId,
-  upsertAgentSkill,
-  updateAgentSkillEnabledStatus,
-} from './skill.service'
-import { zodValidator } from '@tanstack/zod-adapter'
-import { z } from 'zod'
-import { getSkills } from './skill.list'
+import type { InferSelectModel } from '@gingga/db'
 import type { AgentSkills } from '@gingga/db/schema'
-import {
-  getComposioIntegrations,
-  getUserComposioConnections,
-} from '../../settings/integrations/composio.service'
-import { authMiddleware } from '../../../middleware/auth-guard'
+import type { SkillId, SkillOption } from './skill.types'
 import type {
   ComposioAppName,
   ComposioIntegration,
   UserConnection,
 } from '~/features/settings/integrations/composio.schema'
-import type { InferSelectModel } from '@gingga/db'
+import { createServerFn } from '@tanstack/react-start'
+import { zodValidator } from '@tanstack/zod-adapter'
+import { z } from 'zod'
+import { authMiddleware } from '../../../middleware/auth-guard'
+import {
+  getComposioIntegrations,
+  getUserComposioConnections,
+} from '../../settings/integrations/composio.service'
+import { getSkills } from './skill.list'
+import {
+  CreateSkillInputSchema,
+  DeleteSkillInputSchema,
+  SkillIdParamSchema,
+  UpdateSkillInputSchema,
+} from './skill.schema'
+import {
+  createAgentSkill,
+  deleteAgentSkillById,
+  getAgentSkillById,
+  getAgentSkillsByAgentId,
+  updateAgentSkillById,
+  updateAgentSkillEnabledStatus,
+  upsertAgentSkill,
+} from './skill.service'
 
 // Define schema for upsert, making id optional
 const UpsertSkillInputSchema = CreateSkillInputSchema.extend({
@@ -130,16 +130,16 @@ export const $getSkillsByAgentId = createServerFn({ method: 'GET' })
     ])
 
     const composioConnectionsMap = new Map<ComposioAppName, UserConnection>(
-      composioConnections.map((conn) => [conn.appName as ComposioAppName, conn]),
+      composioConnections.map(conn => [conn.appName as ComposioAppName, conn]),
     )
     const composioIntegrationsMap = new Map<ComposioAppName, ComposioIntegration>(
-      composioIntegrations.map((integration) => [
+      composioIntegrations.map(integration => [
         integration.appName as ComposioAppName,
         integration,
       ]),
     )
     const skillOptionsMap = new Map<SkillId, SkillOption>(
-      getSkills().map((opt) => [opt.id, opt]),
+      getSkills().map(opt => [opt.id, opt]),
     )
 
     return agentSkills.map((skill) => {

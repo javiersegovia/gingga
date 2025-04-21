@@ -1,11 +1,11 @@
-import { Suspense } from 'react'
-import { createFileRoute, Outlet } from '@tanstack/react-router'
-import { ChatSidebar } from '~/features/chat/components/sidebar/chat-sidebar'
 import { SidebarProvider } from '@gingga/ui/components/sidebar'
-import { $isSidebarOpened } from '~/features/sidebar/sidebar.api'
-import { SidebarFloatingActions } from '~/features/chat/components/sidebar/sidebar-floating-actions'
+import { createFileRoute, Outlet } from '@tanstack/react-router'
+import { Suspense } from 'react'
 import { recentChatsWithAgentsQueryOptions } from '~/features/agent/agent.query'
 import { userChatsQueryOptions } from '~/features/chat/chat.query'
+import { ChatSidebar } from '~/features/chat/components/sidebar/chat-sidebar'
+import { SidebarFloatingActions } from '~/features/chat/components/sidebar/sidebar-floating-actions'
+import { $isSidebarOpened } from '~/features/sidebar/sidebar.api'
 
 export const Route = createFileRoute('/_demo/chat')({
   component: ChatLayout,

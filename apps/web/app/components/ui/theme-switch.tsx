@@ -1,5 +1,5 @@
-import { useTheme } from '../shared/theme'
 import { Switch } from '@gingga/ui/components/switch'
+import { useTheme } from '../shared/theme'
 
 export function ThemeSwitch() {
   const theme = useTheme()
@@ -10,7 +10,7 @@ export function ThemeSwitch() {
       <Switch
         variant="theme"
         checked={isDark}
-        onCheckedChange={(checked) => theme.set(checked ? 'dark' : 'light')}
+        onCheckedChange={checked => theme.set(checked ? 'dark' : 'light')}
         thumbIcon="theme"
       />
     </div>

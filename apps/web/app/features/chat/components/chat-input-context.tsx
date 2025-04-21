@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
-import { createContext, useContext, useState } from 'react'
+import { createContext, use, useMemo, useState } from 'react'
 
-type ChatInputContextType = {
+interface ChatInputContextType {
   inputHeight: number
   setInputHeight: (height: number) => void
 }
@@ -12,16 +12,18 @@ const ChatInputContext = createContext<ChatInputContextType | undefined>(undefin
 export function ChatInputProvider({ children }: { children: ReactNode }) {
   const [inputHeight, setInputHeight] = useState<number>(100) // Default height
 
+  const value = useMemo(() => ({ inputHeight, setInputHeight }), [inputHeight])
+
   return (
-    <ChatInputContext.Provider value={{ inputHeight, setInputHeight }}>
+    <ChatInputContext value={value}>
       {children}
-    </ChatInputContext.Provider>
+    </ChatInputContext>
   )
 }
 
 // Hook to use the context
 export function useChatInput() {
-  const context = useContext(ChatInputContext)
+  const context = use(ChatInputContext)
   if (context === undefined) {
     throw new Error('useChatInput must be used within a ChatInputProvider')
   }

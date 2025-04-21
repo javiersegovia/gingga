@@ -1,9 +1,9 @@
-import * as React from 'react'
+import { cn } from '@gingga/ui/lib/utils'
 import * as NavigationMenuPrimitive from '@radix-ui/react-navigation-menu'
 import { cva } from 'class-variance-authority'
 import { ChevronDown } from 'lucide-react'
 
-import { cn } from '@gingga/ui/lib/utils'
+import * as React from 'react'
 
 function NavigationMenu({
   className,
@@ -58,7 +58,8 @@ function NavigationMenuTrigger({
       className={cn(navigationMenuTriggerStyle(), 'group', className)}
       {...props}
     >
-      {children}{' '}
+      {children}
+      {' '}
       <ChevronDown
         className="relative top-[1px] ml-1 h-3 w-3 transition duration-300 group-data-[state=open]:rotate-180"
         aria-hidden="true"
@@ -125,13 +126,13 @@ function NavigationMenuIndicator({
 }
 
 export {
-  navigationMenuTriggerStyle,
   NavigationMenu,
-  NavigationMenuList,
-  NavigationMenuItem,
   NavigationMenuContent,
-  NavigationMenuTrigger,
-  NavigationMenuLink,
   NavigationMenuIndicator,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
   NavigationMenuViewport,
 }

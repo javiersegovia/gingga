@@ -1,11 +1,11 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { Navbar } from '~/components/shared/navbar'
-import { Footer } from '~/components/shared/footer'
 import { Button } from '@gingga/ui/components/button'
-import { CalendarIcon, MailIcon } from 'lucide-react'
 import { Card, CardContent } from '@gingga/ui/components/card'
-import { ContactForm } from '~/features/contact/components/contact-form'
 import { DirectionAwareTabs } from '@gingga/ui/components/direction-aware-tabs'
+import { createFileRoute } from '@tanstack/react-router'
+import { CalendarIcon, MailIcon } from 'lucide-react'
+import { Footer } from '~/components/shared/footer'
+import { Navbar } from '~/components/shared/navbar'
+import { ContactForm } from '~/features/contact/components/contact-form'
 
 // Constants shared across routes
 const BOOKING_LINK = 'https://calendly.com/guzman-vla/30min'

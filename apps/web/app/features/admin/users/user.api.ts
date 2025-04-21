@@ -2,16 +2,16 @@ import { createServerFn } from '@tanstack/react-start'
 import { setResponseStatus } from '@tanstack/react-start/server'
 import { zodValidator } from '@tanstack/zod-adapter'
 import { adminMiddleware } from '~/middleware/admin-guard'
+import { BanUserSchema, UpdateUserSchema, UserIdSchema } from './user.schema'
 import {
-  getUsers,
-  getUserById,
-  updateUser,
-  deleteUser,
   banUser,
-  unbanUser,
+  deleteUser,
+  getUserById,
+  getUsers,
   impersonateUser,
+  unbanUser,
+  updateUser,
 } from './user.service'
-import { UpdateUserSchema, BanUserSchema, UserIdSchema } from './user.schema'
 
 export const $getUsers = createServerFn({
   method: 'GET',
@@ -22,7 +22,8 @@ export const $getUsers = createServerFn({
     try {
       const users = await getUsers()
       return users
-    } catch (error) {
+    }
+    catch (error) {
       console.error('API Error fetching users:', error)
       setResponseStatus(500)
       throw new Error('Failed to retrieve users')
@@ -42,11 +43,13 @@ export const $getUserDetails = createServerFn({
         return null // Or throw new Error('User not found')
       }
       return user
-    } catch (error) {
+    }
+    catch (error) {
       console.error(`API Error fetching user ${data.userId}:`, error)
       if (error instanceof Error && error.name === 'NotFoundError') {
         setResponseStatus(404)
-      } else {
+      }
+      else {
         setResponseStatus(500)
       }
       throw new Error(
@@ -64,11 +67,13 @@ export const $updateUser = createServerFn({
     try {
       const updatedUser = await updateUser(data)
       return updatedUser
-    } catch (error) {
+    }
+    catch (error) {
       console.error(`API Error updating user ${data.userId}:`, error)
       if (error instanceof Error && error.name === 'NotFoundError') {
         setResponseStatus(404)
-      } else {
+      }
+      else {
         setResponseStatus(500)
       }
       throw new Error(error instanceof Error ? error.message : 'Failed to update user')
@@ -84,11 +89,13 @@ export const $deleteUser = createServerFn({
     try {
       await deleteUser(data.userId)
       return { success: true }
-    } catch (error) {
+    }
+    catch (error) {
       console.error(`API Error deleting user ${data.userId}:`, error)
       if (error instanceof Error && error.name === 'NotFoundError') {
         setResponseStatus(404)
-      } else {
+      }
+      else {
         setResponseStatus(500)
       }
       throw new Error(error instanceof Error ? error.message : 'Failed to delete user')
@@ -104,11 +111,13 @@ export const $banUser = createServerFn({
     try {
       await banUser(data)
       return { success: true }
-    } catch (error) {
+    }
+    catch (error) {
       console.error(`API Error banning user ${data.userId}:`, error)
       if (error instanceof Error && error.name === 'NotFoundError') {
         setResponseStatus(404)
-      } else {
+      }
+      else {
         setResponseStatus(500)
       }
       throw new Error(error instanceof Error ? error.message : 'Failed to ban user')
@@ -124,11 +133,13 @@ export const $unbanUser = createServerFn({
     try {
       await unbanUser(data.userId)
       return { success: true }
-    } catch (error) {
+    }
+    catch (error) {
       console.error(`API Error unbanning user ${data.userId}:`, error)
       if (error instanceof Error && error.name === 'NotFoundError') {
         setResponseStatus(404)
-      } else {
+      }
+      else {
         setResponseStatus(500)
       }
       throw new Error(error instanceof Error ? error.message : 'Failed to unban user')
@@ -151,16 +162,19 @@ export const $impersonateUser = createServerFn({
       // Impersonation likely involves setting a cookie or similar server-side state,
       // so a successful response (default 200 OK) is usually sufficient.
       // return { success: true }
-    } catch (error) {
+    }
+    catch (error) {
       console.error(`API Error impersonating user ${data.userId}:`, error)
       if (
-        error instanceof Error &&
-        error.message === 'Cannot impersonate another admin.'
+        error instanceof Error
+        && error.message === 'Cannot impersonate another admin.'
       ) {
         setResponseStatus(403) // Forbidden
-      } else if (error instanceof Error && error.name === 'NotFoundError') {
+      }
+      else if (error instanceof Error && error.name === 'NotFoundError') {
         setResponseStatus(404)
-      } else {
+      }
+      else {
         setResponseStatus(500)
       }
       throw new Error(

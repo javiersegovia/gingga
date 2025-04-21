@@ -247,6 +247,6 @@ export const aiModels: AIModel[] = [
 //   return { id, name: model ? model.name : id }
 // })
 
-export const availableModels = aiModels.filter((model) =>
+export const availableModels = aiModels.filter(model =>
   availableModelIds.includes(model.id as (typeof availableModelIds)[number]),
 )

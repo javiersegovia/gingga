@@ -20,8 +20,8 @@ export function HybridTeamsSection() {
                 'Automate repetitive work',
                 'Run growth loops continuously',
                 'Fundraising narrative ready for VCs',
-              ].map((item, index) => (
-                <li key={index} className="flex items-start">
+              ].map(item => (
+                <li key={item} className="flex items-start">
                   <div className="bg-brand-green mt-1 mr-4 rounded-full p-1">
                     <svg
                       className="text-brand-green-foreground h-4 w-4"

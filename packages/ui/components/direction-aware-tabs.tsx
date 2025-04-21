@@ -1,9 +1,9 @@
-import { useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
-import { AnimatePresence, MotionConfig, motion } from 'motion/react'
 import { cn } from '@gingga/ui/lib/utils'
+import { AnimatePresence, motion, MotionConfig } from 'motion/react'
+import { useMemo, useState } from 'react'
 
-type Tab = {
+interface Tab {
   id: number
   label: string
   content: ReactNode
@@ -21,7 +21,7 @@ function DirectionAwareTabs({ tabs, className, onChange }: DirectionAwareTabsPro
   const [isAnimating, setIsAnimating] = useState(false)
 
   const content = useMemo(() => {
-    const activeTabContent = tabs.find((tab) => tab.id === activeTab)?.content
+    const activeTabContent = tabs.find(tab => tab.id === activeTab)?.content
     return activeTabContent || null
   }, [activeTab, tabs])
 
@@ -60,7 +60,7 @@ function DirectionAwareTabs({ tabs, className, onChange }: DirectionAwareTabsPro
           className,
         )}
       >
-        {tabs.map((tab) => (
+        {tabs.map(tab => (
           <button
             key={tab.id}
             type="button"

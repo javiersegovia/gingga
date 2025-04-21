@@ -1,5 +1,5 @@
-import { Slot } from '@radix-ui/react-slot'
 import type React from 'react'
+import { Slot } from '@radix-ui/react-slot'
 import { useFormFieldItemContext } from './form-field-context'
 
 type FormFieldControlProps = React.ComponentProps<typeof Slot>

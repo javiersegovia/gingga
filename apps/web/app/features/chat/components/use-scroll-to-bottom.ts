@@ -1,8 +1,7 @@
-/* eslint-disable react-compiler/react-compiler */
 import type React from 'react'
-import { useState, useRef, useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
-export type ScrollUtilities = {
+export interface ScrollUtilities {
   autoScrollEnabled: boolean
   scrollToBottom: (behavior?: ScrollBehavior) => void
   isScrolling: boolean
@@ -34,7 +33,8 @@ export function useScrollToBottom<T extends HTMLElement>(): [
   const scrollToBottom = useCallback(
     (behavior: ScrollBehavior = 'smooth') => {
       const container = containerRef.current
-      if (!container) return
+      if (!container)
+        return
 
       autoScrollingRef.current = true
       scrollTriggeredRef.current = true
@@ -43,7 +43,7 @@ export function useScrollToBottom<T extends HTMLElement>(): [
 
       container.scrollTo({
         top: targetScrollTop,
-        behavior: behavior,
+        behavior,
       })
 
       const checkScrollEnd = () => {
@@ -74,7 +74,8 @@ export function useScrollToBottom<T extends HTMLElement>(): [
         container.addEventListener('scrollend', handleScrollEnd, {
           once: true,
         })
-      } catch (_e) {
+      }
+      catch (_e) {
         // scrollend event not supported in this browser, fallback to requestAnimationFrame
       }
     },
@@ -83,12 +84,14 @@ export function useScrollToBottom<T extends HTMLElement>(): [
 
   useEffect(() => {
     const container = containerRef?.current
-    if (!container) return
+    if (!container)
+      return
 
     lastScrollTopRef.current = container.scrollTop
 
     const handleScroll = () => {
-      if (autoScrollingRef.current) return
+      if (autoScrollingRef.current)
+        return
 
       const currentScrollTop = container.scrollTop
 

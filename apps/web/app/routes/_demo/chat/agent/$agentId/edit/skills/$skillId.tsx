@@ -1,18 +1,18 @@
-import { Suspense } from 'react'
-import { createFileRoute, useRouter } from '@tanstack/react-router'
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from '@gingga/ui/components/sheet'
 import { useSuspenseQueries } from '@tanstack/react-query'
+import { createFileRoute, useRouter } from '@tanstack/react-router'
+import { Suspense } from 'react'
+import { SkillForm, SkillFormSkeleton } from '~/features/ai/skills/components/skill-form'
 import {
   skillByIdQueryOptions,
   skillOptionsQueryOptions,
 } from '~/features/ai/skills/skill.query'
-import { SkillForm, SkillFormSkeleton } from '~/features/ai/skills/components/skill-form'
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetDescription,
-} from '@gingga/ui/components/sheet'
 
 export const Route = createFileRoute('/_demo/chat/agent/$agentId/edit/skills/$skillId')({
   component: RouteComponent,
@@ -38,7 +38,8 @@ function RouteComponent() {
     <Sheet
       open
       onOpenChange={(open) => {
-        if (!open) handleClose()
+        if (!open)
+          handleClose()
       }}
     >
       <SheetContent side="right" className="flex flex-col sm:max-w-xl">
@@ -50,7 +51,7 @@ function RouteComponent() {
   )
 }
 
-const SkillSheetContent = ({ handleClose }: { handleClose: () => void }) => {
+function SkillSheetContent({ handleClose }: { handleClose: () => void }) {
   const { agentId, skillId } = Route.useParams()
 
   const [agentSkillQueryResult, skillOptionsQueryResult] = useSuspenseQueries({
@@ -65,7 +66,7 @@ const SkillSheetContent = ({ handleClose }: { handleClose: () => void }) => {
     return <div>Error: Agent Skill not found.</div>
   }
 
-  const skillOption = skillOptions.find((opt) => opt.id === agentSkill.skillId)
+  const skillOption = skillOptions.find(opt => opt.id === agentSkill.skillId)
 
   if (!skillOption) {
     // Todo: Handle this error

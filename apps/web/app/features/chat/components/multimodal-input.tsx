@@ -1,18 +1,76 @@
+import type { UseChatHelpers } from '@ai-sdk/react'
 import type { Attachment, Message } from 'ai'
 import type React from 'react'
-import { useRef, useEffect, useState, useCallback, memo, useLayoutEffect } from 'react'
 import type { Dispatch, SetStateAction } from 'react'
-import { useLocalStorage, useWindowSize } from 'usehooks-ts'
-
-import { ArrowUpIcon, PaperclipIcon } from 'lucide-react'
-import { PreviewAttachment } from './messages/message-preview-attachment'
 import { Button } from '@gingga/ui/components/button'
+
 import { Textarea } from '@gingga/ui/components/textarea'
-import equal from 'fast-deep-equal'
-import type { UseChatHelpers } from '@ai-sdk/react'
 import { cn } from '@gingga/ui/lib/utils'
-import { useChatInput } from './chat-input-context'
+import equal from 'fast-deep-equal'
+import { ArrowUpIcon } from 'lucide-react'
+import { memo, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
+import { useLocalStorage, useWindowSize } from 'usehooks-ts'
+import { useChatInput } from './chat-input-context'
+import { PreviewAttachment } from './messages/message-preview-attachment'
+
+function PureStopButton({
+  stop,
+  setMessages,
+}: {
+  stop: () => void
+  setMessages: Dispatch<SetStateAction<Array<Message>>>
+}) {
+  return (
+    <Button
+      data-testid="stop-button"
+      className="dark:border-border border p-1.5"
+      onClick={(event) => {
+        event.preventDefault()
+        stop()
+        setMessages(messages => messages)
+      }}
+    >
+      <StopIcon size={14} />
+      <span className="">Stop!</span>
+    </Button>
+  )
+}
+
+const StopButton = memo(PureStopButton)
+
+function PureSendButton({
+  submitForm,
+  input,
+  uploadQueue,
+}: {
+  submitForm: () => void
+  input: string
+  uploadQueue: Array<string>
+}) {
+  return (
+    <Button
+      data-testid="send-button"
+      variant="primary"
+      className="h-fit rounded-full p-1.5"
+      onClick={(event) => {
+        event.preventDefault()
+        submitForm()
+      }}
+      disabled={input.length === 0 || uploadQueue.length > 0}
+    >
+      <ArrowUpIcon size={14} />
+    </Button>
+  )
+}
+
+const SendButton = memo(PureSendButton, (prevProps, nextProps) => {
+  if (prevProps.uploadQueue.length !== nextProps.uploadQueue.length)
+    return false
+  if (prevProps.input !== nextProps.input)
+    return false
+  return true
+})
 
 function PureMultimodalInput({
   chatId,
@@ -50,18 +108,18 @@ function PureMultimodalInput({
   const { width } = useWindowSize()
   const { setInputHeight } = useChatInput()
 
-  useEffect(() => {
-    if (textareaRef.current) {
-      adjustHeight()
-    }
-  }, [])
-
   const adjustHeight = () => {
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto'
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight + 2}px`
     }
   }
+
+  useEffect(() => {
+    if (textareaRef.current) {
+      adjustHeight()
+    }
+  }, [])
 
   const resetHeight = () => {
     if (textareaRef.current) {
@@ -81,8 +139,6 @@ function PureMultimodalInput({
       adjustHeight()
     }
     // Only run once after hydration
-    // eslint-disable-next-line react-compiler/react-compiler
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -95,7 +151,7 @@ function PureMultimodalInput({
   }
 
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const [uploadQueue, setUploadQueue] = useState<Array<string>>([])
+  const [uploadQueue, _setUploadQueue] = useState<Array<string>>([])
 
   // Update input height in context whenever it changes
   useLayoutEffect(() => {
@@ -117,8 +173,6 @@ function PureMultimodalInput({
     if (width && width > 768) {
       textareaRef.current?.focus()
     }
-    // eslint-disable-next-line react-compiler/react-compiler
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [attachments, handleSubmit, setAttachments, setLocalStorageInput, width, chatId])
 
   // const uploadFile = async (file: File) => {
@@ -232,11 +286,11 @@ function PureMultimodalInput({
             data-testid="attachments-preview"
             className="flex flex-row items-end gap-2 overflow-x-scroll"
           >
-            {attachments.map((attachment) => (
+            {attachments.map(attachment => (
               <PreviewAttachment key={attachment.url} attachment={attachment} />
             ))}
 
-            {uploadQueue.map((filename) => (
+            {uploadQueue.map(filename => (
               <PreviewAttachment
                 key={filename}
                 attachment={{
@@ -269,15 +323,16 @@ function PureMultimodalInput({
           autoFocus
           onKeyDown={(event) => {
             if (
-              event.key === 'Enter' &&
-              !event.shiftKey &&
-              !event.nativeEvent.isComposing
+              event.key === 'Enter'
+              && !event.shiftKey
+              && !event.nativeEvent.isComposing
             ) {
               event.preventDefault()
 
               if (status !== 'error' && status !== 'ready') {
                 toast.error('Please wait for the model to finish its response!')
-              } else {
+              }
+              else {
                 submitForm()
               }
             }
@@ -289,15 +344,17 @@ function PureMultimodalInput({
             <AttachmentsButton fileInputRef={fileInputRef} status={status} />
           </div> */}
           <div className="flex w-fit flex-row justify-end">
-            {status === 'submitted' || status === 'streaming' ? (
-              <StopButton stop={stop} setMessages={setMessages} />
-            ) : (
-              <SendButton
-                input={input}
-                submitForm={submitForm}
-                uploadQueue={uploadQueue}
-              />
-            )}
+            {status === 'submitted' || status === 'streaming'
+              ? (
+                  <StopButton stop={stop} setMessages={setMessages} />
+                )
+              : (
+                  <SendButton
+                    input={input}
+                    submitForm={submitForm}
+                    uploadQueue={uploadQueue}
+                  />
+                )}
           </div>
         </div>
       </div>
@@ -306,41 +363,45 @@ function PureMultimodalInput({
 }
 
 export const MultimodalInput = memo(PureMultimodalInput, (prevProps, nextProps) => {
-  if (!equal(prevProps.messages, nextProps.messages)) return false
-  if (prevProps.input !== nextProps.input) return false
-  if (prevProps.status !== nextProps.status) return false
-  if (!equal(prevProps.attachments, nextProps.attachments)) return false
+  if (!equal(prevProps.messages, nextProps.messages))
+    return false
+  if (prevProps.input !== nextProps.input)
+    return false
+  if (prevProps.status !== nextProps.status)
+    return false
+  if (!equal(prevProps.attachments, nextProps.attachments))
+    return false
 
   return true
 })
 
-function PureAttachmentsButton({
-  fileInputRef,
-  status,
-}: {
-  fileInputRef: React.MutableRefObject<HTMLInputElement | null>
-  status: UseChatHelpers['status']
-}) {
-  return (
-    <Button
-      data-testid="attachments-button"
-      hover="reverse"
-      className="hover:bg-primary-accent h-fit w-fit rounded-full p-1.5"
-      onClick={(event) => {
-        event.preventDefault()
-        fileInputRef.current?.click()
-      }}
-      disabled={status !== 'ready'}
-      variant="ghost"
-    >
-      <PaperclipIcon size={14} />
-    </Button>
-  )
-}
+// function PureAttachmentsButton({
+//   fileInputRef,
+//   status,
+// }: {
+//   fileInputRef: React.RefObject<HTMLInputElement>
+//   status: UseChatHelpers['status']
+// }) {
+//   return (
+//     <Button
+//       data-testid="attachments-button"
+//       hover="reverse"
+//       className="hover:bg-primary-accent h-fit w-fit rounded-full p-1.5"
+//       onClick={(event) => {
+//         event.preventDefault()
+//         fileInputRef.current?.click()
+//       }}
+//       disabled={status !== 'ready'}
+//       variant="ghost"
+//     >
+//       <PaperclipIcon size={14} />
+//     </Button>
+//   )
+// }
 
-const AttachmentsButton = memo(PureAttachmentsButton)
+// const AttachmentsButton = memo(PureAttachmentsButton)
 
-export const StopIcon = ({ size = 16 }: { size?: number }) => {
+export function StopIcon({ size = 16 }: { size?: number }) {
   return (
     <svg height={size} viewBox="0 0 16 16" width={size} style={{ color: 'currentcolor' }}>
       <path
@@ -352,59 +413,3 @@ export const StopIcon = ({ size = 16 }: { size?: number }) => {
     </svg>
   )
 }
-
-function PureStopButton({
-  stop,
-  setMessages,
-}: {
-  stop: () => void
-  setMessages: Dispatch<SetStateAction<Array<Message>>>
-}) {
-  return (
-    <Button
-      data-testid="stop-button"
-      className="dark:border-border border p-1.5"
-      onClick={(event) => {
-        event.preventDefault()
-        stop()
-        setMessages((messages) => messages)
-      }}
-    >
-      <StopIcon size={14} />
-      <span className="">Stop!</span>
-    </Button>
-  )
-}
-
-const StopButton = memo(PureStopButton)
-
-function PureSendButton({
-  submitForm,
-  input,
-  uploadQueue,
-}: {
-  submitForm: () => void
-  input: string
-  uploadQueue: Array<string>
-}) {
-  return (
-    <Button
-      data-testid="send-button"
-      variant="primary"
-      className="h-fit rounded-full p-1.5"
-      onClick={(event) => {
-        event.preventDefault()
-        submitForm()
-      }}
-      disabled={input.length === 0 || uploadQueue.length > 0}
-    >
-      <ArrowUpIcon size={14} />
-    </Button>
-  )
-}
-
-const SendButton = memo(PureSendButton, (prevProps, nextProps) => {
-  if (prevProps.uploadQueue.length !== nextProps.uploadQueue.length) return false
-  if (prevProps.input !== nextProps.input) return false
-  return true
-})

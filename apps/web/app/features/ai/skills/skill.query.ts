@@ -1,14 +1,14 @@
 import { queryOptions, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useRouter } from '@tanstack/react-router'
 import {
-  $getSkillOptions,
-  $getSkillById,
   $createSkill,
+  $deleteSkillById,
+  $getSkillById,
+  $getSkillOptions,
+  $getSkillsByAgentId,
   $updateSkillById,
   $upsertSkill,
-  $deleteSkillById,
-  $getSkillsByAgentId,
 } from './skill.api'
-import { useRouter } from '@tanstack/react-router'
 
 // --- Query Key Factory ---
 export const skillQueryKeys = {
@@ -31,22 +31,24 @@ export const skillOptionsQueryOptions = queryOptions({
 /**
  * Query options for fetching a single AgentSkill by id.
  */
-export const skillByIdQueryOptions = (id: string) =>
-  queryOptions({
+export function skillByIdQueryOptions(id: string) {
+  return queryOptions({
     queryKey: skillQueryKeys.byId(id),
     queryFn: () => $getSkillById({ data: { id } }),
     enabled: !!id,
   })
+}
 
 /**
  * Query options for fetching all AgentSkills for a given agentId.
  */
-export const skillsByAgentIdQueryOptions = (agentId: string) =>
-  queryOptions({
+export function skillsByAgentIdQueryOptions(agentId: string) {
+  return queryOptions({
     queryKey: skillQueryKeys.byAgentId(agentId),
     queryFn: () => $getSkillsByAgentId({ data: { agentId } }),
     enabled: !!agentId,
   })
+}
 
 /**
  * Hook to create a new AgentSkill.

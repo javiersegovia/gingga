@@ -1,8 +1,8 @@
 import { Card, CardContent } from '@gingga/ui/components/card'
 import { cn } from '@gingga/ui/lib/utils'
 import { CheckCircle, Circle } from 'lucide-react'
-import { useState } from 'react'
 import { motion } from 'motion/react'
+import { useState } from 'react'
 
 const originalPhasesData = [
   {
@@ -43,8 +43,8 @@ const originalPhasesData = [
 
 type PhaseStatus = 'completed' | 'in-progress' | 'upcoming'
 
-const formatDescription = (goals: string[], target: string): string => {
-  let desc = goals.map((g) => `- ${g}`).join('\n')
+function formatDescription(goals: string[], target: string): string {
+  let desc = goals.map(g => `- ${g}`).join('\n')
   if (target) {
     desc += `\n\n**${target}**`
   }
@@ -52,18 +52,18 @@ const formatDescription = (goals: string[], target: string): string => {
 }
 
 const statusIcons: Record<PhaseStatus, React.ElementType> = {
-  completed: CheckCircle,
+  'completed': CheckCircle,
   'in-progress': Circle,
-  upcoming: Circle,
+  'upcoming': Circle,
 }
 
 const statusColors: Record<PhaseStatus, string> = {
-  completed: 'text-green-500 border-green-500',
+  'completed': 'text-green-500 border-green-500',
   'in-progress': 'text-amber-500 border-amber-500 fill-amber-500',
-  upcoming: 'text-muted-foreground border-border',
+  'upcoming': 'text-muted-foreground border-border',
 }
 
-export const RoadmapSection = () => {
+export function RoadmapSection() {
   const [activePhase, setActivePhase] = useState<string | null>(null)
 
   const handlePhaseClick = (title: string): void => {

@@ -1,7 +1,7 @@
+import type { UseChatHelpers } from '@ai-sdk/react'
 import type { UIMessage } from 'ai'
-import { AnimatePresence, motion } from 'motion/react'
-import { memo, useState } from 'react'
-import { PencilIcon, SparklesIcon } from 'lucide-react'
+import type { /* ToolName, */ ToolResponse } from '../../../ai/skills/skill.types'
+import { Avatar, AvatarFallback } from '@gingga/ui/components/avatar'
 
 // import type { Vote } from '~/lib/db/schema'
 // import { DocumentToolCall, DocumentToolResult } from './document'
@@ -9,8 +9,6 @@ import { PencilIcon, SparklesIcon } from 'lucide-react'
 // import { Weather } from './weather'
 // import { DocumentPreview } from './document-preview'
 
-import equal from 'fast-deep-equal'
-import { cn } from '@gingga/ui/lib/utils'
 import { Button } from '@gingga/ui/components/button'
 import {
   Tooltip,
@@ -18,14 +16,16 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@gingga/ui/components/tooltip'
+import { cn } from '@gingga/ui/lib/utils'
+import equal from 'fast-deep-equal'
 
+import { PencilIcon, SparklesIcon } from 'lucide-react'
+import { AnimatePresence, motion } from 'motion/react'
+import { memo, useState } from 'react'
 import { Markdown } from '../markdown'
-import { PreviewAttachment } from './message-preview-attachment'
 import { MessageEditor } from './message-editor'
+import { PreviewAttachment } from './message-preview-attachment'
 import { MessageReasoning } from './message-reasoning'
-import type { UseChatHelpers } from '@ai-sdk/react'
-import { Avatar, AvatarFallback } from '@gingga/ui/components/avatar'
-import type { /* ToolName, */ ToolResponse } from '../../../ai/skills/skill.types'
 // import {
 //   toolsRequiringConfirmation,
 //   APPROVAL /*skillsInfo*/,
@@ -59,7 +59,7 @@ interface MessageProps {
 //   )
 // }
 
-const PurePreviewMessage = ({
+function PurePreviewMessage({
   // chatId,
   message,
   // status,
@@ -68,7 +68,7 @@ const PurePreviewMessage = ({
   reload,
   // addToolResult,
   isReadonly,
-}: MessageProps) => {
+}: MessageProps) {
   const [mode, setMode] = useState<'view' | 'edit'>('view')
   // const isChatLoading = status === 'streaming' || status === 'submitted'
 
@@ -109,17 +109,17 @@ const PurePreviewMessage = ({
             )}
 
             <div className="flex w-full flex-col gap-4">
-              {message.experimental_attachments &&
-                message.experimental_attachments.length > 0 && (
-                  <div
-                    data-testid={`message-attachments`}
-                    className="flex flex-row justify-end gap-2"
-                  >
-                    {message.experimental_attachments.map((attachment) => (
-                      <PreviewAttachment key={attachment.url} attachment={attachment} />
-                    ))}
-                  </div>
-                )}
+              {message.experimental_attachments
+                && message.experimental_attachments.length > 0 && (
+                <div
+                  data-testid="message-attachments"
+                  className="flex flex-row justify-end gap-2"
+                >
+                  {message.experimental_attachments.map(attachment => (
+                    <PreviewAttachment key={attachment.url} attachment={attachment} />
+                  ))}
+                </div>
+              )}
 
               {message.parts?.map((part, index) => {
                 const { type } = part
@@ -137,40 +137,42 @@ const PurePreviewMessage = ({
 
                 if (type === 'text') {
                   if (mode === 'view') {
-                    return !part.text ? null : (
-                      <div key={key} className="flex flex-row items-start gap-2">
-                        {message.role === 'user' && !isReadonly && (
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Button
-                                data-testid="message-edit-button"
-                                variant="ghost"
-                                hover="noShadow"
-                                className="text-muted-foreground h-fit rounded-full px-2 opacity-0 group-hover/message:opacity-100"
-                                onClick={() => {
-                                  setMode('edit')
-                                }}
-                              >
-                                <PencilIcon />
-                              </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>Edit message</TooltipContent>
-                          </Tooltip>
-                        )}
+                    return !part.text
+                      ? null
+                      : (
+                          <div key={key} className="flex flex-row items-start gap-2">
+                            {message.role === 'user' && !isReadonly && (
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <Button
+                                    data-testid="message-edit-button"
+                                    variant="ghost"
+                                    hover="noShadow"
+                                    className="text-muted-foreground h-fit rounded-full px-2 opacity-0 group-hover/message:opacity-100"
+                                    onClick={() => {
+                                      setMode('edit')
+                                    }}
+                                  >
+                                    <PencilIcon />
+                                  </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>Edit message</TooltipContent>
+                              </Tooltip>
+                            )}
 
-                        <div
-                          data-testid="message-content"
-                          className={cn(
-                            'text-foreground flex flex-col gap-4',
+                            <div
+                              data-testid="message-content"
+                              className={cn(
+                                'text-foreground flex flex-col gap-4',
 
-                            message.role === 'user' &&
-                              'bg-accent text-accent-foreground border-border rounded-md border-2 px-3 py-2',
-                          )}
-                        >
-                          <Markdown>{part.text}</Markdown>
-                        </div>
-                      </div>
-                    )
+                                message.role === 'user'
+                                && 'bg-accent text-accent-foreground border-border rounded-md border-2 px-3 py-2',
+                              )}
+                            >
+                              <Markdown>{part.text}</Markdown>
+                            </div>
+                          </div>
+                        )
                   }
 
                   if (mode === 'edit') {
@@ -331,6 +333,7 @@ const PurePreviewMessage = ({
                 //     )
                 //   }
                 // }
+                return null
               })}
 
               {/* {!isReadonly && (
@@ -351,16 +354,20 @@ const PurePreviewMessage = ({
 }
 
 export const PreviewMessage = memo(PurePreviewMessage, (prevProps, nextProps) => {
-  if (prevProps.isLoading !== nextProps.isLoading) return false
-  if (prevProps.status !== nextProps.status) return false
-  if (prevProps.message.id !== nextProps.message.id) return false
-  if (!equal(prevProps.message.parts, nextProps.message.parts)) return false
+  if (prevProps.isLoading !== nextProps.isLoading)
+    return false
+  if (prevProps.status !== nextProps.status)
+    return false
+  if (prevProps.message.id !== nextProps.message.id)
+    return false
+  if (!equal(prevProps.message.parts, nextProps.message.parts))
+    return false
   // if (!equal(prevProps.vote, nextProps.vote)) return false
 
   return true
 })
 
-export const ThinkingMessage = () => {
+export function ThinkingMessage() {
   const role = 'assistant'
 
   return (

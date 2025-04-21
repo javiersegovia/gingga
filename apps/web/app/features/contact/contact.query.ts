@@ -1,11 +1,11 @@
+import type { ContactFormInput } from './contact.schema'
 import { useMutation } from '@tanstack/react-query'
 import { $submitContactForm } from './contact.api'
-import type { ContactFormInput } from './contact.schema'
 
 /**
  * Hook for submitting the contact form
  */
-export const useSubmitContactForm = () => {
+export function useSubmitContactForm() {
   return useMutation({
     mutationFn: (formData: ContactFormInput) => $submitContactForm({ data: formData }),
     onSuccess: async () => {

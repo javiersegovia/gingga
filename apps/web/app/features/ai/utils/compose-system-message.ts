@@ -18,14 +18,14 @@ interface ComposeSystemMessageArgs {
   languagePref: string
 }
 
-export const getSystemPrompt = ({
+export function getSystemPrompt({
   agentName,
   agentInstructions,
   skillInstructions,
   tools,
   languagePref,
-}: ComposeSystemMessageArgs) =>
-  `You are ${agentName}, an AI assistant that is part of a team of agents inside Gingga.
+}: ComposeSystemMessageArgs) {
+  return `You are ${agentName}, an AI assistant that is part of a team of agents inside Gingga.
 
 ${agentInstructions}
 
@@ -60,7 +60,7 @@ SKILLS  – Your available playbook. Each skill contains instructions and multip
 ================================================================
 ${skillInstructions
   .map(
-    (skill) => `### ${skill.skillName}
+    skill => `### ${skill.skillName}
 ${skill.instructions}
 
 **Tools available inside ${skill.skillName}**: ${skill.toolNames.join(', ')}`,
@@ -93,3 +93,4 @@ ERRORS INSTRUCTIONS
 - If you receive Composio or connection errors during the execution of a tool related to the user's credentials, suggest the user to re-authenticate.
 - For example, if the error says anything about not finding a connection, you should ask the user to go to their settings and setup their specific integration again.
 `.trim()
+}

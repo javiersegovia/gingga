@@ -1,4 +1,7 @@
 /** @jsxImportSource react */
+import type { ComponentProps } from 'react'
+import { cn } from '@gingga/ui/lib/utils'
+
 import {
   Body,
   Button,
@@ -8,14 +11,11 @@ import {
   Html,
   Preview,
   Tailwind,
-} from "@react-email/components";
-import type { ComponentProps } from "react";
-
-import { cn } from "@gingga/ui/lib/utils";
+} from '@react-email/components'
 
 type EmailLayoutProps = ComponentProps<typeof Container> & {
-  preview?: string;
-};
+  preview?: string
+}
 
 export function EmailLayout({
   preview,
@@ -31,8 +31,8 @@ export function EmailLayout({
         <Body className="m-auto bg-white px-2 font-sans">
           <Container
             className={cn(
-              "mx-auto my-[40px] max-w-[465px] rounded border border-solid border-zinc-200 p-[20px]",
-              className
+              'mx-auto my-[40px] max-w-[465px] rounded border border-solid border-zinc-200 p-[20px]',
+              className,
             )}
             {...props}
           >
@@ -41,7 +41,7 @@ export function EmailLayout({
         </Body>
       </Html>
     </Tailwind>
-  );
+  )
 }
 
 export function EmailHeading({
@@ -51,12 +51,12 @@ export function EmailHeading({
   return (
     <Heading
       className={cn(
-        "mx-0 my-[30px] p-0 text-center text-[24px] font-semibold text-black",
-        className
+        'mx-0 my-[30px] p-0 text-center text-[24px] font-semibold text-black',
+        className,
       )}
       {...props}
     />
-  );
+  )
 }
 
 export function EmailButton({
@@ -66,10 +66,10 @@ export function EmailButton({
   return (
     <Button
       className={cn(
-        "rounded bg-[#000000] px-5 py-3 text-center text-[12px] font-semibold text-white no-underline",
-        className
+        'rounded bg-[#000000] px-5 py-3 text-center text-[12px] font-semibold text-white no-underline',
+        className,
       )}
       {...props}
     />
-  );
+  )
 }

@@ -1,7 +1,6 @@
-import { clsx } from 'clsx'
 import type { ClassValue } from 'clsx'
-import { useContext } from 'react'
-import { createContext } from 'react'
+import { clsx } from 'clsx'
+import { createContext, use } from 'react'
 import { twMerge } from 'tailwind-merge'
 
 export function cn(...inputs: ClassValue[]) {
@@ -11,7 +10,7 @@ export function cn(...inputs: ClassValue[]) {
 export function getInitials(name: string) {
   return name
     .split(' ')
-    .map((n) => n[0])
+    .map(n => n[0])
     .join('')
     .toUpperCase()
 }
@@ -19,8 +18,9 @@ export function getInitials(name: string) {
 /**
  * Creates a React Context with a custom `useContext` hook.
  *
- * @param defaultValue - Default context value, or `null`.
- * @param errorMessage - Error message if `useContext` is called outside a provider.
+ * @param options - Options for the context.
+ * @param options.defaultValue - Default context value, or `null`.
+ * @param options.errorMessage - Error message if `useContext` is called outside a provider.
  * @returns A tuple with the Provider and custom `useContext` hook.
  */
 export function createContextFactory<ContextData>(options?: {
@@ -36,7 +36,7 @@ export function createContextFactory<ContextData>(options?: {
   const context = createContext<ContextData | null>(opts.defaultValue)
 
   function useContextFactory(): ContextData {
-    const contextValue = useContext(context)
+    const contextValue = use(context)
     if (contextValue === null) {
       throw new Error(opts.errorMessage)
     }

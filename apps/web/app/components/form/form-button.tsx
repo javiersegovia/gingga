@@ -1,11 +1,11 @@
-import type React from 'react'
-import { useFormContext } from './tanstack-form'
 import type { ButtonProps } from '@gingga/ui/components/button'
+import type React from 'react'
 import { Button } from '@gingga/ui/components/button'
+import { useFormContext } from './tanstack-form'
 
 type FormButtonProps = Omit<ButtonProps, 'children'> & {
   children?:
-    | ((props: { isSubmitting?: boolean; canSubmit?: boolean }) => React.ReactNode)
+    | ((props: { isSubmitting?: boolean, canSubmit?: boolean }) => React.ReactNode)
     | React.ReactNode
 }
 
@@ -14,7 +14,7 @@ const FormButton: React.FC<FormButtonProps> = ({ children, ...props }) => {
 
   return (
     <form.Subscribe
-      selector={(state) => [state.canSubmit, state.isSubmitting]}
+      selector={state => [state.canSubmit, state.isSubmitting]}
       children={([canSubmit, isSubmitting]) => (
         <Button disabled={!canSubmit} isPending={isSubmitting} type="submit" {...props}>
           {typeof children === 'function'

@@ -1,9 +1,9 @@
-import { useState } from 'react'
-import { Card, CardContent } from '@gingga/ui/components/card'
-import { cn } from '@gingga/ui/lib/utils'
-import { Slider } from '@gingga/ui/components/slider'
-import { GridPattern } from '@gingga/ui/components/grid-pattern'
 import { Badge } from '@gingga/ui/components/badge'
+import { Card, CardContent } from '@gingga/ui/components/card'
+import { GridPattern } from '@gingga/ui/components/grid-pattern'
+import { Slider } from '@gingga/ui/components/slider'
+import { cn } from '@gingga/ui/lib/utils'
+import { useState } from 'react'
 
 export function ProblemSection() {
   const [hours, setHours] = useState(10)
@@ -80,7 +80,11 @@ export function ProblemSection() {
       <div className="container-marketing relative z-10">
         <div className="mb-16 text-center">
           <h2 className="mb-4 text-3xl font-bold tracking-tight md:text-4xl lg:text-4xl">
-            The <span className="text-brand-red">True Cost</span> of Manual Work
+            The
+            {' '}
+            <span className="text-brand-red">True Cost</span>
+            {' '}
+            of Manual Work
           </h2>
           <p className="text-muted-foreground mx-auto max-w-[800px] text-2xl">
             Every hour spent on tasks that could be automated is time and money wasted.
@@ -94,7 +98,7 @@ export function ProblemSection() {
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               {painPoints.map((point, index) => (
                 <Card
-                  key={index}
+                  key={point.title}
                   hover="reverse"
                   className={cn(index % 2 === 0 ? 'translate-y-0' : 'md:translate-y-12')}
                 >
@@ -119,7 +123,8 @@ export function ProblemSection() {
               <Card className="border-2 shadow">
                 <CardContent className="p-6">
                   <h3 className="text-foreground font-medium">
-                    How much do you spend on{' '}
+                    How much do you spend on
+                    {' '}
                     <span className="text-brand-red">manual work?</span>
                   </h3>
 
@@ -129,7 +134,11 @@ export function ProblemSection() {
                         <label htmlFor="hours" className="text-sm font-medium">
                           Hours spent on repetitive tasks weekly
                         </label>
-                        <span className="text-sm font-semibold">{hours} hrs</span>
+                        <span className="text-sm font-semibold">
+                          {hours}
+                          {' '}
+                          hrs
+                        </span>
                       </div>
                       <Slider
                         id="hours"
@@ -137,7 +146,7 @@ export function ProblemSection() {
                         max={40}
                         step={1}
                         value={[hours]}
-                        onValueChange={(value) => setHours(value[0])}
+                        onValueChange={value => setHours(value[0])}
                         className="py-2"
                       />
                     </div>
@@ -147,7 +156,11 @@ export function ProblemSection() {
                         <label htmlFor="rate" className="text-sm font-medium">
                           Hourly labor cost
                         </label>
-                        <span className="text-sm font-semibold">${rate}/hr</span>
+                        <span className="text-sm font-semibold">
+                          $
+                          {rate}
+                          /hr
+                        </span>
                       </div>
                       <Slider
                         id="rate"
@@ -155,7 +168,7 @@ export function ProblemSection() {
                         max={200}
                         step={5}
                         value={[rate]}
-                        onValueChange={(value) => setRate(value[0])}
+                        onValueChange={value => setRate(value[0])}
                         className="py-2"
                       />
                     </div>
@@ -164,21 +177,27 @@ export function ProblemSection() {
                   <div className="mt-8 flex flex-col gap-1">
                     <div className="text-brand-red text-center">
                       <p className="text-base font-semibold">
-                        ${weeklyCost.toLocaleString()}{' '}
+                        $
+                        {weeklyCost.toLocaleString()}
+                        {' '}
                         <span className="text-xs font-normal">/ week</span>
                       </p>
                     </div>
 
                     <div className="text-brand-red text-center">
                       <p className="text-lg font-semibold">
-                        ${monthlyCost.toLocaleString()}{' '}
+                        $
+                        {monthlyCost.toLocaleString()}
+                        {' '}
                         <span className="text-sm font-normal">/ month</span>
                       </p>
                     </div>
 
                     <div className="text-brand-red text-center">
                       <p className="text-2xl font-semibold">
-                        ${yearlyCost.toLocaleString()}{' '}
+                        $
+                        {yearlyCost.toLocaleString()}
+                        {' '}
                         <span className="text-lg font-normal">/ year</span>
                       </p>
                     </div>
@@ -201,7 +220,8 @@ export function ProblemSection() {
                               : ''
                           }
                         >
-                          ${monthlySavings.toLocaleString()}
+                          $
+                          {monthlySavings.toLocaleString()}
                         </Badge>
                       </div>
                       <div className="flex items-center justify-between">
@@ -216,7 +236,8 @@ export function ProblemSection() {
                               : ''
                           }
                         >
-                          {roiPercentage}%
+                          {roiPercentage}
+                          %
                         </Badge>
                       </div>
                       <p className="text-foreground dark:text-muted-foreground mt-2 text-xs leading-4">

@@ -1,10 +1,10 @@
-import { Link } from '@tanstack/react-router'
 import {
   GithubIcon,
   LinkedInIcon,
   XTwitterIcon,
 } from '@gingga/ui/components/social-icons'
 import { cn } from '@gingga/ui/lib/utils'
+import { Link } from '@tanstack/react-router'
 
 export function Footer({ className }: { className?: string }) {
   return (
@@ -23,7 +23,9 @@ export function Footer({ className }: { className?: string }) {
               />
             </Link>
             <p className="text-muted-foreground text-sm">
-              Transforming businesses with AI-first solutions. <br />
+              Transforming businesses with AI-first solutions.
+              {' '}
+              <br />
               We help founders automate processes and build digital products that leverage
               the power of artificial intelligence.
             </p>
@@ -73,7 +75,11 @@ export function Footer({ className }: { className?: string }) {
       <div className="border-t border-white/10">
         <div className="container flex flex-col items-center justify-between py-6 md:flex-row">
           <p className="text-muted-foreground mb-4 text-sm md:mb-0">
-            © {new Date().getFullYear()} Gingga. All rights reserved.
+            ©
+            {' '}
+            {new Date().getFullYear()}
+            {' '}
+            Gingga. All rights reserved.
           </p>
           <div className="text-muted-foreground flex flex-col items-center gap-4 text-sm md:flex-row">
             <Link to="/privacy" className="hover:text-primary transition-colors">

@@ -1,14 +1,14 @@
+import type { UseChatHelpers } from '@ai-sdk/react'
 import type { UIMessage } from 'ai'
-import { PreviewMessage, ThinkingMessage } from './message'
 import type { useScrollToBottom } from '../use-scroll-to-bottom'
-import { EmptyOverview } from '../empty-overview'
-import { memo, useEffect, useRef } from 'react'
+import type { ToolResponse } from '~/features/ai/skills/skill.types'
+import { cn } from '@gingga/ui/lib/utils'
 // import { Vote } from '~/lib/db/schema'
 import equal from 'fast-deep-equal'
-import type { UseChatHelpers } from '@ai-sdk/react'
+import { memo, useEffect, useRef } from 'react'
 import { useChatInput } from '../chat-input-context'
-import { cn } from '@gingga/ui/lib/utils'
-import type { ToolResponse } from '~/features/ai/skills/skill.types'
+import { EmptyOverview } from '../empty-overview'
+import { PreviewMessage, ThinkingMessage } from './message'
 
 interface MessagesProps {
   chatId: string
@@ -64,7 +64,8 @@ function PureMessages({
   useEffect(() => {
     if (messages.length > prevMessagesLengthRef.current) {
       scrollUtils.setNewMessageAdded(true)
-    } else if (!equal(messages, prevMessageContentRef.current)) {
+    }
+    else if (!equal(messages, prevMessageContentRef.current)) {
       // Content changed without new message
       if (scrollUtils.autoScrollEnabled) {
         scrollUtils.scrollToBottom('smooth')
@@ -93,7 +94,8 @@ function PureMessages({
     }
 
     return () => {
-      if (scrollRequestId) cancelAnimationFrame(scrollRequestId)
+      if (scrollRequestId)
+        cancelAnimationFrame(scrollRequestId)
     }
   }, [
     scrollUtils.newMessageAdded,
@@ -137,9 +139,9 @@ function PureMessages({
           />
         ))}
 
-        {status === 'submitted' &&
-          messages.length > 0 &&
-          messages[messages.length - 1].role === 'user' && <ThinkingMessage />}
+        {status === 'submitted'
+          && messages.length > 0
+          && messages[messages.length - 1].role === 'user' && <ThinkingMessage />}
 
         <div ref={messagesEndRef} className="min-h-[24px] min-w-[24px] shrink-0" />
 
@@ -157,12 +159,17 @@ function PureMessages({
 }
 
 export const Messages = memo(PureMessages, (prevProps, nextProps) => {
-  if (prevProps.isArtifactVisible && nextProps.isArtifactVisible) return true
+  if (prevProps.isArtifactVisible && nextProps.isArtifactVisible)
+    return true
 
-  if (prevProps.status !== nextProps.status) return false
-  if (prevProps.status && nextProps.status) return false
-  if (prevProps.messages.length !== nextProps.messages.length) return false
-  if (!equal(prevProps.messages, nextProps.messages)) return false
+  if (prevProps.status !== nextProps.status)
+    return false
+  if (prevProps.status && nextProps.status)
+    return false
+  if (prevProps.messages.length !== nextProps.messages.length)
+    return false
+  if (!equal(prevProps.messages, nextProps.messages))
+    return false
   // if (!equal(prevProps.votes, nextProps.votes)) return false
 
   return true

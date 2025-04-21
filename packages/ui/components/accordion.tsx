@@ -1,53 +1,53 @@
-import * as AccordionPrimitive from "@radix-ui/react-accordion";
-import { ChevronDown } from "lucide-react";
-import * as React from "react";
-import { cva } from "class-variance-authority";
-import type { VariantProps } from "class-variance-authority";
+import type { VariantProps } from 'class-variance-authority'
+import { cn } from '@gingga/ui/lib/utils'
+import * as AccordionPrimitive from '@radix-ui/react-accordion'
+import { cva } from 'class-variance-authority'
+import { ChevronDown } from 'lucide-react'
 
-import { cn } from "@gingga/ui/lib/utils";
+import * as React from 'react'
 
-const accordionItemVariants = cva("", {
+const accordionItemVariants = cva('', {
   variants: {
     variant: {
-      default: "rounded-sm border-mborder shadow-shadow border-b",
-      ghost: "border-none shadow-none",
+      default: 'rounded-sm border-mborder shadow-shadow border-b',
+      ghost: 'border-none shadow-none',
     },
   },
   defaultVariants: {
-    variant: "default",
+    variant: 'default',
   },
-});
+})
 
 const accordionTriggerVariants = cva(
-  "flex flex-1 cursor-pointer items-center justify-between text-base font-semibold transition-all [&[data-state=open]>svg]:rotate-180",
+  'flex flex-1 cursor-pointer items-center justify-between text-base font-semibold transition-all [&[data-state=open]>svg]:rotate-180',
   {
     variants: {
       variant: {
         default:
-          "rounded-sm bg-card font-body text-secondary-foreground p-4 [&[data-state=open]]:rounded-b-none [&[data-state=open]]:border-b",
-        ghost: "bg-transparent p-2 hover:underline",
+          'rounded-sm bg-card font-body text-secondary-foreground p-4 [&[data-state=open]]:rounded-b-none [&[data-state=open]]:border-b',
+        ghost: 'bg-transparent p-2 hover:underline',
       },
     },
     defaultVariants: {
-      variant: "default",
+      variant: 'default',
     },
-  }
-);
+  },
+)
 
 const accordionContentVariants = cva(
-  "data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down rounded-b-sm overflow-hidden text-sm transition-all",
+  'data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down rounded-b-sm overflow-hidden text-sm transition-all',
   {
     variants: {
       variant: {
-        default: "bg-card font-base",
-        ghost: "bg-transparent",
+        default: 'bg-card font-base',
+        ghost: 'bg-transparent',
       },
     },
     defaultVariants: {
-      variant: "default",
+      variant: 'default',
     },
-  }
-);
+  },
+)
 
 function Accordion({
   className,
@@ -56,15 +56,15 @@ function Accordion({
   return (
     <AccordionPrimitive.Root
       data-slot="accordion"
-      className={cn("rounded-base space-y-4", className)}
+      className={cn('rounded-base space-y-4', className)}
       {...props}
     />
-  );
+  )
 }
 
 interface AccordionItemProps
   extends React.ComponentProps<typeof AccordionPrimitive.Item>,
-    VariantProps<typeof accordionItemVariants> {}
+  VariantProps<typeof accordionItemVariants> {}
 
 function AccordionItem({ className, variant, ...props }: AccordionItemProps) {
   return (
@@ -74,12 +74,12 @@ function AccordionItem({ className, variant, ...props }: AccordionItemProps) {
       className={cn(accordionItemVariants({ variant }), className)}
       {...props}
     />
-  );
+  )
 }
 
 interface AccordionTriggerProps
   extends React.ComponentProps<typeof AccordionPrimitive.Trigger>,
-    VariantProps<typeof accordionTriggerVariants> {}
+  VariantProps<typeof accordionTriggerVariants> {}
 
 function AccordionTrigger({
   className,
@@ -99,12 +99,12 @@ function AccordionTrigger({
         <ChevronDown className="mt-1.5 h-5 w-5 shrink-0 self-start transition-transform duration-200" />
       </AccordionPrimitive.Trigger>
     </AccordionPrimitive.Header>
-  );
+  )
 }
 
 interface AccordionContentProps
   extends React.ComponentProps<typeof AccordionPrimitive.Content>,
-    VariantProps<typeof accordionContentVariants> {}
+  VariantProps<typeof accordionContentVariants> {}
 
 function AccordionContent({
   className,
@@ -121,7 +121,7 @@ function AccordionContent({
     >
       {children}
     </AccordionPrimitive.Content>
-  );
+  )
 }
 
-export { Accordion, AccordionItem, AccordionTrigger, AccordionContent };
+export { Accordion, AccordionContent, AccordionItem, AccordionTrigger }

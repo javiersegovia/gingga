@@ -1,16 +1,17 @@
 import { queryOptions, useQuery } from '@tanstack/react-query'
 import { $isAdmin, $isAgentOwner } from './permission.api'
 
-export const isAdminQueryOptions = () =>
-  queryOptions({
+export function isAdminQueryOptions() {
+  return queryOptions({
     queryKey: ['permissions', 'isAdmin'],
     queryFn: () => $isAdmin(),
     // Stale time can be adjusted based on how often roles might change
     staleTime: 5 * 60 * 1000, // 5 minutes
   })
+}
 
-export const isAgentOwnerQueryOptions = (agentId: string | undefined) =>
-  queryOptions({
+export function isAgentOwnerQueryOptions(agentId: string | undefined) {
+  return queryOptions({
     queryKey: ['permissions', 'isAgentOwner', agentId],
     // Wrap the input object in a 'data' property as expected by validated server functions
     queryFn: () => $isAgentOwner({ data: { agentId: agentId! } }),
@@ -18,11 +19,12 @@ export const isAgentOwnerQueryOptions = (agentId: string | undefined) =>
     enabled: !!agentId,
     staleTime: 5 * 60 * 1000, // 5 minutes
   })
+}
 
 /**
  * Hook to check if the current user is an admin.
  */
-export const useIsAdmin = () => {
+export function useIsAdmin() {
   return useQuery(isAdminQueryOptions())
 }
 
@@ -30,6 +32,6 @@ export const useIsAdmin = () => {
  * Hook to check if the current user owns a specific agent.
  * @param agentId - The ID of the agent to check ownership for.
  */
-export const useIsAgentOwner = (agentId: string | undefined) => {
+export function useIsAgentOwner(agentId: string | undefined) {
   return useQuery(isAgentOwnerQueryOptions(agentId))
 }

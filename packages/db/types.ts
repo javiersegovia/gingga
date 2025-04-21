@@ -1,4 +1,4 @@
-import { Agents, Chats, ChatMessages, Users, AgentSkills } from './schema'
+import type { Agents, AgentSkills, ChatMessages, Chats, Users } from './schema'
 
 export type Chat = typeof Chats.$inferSelect
 export type ChatMessage = typeof ChatMessages.$inferSelect

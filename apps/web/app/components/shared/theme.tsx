@@ -1,16 +1,16 @@
 import type { PropsWithChildren } from 'react'
+import { createContextFactory } from '@gingga/ui/lib/utils'
 import { useDidUpdate } from '@mantine/hooks'
 import { ScriptOnce } from '@tanstack/react-router'
 import { outdent } from 'outdent'
 import { startTransition, useEffect, useState } from 'react'
-import { createContextFactory } from '@gingga/ui/lib/utils'
 
 type Theme = 'dark' | 'light' | 'system'
 type ResolvedTheme = Exclude<Theme, 'system'>
 
 const DEFAULT_THEME = 'light' as const
 
-type ThemeContext = {
+interface ThemeContext {
   value: Theme
   resolved: ResolvedTheme
   set: (theme: Theme) => void
@@ -25,7 +25,7 @@ function ThemeProvider({ children }: PropsWithChildren) {
   // This must change to system later on, when we enable light mode completely.
   const [theme, _setTheme] = useState<Theme>(DEFAULT_THEME)
   const [resolvedTheme, _setResolvedTheme] = useState<ResolvedTheme>(
-    getResolvedTheme(theme),
+    () => getResolvedTheme(theme),
   )
 
   const setTheme = (theme: Theme) => {
@@ -67,7 +67,7 @@ function ThemeProvider({ children }: PropsWithChildren) {
   return (
     <ThemeContextProvider value={context}>
       <ScriptOnce>
-        {outdent/* js */ `
+        {outdent/* js */`
           function initTheme() {
             if (typeof localStorage === 'undefined') return
 
@@ -97,10 +97,11 @@ function getLocalTheme(): Theme {
   }
 
   const localTheme = localStorage.getItem('theme')
-  if (localTheme === null)
+  if (localTheme === null) {
     throw new Error(
-      "Can't find theme in localStorage. Make sure you wrap the app with ThemeProvider.",
+      'Can\'t find theme in localStorage. Make sure you wrap the app with ThemeProvider.',
     )
+  }
 
   return localTheme as Theme
 }

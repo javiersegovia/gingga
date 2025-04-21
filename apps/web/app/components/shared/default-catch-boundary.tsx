@@ -1,3 +1,5 @@
+import type { ErrorComponentProps } from '@tanstack/react-router'
+import { Button } from '@gingga/ui/components/button'
 import {
   ErrorComponent,
   Link,
@@ -5,14 +7,12 @@ import {
   useMatch,
   useRouter,
 } from '@tanstack/react-router'
-import type { ErrorComponentProps } from '@tanstack/react-router'
-import { Button } from '@gingga/ui/components/button'
 
 export function DefaultCatchBoundary({ error }: ErrorComponentProps) {
   const router = useRouter()
   const isRoot = useMatch({
     strict: false,
-    select: (state) => state.id === rootRouteId,
+    select: state => state.id === rootRouteId,
   })
 
   console.error(error)
@@ -29,23 +29,25 @@ export function DefaultCatchBoundary({ error }: ErrorComponentProps) {
         >
           Try Again
         </Button>
-        {isRoot ? (
-          <Button asChild variant="secondary">
-            <Link to="/">Home</Link>
-          </Button>
-        ) : (
-          <Button asChild variant="secondary">
-            <Link
-              to="/"
-              onClick={(e) => {
-                e.preventDefault()
-                window.history.back()
-              }}
-            >
-              Go Back
-            </Link>
-          </Button>
-        )}
+        {isRoot
+          ? (
+              <Button asChild variant="secondary">
+                <Link to="/">Home</Link>
+              </Button>
+            )
+          : (
+              <Button asChild variant="secondary">
+                <Link
+                  to="/"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    window.history.back()
+                  }}
+                >
+                  Go Back
+                </Link>
+              </Button>
+            )}
       </div>
     </div>
   )

@@ -2,17 +2,17 @@ import { createServerFn } from '@tanstack/react-start'
 import { zodValidator } from '@tanstack/zod-adapter'
 import { authMiddleware } from '~/middleware/auth-guard' // Assuming this exists
 import {
-  getComposioIntegrations,
-  getComposioIntegrationByAppName,
-  initiateComposioConnection,
-  deleteUserComposioConnection,
-  getVercelToolset,
-} from './composio.service'
-import {
-  InitiateConnectionSchema,
   DeleteConnectionSchema,
   GetIntegrationSchema,
+  InitiateConnectionSchema,
 } from './composio.schema'
+import {
+  deleteUserComposioConnection,
+  getComposioIntegrationByAppName,
+  getComposioIntegrations,
+  getVercelToolset,
+  initiateComposioConnection,
+} from './composio.service'
 
 /**
  * API Function: Get the list of available Composio integrations.
@@ -23,7 +23,8 @@ export const $getComposioIntegrations = createServerFn({
   try {
     const integrations = await getComposioIntegrations()
     return integrations
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Error fetching composio integrations:', error)
     throw new Error('Failed to retrieve integrations list.')
   }
@@ -47,7 +48,8 @@ export const $getComposioIntegrationByAppName = createServerFn({
         throw new Error(`Integration with appName '${data.appName}' not found.`)
       }
       return { integration }
-    } catch (error) {
+    }
+    catch (error) {
       console.error(`Error fetching composio integration ${data.appName}:`, error)
       if (error instanceof Error && error.message.includes('not found')) {
         throw error // Re-throw specific not found error
@@ -72,7 +74,7 @@ export const $getUserComposioConnections = createServerFn({
       })
 
       return (
-        connections.items?.map((conn) => ({
+        connections.items?.map(conn => ({
           id: conn.id,
           appName: conn.appName ?? null,
           appUniqueId: conn.appUniqueId ?? null,
@@ -83,7 +85,8 @@ export const $getUserComposioConnections = createServerFn({
           isDisabled: conn.isDisabled,
         })) || []
       )
-    } catch (error) {
+    }
+    catch (error) {
       console.error(`Error fetching connections for user ${userId}:`, error)
       // Instead of throwing, return empty items and error message
       throw new Error('Failed to retrieve user connections.')
@@ -110,14 +113,15 @@ export const $initiateComposioConnection = createServerFn({
       })
 
       return { redirectUrl }
-    } catch (error) {
+    }
+    catch (error) {
       console.error(
         `Error initiating connection for user ${userId}, integration ${data.integrationId}:`,
         error,
       )
 
       if (error instanceof Error) {
-        throw new Error(error.message || 'Failed to initiate connection.')
+        throw new TypeError(error.message || 'Failed to initiate connection.')
       }
 
       throw new Error('Failed to initiate connection.')
@@ -142,7 +146,8 @@ export const $deleteUserComposioConnection = createServerFn({
       // Input is guaranteed by validator
       const success = await deleteUserComposioConnection(data.connectionId)
       return { success }
-    } catch (error) {
+    }
+    catch (error) {
       console.error(
         `Error deleting connection ${data.connectionId} (triggered by user ${userId}):`,
         error,

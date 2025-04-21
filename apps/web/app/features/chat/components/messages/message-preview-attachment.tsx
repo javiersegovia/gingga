@@ -1,32 +1,36 @@
 import type { Attachment } from 'ai'
 import { LoaderIcon } from 'lucide-react'
 
-export const PreviewAttachment = ({
+export function PreviewAttachment({
   attachment,
   isUploading = false,
 }: {
   attachment: Attachment
   isUploading?: boolean
-}) => {
+}) {
   const { name, url, contentType } = attachment
 
   return (
     <div data-testid="input-attachment-preview" className="flex flex-col gap-2">
       <div className="bg-muted relative flex aspect-video h-16 w-20 flex-col items-center justify-center rounded-md">
-        {contentType ? (
-          contentType.startsWith('image') ? (
-            <img
-              key={url}
-              src={url}
-              alt={name ?? 'An image attachment'}
-              className="size-full rounded-md object-cover"
-            />
-          ) : (
-            <div className="" />
-          )
-        ) : (
-          <div className="" />
-        )}
+        {contentType
+          ? (
+              contentType.startsWith('image')
+                ? (
+                    <img
+                      key={url}
+                      src={url}
+                      alt={name ?? 'An image attachment'}
+                      className="size-full rounded-md object-cover"
+                    />
+                  )
+                : (
+                    <div className="" />
+                  )
+            )
+          : (
+              <div className="" />
+            )}
 
         {isUploading && (
           <div

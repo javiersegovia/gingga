@@ -1,53 +1,54 @@
-import { Hono } from "hono";
-import { cors } from "hono/cors";
-import { logger } from "hono/logger";
-import { trpcServer } from "@hono/trpc-server";
-import { createDatabaseClient, type DatabaseType } from "@gingga/db";
-import { contextStorage } from "hono/context-storage";
-import { apiEnv } from "~/env";
-import { appRouter } from "~/trpc/routers";
-import { createContext } from "~/context";
+import type { DatabaseType } from '@gingga/db'
+import { createDatabaseClient } from '@gingga/db'
+import { trpcServer } from '@hono/trpc-server'
+import { Hono } from 'hono'
+import { contextStorage } from 'hono/context-storage'
+import { cors } from 'hono/cors'
+import { logger } from 'hono/logger'
+import { createContext } from '~/context'
+import { apiEnv } from '~/env'
+import { appRouter } from '~/trpc/routers'
 
-export type ContextEnv = {
-  Bindings: Cloudflare.Env;
+export interface ContextEnv {
+  Bindings: Cloudflare.Env
   Variables: {
-    db: DatabaseType;
-  };
-};
+    db: DatabaseType
+  }
+}
 
-const app = new Hono<ContextEnv>();
+const app = new Hono<ContextEnv>()
 
-app.use(logger());
-app.use(contextStorage());
+app.use(logger())
+app.use(contextStorage())
 
 app.use(
   cors({
     origin: [apiEnv.VITE_SITE_URL],
     credentials: true,
-  })
-);
+  }),
+)
 
-app.use("*", (c, next) => {
-  const db = createDatabaseClient();
-  c.set("db", db);
-  return next();
-});
+app.use('*', (c, next) => {
+  const db = createDatabaseClient()
+  c.set('db', db)
+  return next()
+})
 
-app.on(["POST", "GET"], "/api/auth/*", (c) => {
+app.on(['POST', 'GET'], '/api/auth/*', (c) => {
   // return auth.handler(c.req.raw);
-  return c.text("Hello Auth!");
-});
+  return c.text('Hello Auth!')
+})
 
 app.use(
-  "/trpc/*",
+  '/trpc/*',
   trpcServer({
     router: appRouter,
     createContext: (_, c) => createContext(c),
-  })
-);
+  }),
+)
 
-app.get("/", (c) => {
-  return c.text("Hello Hono!");
-});
+app.get('/', (c) => {
+  return c.text('Hello Hono!')
+})
 
-export default app;
+export default app

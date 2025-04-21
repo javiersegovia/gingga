@@ -1,49 +1,49 @@
 import {
+  queryOptions,
   useMutation,
   useQuery,
-  useSuspenseQuery,
-  queryOptions,
   useQueryClient,
+  useSuspenseQuery,
 } from '@tanstack/react-query'
+import { useRouter } from '@tanstack/react-router'
 import { useAuthQuery } from '~/features/auth/auth.query'
 import {
-  $getUserChats,
-  $renameChat,
   $deleteChat,
-  $updateChatVisibility,
   $getChatById,
   $getChatModelId,
+  $getUserChats,
+  $renameChat,
+  $updateChatVisibility,
 } from './chat.api'
-import { useRouter } from '@tanstack/react-router'
 
-export const chatModelQueryOptions = () => {
+export function chatModelQueryOptions() {
   return queryOptions({
     queryKey: ['chatModel'],
     queryFn: () => $getChatModelId(),
   })
 }
 
-export const chatQueryOptions = (chatId: string) => {
+export function chatQueryOptions(chatId: string) {
   return queryOptions({
     queryKey: ['chat', chatId],
     queryFn: () => $getChatById({ data: { id: chatId } }),
   })
 }
 
-export const useChatQuery = (chatId: string) => {
+export function useChatQuery(chatId: string) {
   return useQuery({
     ...chatQueryOptions(chatId),
   })
 }
 
-export const userChatsQueryOptions = () => {
+export function userChatsQueryOptions() {
   return queryOptions({
     queryKey: ['userChats'],
     queryFn: $getUserChats,
   })
 }
 
-export const useUserChatsQuery = () => {
+export function useUserChatsQuery() {
   const { data: authData } = useAuthQuery()
 
   return useQuery({
@@ -52,12 +52,12 @@ export const useUserChatsQuery = () => {
   })
 }
 
-export const useUserChatsSuspenseQuery = () => {
+export function useUserChatsSuspenseQuery() {
   return useSuspenseQuery(userChatsQueryOptions())
 }
 
 // Chat mutations
-export const useRenameChatMutation = () => {
+export function useRenameChatMutation() {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: $renameChat,
@@ -67,7 +67,7 @@ export const useRenameChatMutation = () => {
   })
 }
 
-export const useDeleteChatMutation = () => {
+export function useDeleteChatMutation() {
   const queryClient = useQueryClient()
   const router = useRouter()
   return useMutation({
@@ -79,7 +79,7 @@ export const useDeleteChatMutation = () => {
   })
 }
 
-export const useUpdateChatVisibilityMutation = () => {
+export function useUpdateChatVisibilityMutation() {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: $updateChatVisibility,

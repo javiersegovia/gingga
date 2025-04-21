@@ -1,13 +1,13 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { HeroSection } from './_components/HeroSection'
-import { FoundersSection } from './_components/FoundersSection'
-import { AIAgentsSection } from './_components/AIAgentsSection'
-import { HybridTeamsSection } from './_components/HybridTeamsSection'
-import { DeliverablesSection } from './_components/DeliverablesSection'
-import { SpeedGuaranteeSection } from './_components/SpeedGuaranteeSection'
-import { CaseStudiesSection } from './_components/CaseStudiesSection'
-import { PricingSection } from './_components/PricingSection'
 import { DotPattern } from '@gingga/ui/components/dot-pattern'
+import { createFileRoute } from '@tanstack/react-router'
+import { AIAgentsSection } from './_components/AIAgentsSection'
+import { CaseStudiesSection } from './_components/CaseStudiesSection'
+import { DeliverablesSection } from './_components/DeliverablesSection'
+import { FoundersSection } from './_components/FoundersSection'
+import { HeroSection } from './_components/HeroSection'
+import { HybridTeamsSection } from './_components/HybridTeamsSection'
+import { PricingSection } from './_components/PricingSection'
+import { SpeedGuaranteeSection } from './_components/SpeedGuaranteeSection'
 
 export const Route = createFileRoute('/grayola/')({
   component: GrayolaPage,

@@ -99,8 +99,8 @@ function FounderCardRedesigned({
             <p className="text-foreground/80 mb-6">{bio}</p>
 
             <div className="mb-6 flex flex-wrap gap-2">
-              {skills.map((skill, index) => (
-                <span key={index} className="bg-accent rounded-full px-3 py-1 text-sm">
+              {skills.map(skill => (
+                <span key={skill} className="bg-accent rounded-full px-3 py-1 text-sm">
                   {skill}
                 </span>
               ))}

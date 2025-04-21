@@ -1,23 +1,23 @@
-import { Suspense } from 'react'
-import { createFileRoute, useRouter, ErrorComponent } from '@tanstack/react-router'
-import { useSuspenseQuery } from '@tanstack/react-query'
-import { skillOptionsQueryOptions } from '~/features/ai/skills/skill.query'
-import { SkillForm, SkillFormSkeleton } from '~/features/ai/skills/components/skill-form'
-import { z } from 'zod'
 import {
   Sheet,
   SheetContent,
+  SheetDescription,
   SheetHeader,
   SheetTitle,
-  SheetDescription,
 } from '@gingga/ui/components/sheet'
+import { useSuspenseQuery } from '@tanstack/react-query'
+import { createFileRoute, ErrorComponent, useRouter } from '@tanstack/react-router'
+import { Suspense } from 'react'
+import { z } from 'zod'
+import { SkillForm, SkillFormSkeleton } from '~/features/ai/skills/components/skill-form'
+import { skillOptionsQueryOptions } from '~/features/ai/skills/skill.query'
 
 const skillSearchSchema = z.object({
   skillOptionId: z.string().optional(),
 })
 
 export const Route = createFileRoute('/_demo/chat/agent/$agentId/edit/skills/new')({
-  validateSearch: (search) => skillSearchSchema.parse(search),
+  validateSearch: search => skillSearchSchema.parse(search),
   loaderDeps: ({ search: { skillOptionId } }) => ({ skillOptionId }),
   loader: ({ deps: { skillOptionId } }) => {
     if (!skillOptionId) {
@@ -48,7 +48,8 @@ function RouteComponent() {
     <Sheet
       open
       onOpenChange={(open) => {
-        if (!open) handleClose()
+        if (!open)
+          handleClose()
       }}
     >
       <SheetContent side="right" className="flex flex-col sm:max-w-xl">
@@ -60,12 +61,12 @@ function RouteComponent() {
   )
 }
 
-const SkillSheetContent = ({ handleClose }: { handleClose: () => void }) => {
+function SkillSheetContent({ handleClose }: { handleClose: () => void }) {
   const { agentId } = Route.useParams()
   const { skillOptionId } = Route.useSearch()
 
   const { data: skillOptions } = useSuspenseQuery(skillOptionsQueryOptions)
-  const selectedSkillOption = skillOptions.find((opt) => opt.id === skillOptionId)
+  const selectedSkillOption = skillOptions.find(opt => opt.id === skillOptionId)
 
   if (!selectedSkillOption) {
     return <div>Error: Skill option not found.</div>

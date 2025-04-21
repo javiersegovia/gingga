@@ -13,7 +13,7 @@ export const APPROVAL = {
 } as const
 
 // All ToolName values must be present
-export const toolsInfo: Record<ToolName, { approval: string; success: string }> = {
+export const toolsInfo: Record<ToolName, { approval: string, success: string }> = {
   getWeatherInformationTool: {
     approval: 'Do you want to get the weather information?',
     success: 'Weather information retrieved successfully!',

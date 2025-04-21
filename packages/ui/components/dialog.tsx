@@ -1,8 +1,8 @@
-import * as React from 'react'
+import { cn } from '@gingga/ui/lib/utils'
 import * as DialogPrimitive from '@radix-ui/react-dialog'
 import { X } from 'lucide-react'
 
-import { cn } from '@gingga/ui/lib/utils'
+import * as React from 'react'
 
 const Dialog = DialogPrimitive.Root
 
@@ -103,13 +103,13 @@ function DialogDescription({
 
 export {
   Dialog,
-  DialogPortal,
-  DialogOverlay,
   DialogClose,
-  DialogTrigger,
   DialogContent,
-  DialogHeader,
-  DialogFooter,
-  DialogTitle,
   DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogOverlay,
+  DialogPortal,
+  DialogTitle,
+  DialogTrigger,
 }

@@ -61,15 +61,15 @@ export const OAUTH_PROVIDERS: Record<string, OAuthProviderConfig> = {
   google: {
     id: 'google',
     name: 'Google',
-    icon: (props) => GoogleIcon(props),
+    icon: props => GoogleIcon(props),
     services: {
       'google-gmail': {
         id: 'google-gmail',
         name: 'Gmail',
         description: 'Automate email workflows and enhance communication efficiency.',
         providerId: 'google-email',
-        icon: (props) => GmailIcon(props),
-        baseProviderIcon: (props) => GoogleIcon(props),
+        icon: props => GmailIcon(props),
+        baseProviderIcon: props => GoogleIcon(props),
         scopes: [
           'https://www.googleapis.com/auth/gmail.send',
           // 'https://www.googleapis.com/auth/gmail.readonly',
@@ -81,8 +81,8 @@ export const OAUTH_PROVIDERS: Record<string, OAuthProviderConfig> = {
         name: 'Google Drive',
         description: 'Streamline file organization and document workflows.',
         providerId: 'google-drive',
-        icon: (props) => GoogleDriveIcon(props),
-        baseProviderIcon: (props) => GoogleIcon(props),
+        icon: props => GoogleDriveIcon(props),
+        baseProviderIcon: props => GoogleIcon(props),
         scopes: ['https://www.googleapis.com/auth/drive.file'],
       },
       'google-docs': {
@@ -90,8 +90,8 @@ export const OAUTH_PROVIDERS: Record<string, OAuthProviderConfig> = {
         name: 'Google Docs',
         description: 'Create, read, and edit Google Documents programmatically.',
         providerId: 'google-docs',
-        icon: (props) => GoogleDocsIcon(props),
-        baseProviderIcon: (props) => GoogleIcon(props),
+        icon: props => GoogleDocsIcon(props),
+        baseProviderIcon: props => GoogleIcon(props),
         scopes: ['https://www.googleapis.com/auth/drive.file'],
       },
       'google-sheets': {
@@ -99,8 +99,8 @@ export const OAUTH_PROVIDERS: Record<string, OAuthProviderConfig> = {
         name: 'Google Sheets',
         description: 'Manage and analyze data with Google Sheets integration.',
         providerId: 'google-sheets',
-        icon: (props) => GoogleSheetsIcon(props),
-        baseProviderIcon: (props) => GoogleIcon(props),
+        icon: props => GoogleSheetsIcon(props),
+        baseProviderIcon: props => GoogleIcon(props),
         scopes: [
           'https://www.googleapis.com/auth/spreadsheets',
           'https://www.googleapis.com/auth/drive.file',
@@ -111,8 +111,8 @@ export const OAUTH_PROVIDERS: Record<string, OAuthProviderConfig> = {
         name: 'Google Calendar',
         description: 'Schedule and manage events with Google Calendar.',
         providerId: 'google-calendar',
-        icon: (props) => GoogleCalendarIcon(props),
-        baseProviderIcon: (props) => GoogleIcon(props),
+        icon: props => GoogleCalendarIcon(props),
+        baseProviderIcon: props => GoogleIcon(props),
         scopes: ['https://www.googleapis.com/auth/calendar'],
       },
     },
@@ -235,8 +235,8 @@ export function getServiceByProviderAndId(
   }
 
   return (
-    providerConfig.services[serviceId] ||
-    providerConfig.services[providerConfig.defaultService]
+    providerConfig.services[serviceId]
+    || providerConfig.services[providerConfig.defaultService]
   )
 }
 
@@ -251,15 +251,19 @@ export function getServiceIdFromScopes(
   }
 
   if (provider === 'google') {
-    if (scopes.some((scope) => scope.includes('gmail') || scope.includes('mail'))) {
+    if (scopes.some(scope => scope.includes('gmail') || scope.includes('mail'))) {
       return 'gmail'
-    } else if (scopes.some((scope) => scope.includes('drive'))) {
+    }
+    else if (scopes.some(scope => scope.includes('drive'))) {
       return 'google-drive'
-    } else if (scopes.some((scope) => scope.includes('docs'))) {
+    }
+    else if (scopes.some(scope => scope.includes('docs'))) {
       return 'google-docs'
-    } else if (scopes.some((scope) => scope.includes('sheets'))) {
+    }
+    else if (scopes.some(scope => scope.includes('sheets'))) {
       return 'google-sheets'
-    } else if (scopes.some((scope) => scope.includes('calendar'))) {
+    }
+    else if (scopes.some(scope => scope.includes('calendar'))) {
       return 'google-calendar'
     }
   }

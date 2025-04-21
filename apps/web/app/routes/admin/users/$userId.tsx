@@ -1,9 +1,9 @@
-import { createFileRoute, useParams } from '@tanstack/react-router'
+import type { UserMemberships } from '@gingga/db/schema'
+import type { UserFormValues } from '~/features/admin/users/user.schema'
 import { useQuery } from '@tanstack/react-query'
+import { createFileRoute, useParams } from '@tanstack/react-router'
 import { UserForm } from '~/features/admin/users/components/user-form'
 import { userDetailsQueryOptions, useUpdateUser } from '~/features/admin/users/user.query'
-import type { UserFormValues } from '~/features/admin/users/user.schema'
-import type { UserMemberships } from '@gingga/db/schema'
 
 export const Route = createFileRoute('/admin/users/$userId')({
   component: RouteComponent,
@@ -27,8 +27,10 @@ function RouteComponent() {
     })
   }
 
-  if (isLoading) return <div>Loading...</div>
-  if (error) return <div>Error loading user details</div>
+  if (isLoading)
+    return <div>Loading...</div>
+  if (error)
+    return <div>Error loading user details</div>
 
   // Map user data to form values format
   const initialValues: Partial<UserFormValues> = user

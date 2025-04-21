@@ -1,7 +1,7 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
 import { nanoid } from 'nanoid'
-import { BaseChat } from '~/features/chat/components/base-chat'
 import { agentQueryOptions } from '~/features/agent/agent.query'
+import { BaseChat } from '~/features/chat/components/base-chat'
 
 export const Route = createFileRoute('/_demo/chat/agent/$agentId_/')({
   component: AgentChatRoute,
@@ -9,7 +9,8 @@ export const Route = createFileRoute('/_demo/chat/agent/$agentId_/')({
     try {
       queryClient.prefetchQuery(agentQueryOptions(params.agentId))
       return { agentId: params.agentId }
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Error ensuring agent data:', error)
       throw redirect({ to: '/chat/agents' })
     }

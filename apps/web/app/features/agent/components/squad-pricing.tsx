@@ -1,3 +1,5 @@
+import { Badge } from '@gingga/ui/components/badge'
+import { Button } from '@gingga/ui/components/button'
 import {
   Card,
   CardContent,
@@ -5,13 +7,11 @@ import {
   CardHeader,
   CardTitle,
 } from '@gingga/ui/components/card'
-import { Check } from 'lucide-react'
-import { Button } from '@gingga/ui/components/button'
-import { cn } from '@gingga/ui/lib/utils'
-import { Badge } from '@gingga/ui/components/badge'
 import { Tabs, TabsList, TabsTrigger } from '@gingga/ui/components/tabs'
-import { useState } from 'react'
+import { cn } from '@gingga/ui/lib/utils'
 import { Link } from '@tanstack/react-router'
+import { Check } from 'lucide-react'
+import { useState } from 'react'
 
 // Pricing constants - easy to change
 const PRICING = {
@@ -105,7 +105,7 @@ export function SquadPricing() {
         <Tabs
           defaultValue="monthly"
           value={billingPeriod}
-          onValueChange={(value) => setBillingPeriod(value as 'monthly' | 'annual')}
+          onValueChange={value => setBillingPeriod(value as 'monthly' | 'annual')}
           className="mx-auto mb-10 w-fit"
         >
           <TabsList>
@@ -115,20 +115,20 @@ export function SquadPricing() {
         </Tabs>
 
         <div className="mx-auto grid max-w-7xl grid-cols-1 items-start divide-y pt-8 md:grid-cols-3 md:divide-x md:divide-y-0">
-          {plans.map((plan) => (
+          {plans.map(plan => (
             <Card
               key={plan.name}
               hover="noShadow"
               className={cn(
                 'relative font-medium',
-                plan.planType === 'basic' &&
-                  'md:rounded-bl-base! rounded-b-none pb-10 md:rounded-r-none! md:pb-0',
+                plan.planType === 'basic'
+                && 'md:rounded-bl-base! rounded-b-none pb-10 md:rounded-r-none! md:pb-0',
 
-                plan.planType === 'pro' &&
-                  'bg-brand-blue text-brand-blue-foreground dark:bg-background dark:text-foreground z-10 scale-105',
+                plan.planType === 'pro'
+                && 'bg-brand-blue text-brand-blue-foreground dark:bg-background dark:text-foreground z-10 scale-105',
 
-                plan.planType === 'enterprise' &&
-                  'md:rounded-tr-base! bg-foreground text-background dark:bg-primary-accent dark:border-primary-accent dark:text-primary-accent-foreground rounded-tl-none! rounded-tr-none! md:rounded-bl-none!',
+                plan.planType === 'enterprise'
+                && 'md:rounded-tr-base! bg-foreground text-background dark:bg-primary-accent dark:border-primary-accent dark:text-primary-accent-foreground rounded-tl-none! rounded-tr-none! md:rounded-bl-none!',
               )}
             >
               {plan.planType === 'pro' && (
@@ -141,8 +141,8 @@ export function SquadPricing() {
                 <CardTitle
                   className={cn(
                     'font-title text-foreground mt-4 text-2xl',
-                    plan.planType === 'pro' &&
-                      'line-stroke text-brand-blue-foreground dark:text-brand-pink',
+                    plan.planType === 'pro'
+                    && 'line-stroke text-brand-blue-foreground dark:text-brand-pink',
                     plan.planType === 'enterprise' && 'text-primary',
                   )}
                 >
@@ -156,67 +156,71 @@ export function SquadPricing() {
                   className={cn(
                     'text-muted-foreground w-full border-t-2 border-b-2 p-4',
                     'flex flex-col items-center justify-center',
-                    plan.planType === 'basic' &&
-                      'border-brand-blue bg-accent dark:bg-gray-800',
-                    plan.planType === 'pro' &&
-                      'border-primary text-brand-blue-foreground dark:text-muted-foreground dark:bg-brand-pink/10 dark:border-brand-pink',
-                    plan.planType === 'enterprise' &&
-                      'border-primary dark:bg-primary/10 text-white',
+                    plan.planType === 'basic'
+                    && 'border-brand-blue bg-accent dark:bg-gray-800',
+                    plan.planType === 'pro'
+                    && 'border-primary text-brand-blue-foreground dark:text-muted-foreground dark:bg-brand-pink/10 dark:border-brand-pink',
+                    plan.planType === 'enterprise'
+                    && 'border-primary dark:bg-primary/10 text-white',
                   )}
                 >
                   <div>
-                    {plan.planType !== 'enterprise' ? (
-                      <>
-                        <div className="flex items-end justify-center gap-0">
-                          <div
-                            className={cn(
-                              'text-foreground text-3xl font-bold dark:text-white',
-                              plan.planType === 'pro' &&
-                                'text-primary line-stroke dark:text-brand-pink',
-                            )}
-                          >
-                            {typeof plan.monthlyPrice === 'number'
-                              ? `£${plan.monthlyPrice}`
-                              : plan.monthlyPrice}
-                          </div>
-                          <div>
-                            /
-                            {billingPeriod === 'monthly'
-                              ? 'month'
-                              : 'month, billed annually'}
-                          </div>
-                        </div>
+                    {plan.planType !== 'enterprise'
+                      ? (
+                          <>
+                            <div className="flex items-end justify-center gap-0">
+                              <div
+                                className={cn(
+                                  'text-foreground text-3xl font-bold dark:text-white',
+                                  plan.planType === 'pro'
+                                  && 'text-primary line-stroke dark:text-brand-pink',
+                                )}
+                              >
+                                {typeof plan.monthlyPrice === 'number'
+                                  ? `£${plan.monthlyPrice}`
+                                  : plan.monthlyPrice}
+                              </div>
+                              <div>
+                                /
+                                {billingPeriod === 'monthly'
+                                  ? 'month'
+                                  : 'month, billed annually'}
+                              </div>
+                            </div>
 
-                        {billingPeriod === 'monthly' ? (
-                          <div className="mb-0 flex items-baseline justify-center gap-1">
-                            Plus
-                            <div className="font-bold">
-                              {typeof plan.setupFee === 'number'
-                                ? `£${plan.setupFee}`
-                                : plan.setupFee}
-                            </div>
-                            <div
-                              className={cn(
-                                'text-muted-foreground',
-                                plan.planType === 'pro' &&
-                                  'text-brand-blue-foreground dark:text-muted-foreground',
-                              )}
-                            >
-                              setup fee
-                            </div>
+                            {billingPeriod === 'monthly'
+                              ? (
+                                  <div className="mb-0 flex items-baseline justify-center gap-1">
+                                    Plus
+                                    <div className="font-bold">
+                                      {typeof plan.setupFee === 'number'
+                                        ? `£${plan.setupFee}`
+                                        : plan.setupFee}
+                                    </div>
+                                    <div
+                                      className={cn(
+                                        'text-muted-foreground',
+                                        plan.planType === 'pro'
+                                        && 'text-brand-blue-foreground dark:text-muted-foreground',
+                                      )}
+                                    >
+                                      setup fee
+                                    </div>
+                                  </div>
+                                )
+                              : (
+                                  <div className="text-center font-semibold">Setup is free!</div>
+                                )}
+                          </>
+                        )
+                      : (
+                          <div className="font-semibold text-white">
+                            <h2 className="line-stroke text-xl font-bold text-white">
+                              Custom pricing
+                            </h2>
+                            {/* <p>Adapted to your needs</p> */}
                           </div>
-                        ) : (
-                          <div className="text-center font-semibold">Setup is free!</div>
                         )}
-                      </>
-                    ) : (
-                      <div className="font-semibold text-white">
-                        <h2 className="line-stroke text-xl font-bold text-white">
-                          Custom pricing
-                        </h2>
-                        {/* <p>Adapted to your needs</p> */}
-                      </div>
-                    )}
                   </div>
                 </div>
 
@@ -225,7 +229,7 @@ export function SquadPricing() {
                     'dark:text-foreground w-full space-y-3 px-8 py-10 text-left',
                   )}
                 >
-                  {plan.features.map((feature) => (
+                  {plan.features.map(feature => (
                     <li key={feature} className="flex items-start">
                       <div className="mt-0.5 mr-3">
                         <Check className="h-5 w-5 text-green-500" />

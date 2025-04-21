@@ -1,7 +1,7 @@
-import { Slot } from '@radix-ui/react-slot'
 import type React from 'react'
 import { buttonVariants } from '@gingga/ui/components/button' // Adjusted path
 import { cn } from '@gingga/ui/lib/utils' // Adjusted path
+import { Slot } from '@radix-ui/react-slot'
 import { useFormFieldItemContext } from './form-field-context'
 
 type FormFieldControlIconProps = React.ComponentProps<'div'> & {

@@ -46,6 +46,6 @@ export type UpdateChatVisibilityType = z.infer<typeof UpdateChatVisibilitySchema
 
 export const ChatModelSchema = z
   .object({ modelId: z.string() })
-  .refine((data) => aiModels.some((model) => model.id === data.modelId), {
+  .refine(data => aiModels.some(model => model.id === data.modelId), {
     message: 'Invalid model id',
   })

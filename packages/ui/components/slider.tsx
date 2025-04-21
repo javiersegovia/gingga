@@ -1,12 +1,9 @@
-import * as React from 'react'
+import { cn } from '@gingga/ui/lib/utils'
 import * as SliderPrimitive from '@radix-ui/react-slider'
 
-import { cn } from '@gingga/ui/lib/utils'
+import * as React from 'react'
 
-const Slider = React.forwardRef<
-  React.ElementRef<typeof SliderPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root>
->(({ className, defaultValue, value, min = 0, max = 100, ...props }, ref) => {
+function Slider({ ref, className, defaultValue, value, min = 0, max = 100, ...props }: React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root> & { ref?: React.RefObject<React.ElementRef<typeof SliderPrimitive.Root> | null> }) {
   const _values = React.useMemo(
     () =>
       Array.isArray(value)
@@ -41,7 +38,7 @@ const Slider = React.forwardRef<
       ))}
     </SliderPrimitive.Root>
   )
-})
+}
 Slider.displayName = SliderPrimitive.Root.displayName
 
 export { Slider }

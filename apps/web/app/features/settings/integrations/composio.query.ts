@@ -1,3 +1,4 @@
+import type { ComposioAppName } from './composio.schema'
 import {
   queryOptions,
   useMutation,
@@ -5,12 +6,11 @@ import {
   useQueryClient,
 } from '@tanstack/react-query'
 import {
-  $getComposioIntegrations,
-  $getComposioIntegrationByAppName,
-  $getUserComposioConnections,
   $deleteUserComposioConnection,
+  $getComposioIntegrationByAppName,
+  $getComposioIntegrations,
+  $getUserComposioConnections,
 } from './composio.api' // Assuming API functions are exported
-import type { ComposioAppName } from './composio.schema'
 
 // --- Query Key Factory ---
 
@@ -30,12 +30,13 @@ export const composioIntegrationsQueryOptions = queryOptions({
   queryFn: $getComposioIntegrations,
 })
 
-export const composioIntegrationQueryOptions = (appName: ComposioAppName) =>
-  queryOptions({
+export function composioIntegrationQueryOptions(appName: ComposioAppName) {
+  return queryOptions({
     queryKey: composioQueryKeys.integration(appName),
     queryFn: async () => $getComposioIntegrationByAppName({ data: { appName } }),
     enabled: !!appName, // Only run if appName is provided
   })
+}
 
 export const userComposioConnectionsQueryOptions = queryOptions({
   queryKey: composioQueryKeys.connections(),
@@ -63,9 +64,9 @@ export function useDeleteUserComposioConnection() {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: $deleteUserComposioConnection,
-    onSuccess: ({ success }, { data: { connectionId } }) => {
+    onSuccess: ({ success }) => {
       if (success) {
-        console.log(`Connection ${connectionId} deleted successfully.`)
+        // console.log(`Connection ${connectionId} deleted successfully.`)
         // Invalidate the user connections query to refresh the list
         queryClient.invalidateQueries({ queryKey: composioQueryKeys.connections() })
         // Potentially invalidate specific connection details if cached elsewhere

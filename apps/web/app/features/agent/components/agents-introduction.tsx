@@ -1,53 +1,6 @@
 import { Badge } from '@gingga/ui/components/badge'
-import { FileQuestion, Bot, Presentation } from 'lucide-react'
-import { Card, CardContent, CardTitle, CardDescription } from '@gingga/ui/components/card'
-
-// STYLING NOTE: This component uses brand colors for card shadows and icons
-
-export function AgentsIntroduction() {
-  return (
-    <div className="bg-background relative w-full">
-      <div className="diagonal-pattern absolute inset-0"></div>
-      <div className="container-marketing relative z-10 p-6 py-40">
-        <div className="mb-12 text-center">
-          <Badge className="bg-brand-blue text-brand-blue-foreground mb-4">
-            Our Process
-          </Badge>
-          <h2 className="text-foreground dark:text-foreground mx-auto mb-4 max-w-3xl font-bold tracking-tight">
-            3 Simple Steps to <br />
-            <span className="dark:text-brand-pink text-brand-pink line-stroke">
-              Your First Assistant
-            </span>
-          </h2>
-          <p className="text-muted-foreground mx-auto max-w-[800px] text-xl">
-            We partner with your business to create, deploy, and evolve custom assistants
-            that transform your workflows and boost productivity
-          </p>
-        </div>
-
-        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-4 md:grid-cols-3 md:px-4">
-          {processSteps.map((step) => (
-            <Card
-              key={step.title}
-              hover="reverse"
-              design="grid"
-              className="relative overflow-hidden p-0"
-              shadowColor={`var(--${step.iconColor})`}
-            >
-              <CardContent className="relative z-20">
-                {step.icon}
-                <CardTitle className="mt-4 text-base font-bold">{step.title}</CardTitle>
-                <CardDescription className="text-muted-foreground text-base font-normal">
-                  {step.description}
-                </CardDescription>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
-    </div>
-  )
-}
+import { Card, CardContent, CardDescription, CardTitle } from '@gingga/ui/components/card'
+import { Bot, FileQuestion, Presentation } from 'lucide-react'
 
 const processSteps = [
   {
@@ -72,3 +25,50 @@ const processSteps = [
     iconColor: 'brand-pink',
   },
 ]
+
+export function AgentsIntroduction() {
+  return (
+    <div className="bg-background relative w-full">
+      <div className="diagonal-pattern absolute inset-0"></div>
+      <div className="container-marketing relative z-10 p-6 py-40">
+        <div className="mb-12 text-center">
+          <Badge className="bg-brand-blue text-brand-blue-foreground mb-4">
+            Our Process
+          </Badge>
+          <h2 className="text-foreground dark:text-foreground mx-auto mb-4 max-w-3xl font-bold tracking-tight">
+            3 Simple Steps to
+            {' '}
+            <br />
+            <span className="dark:text-brand-pink text-brand-pink line-stroke">
+              Your First Assistant
+            </span>
+          </h2>
+          <p className="text-muted-foreground mx-auto max-w-[800px] text-xl">
+            We partner with your business to create, deploy, and evolve custom assistants
+            that transform your workflows and boost productivity
+          </p>
+        </div>
+
+        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-4 md:grid-cols-3 md:px-4">
+          {processSteps.map(step => (
+            <Card
+              key={step.title}
+              hover="reverse"
+              design="grid"
+              className="relative overflow-hidden p-0"
+              shadowColor={`var(--${step.iconColor})`}
+            >
+              <CardContent className="relative z-20">
+                {step.icon}
+                <CardTitle className="mt-4 text-base font-bold">{step.title}</CardTitle>
+                <CardDescription className="text-muted-foreground text-base font-normal">
+                  {step.description}
+                </CardDescription>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}

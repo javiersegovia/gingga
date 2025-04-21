@@ -14,7 +14,11 @@ function RouteComponent() {
   const { data, session } = Route.useLoaderData()
   return (
     <div>
-      Hello &quot;/test&quot;! {data?.message} and ...
+      Hello &quot;/test&quot;!
+      {' '}
+      {data?.message}
+      {' '}
+      and ...
       <div>{JSON.stringify(session, null, 2)}</div>
     </div>
   )

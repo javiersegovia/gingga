@@ -1,35 +1,36 @@
-import * as React from "react";
-import { cva } from "class-variance-authority";
-import type { VariantProps } from "class-variance-authority";
-import { useId } from "react";
+/* eslint-disable react/no-array-index-key */
+import type { VariantProps } from 'class-variance-authority'
+import { cn } from '@gingga/ui/lib/utils'
+import { cva } from 'class-variance-authority'
+import * as React from 'react'
 
-import { cn } from "@gingga/ui/lib/utils";
+import { useId } from 'react'
 
 const cardVariants = cva(
-  "rounded-base border-border bg-card text-card-foreground border-2 transition-all duration-300",
+  'rounded-base border-border bg-card text-card-foreground border-2 transition-all duration-300',
   {
     variants: {
       hover: {
-        default: "shadow-shadow border-shadow-border",
-        reverse: "hover:shadow-custom hover:border-shadow-border",
-        noShadow: "",
+        default: 'shadow-shadow border-shadow-border',
+        reverse: 'hover:shadow-custom hover:border-shadow-border',
+        noShadow: '',
       },
       design: {
-        default: "",
-        grid: "relative overflow-hidden p-0",
+        default: '',
+        grid: 'relative overflow-hidden p-0',
       },
     },
     defaultVariants: {
-      hover: "default",
-      design: "default",
+      hover: 'default',
+      design: 'default',
     },
-  }
-);
+  },
+)
 
 interface CardProps
   extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof cardVariants> {
-  shadowColor?: string;
+  VariantProps<typeof cardVariants> {
+  shadowColor?: string
 }
 
 function Card({
@@ -43,9 +44,9 @@ function Card({
   const customStyle = shadowColor
     ? ({
         ...style,
-        "--shadow-color": shadowColor,
+        '--shadow-color': shadowColor,
       } as React.CSSProperties)
-    : style;
+    : style
 
   return (
     <div
@@ -54,10 +55,10 @@ function Card({
       style={customStyle}
       {...props}
     >
-      {design === "grid" && <FeatureGrid />}
+      {design === 'grid' && <FeatureGrid />}
       {props.children}
     </div>
-  );
+  )
 }
 
 function CardHeader({
@@ -67,10 +68,10 @@ function CardHeader({
   return (
     <div
       data-slot="card-header"
-      className={cn("m-6 flex flex-col space-y-1.5", className)}
+      className={cn('m-6 flex flex-col space-y-1.5', className)}
       {...props}
     />
-  );
+  )
 }
 
 function CardTitle({
@@ -81,12 +82,12 @@ function CardTitle({
     <div
       data-slot="card-title"
       className={cn(
-        "text-xl leading-none font-semibold tracking-tight",
-        className
+        'text-xl leading-none font-semibold tracking-tight',
+        className,
       )}
       {...props}
     />
-  );
+  )
 }
 
 function CardDescription({
@@ -96,10 +97,10 @@ function CardDescription({
   return (
     <div
       data-slot="card-description"
-      className={cn("font-base mt-3 text-sm", className)}
+      className={cn('font-base mt-3 text-sm', className)}
       {...props}
     />
-  );
+  )
 }
 
 function CardContent({
@@ -107,8 +108,8 @@ function CardContent({
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div data-slot="card-content" className={cn("m-6", className)} {...props} />
-  );
+    <div data-slot="card-content" className={cn('m-6', className)} {...props} />
+  )
 }
 
 function CardFooter({
@@ -118,21 +119,21 @@ function CardFooter({
   return (
     <div
       data-slot="card-footer"
-      className={cn("m-6 flex items-center", className)}
+      className={cn('m-6 flex items-center', className)}
       {...props}
     />
-  );
+  )
 }
 
 function FeatureGrid() {
-  const patternId = useId();
+  const patternId = useId()
   const pattern = [
     [7, 5],
     [8, 3],
     [9, 1],
     [10, 4],
     [8, 6],
-  ];
+  ]
 
   return (
     <div className="pointer-events-none absolute top-0 left-1/2 -mt-2 -ml-20 h-full w-full [mask-image:linear-gradient(white,transparent)]">
@@ -174,15 +175,15 @@ function FeatureGrid() {
         </svg>
       </div>
     </div>
-  );
+  )
 }
 
 export {
   Card,
-  CardHeader,
-  CardFooter,
-  CardTitle,
-  CardDescription,
   CardContent,
-};
-export type { CardProps };
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+}
+export type { CardProps }

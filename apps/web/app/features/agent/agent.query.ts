@@ -10,27 +10,29 @@ import {
   $deleteAgentById,
   $getAgentById,
   $getAgents,
-  $updateAgentById,
   $getRecentChatsWithAgents,
+  $updateAgentById,
 } from './agent.api'
 
 // Query options for fetching agents list
-export const agentsQueryOptions = () =>
-  queryOptions({
+export function agentsQueryOptions() {
+  return queryOptions({
     queryKey: ['agents'],
     queryFn: () => $getAgents(),
   })
+}
 
 // Query options for fetching a single agent
-export const agentQueryOptions = (agentId?: string) =>
-  queryOptions({
+export function agentQueryOptions(agentId?: string) {
+  return queryOptions({
     queryKey: ['agent', agentId],
     queryFn: () => $getAgentById({ data: { id: agentId ?? '' } }),
     enabled: !!agentId,
   })
+}
 
 // Mutation hook for creating a new agent
-export const useCreateAgentMutation = () => {
+export function useCreateAgentMutation() {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: $createAgent,
@@ -41,7 +43,7 @@ export const useCreateAgentMutation = () => {
 }
 
 // Mutation hook for updating an agent
-export const useUpdateAgentMutation = () => {
+export function useUpdateAgentMutation() {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: $updateAgentById,
@@ -55,7 +57,7 @@ export const useUpdateAgentMutation = () => {
 }
 
 // Mutation hook for deleting an agent
-export const useDeleteAgentMutation = () => {
+export function useDeleteAgentMutation() {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: $deleteAgentById,
@@ -68,11 +70,12 @@ export const useDeleteAgentMutation = () => {
 /**
  * Query options factory function for fetching recent agents.
  */
-export const recentChatsWithAgentsQueryOptions = () =>
-  queryOptions({
+export function recentChatsWithAgentsQueryOptions() {
+  return queryOptions({
     queryKey: ['agents', 'recent'],
     queryFn: $getRecentChatsWithAgents,
   })
+}
 
 /**
  * Custom hook to fetch recent agents using TanStack Query with Suspense.

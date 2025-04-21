@@ -1,6 +1,9 @@
 import type { Tab } from '~/components/ui/animated-link-tabs'
-import { createFileRoute, Link, Outlet } from '@tanstack/react-router'
+import { Avatar, AvatarFallback, AvatarImage } from '@gingga/ui/components/avatar'
 import { Button } from '@gingga/ui/components/button'
+import { cn } from '@gingga/ui/lib/utils'
+import { useSuspenseQuery } from '@tanstack/react-query'
+import { createFileRoute, Link, Outlet } from '@tanstack/react-router'
 import {
   ArrowLeftIcon,
   BookIcon,
@@ -9,11 +12,8 @@ import {
   WorkflowIcon,
 } from 'lucide-react'
 import { AnimatedLinkTabs } from '~/components/ui/animated-link-tabs'
-import { Avatar, AvatarFallback, AvatarImage } from '@gingga/ui/components/avatar'
-import { cn } from '@gingga/ui/lib/utils'
 import { agentQueryOptions } from '~/features/agent/agent.query'
 import { skillOptionsQueryOptions } from '~/features/ai/skills/skill.query'
-import { useSuspenseQuery } from '@tanstack/react-query'
 
 export const Route = createFileRoute('/_demo/chat/agent/$agentId/edit')({
   loader: async ({ params, location, context }) => {
@@ -88,32 +88,34 @@ function RouteComponent() {
               </p>
 
               <h4 className="font-title mt-4 text-xs uppercase">Skills</h4>
-              {agent.agentSkills.length > 0 ? (
-                <ul className="mt-2 flex flex-col items-start justify-start gap-2 text-xs">
-                  {agent.agentSkills.map((skill) => {
-                    const skillOption = skillOptions?.find(
-                      (opt) => opt.id === skill.skillId,
-                    )
-                    const displayName = skill.name || skillOption?.name || skill.skillId
-                    return (
-                      <li
-                        key={skill.id}
-                        className="flex items-center gap-2 rounded-md border px-4 py-2"
-                      >
-                        <div
-                          className={cn(
-                            'h-2 w-2 rounded-full',
-                            skill.isEnabled ? 'bg-green-500' : 'bg-red-500',
-                          )}
-                        />
-                        <span className="inline-block">{displayName}</span>
-                      </li>
-                    )
-                  })}
-                </ul>
-              ) : (
-                <p className="text-muted-foreground text-sm">No skills added yet.</p>
-              )}
+              {agent.agentSkills.length > 0
+                ? (
+                    <ul className="mt-2 flex flex-col items-start justify-start gap-2 text-xs">
+                      {agent.agentSkills.map((skill) => {
+                        const skillOption = skillOptions?.find(
+                          opt => opt.id === skill.skillId,
+                        )
+                        const displayName = skill.name || skillOption?.name || skill.skillId
+                        return (
+                          <li
+                            key={skill.id}
+                            className="flex items-center gap-2 rounded-md border px-4 py-2"
+                          >
+                            <div
+                              className={cn(
+                                'h-2 w-2 rounded-full',
+                                skill.isEnabled ? 'bg-green-500' : 'bg-red-500',
+                              )}
+                            />
+                            <span className="inline-block">{displayName}</span>
+                          </li>
+                        )
+                      })}
+                    </ul>
+                  )
+                : (
+                    <p className="text-muted-foreground text-sm">No skills added yet.</p>
+                  )}
             </div>
           </div>
         </div>

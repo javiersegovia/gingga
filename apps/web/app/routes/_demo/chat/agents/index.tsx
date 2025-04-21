@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import type { Agent } from '~/features/agent/agent.types'
 import { Button } from '@gingga/ui/components/button'
 import {
   Card,
@@ -8,14 +8,14 @@ import {
   CardTitle,
 } from '@gingga/ui/components/card'
 import { GridPattern } from '@gingga/ui/components/grid-pattern'
-import { MessageSquareTextIcon, ArrowRightIcon, BotIcon, EditIcon } from 'lucide-react'
+import { Skeleton } from '@gingga/ui/components/skeleton'
 import { cn } from '@gingga/ui/lib/utils'
-import type { Agent } from '~/features/agent/agent.types'
+import { useSuspenseQuery } from '@tanstack/react-query'
+import { createFileRoute, Link } from '@tanstack/react-router'
+import { ArrowRightIcon, BotIcon, EditIcon, MessageSquareTextIcon } from 'lucide-react'
+import { Suspense } from 'react'
 import { agentsQueryOptions } from '~/features/agent/agent.query'
 import { useAuthQuery } from '~/features/auth/auth.query'
-import { Skeleton } from '@gingga/ui/components/skeleton'
-import { useSuspenseQuery } from '@tanstack/react-query'
-import { Suspense } from 'react'
 
 export const Route = createFileRoute('/_demo/chat/agents/')({
   component: AgentsExploreComponent,
@@ -24,7 +24,8 @@ export const Route = createFileRoute('/_demo/chat/agents/')({
 function AgentGridLoadingSkeleton() {
   return (
     <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-      {[...Array(3)].map((_, i) => (
+      {Array.from({ length: 3 }).map((_, i) => (
+        // eslint-disable-next-line react/no-array-index-key
         <Skeleton key={i} className="h-[300px] w-full rounded-lg" /> // Adjusted height
       ))}
     </div>
@@ -40,15 +41,15 @@ function AgentGridSection() {
   const isEmpty = agents.length === 0
 
   // Admin button that will be shown regardless of empty state
-  const AdminCreateButton = authSession.isAuthenticated &&
-    authSession.user.role === 'admin' && (
-      <Button asChild size="md" className="absolute top-0 right-0 -translate-y-1/2">
-        <Link to="/chat/agents/create">
-          <BotIcon className="mr-2 h-4 w-4" />
-          Create Agent
-        </Link>
-      </Button>
-    )
+  const AdminCreateButton = authSession.isAuthenticated
+    && authSession.user.role === 'admin' && (
+    <Button asChild size="md" className="absolute top-0 right-0 -translate-y-1/2">
+      <Link to="/chat/agents/create">
+        <BotIcon className="mr-2 h-4 w-4" />
+        Create Agent
+      </Link>
+    </Button>
+  )
 
   if (isEmpty) {
     return (
@@ -106,7 +107,7 @@ function AgentsExploreComponent() {
         height={40}
         x={-1}
         y={-1}
-        strokeDasharray={'4 2'}
+        strokeDasharray="4 2"
         className="absolute inset-0 h-full w-full [mask-image:radial-gradient(900px_circle_at_center,white,transparent)]"
       />
 
@@ -122,7 +123,7 @@ function AgentsExploreComponent() {
   )
 }
 
-function AgentCard({ agent, isAdmin }: { agent: Agent; isAdmin?: boolean }) {
+function AgentCard({ agent, isAdmin }: { agent: Agent, isAdmin?: boolean }) {
   return (
     <Card hover="noShadow" className={cn('flex flex-col overflow-hidden transition-all')}>
       <div className="relative">

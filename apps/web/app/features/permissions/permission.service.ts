@@ -1,7 +1,7 @@
-import type { Users, UserMemberships } from '@gingga/db/schema'
+import type { UserMemberships, Users } from '@gingga/db/schema'
+import { eq } from '@gingga/db'
 import { Agents } from '@gingga/db/schema'
 import { getDatabase } from '~/middleware/setup-context.server'
-import { eq } from '@gingga/db'
 
 // Define types based on schema for clarity
 type User = typeof Users.$inferSelect
@@ -12,7 +12,7 @@ type UserMembership = typeof UserMemberships.$inferSelect
  * @param user - The user object.
  * @returns True if the user is an admin, false otherwise.
  */
-export const isAdmin = (user: Pick<User, 'role'>): boolean => {
+export function isAdmin(user: Pick<User, 'role'>): boolean {
   return user.role === 'admin'
 }
 
@@ -23,7 +23,7 @@ export const isAdmin = (user: Pick<User, 'role'>): boolean => {
  * @param agentId - The ID of the agent.
  * @returns Promise<boolean> - True if the user owns the agent, false otherwise.
  */
-export const isAgentOwner = async (userId: string, agentId: string): Promise<boolean> => {
+export async function isAgentOwner(userId: string, agentId: string): Promise<boolean> {
   if (!userId || !agentId) {
     return false
   }
@@ -36,7 +36,8 @@ export const isAgentOwner = async (userId: string, agentId: string): Promise<boo
       .get() // Use .get() for single record fetch
 
     return !!agent && agent.ownerId === userId
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Error checking agent ownership:', error)
     return false // Fail safely
   }
@@ -47,9 +48,7 @@ export const isAgentOwner = async (userId: string, agentId: string): Promise<boo
  * @param membership - The user's membership object.
  * @returns True if the user has a pro membership, false otherwise.
  */
-export const hasProMembership = (
-  membership: Pick<UserMembership, 'tier'> | null | undefined,
-): boolean => {
+export function hasProMembership(membership: Pick<UserMembership, 'tier'> | null | undefined): boolean {
   return membership?.tier === 'pro'
 }
 
@@ -58,8 +57,6 @@ export const hasProMembership = (
  * @param membership - The user's membership object.
  * @returns True if the user has an enterprise membership, false otherwise.
  */
-export const hasEnterpriseMembership = (
-  membership: Pick<UserMembership, 'tier'> | null | undefined,
-): boolean => {
+export function hasEnterpriseMembership(membership: Pick<UserMembership, 'tier'> | null | undefined): boolean {
   return membership?.tier === 'enterprise'
 }

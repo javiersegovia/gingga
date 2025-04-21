@@ -1,12 +1,13 @@
+/* eslint-disable no-alert */
+import { Badge } from '@gingga/ui/components/badge'
 import { Button } from '@gingga/ui/components/button'
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
-  CardDescription,
 } from '@gingga/ui/components/card'
-import { Badge } from '@gingga/ui/components/badge'
 import { Check } from 'lucide-react'
 
 export function PricingSection() {
@@ -54,7 +55,7 @@ export function PricingSection() {
                   '20 Human Hours per Week',
                   'Full AI access + tailored agents',
                   'Prototype or test in 2-3 weeks',
-                ].map((feature) => (
+                ].map(feature => (
                   <li key={feature} className="flex items-start">
                     <div className="mt-0.5 mr-3">
                       <Check className="h-5 w-5 text-green-500" />
@@ -115,7 +116,7 @@ export function PricingSection() {
                   '40 Human Hours per Week',
                   'Full AI agents + custom agents',
                   'MVP ready in 4-6 weeks',
-                ].map((feature) => (
+                ].map(feature => (
                   <li key={feature} className="flex items-start">
                     <div className="mt-0.5 mr-3">
                       <Check className="h-5 w-5 text-green-500" />
@@ -171,7 +172,7 @@ export function PricingSection() {
                   'More human hours needed?',
                   'Full AI access',
                   'Contact us for a custom engagement',
-                ].map((feature) => (
+                ].map(feature => (
                   <li key={feature} className="flex items-start">
                     <div className="mt-0.5 mr-3">
                       <Check className="h-5 w-5 text-green-500" />

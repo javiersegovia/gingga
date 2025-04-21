@@ -1,19 +1,19 @@
+import type {
+  BanUserInput,
+  UpdateUserInput,
+  UserDetails,
+  UserIdInput,
+} from './user.schema'
 import { queryOptions, useMutation, useQueryClient } from '@tanstack/react-query'
 import {
-  $getUsers,
-  $getUserDetails,
-  $updateUser,
-  $deleteUser,
   $banUser,
-  $unbanUser,
+  $deleteUser,
+  $getUserDetails,
+  $getUsers,
   $impersonateUser,
+  $unbanUser,
+  $updateUser,
 } from './user.api'
-import type {
-  UpdateUserInput,
-  BanUserInput,
-  UserIdInput,
-  UserDetails,
-} from './user.schema'
 
 // Query Key Factory
 export const userKeys = {
@@ -29,12 +29,13 @@ export const usersQueryOptions = queryOptions({
   queryFn: () => $getUsers(),
 })
 
-export const userDetailsQueryOptions = (userId: string) =>
-  queryOptions({
+export function userDetailsQueryOptions(userId: string) {
+  return queryOptions({
     queryKey: userKeys.detail(userId),
     queryFn: () => $getUserDetails({ data: { userId } }),
     enabled: !!userId, // Only run if userId is provided
   })
+}
 
 // Mutations
 export function useUpdateUser() {
@@ -57,7 +58,7 @@ export function useDeleteUser() {
     mutationFn: async ({ userId }) => {
       return $deleteUser({ data: { userId } })
     },
-    onSuccess: (data, variables) => {
+    onSuccess: (_, variables) => {
       // Invalidate user list query
       queryClient.invalidateQueries({ queryKey: userKeys.lists() })
       // Remove the specific user detail query from cache
@@ -72,7 +73,7 @@ export function useBanUser() {
     mutationFn: async (banData) => {
       return $banUser({ data: banData })
     },
-    onSuccess: (data, variables) => {
+    onSuccess: (_, variables) => {
       // Invalidate lists and details
       queryClient.invalidateQueries({ queryKey: userKeys.lists() })
       queryClient.invalidateQueries({ queryKey: userKeys.detail(variables.userId) })
@@ -86,7 +87,7 @@ export function useUnbanUser() {
     mutationFn: async ({ userId }) => {
       return $unbanUser({ data: { userId } })
     },
-    onSuccess: (data, variables) => {
+    onSuccess: (_, variables) => {
       // Invalidate lists and details
       queryClient.invalidateQueries({ queryKey: userKeys.lists() })
       queryClient.invalidateQueries({ queryKey: userKeys.detail(variables.userId) })
@@ -99,13 +100,13 @@ export function useImpersonateUser() {
     mutationFn: async ({ userId }) => {
       await $impersonateUser({ data: { userId } })
     },
-    onSuccess: (data, variables) => {
-      console.log(`Successfully initiated impersonation for ${variables.userId}`)
+    onSuccess: (_) => {
+      // console.log(`Successfully initiated impersonation for ${variables.userId}`)
       // Potentially trigger a page reload or redirect here
       // window.location.reload();
     },
-    onError: (error, variables) => {
-      console.error(`Failed to impersonate user ${variables.userId}:`, error)
+    onError: (_error) => {
+      // console.error(`Failed to impersonate user ${variables.userId}:`, error)
       // Display error notification to the user
     },
   })

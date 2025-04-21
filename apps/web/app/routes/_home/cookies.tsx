@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { Navbar } from '~/components/shared/navbar'
 import { Footer } from '~/components/shared/footer'
+import { Navbar } from '~/components/shared/navbar'
 
 export const Route = createFileRoute('/_home/cookies')({
   component: RouteComponent,
@@ -14,7 +14,9 @@ function RouteComponent() {
         <div className="container max-w-3xl py-12">
           <h1 className="mb-8 text-3xl font-bold">Cookie Policy</h1>
           <p className="text-muted-foreground mb-4">
-            Last updated: {new Date().toLocaleDateString()}
+            Last updated:
+            {' '}
+            {new Date().toLocaleDateString()}
           </p>
           <div className="prose dark:prose-invert max-w-none">
             <p className="my-6">

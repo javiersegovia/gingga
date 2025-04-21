@@ -1,8 +1,8 @@
 import { Button } from '@gingga/ui/components/button'
-import { ArrowRightIcon, Zap, Clock } from 'lucide-react'
 import { Marquee } from '@gingga/ui/components/marquee'
 import { cn } from '@gingga/ui/lib/utils'
 import { Link } from '@tanstack/react-router'
+import { ArrowRightIcon, Clock, Zap } from 'lucide-react'
 
 interface MarqueeItemProps {
   id: string | number
@@ -54,7 +54,8 @@ export function AgentsHero() {
               <h1 className="line-stroke mb-6 text-2xl font-bold text-white sm:text-3xl md:mb-8 md:text-4xl">
                 Scale Your Business
                 <br />
-                with{' '}
+                with
+                {' '}
                 <span className="text-primary line-stroke font-semibold">
                   Gingga Agents
                 </span>
@@ -113,7 +114,7 @@ export function AgentsHero() {
           style={{ '--duration': '60s' } as React.CSSProperties}
           repeat={2}
         >
-          {marqueeItems.map((item) => (
+          {marqueeItems.map(item => (
             <MarqueeItem key={item.id} {...item} />
           ))}
         </Marquee>

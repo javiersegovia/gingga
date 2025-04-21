@@ -1,7 +1,7 @@
-import * as React from 'react'
+import { cn } from '@gingga/ui/lib/utils'
 import * as ProgressPrimitive from '@radix-ui/react-progress'
 
-import { cn } from '@gingga/ui/lib/utils'
+import * as React from 'react'
 
 function Progress({
   className,

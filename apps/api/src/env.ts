@@ -1,6 +1,6 @@
-import { createEnv } from "@t3-oss/env-core";
-import { z } from "zod";
-import { dbEnv } from "@gingga/db/env";
+import { dbEnv } from '@gingga/db/env'
+import { createEnv } from '@t3-oss/env-core'
+import { z } from 'zod'
 
 export const apiEnv = createEnv({
   extends: [dbEnv()],
@@ -23,10 +23,10 @@ export const apiEnv = createEnv({
     GOOGLE_REDIRECT_URI: z.string().url(),
 
     // ========================= EMAIL =========================
-    RESEND_API_KEY: z.string().startsWith("re_"),
+    RESEND_API_KEY: z.string().startsWith('re_'),
 
     // ========================= AI SERVICES =========================
-    OPENAI_API_KEY: z.string().startsWith("sk-"),
+    OPENAI_API_KEY: z.string().startsWith('sk-'),
     OPENROUTER_API_KEY: z.string().min(1),
     GATEWAY_BASE_OPENAI_URL: z.string().url(),
     GATEWAY_BASE_OPENROUTER_URL: z.string().url(),
@@ -43,7 +43,7 @@ export const apiEnv = createEnv({
 
     // ========================= CI/CD =========================
     GH_TOKEN: z.string().min(1),
-    NODE_ENV: z.enum(["development", "production", "test"]).optional(),
+    NODE_ENV: z.enum(['development', 'production', 'test']).optional(),
 
     // ========================= COMPOSIO =========================
     COMPOSIO_API_KEY: z.string().min(1),
@@ -53,8 +53,8 @@ export const apiEnv = createEnv({
     COMPOSIO_GMAIL_INTEGRATION_ID: z.string().min(1),
     COMPOSIO_GOOGLEDOCS_INTEGRATION_ID: z.string().min(1),
 
-    ADMIN_USER_IDS: z.string().refine((id) => id.split(",").length > 0, {
-      message: "ADMIN_USER_IDS must be a comma-separated list of user IDs",
+    ADMIN_USER_IDS: z.string().refine(id => id.split(',').length > 0, {
+      message: 'ADMIN_USER_IDS must be a comma-separated list of user IDs',
     }),
   },
   shared: {
@@ -65,4 +65,4 @@ export const apiEnv = createEnv({
     VITE_SUPPORT_EMAIL: z.string().min(1),
   },
   runtimeEnv: process.env,
-});
+})

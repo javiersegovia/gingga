@@ -1,8 +1,9 @@
-import { sqliteTable, text, integer, primaryKey } from 'drizzle-orm/sqlite-core'
-import { relations, sql } from 'drizzle-orm'
-import { nanoid } from 'nanoid'
+/* eslint-disable ts/no-use-before-define */
 import type { Attachment } from 'ai'
 import type { ComposioToolName, SkillId, ToolName } from './enums'
+import { relations, sql } from 'drizzle-orm'
+import { integer, primaryKey, sqliteTable, text } from 'drizzle-orm/sqlite-core'
+import { nanoid } from 'nanoid'
 import { ComposioAppNames } from './enums'
 
 // Helper for NanoId default values
@@ -112,7 +113,7 @@ export const OAuthAccounts = sqliteTable(
       .notNull()
       .references(() => Users.id, { onDelete: 'cascade' }),
   },
-  (table) => [primaryKey({ columns: [table.providerId, table.userId] })],
+  table => [primaryKey({ columns: [table.providerId, table.userId] })],
 )
 
 export const oauthAccountsRelations = relations(OAuthAccounts, ({ one }) => ({
@@ -168,7 +169,7 @@ export const UserMemberships = sqliteTable(
     monthlyStandardUsed: integer('monthly_standard_used').default(0),
     monthlyPremiumUsed: integer('monthly_premium_used').default(0),
   },
-  (table) => [primaryKey({ columns: [table.userId] })],
+  table => [primaryKey({ columns: [table.userId] })],
 )
 
 export const userMembershipsRelations = relations(UserMemberships, ({ one }) => ({
@@ -257,7 +258,7 @@ export const ChatMessages = sqliteTable('chat_messages', {
     enum: ['user', 'assistant', 'system'],
   }).notNull(),
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line ts/no-explicit-any
   parts: text('parts', { mode: 'json' }).$type<Array<any>>().notNull(),
   attachments: text('attachments', { mode: 'json' }).$type<Attachment[]>(),
 

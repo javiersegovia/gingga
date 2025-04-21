@@ -1,9 +1,9 @@
-import { UserMemberships } from '@gingga/db/schema'
 import type { RateLimitResult, Tier } from '~/lib/ratelimiter'
-import { rateLimit } from '~/lib/ratelimiter'
 import { eq } from '@gingga/db'
-import { getDatabase } from '~/middleware/setup-context.server'
+import { UserMemberships } from '@gingga/db/schema'
 import { ipAddress, waitUntil } from '@vercel/functions'
+import { rateLimit } from '~/lib/ratelimiter'
+import { getDatabase } from '~/middleware/setup-context.server'
 
 export interface RateLimitContext {
   identifier: string
@@ -39,8 +39,8 @@ export async function checkRateLimit({
   let tier: Tier = 'public'
 
   // Get identifier (IP address for anonymous, userId for authenticated)
-  let identifier =
-    ipAddress(request) || request.headers.get('x-forwarded-for') || 'anonymous'
+  let identifier
+    = ipAddress(request) || request.headers.get('x-forwarded-for') || 'anonymous'
   const db = getDatabase()
 
   if (userId) {

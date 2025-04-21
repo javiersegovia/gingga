@@ -1,9 +1,9 @@
-import { createFileRoute } from '@tanstack/react-router'
 import type { UserTableEntry } from '~/features/admin/users/components/users-columns'
+import { useSuspenseQuery } from '@tanstack/react-query'
+import { createFileRoute } from '@tanstack/react-router'
 import { userColumns } from '~/features/admin/users/components/users-columns' // Adjust path if needed
 import { UsersDataTable } from '~/features/admin/users/components/users-data-table' // Adjust path if needed
 import { usersQueryOptions } from '~/features/admin/users/user.query'
-import { useSuspenseQuery } from '@tanstack/react-query'
 
 export const Route = createFileRoute('/admin/users/')({
   component: RouteComponent,

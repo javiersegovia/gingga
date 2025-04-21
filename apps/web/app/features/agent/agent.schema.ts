@@ -1,6 +1,6 @@
 import { Agents } from '@gingga/db/schema'
-import { z } from 'zod'
 import { formOptions } from '@tanstack/react-form'
+import { z } from 'zod'
 
 export const AgentSchema = z.object({
   id: z.string(),
@@ -10,7 +10,7 @@ export const AgentSchema = z.object({
   modelId: z.enum(Agents.modelId.enumValues).nullable(),
   image: z.string().url().optional().nullable(),
 })
-export type AgentSchema = z.infer<typeof AgentSchema>
+export type AgentSchemaType = z.infer<typeof AgentSchema>
 
 // export const AgentCreateSchema = AgentSchema.omit({ id: true })
 // export type AgentCreateSchema = z.infer<typeof AgentCreateSchema>

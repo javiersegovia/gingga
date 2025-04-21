@@ -1,4 +1,6 @@
+import type { Chat } from '@gingga/db/types'
 import { Button } from '@gingga/ui/components/button'
+
 import {
   DialogClose,
   DialogDescription,
@@ -7,13 +9,11 @@ import {
   DialogTitle,
 } from '@gingga/ui/components/dialog'
 
-import { Switch } from '@gingga/ui/components/switch'
-
 import { Label } from '@gingga/ui/components/label'
-import { CopyIcon, CheckIcon } from 'lucide-react'
+import { Switch } from '@gingga/ui/components/switch'
+import { CheckIcon, CopyIcon } from 'lucide-react'
 import { useState } from 'react'
 import { useUpdateChatVisibilityMutation } from '~/features/chat/chat.query'
-import type { Chat } from '@gingga/db/types'
 
 export function ShareChatDialog({
   chat,
@@ -70,11 +70,13 @@ export function ShareChatDialog({
             <span className="">
               {copied ? 'Copied to clipboard' : 'Copy link to clipboard'}
             </span>
-            {copied ? (
-              <CheckIcon className="h-4 w-4" />
-            ) : (
-              <CopyIcon className="h-4 w-4" />
-            )}
+            {copied
+              ? (
+                  <CheckIcon className="h-4 w-4" />
+                )
+              : (
+                  <CopyIcon className="h-4 w-4" />
+                )}
           </Button>
         </div>
       </div>

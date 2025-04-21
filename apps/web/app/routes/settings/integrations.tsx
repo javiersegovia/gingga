@@ -1,5 +1,3 @@
-import { Suspense } from 'react'
-import { createFileRoute } from '@tanstack/react-router'
 import {
   Card,
   CardContent,
@@ -7,14 +5,16 @@ import {
   CardHeader,
   CardTitle,
 } from '@gingga/ui/components/card'
+import { useSuspenseQuery } from '@tanstack/react-query'
+import { createFileRoute } from '@tanstack/react-router'
 
+import { PlugZapIcon } from 'lucide-react'
+import { Suspense } from 'react'
 import { IntegrationCard } from '~/features/settings/integrations/components/integration-card'
 import {
   composioIntegrationsQueryOptions,
   userComposioConnectionsQueryOptions,
 } from '~/features/settings/integrations/composio.query'
-import { useSuspenseQuery } from '@tanstack/react-query'
-import { PlugZapIcon } from 'lucide-react'
 
 export const Route = createFileRoute('/settings/integrations')({
   component: IntegrationsSettingsComponent,

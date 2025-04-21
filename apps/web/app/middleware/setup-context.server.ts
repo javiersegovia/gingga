@@ -1,11 +1,13 @@
-import { createServerAuth } from '~/features/auth/auth.server'
-import { createDatabaseClient, eq } from '@gingga/db'
-import { getEvent, getWebRequest } from '@tanstack/react-start/server'
-import { Users, UserMemberships } from '@gingga/db/schema'
+import type { AppAuthSession } from '@gingga/api/src/lib/auth/auth.types'
 import type { Session as BetterAuthSessionData } from 'better-auth'
-import type { AppAuthSession } from '~/features/auth/auth.types'
+import { createServerAuth } from '@gingga/api/src/lib/auth/auth.service'
+import { createDatabaseClient, eq } from '@gingga/db'
+import { UserMemberships, Users } from '@gingga/db/schema'
+import { getEvent, getWebRequest } from '@tanstack/react-start/server'
 
 export const getDatabase = () => getEvent().context.db
+export const getAuth = () => getEvent().context.auth
+export const getAuthSession = () => getEvent().context.authSession
 
 export async function setupAppContext() {
   const event = getEvent()
@@ -47,7 +49,8 @@ export async function setupAppContext() {
       user,
       membership: membership ?? null,
     }
-  } else {
+  }
+  else {
     authSession = { isAuthenticated: false }
   }
 

@@ -1,26 +1,26 @@
-import { betterAuth } from "better-auth";
-import { admin } from "better-auth/plugins";
-import { drizzleAdapter } from "better-auth/adapters/drizzle";
+import { Accounts, Sessions, Users, Verifications } from '@gingga/db/schema'
+import { betterAuth } from 'better-auth'
+import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 
-import { Accounts, Sessions, Users, Verifications } from "@gingga/db/schema";
+import { admin } from 'better-auth/plugins'
 
-import VerificationEmail from "~/lib/email/templates/verification-email";
-import { getDB } from "~/context";
-import { sendEmail } from "~/lib/email";
-import { apiEnv } from "~/env";
-import { PASSWORD_MAX, PASSWORD_MIN } from "./auth.schema";
+import { getDB } from '~/context'
+import { apiEnv } from '~/env'
+import { sendEmail } from '~/lib/email'
+import VerificationEmail from '~/lib/email/templates/verification-email'
+import { PASSWORD_MAX, PASSWORD_MIN } from './auth.schema'
 
-export type Session = ReturnType<typeof createServerAuth>["$Infer"]["Session"];
+export type Session = ReturnType<typeof createServerAuth>['$Infer']['Session']
 
 export function createServerAuth() {
-  const db = getDB();
-  const adminUserIds = apiEnv.ADMIN_USER_IDS.split(",");
+  const db = getDB()
+  const adminUserIds = apiEnv.ADMIN_USER_IDS.split(',')
 
   return betterAuth({
     baseURL: apiEnv.VITE_SITE_URL,
     secret: apiEnv.AUTH_SECRET,
     database: drizzleAdapter(db, {
-      provider: "sqlite",
+      provider: 'sqlite',
       schema: {
         user: Users,
         account: Accounts,
@@ -38,12 +38,12 @@ export function createServerAuth() {
       async sendResetPassword({ url, user }) {
         sendEmail({
           to: user.email,
-          subject: "Reset your password",
+          subject: 'Reset your password',
           react: VerificationEmail({
             verifyUrl: url,
-            title: "Reset your password",
+            title: 'Reset your password',
           }),
-        });
+        })
       },
     },
     emailVerification: {
@@ -53,12 +53,12 @@ export function createServerAuth() {
       sendVerificationEmail: async ({ user, url }) => {
         sendEmail({
           to: user.email,
-          subject: "Verify your email",
+          subject: 'Verify your email',
           react: VerificationEmail({
             verifyUrl: url,
-            title: "Verify your email",
+            title: 'Verify your email',
           }),
-        });
+        })
       },
     },
     user: {
@@ -67,12 +67,12 @@ export function createServerAuth() {
         sendChangeEmailVerification: async ({ newEmail, url }) => {
           sendEmail({
             to: newEmail,
-            subject: "Verify your new email",
+            subject: 'Verify your new email',
             react: VerificationEmail({
               verifyUrl: url,
-              title: "Verify your new email",
+              title: 'Verify your new email',
             }),
-          });
+          })
         },
       },
     },
@@ -80,7 +80,7 @@ export function createServerAuth() {
       // TODO: Manually Linking Accounts: https://www.better-auth.com/docs/concepts/users-accounts#manually-linking-accounts
       accountLinking: {
         enabled: true,
-        trustedProviders: ["google", "github"],
+        trustedProviders: ['google', 'github'],
       },
     },
     socialProviders: {
@@ -98,5 +98,5 @@ export function createServerAuth() {
         adminUserIds,
       }),
     ],
-  });
+  })
 }

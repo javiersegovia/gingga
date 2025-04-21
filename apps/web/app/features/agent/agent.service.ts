@@ -1,8 +1,8 @@
-import { getDatabase } from '~/middleware/setup-context.server'
-import { Agents, Chats } from '@gingga/db/schema'
-import { eq, and, desc, max, isNotNull } from '@gingga/db'
-import type { AgentFormValues } from './agent.schema'
 import type { Agent } from '@gingga/db/types'
+import type { AgentFormValues } from './agent.schema'
+import { and, desc, eq, isNotNull, max } from '@gingga/db'
+import { Agents, Chats } from '@gingga/db/schema'
+import { getDatabase } from '~/middleware/setup-context.server'
 
 /**
  * Fetches the configuration for a specific agent from the database.
@@ -24,7 +24,8 @@ export async function getAgentById(agentId: string) {
     }
 
     return agent
-  } catch (error) {
+  }
+  catch (error) {
     console.error(`Failed to fetch agent config for ID: ${agentId}`, error)
     return null
   }
@@ -46,7 +47,8 @@ export async function createAgent(data: AgentFormValues): Promise<Agent> {
       .returning()
 
     return agent
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Failed to create agent:', error)
     throw new Error('Failed to create agent')
   }
@@ -78,7 +80,8 @@ export async function updateAgentById(
     }
 
     return agent
-  } catch (error) {
+  }
+  catch (error) {
     console.error(`Failed to update agent with ID: ${agentId}`, error)
     throw new Error('Failed to update agent')
   }
@@ -98,7 +101,8 @@ export async function deleteAgentById(agentId: string): Promise<boolean> {
       .returning({ id: Agents.id })
 
     return result?.id !== undefined
-  } catch (error) {
+  }
+  catch (error) {
     console.error(`Failed to delete agent with ID: ${agentId}`, error)
     throw new Error('Failed to delete agent')
   }
@@ -114,7 +118,8 @@ export async function getAgents(): Promise<Agent[]> {
     return await db.query.Agents.findMany({
       orderBy: desc(Agents.createdAt),
     })
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Failed to list agents:', error)
     throw new Error('Failed to list agents')
   }
@@ -157,7 +162,8 @@ export async function getRecentAgentsForUser(userId: string, limit: number = 5) 
 
     // Optionally remove lastUsedAt if the final result shouldn't include it
     return recentAgents.map(({ id, name, image }) => ({ id, name, image }))
-  } catch (error) {
+  }
+  catch (error) {
     console.error(`Database error fetching recent agents for user ${userId}:`, error)
     throw new Error('Database query failed while fetching recent agents.')
   }

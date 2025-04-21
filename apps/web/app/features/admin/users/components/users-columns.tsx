@@ -1,9 +1,8 @@
-/* eslint-disable max-params */
 import type { ColumnDef } from '@tanstack/react-table'
 import { Badge } from '@gingga/ui/components/badge'
 
-import { UsersDataTableRowActions } from './users-data-table-row-actions'
 import { UsersDataTableColumnHeader } from './users-data-table-column-header'
+import { UsersDataTableRowActions } from './users-data-table-row-actions'
 
 // Define the structure for the table row data
 // Combining relevant fields from Users and UserMemberships
@@ -53,9 +52,10 @@ export const userColumns: ColumnDef<UserTableEntry>[] = [
     header: ({ column }) => <UsersDataTableColumnHeader column={column} title="Tier" />,
     cell: ({ row }) => {
       const tier = row.original.membership?.tier
-      if (!tier) return <span className="text-muted-foreground">-</span>
-      const variant =
-        tier === 'enterprise'
+      if (!tier)
+        return <span className="text-muted-foreground">-</span>
+      const variant
+        = tier === 'enterprise'
           ? 'destructive' // Example: maybe make enterprise stand out
           : tier === 'pro'
             ? 'default'
@@ -87,7 +87,8 @@ export const userColumns: ColumnDef<UserTableEntry>[] = [
     header: ({ column }) => <UsersDataTableColumnHeader column={column} title="Joined" />,
     cell: ({ row }) => {
       const date = row.getValue('createdAt') as Date | null
-      if (!date) return '-'
+      if (!date)
+        return '-'
       return (
         <span className="whitespace-nowrap">
           {new Intl.DateTimeFormat('en-GB', {

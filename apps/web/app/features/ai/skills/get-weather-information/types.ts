@@ -1,6 +1,6 @@
 import type { Tool } from 'ai'
-import { z } from 'zod'
 import type { ExecutionFunction, ToolResponse } from '../skill.types'
+import { z } from 'zod'
 
 type GetWeatherInformationToolResponse = ToolResponse<string>
 export const GetWeatherInformationToolParamsSchema = z.object({ city: z.string() })

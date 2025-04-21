@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react'
-import { useMemo, useState } from 'react'
 import { Button } from '@gingga/ui/components/button'
 import {
   DropdownMenu,
@@ -8,8 +7,9 @@ import {
   DropdownMenuTrigger,
 } from '@gingga/ui/components/dropdown-menu'
 import { cn } from '@gingga/ui/lib/utils'
-
 import { CheckCircleIcon, ChevronDownIcon, GlobeIcon, LockIcon } from 'lucide-react'
+
+import { useMemo, useState } from 'react'
 import { useChatVisibility } from './use-chat-visibility'
 
 export type VisibilityType = 'private' | 'public'
@@ -50,7 +50,7 @@ export function VisibilitySelector({
   })
 
   const selectedVisibility = useMemo(
-    () => visibilities.find((visibility) => visibility.id === visibilityType),
+    () => visibilities.find(visibility => visibility.id === visibilityType),
     [visibilityType],
   )
 
@@ -71,7 +71,7 @@ export function VisibilitySelector({
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="start" className="min-w-[300px]">
-        {visibilities.map((visibility) => (
+        {visibilities.map(visibility => (
           <DropdownMenuItem
             key={visibility.id}
             onSelect={() => {

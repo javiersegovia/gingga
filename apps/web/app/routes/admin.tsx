@@ -1,7 +1,7 @@
-import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
-import { AdminSidebar } from '~/features/admin/components/sidebar/admin-sidebar'
 import { SidebarProvider } from '@gingga/ui/components/sidebar'
+import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 import { Suspense } from 'react'
+import { AdminSidebar } from '~/features/admin/components/sidebar/admin-sidebar'
 import { $isSidebarOpened } from '~/features/sidebar/sidebar.api'
 
 export const Route = createFileRoute('/admin')({

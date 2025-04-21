@@ -1,4 +1,4 @@
-export const SharedOpportunitySection = () => {
+export function SharedOpportunitySection() {
   return (
     <section className="flex min-h-screen flex-col items-center justify-center gap-12 p-8">
       <h2 className="text-center text-5xl font-bold tracking-tight lg:text-7xl">

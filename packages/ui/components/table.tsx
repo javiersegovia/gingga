@@ -1,6 +1,6 @@
-import * as React from 'react'
-
 import { cn } from '@gingga/ui/lib/utils'
+
+import * as React from 'react'
 
 function Table({ className, ...props }: React.ComponentProps<'table'>) {
   return (
@@ -95,11 +95,11 @@ function TableCaption({ className, ...props }: React.ComponentProps<'caption'>) 
 
 export {
   Table,
-  TableHeader,
   TableBody,
+  TableCaption,
+  TableCell,
   TableFooter,
   TableHead,
+  TableHeader,
   TableRow,
-  TableCell,
-  TableCaption,
 }

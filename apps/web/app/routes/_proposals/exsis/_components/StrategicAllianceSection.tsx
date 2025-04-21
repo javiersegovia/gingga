@@ -1,6 +1,6 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@gingga/ui/components/card'
-import { Scale, Layers3, Copyleft, TrendingUp } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
+import { Card, CardContent, CardHeader, CardTitle } from '@gingga/ui/components/card'
+import { Copyleft, Layers3, Scale, TrendingUp } from 'lucide-react'
 
 const allianceIdeas: {
   title: string
@@ -34,7 +34,7 @@ const allianceIdeas: {
   },
 ]
 
-export const StrategicAllianceSection = () => {
+export function StrategicAllianceSection() {
   return (
     <section className="flex min-h-screen flex-col items-center justify-center gap-12 p-8">
       <h2 className="text-5xl font-bold tracking-tight lg:text-7xl">
@@ -60,24 +60,28 @@ export const StrategicAllianceSection = () => {
                 </div>
               </CardHeader>
               <CardContent className="text-muted-foreground">
-                {idea.description ? (
-                  <p>{idea.description}</p>
-                ) : (
-                  <div className="space-y-2">
-                    {idea.exsis && (
-                      <p>
-                        <span className="text-foreground font-semibold">Exsis:</span>{' '}
-                        {idea.exsis}
-                      </p>
+                {idea.description
+                  ? (
+                      <p>{idea.description}</p>
+                    )
+                  : (
+                      <div className="space-y-2">
+                        {idea.exsis && (
+                          <p>
+                            <span className="text-foreground font-semibold">Exsis:</span>
+                            {' '}
+                            {idea.exsis}
+                          </p>
+                        )}
+                        {idea.gingga && (
+                          <p>
+                            <span className="text-foreground font-semibold">Gingga:</span>
+                            {' '}
+                            {idea.gingga}
+                          </p>
+                        )}
+                      </div>
                     )}
-                    {idea.gingga && (
-                      <p>
-                        <span className="text-foreground font-semibold">Gingga:</span>{' '}
-                        {idea.gingga}
-                      </p>
-                    )}
-                  </div>
-                )}
               </CardContent>
             </Card>
           )

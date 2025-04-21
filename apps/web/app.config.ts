@@ -1,8 +1,8 @@
-import { config } from 'dotenv'
 import tailwindcss from '@tailwindcss/vite'
 import { defineConfig } from '@tanstack/react-start/config'
-import tsconfigPaths from 'vite-tsconfig-paths'
+import { config } from 'dotenv'
 import { denyImports, envOnlyMacros } from 'vite-env-only'
+import tsconfigPaths from 'vite-tsconfig-paths'
 import { parseEnv } from './app/server/env'
 
 config()

@@ -1,6 +1,7 @@
-import { cn } from '@gingga/ui/lib/utils'
+/* eslint-disable no-alert */
 import { Button } from '@gingga/ui/components/button'
 import { Card, CardContent } from '@gingga/ui/components/card'
+import { cn } from '@gingga/ui/lib/utils'
 
 interface PricingCardProps {
   title: string
@@ -43,8 +44,8 @@ export function PricingCard({
         </div>
 
         <div className="mb-6 space-y-4">
-          {features.map((feature, index) => (
-            <div key={index} className="flex items-start">
+          {features.map(feature => (
+            <div key={feature} className="flex items-start">
               <div className="bg-brand-green mt-1 mr-3 rounded-full p-1">
                 <svg
                   className="text-brand-green-foreground h-3 w-3"
@@ -68,7 +69,7 @@ export function PricingCard({
 
         <Button
           onClick={() => {
-            alert('Contact us at ' + contactEmail + ' or via WhatsApp for more details.')
+            alert(`Contact us at ${contactEmail} or via WhatsApp for more details.`)
           }}
           variant={highlighted ? 'primary' : 'default'}
           className={cn('w-full py-6', highlighted ? '' : 'bg-accent hover:bg-accent/80')}

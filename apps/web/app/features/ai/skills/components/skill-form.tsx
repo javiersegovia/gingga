@@ -1,21 +1,22 @@
-import type { SkillOption } from '../skill.types'
+/* eslint-disable react/no-array-index-key */
 import type { AgentSkill } from '@gingga/db/types'
-import { useState } from 'react'
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@gingga/ui/components/tabs'
-import { Button } from '@gingga/ui/components/button'
-import { Input } from '@gingga/ui/components/input'
-import { Textarea } from '@gingga/ui/components/textarea'
-import { Checkbox } from '@gingga/ui/components/checkbox'
-import { Label } from '@gingga/ui/components/label'
-import { cn } from '@gingga/ui/lib/utils'
-
-import { toast } from 'sonner'
-import { useUpsertSkillMutation } from '../skill.query'
-import { useAppForm } from '~/components/form/tanstack-form'
-import { formOptions } from '@tanstack/react-form'
+import type { SkillOption } from '../skill.types'
 import type { ComposioToolName } from '~/features/settings/integrations/composio.schema'
+import { Button } from '@gingga/ui/components/button'
+import { Checkbox } from '@gingga/ui/components/checkbox'
+import { Input } from '@gingga/ui/components/input'
+import { Label } from '@gingga/ui/components/label'
 import { SheetDescription, SheetHeader, SheetTitle } from '@gingga/ui/components/sheet'
 import { Skeleton } from '@gingga/ui/components/skeleton'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@gingga/ui/components/tabs'
+
+import { Textarea } from '@gingga/ui/components/textarea'
+import { cn } from '@gingga/ui/lib/utils'
+import { formOptions } from '@tanstack/react-form'
+import { useState } from 'react'
+import { toast } from 'sonner'
+import { useAppForm } from '~/components/form/tanstack-form'
+import { useUpsertSkillMutation } from '../skill.query'
 
 interface SkillFormProps {
   mode: 'create' | 'edit'
@@ -30,22 +31,25 @@ interface SkillFormProps {
 function recordToArray(
   record:
     | Record<string, string | null>
-    | { key: string; value: string | null }[]
+    | { key: string, value: string | null }[]
     | undefined
     | null,
-): { key: string; value: string | null }[] {
-  if (Array.isArray(record)) return record
-  if (!record) return []
+): { key: string, value: string | null }[] {
+  if (Array.isArray(record))
+    return record
+  if (!record)
+    return []
   return Object.entries(record).map(([key, value]) => ({ key, value }))
 }
 
 // Helper to convert array to record for backend
 function arrayToRecord(
-  arr: { key: string; value: string | null }[],
+  arr: { key: string, value: string | null }[],
 ): Record<string, string | null> {
   const rec: Record<string, string | null> = {}
   arr.forEach(({ key, value }) => {
-    if (key) rec[key] = value
+    if (key)
+      rec[key] = value
   })
   return rec
 }
@@ -88,8 +92,7 @@ export function SkillForm({
     ...formOpts,
     onSubmit: async ({ value }) => {
       setFormError(null)
-      console.log('value')
-      console.log(value)
+
       await upsertMutation.mutateAsync(
         {
           data: {
@@ -112,13 +115,14 @@ export function SkillForm({
             let message = 'Failed to save skill.'
             function isErrorWithMessage(e: unknown): e is { message: string } {
               return (
-                typeof e === 'object' &&
-                e !== null &&
-                'message' in e &&
-                typeof (e as { message: unknown }).message === 'string'
+                typeof e === 'object'
+                && e !== null
+                && 'message' in e
+                && typeof (e as { message: unknown }).message === 'string'
               )
             }
-            if (isErrorWithMessage(err)) message = err.message
+            if (isErrorWithMessage(err))
+              message = err.message
             setFormError(message)
             console.error('Failed to save skill:', err)
             toast.error('Failed to save skill.')
@@ -143,7 +147,7 @@ export function SkillForm({
         {/* <formContext.Provider value={form}> */}
         <Tabs
           value={tab}
-          onValueChange={(value) => setTab(value as typeof tab)}
+          onValueChange={value => setTab(value as typeof tab)}
           className="mt-4 flex flex-1 flex-col"
         >
           <TabsList className="mr-auto mb-4">
@@ -168,78 +172,81 @@ export function SkillForm({
           <div className="flex-grow pr-2">
             <TabsContent value="tools">
               <form.AppField name="composioToolNames">
-                {(field) => (
+                {field => (
                   <field.FormFieldItem>
                     <field.FormFieldLabel className="text-lg font-medium">
                       Select Tools
                     </field.FormFieldLabel>
-                    {(skillOption.integration?.availableComposioToolNames?.length ??
-                      0) === 0 ? (
-                      <div className="text-muted-foreground text-sm">
-                        No tools available for this skill yet.
-                      </div>
-                    ) : (
-                      <div className="h-[calc(100vh-400px)] space-y-4 overflow-y-auto pr-1">
-                        {skillOption.integration?.availableComposioToolNames?.map(
-                          (tool) => {
-                            const isChecked = field.state.value?.includes(
-                              tool.id as ComposioToolName,
-                            )
-                            return (
-                              <div
-                                key={tool.id}
-                                className={cn(
-                                  'border-border flex items-start space-x-4 rounded-md border p-4 transition-colors',
-                                  isChecked
-                                    ? 'border-border dark:bg-secondary/5 dark:border-secondary bg-secondary/30'
-                                    : 'hover:bg-muted/50',
-                                )}
-                              >
-                                <field.FormFieldControl>
-                                  <Checkbox
-                                    id={tool.id}
-                                    checked={isChecked}
-                                    onCheckedChange={(checked) => {
-                                      const checkedVal = !!checked
-                                      const current = field.state.value || []
-                                      if (checkedVal) {
-                                        if (
-                                          !current.includes(tool.id as ComposioToolName)
-                                        ) {
-                                          field.handleChange([
-                                            ...current,
-                                            tool.id as ComposioToolName,
-                                          ])
-                                        }
-                                      } else {
-                                        field.handleChange(
-                                          current.filter(
-                                            (id: ComposioToolName) => id !== tool.id,
-                                          ),
-                                        )
-                                      }
-                                    }}
-                                    className="mt-1"
-                                    disabled={isSaving}
-                                  />
-                                </field.FormFieldControl>
-                                <div className="flex-grow space-y-1">
-                                  <Label
-                                    htmlFor={tool.id}
-                                    className="mx-0 cursor-pointer text-base leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    {(skillOption.integration?.availableComposioToolNames?.length
+                      ?? 0) === 0
+                      ? (
+                          <div className="text-muted-foreground text-sm">
+                            No tools available for this skill yet.
+                          </div>
+                        )
+                      : (
+                          <div className="h-[calc(100vh-400px)] space-y-4 overflow-y-auto pr-1">
+                            {skillOption.integration?.availableComposioToolNames?.map(
+                              (tool) => {
+                                const isChecked = field.state.value?.includes(
+                                  tool.id as ComposioToolName,
+                                )
+                                return (
+                                  <div
+                                    key={tool.id}
+                                    className={cn(
+                                      'border-border flex items-start space-x-4 rounded-md border p-4 transition-colors',
+                                      isChecked
+                                        ? 'border-border dark:bg-secondary/5 dark:border-secondary bg-secondary/30'
+                                        : 'hover:bg-muted/50',
+                                    )}
                                   >
-                                    {tool.name}
-                                  </Label>
-                                  <p className="text-muted-foreground text-sm">
-                                    {tool.description}
-                                  </p>
-                                </div>
-                              </div>
-                            )
-                          },
+                                    <field.FormFieldControl>
+                                      <Checkbox
+                                        id={tool.id}
+                                        checked={isChecked}
+                                        onCheckedChange={(checked) => {
+                                          const checkedVal = !!checked
+                                          const current = field.state.value || []
+                                          if (checkedVal) {
+                                            if (
+                                              !current.includes(tool.id as ComposioToolName)
+                                            ) {
+                                              field.handleChange([
+                                                ...current,
+                                                tool.id as ComposioToolName,
+                                              ])
+                                            }
+                                          }
+                                          else {
+                                            field.handleChange(
+                                              current.filter(
+                                                (id: ComposioToolName) => id !== tool.id,
+                                              ),
+                                            )
+                                          }
+                                        }}
+                                        className="mt-1"
+                                        disabled={isSaving}
+                                      />
+                                    </field.FormFieldControl>
+                                    <div className="flex-grow space-y-1">
+                                      <Label
+                                        htmlFor={tool.id}
+                                        className="mx-0 cursor-pointer text-base leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                      >
+                                        {tool.name}
+                                      </Label>
+                                      <p className="text-muted-foreground text-sm">
+                                        {tool.description}
+                                      </p>
+                                    </div>
+                                  </div>
+                                )
+                              },
+                            )}
+                          </div>
                         )}
-                      </div>
-                    )}
                     <field.FormFieldMessage />
                   </field.FormFieldItem>
                 )}
@@ -249,30 +256,32 @@ export function SkillForm({
               <div className="space-y-4">
                 <div className="space-y-1">
                   <Label>Available Variables</Label>
-                  {(form.state.values.variables ?? []).filter((v) => v.key).length ===
-                  0 ? (
-                    <div className="text-muted-foreground rounded border p-2 text-xs">
-                      There are no variables created yet. Create a new one inside the
-                      Variables tab.
-                    </div>
-                  ) : (
-                    <div className="mt-2 flex flex-wrap gap-2">
-                      {(form.state.values.variables ?? [])
-                        .map((v) => v.key)
-                        .filter((k) => k)
-                        .map((key) => (
-                          <span
-                            key={key}
-                            className="bg-muted rounded px-2 py-1 font-mono text-xs"
-                          >
-                            {'{{' + key + '}}'}
-                          </span>
-                        ))}
-                    </div>
-                  )}
+                  {(form.state.values.variables ?? []).filter(v => v.key).length
+                    === 0
+                    ? (
+                        <div className="text-muted-foreground rounded border p-2 text-xs">
+                          There are no variables created yet. Create a new one inside the
+                          Variables tab.
+                        </div>
+                      )
+                    : (
+                        <div className="mt-2 flex flex-wrap gap-2">
+                          {(form.state.values.variables ?? [])
+                            .map(v => v.key)
+                            .filter(k => k)
+                            .map(key => (
+                              <span
+                                key={key}
+                                className="bg-muted rounded px-2 py-1 font-mono text-xs"
+                              >
+                                {`{{${key}}}`}
+                              </span>
+                            ))}
+                        </div>
+                      )}
                 </div>
                 <form.AppField name="instructions">
-                  {(field) => (
+                  {field => (
                     <field.FormFieldItem>
                       <field.FormFieldLabel>Instructions</field.FormFieldLabel>
                       <field.FormFieldControl>
@@ -281,7 +290,7 @@ export function SkillForm({
                           name={field.name}
                           placeholder="Write instructions for this skill. Use {{variableName}} to reference variables."
                           value={field.state.value}
-                          onChange={(e) => field.handleChange(e.target.value)}
+                          onChange={e => field.handleChange(e.target.value)}
                           rows={6}
                           disabled={isSaving}
                         />
@@ -295,7 +304,7 @@ export function SkillForm({
             <TabsContent value="settings">
               <div className="space-y-4">
                 <form.AppField name="name">
-                  {(field) => (
+                  {field => (
                     <field.FormFieldItem>
                       <field.FormFieldLabel>Skill Name</field.FormFieldLabel>
                       <field.FormFieldControl>
@@ -304,7 +313,7 @@ export function SkillForm({
                           name={field.name}
                           placeholder="Enter a custom skill name (e.g., Email Assistant)"
                           value={field.state.value}
-                          onChange={(e) => field.handleChange(e.target.value)}
+                          onChange={e => field.handleChange(e.target.value)}
                           disabled={isSaving}
                         />
                       </field.FormFieldControl>
@@ -316,7 +325,7 @@ export function SkillForm({
                   )}
                 </form.AppField>
                 <form.AppField name="description">
-                  {(field) => (
+                  {field => (
                     <field.FormFieldItem>
                       <field.FormFieldLabel>Skill Description</field.FormFieldLabel>
                       <field.FormFieldControl>
@@ -325,7 +334,7 @@ export function SkillForm({
                           name={field.name}
                           placeholder="Enter a custom description (e.g., Sends emails, creates contacts, etc.)"
                           value={field.state.value}
-                          onChange={(e) => field.handleChange(e.target.value)}
+                          onChange={e => field.handleChange(e.target.value)}
                           disabled={isSaving}
                         />
                       </field.FormFieldControl>
@@ -380,32 +389,30 @@ export function SkillForm({
                         {field.state.value.map((_, idx) => (
                           <div key={idx} className="flex items-center gap-2">
                             <form.AppField name={`variables[${idx}].key`}>
-                              {(subField) => (
+                              {subField => (
                                 <subField.FormFieldControl className="flex-1">
                                   <Input
                                     placeholder="Key"
                                     name={subField.name}
                                     value={subField.state.value}
                                     onBlur={subField.handleBlur}
-                                    onChange={(e) =>
-                                      subField.handleChange(e.target.value)
-                                    }
+                                    onChange={e =>
+                                      subField.handleChange(e.target.value)}
                                     disabled={isSaving}
                                   />
                                 </subField.FormFieldControl>
                               )}
                             </form.AppField>
                             <form.AppField name={`variables[${idx}].value`}>
-                              {(subField) => (
+                              {subField => (
                                 <subField.FormFieldControl className="flex-1">
                                   <Input
                                     placeholder="Value (Optional)"
                                     name={subField.name}
                                     value={subField.state.value ?? ''}
                                     onBlur={subField.handleBlur}
-                                    onChange={(e) =>
-                                      subField.handleChange(e.target.value)
-                                    }
+                                    onChange={e =>
+                                      subField.handleChange(e.target.value)}
                                     disabled={isSaving}
                                   />
                                 </subField.FormFieldControl>
@@ -480,7 +487,7 @@ export function SkillFormSkeleton() {
         <div className="flex-grow space-y-4 pr-2">
           <Skeleton className="h-6 w-1/4" />
           <div className="h-[calc(100vh-400px)] space-y-4 overflow-y-auto pr-1">
-            {[...Array(3)].map((_, i) => (
+            {Array.from({ length: 3 }).map((_, i) => (
               <div key={i} className="flex items-start space-x-4 rounded-md border p-4">
                 <Skeleton className="mt-1 h-5 w-5" />
                 <div className="flex-grow space-y-2">

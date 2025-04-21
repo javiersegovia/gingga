@@ -1,6 +1,6 @@
-import { useId } from 'react'
-
 import { cn } from '@gingga/ui/lib/utils'
+
+import { useId } from 'react'
 
 interface DotPatternProps extends React.SVGProps<SVGSVGElement> {
   width?: number

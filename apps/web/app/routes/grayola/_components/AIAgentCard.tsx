@@ -1,7 +1,8 @@
+/* eslint-disable no-alert */
+import { Button } from '@gingga/ui/components/button'
+import { Card, CardContent } from '@gingga/ui/components/card'
 import { cn } from '@gingga/ui/lib/utils'
 import { ExternalLinkIcon, StarIcon } from 'lucide-react'
-import { Card, CardContent } from '@gingga/ui/components/card'
-import { Button } from '@gingga/ui/components/button'
 
 interface AIAgentCardProps {
   name: string
@@ -43,9 +44,9 @@ export function AIAgentCard({
           <p className="text-primary mb-6">{role}</p>
 
           <div className="mb-6 w-full space-y-3">
-            {skills.map((skill, index) => (
+            {skills.map(skill => (
               <div
-                key={index}
+                key={skill}
                 className={cn(
                   'flex items-center justify-between rounded-lg px-4 py-2',
                   skill === signatureSkill
@@ -85,9 +86,9 @@ export function AIAgentCard({
                 size="lg"
                 onClick={() => {
                   alert(
-                    'Contact us at ' +
-                      tryButton.email +
-                      ' or via WhatsApp for more details.',
+                    `Contact us at ${
+                      tryButton.email
+                    } or via WhatsApp for more details.`,
                   )
                 }}
               >

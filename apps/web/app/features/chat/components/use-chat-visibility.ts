@@ -1,9 +1,9 @@
+import { useQueryClient } from '@tanstack/react-query'
+import { useMemo, useState } from 'react'
 import {
   userChatsQueryOptions,
   useUpdateChatVisibilityMutation,
 } from '~/features/chat/chat.query'
-import { useQueryClient } from '@tanstack/react-query'
-import { useMemo, useState } from 'react'
 
 export type VisibilityType = 'private' | 'public'
 
@@ -23,16 +23,18 @@ export function useChatVisibility({
   chatId: string
   initialVisibility: VisibilityType
 }) {
-  const [localVisibility, setLocalVisibility] =
-    useState<VisibilityType>(initialVisibility)
+  const [localVisibility, setLocalVisibility]
+    = useState<VisibilityType>(initialVisibility)
   const queryClient = useQueryClient()
   const history = queryClient.getQueryData(userChatsQueryOptions().queryKey)
   // setLocalVisibility(queryClient.setQueryData([`${chatId}-visibility`], initialVisibility))
 
   const visibilityType = useMemo(() => {
-    if (!history) return localVisibility
+    if (!history)
+      return localVisibility
     const chat = history.find((chat: Chat) => chat.id === chatId)
-    if (!chat) return 'private'
+    if (!chat)
+      return 'private'
     return chat.visibility
   }, [history, chatId, localVisibility])
 
@@ -47,7 +49,7 @@ export function useChatVisibility({
     if (previousChatsData) {
       queryClient.setQueryData(
         userChatsQueryOptions().queryKey,
-        previousChatsData.map((chat) =>
+        previousChatsData.map(chat =>
           chat.id === chatId ? { ...chat, visibility: updatedVisibilityType } : chat,
         ),
       )
@@ -61,9 +63,10 @@ export function useChatVisibility({
           visibility: updatedVisibilityType,
         },
       })
-    } catch (error) {
+    }
+    catch (error) {
       // If the mutation fails, roll back to the previous values
-      setLocalVisibility((visibility) =>
+      setLocalVisibility(visibility =>
         visibility === 'private' ? 'public' : 'private',
       )
 
@@ -73,7 +76,8 @@ export function useChatVisibility({
 
       // Rethrow the error for further handling
       throw error
-    } finally {
+    }
+    finally {
       queryClient.invalidateQueries({
         queryKey: userChatsQueryOptions().queryKey,
       })

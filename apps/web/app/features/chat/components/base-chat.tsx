@@ -1,21 +1,21 @@
 import type { Attachment, UIMessage } from 'ai'
-import { useChat } from '@ai-sdk/react'
-import { useState } from 'react'
-import { MultimodalInput } from './multimodal-input'
-import { Messages } from './messages/messages'
-import type { VisibilityType } from './visibility-selector'
-import { nanoid } from 'nanoid'
-import { useQueryClient } from '@tanstack/react-query'
-import { userChatsQueryOptions } from '../chat.query'
-import { useLinkProps } from '@tanstack/react-router'
-import { useScrollToBottom } from './use-scroll-to-bottom'
-import { ChatInputProvider } from './chat-input-context'
-import { ChatHeader } from './chat-header'
-import { useAuthQuery } from '~/features/auth/auth.query'
-import { recentChatsWithAgentsQueryOptions } from '~/features/agent/agent.query'
-import { toast } from 'sonner'
 import type { ToolName } from '../../ai/skills/skill.types'
+import type { VisibilityType } from './visibility-selector'
+import { useChat } from '@ai-sdk/react'
+import { useQueryClient } from '@tanstack/react-query'
+import { useLinkProps } from '@tanstack/react-router'
+import { nanoid } from 'nanoid'
+import { useState } from 'react'
+import { toast } from 'sonner'
+import { recentChatsWithAgentsQueryOptions } from '~/features/agent/agent.query'
+import { useAuthQuery } from '~/features/auth/auth.query'
 import { toolsRequiringConfirmation } from '../../ai/skills/info'
+import { userChatsQueryOptions } from '../chat.query'
+import { ChatHeader } from './chat-header'
+import { ChatInputProvider } from './chat-input-context'
+import { Messages } from './messages/messages'
+import { MultimodalInput } from './multimodal-input'
+import { useScrollToBottom } from './use-scroll-to-bottom'
 
 export function BaseChat({
   id,
@@ -95,16 +95,16 @@ export function BaseChat({
   const [attachments, setAttachments] = useState<Array<Attachment>>([])
   // const isArtifactVisible = useArtifactSelector((state) => state.isVisible)
 
-  const [messagesContainerRef, messagesEndRef, scrollUtils] =
-    useScrollToBottom<HTMLDivElement>()
+  const [messagesContainerRef, messagesEndRef, scrollUtils]
+    = useScrollToBottom<HTMLDivElement>()
 
   // // todo: move to custom hook
-  const pendingToolCallConfirmation = messages.some((m) =>
+  const pendingToolCallConfirmation = messages.some(m =>
     m.parts?.some(
-      (part) =>
-        part.type === 'tool-invocation' &&
-        part.toolInvocation.state === 'call' &&
-        toolsRequiringConfirmation.includes(part.toolInvocation.toolName as ToolName),
+      part =>
+        part.type === 'tool-invocation'
+        && part.toolInvocation.state === 'call'
+        && toolsRequiringConfirmation.includes(part.toolInvocation.toolName as ToolName),
     ),
   )
 

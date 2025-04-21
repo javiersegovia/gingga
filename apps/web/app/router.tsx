@@ -1,32 +1,34 @@
+import type { TRPCAppRouter } from '@gingga/api/src/trpc/routers/index'
+import type { TRPCOptionsProxy } from '@trpc/tanstack-react-query'
 import { QueryClient } from '@tanstack/react-query'
 import { createRouter as createTanStackRouter, isRedirect } from '@tanstack/react-router'
-import { routerWithQueryClient } from '@tanstack/react-router-with-query'
-import { routeTree } from './routeTree.gen'
 
-import SuperJSON from 'superjson'
+import { routerWithQueryClient } from '@tanstack/react-router-with-query'
+import { createIsomorphicFn } from '@tanstack/react-start'
+import { getHeaders } from '@tanstack/react-start/server'
 import { createTRPCClient, httpBatchLink, loggerLink } from '@trpc/client'
 import { createTRPCOptionsProxy } from '@trpc/tanstack-react-query'
-import type { TRPCOptionsProxy } from '@trpc/tanstack-react-query'
-import type { TRPCAppRouter } from '@gingga/api/src/trpc/routers/index'
-import { TRPCProvider } from './lib/trpc'
+import SuperJSON from 'superjson'
 
 import { DefaultCatchBoundary } from './components/shared/default-catch-boundary'
 import { NotFound } from './components/shared/not-found'
-import { createIsomorphicFn } from '@tanstack/react-start'
-import { getHeaders } from '@tanstack/react-start/server'
+import { TRPCProvider } from './lib/trpc'
+import { routeTree } from './routeTree.gen'
 
-export type AppRouterContext = {
+export interface AppRouterContext {
   queryClient: QueryClient
   trpc: TRPCOptionsProxy<TRPCAppRouter>
 }
 
 function getUrl() {
   const base = (() => {
-    if (typeof window !== 'undefined') return ''
-    if (process.env.VITE_API_URL) return process.env.VITE_API_URL
+    if (typeof window !== 'undefined')
+      return ''
+    if (process.env.VITE_API_URL)
+      return process.env.VITE_API_URL
     return `http://localhost:${process.env.PORT ?? 3000}`
   })()
-  return base + '/trpc'
+  return `${base}/trpc`
 }
 
 const headers = createIsomorphicFn()
@@ -54,9 +56,9 @@ export function createRouter() {
     links: [
       loggerLink({
         // Always logs to console in dev mode. In production, only logs errors.
-        enabled: (opts) =>
-          (import.meta.env.MODE === 'development' && typeof window !== 'undefined') ||
-          (opts.direction === 'down' && opts.result instanceof Error),
+        enabled: opts =>
+          (import.meta.env.MODE === 'development' && typeof window !== 'undefined')
+          || (opts.direction === 'down' && opts.result instanceof Error),
       }),
       httpBatchLink({
         url: getUrl(),

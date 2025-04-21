@@ -1,12 +1,12 @@
-import type { Dispatch, SetStateAction } from 'react'
-import { useEffect, useRef, useState } from 'react'
+import type { UseChatHelpers } from '@ai-sdk/react'
 import type { Message } from 'ai'
+import type { Dispatch, SetStateAction } from 'react'
 import { Button } from '@gingga/ui/components/button'
 import { Textarea } from '@gingga/ui/components/textarea'
-import type { UseChatHelpers } from '@ai-sdk/react'
+import { useEffect, useRef, useState } from 'react'
 import { $deleteTrailingMessages } from '~/features/chat/chat.api'
 
-export type MessageEditorProps = {
+export interface MessageEditorProps {
   message: Message
   setMode: Dispatch<SetStateAction<'view' | 'edit'>>
   setMessages: UseChatHelpers['setMessages']
@@ -22,15 +22,9 @@ export function MessageEditor({
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
   const [draftContent, setDraftContent] = useState<string>(
-    message.parts?.find((part) => part.type === 'text')?.text || '',
+    message.parts?.find(part => part.type === 'text')?.text || '',
   )
   const textareaRef = useRef<HTMLTextAreaElement>(null)
-
-  useEffect(() => {
-    if (textareaRef.current) {
-      adjustHeight()
-    }
-  }, [])
 
   const adjustHeight = () => {
     if (textareaRef.current) {
@@ -38,6 +32,12 @@ export function MessageEditor({
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight + 2}px`
     }
   }
+
+  useEffect(() => {
+    if (textareaRef.current) {
+      adjustHeight()
+    }
+  }, [])
 
   const handleInput = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setDraftContent(event.target.value)
@@ -78,7 +78,7 @@ export function MessageEditor({
 
             // @ts-expect-error todo: support UIMessage in setMessages
             setMessages((messages) => {
-              const index = messages.findIndex((m) => m.id === message.id)
+              const index = messages.findIndex(m => m.id === message.id)
 
               if (index !== -1) {
                 const updatedMessage = {

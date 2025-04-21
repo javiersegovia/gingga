@@ -1,10 +1,10 @@
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
-import { AgentForm } from '~/features/agent/components/agent-form'
-import { useCreateAgentMutation } from '~/features/agent/agent.query'
 import type { AgentFormValues } from '~/features/agent/agent.schema'
-import { toast } from 'sonner'
-import { ArrowLeftIcon } from 'lucide-react'
 import { Button } from '@gingga/ui/components/button'
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
+import { ArrowLeftIcon } from 'lucide-react'
+import { toast } from 'sonner'
+import { useCreateAgentMutation } from '~/features/agent/agent.query'
+import { AgentForm } from '~/features/agent/components/agent-form'
 
 export const Route = createFileRoute('/_demo/chat/agents/create')({
   component: RouteComponent,
