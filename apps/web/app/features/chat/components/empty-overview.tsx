@@ -1,8 +1,8 @@
 import { motion } from 'motion/react'
-import { UseChatHelpers } from '@ai-sdk/react'
-import { useAuthQuery } from '@/features/auth/auth.query'
+import type { UseChatHelpers } from '@ai-sdk/react'
+import { useAuthQuery } from '~/features/auth/auth.query'
 import { Button } from '@gingga/ui/components/button'
-import { agentQueryOptions } from '@/features/agent/agent.query'
+import { agentQueryOptions } from '~/features/agent/agent.query'
 import { useQuery } from '@tanstack/react-query'
 
 interface EmptyOverviewProps {

@@ -1,6 +1,5 @@
 import { createServerFn } from '@tanstack/react-start'
-import { SkillId } from './skill.types'
-import type { SkillOption } from './skill.types'
+import type { SkillId, SkillOption } from './skill.types'
 import {
   SkillIdParamSchema,
   CreateSkillInputSchema,
@@ -19,7 +18,7 @@ import {
 import { zodValidator } from '@tanstack/zod-adapter'
 import { z } from 'zod'
 import { getSkills } from './skill.list'
-import { AgentSkills } from '@/db/schema'
+import type { AgentSkills } from '@gingga/db/schema'
 import {
   getComposioIntegrations,
   getUserComposioConnections,
@@ -29,8 +28,8 @@ import type {
   ComposioAppName,
   ComposioIntegration,
   UserConnection,
-} from '@/features/settings/integrations/composio.schema'
-import type { InferSelectModel } from 'drizzle-orm'
+} from '~/features/settings/integrations/composio.schema'
+import type { InferSelectModel } from '@gingga/db'
 
 // Define schema for upsert, making id optional
 const UpsertSkillInputSchema = CreateSkillInputSchema.extend({

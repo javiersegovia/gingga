@@ -1,4 +1,4 @@
-import type { Tab } from '@/components/ui/animated-link-tabs'
+import type { Tab } from '~/components/ui/animated-link-tabs'
 import { createFileRoute, Link, Outlet } from '@tanstack/react-router'
 import { Button } from '@gingga/ui/components/button'
 import {
@@ -8,11 +8,11 @@ import {
   LightbulbIcon,
   WorkflowIcon,
 } from 'lucide-react'
-import { AnimatedLinkTabs } from '@/components/ui/animated-link-tabs'
+import { AnimatedLinkTabs } from '~/components/ui/animated-link-tabs'
 import { Avatar, AvatarFallback, AvatarImage } from '@gingga/ui/components/avatar'
 import { cn } from '@gingga/ui/lib/utils'
-import { agentQueryOptions } from '@/features/agent/agent.query'
-import { skillOptionsQueryOptions } from '@/features/ai/skills/skill.query'
+import { agentQueryOptions } from '~/features/agent/agent.query'
+import { skillOptionsQueryOptions } from '~/features/ai/skills/skill.query'
 import { useSuspenseQuery } from '@tanstack/react-query'
 
 export const Route = createFileRoute('/_demo/chat/agent/$agentId/edit')({

@@ -16,6 +16,8 @@
     "strictNullChecks": true,
     "lib": ["ESNext", "DOM"],
     "noUnusedLocals": true,
-    "noUnusedParameters": true
+    "noUnusedParameters": true,
+    "verbatimModuleSyntax": true,
+    "importsNotUsedAsValues": "remove"
   }
 }

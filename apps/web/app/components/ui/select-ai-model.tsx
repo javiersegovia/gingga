@@ -12,7 +12,8 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from '@gingga/ui/components/popover'
 import { Badge } from '@gingga/ui/components/badge'
 import { Button } from '@gingga/ui/components/button'
-import { AIModel, modelIconPaths } from '@/features/ai/utils/ai-models'
+import type { AIModel } from '~/features/ai/utils/ai-models'
+import { modelIconPaths } from '~/features/ai/utils/ai-models'
 
 interface SelectAIModelProps {
   models: AIModel[]

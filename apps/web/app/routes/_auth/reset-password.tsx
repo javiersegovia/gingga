@@ -4,8 +4,8 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { toast } from 'sonner'
 
-import { PasswordSchema } from '@/features/auth/auth.schema'
-import { authClient } from '@/features/auth/auth.client'
+import { PasswordSchema } from '~/features/auth/auth.schema'
+import { authClient } from '~/features/auth/auth.client'
 import {
   Form,
   FormControl,

@@ -1,5 +1,5 @@
-import { Tool } from 'ai'
-import { ExecutionFunction, ToolResponse } from '../skill.types'
+import type { Tool } from 'ai'
+import type { ExecutionFunction, ToolResponse } from '../skill.types'
 import { z } from 'zod'
 
 // // Input schema based on GOOGLESHEETS_BATCH_GET parameters

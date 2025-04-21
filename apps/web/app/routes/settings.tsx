@@ -2,10 +2,10 @@ import { createFileRoute, Link, Outlet, redirect } from '@tanstack/react-router'
 import { Avatar, AvatarFallback, AvatarImage } from '@gingga/ui/components/avatar'
 import { Badge } from '@gingga/ui/components/badge'
 import { Button } from '@gingga/ui/components/button'
-import { useAuthedQuery, useSignOutMutation } from '@/features/auth/auth.query'
+import { useAuthedQuery, useSignOutMutation } from '~/features/auth/auth.query'
 import { ArrowLeftIcon, LogOutIcon } from 'lucide-react'
-import { AnimatedLinkTabs } from '@/components/ui/animated-link-tabs'
-import type { Tab } from '@/components/ui/animated-link-tabs'
+import { AnimatedLinkTabs } from '~/components/ui/animated-link-tabs'
+import type { Tab } from '~/components/ui/animated-link-tabs'
 
 export const Route = createFileRoute('/settings')({
   component: SettingsLayoutComponent,

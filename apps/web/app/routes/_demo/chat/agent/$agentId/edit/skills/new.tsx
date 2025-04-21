@@ -1,8 +1,8 @@
 import { Suspense } from 'react'
 import { createFileRoute, useRouter, ErrorComponent } from '@tanstack/react-router'
 import { useSuspenseQuery } from '@tanstack/react-query'
-import { skillOptionsQueryOptions } from '@/features/ai/skills/skill.query'
-import { SkillForm, SkillFormSkeleton } from '@/features/ai/skills/components/skill-form'
+import { skillOptionsQueryOptions } from '~/features/ai/skills/skill.query'
+import { SkillForm, SkillFormSkeleton } from '~/features/ai/skills/components/skill-form'
 import { z } from 'zod'
 import {
   Sheet,

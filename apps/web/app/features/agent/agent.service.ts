@@ -1,8 +1,8 @@
-import { getDatabase } from '@/db'
-import { Agents, Chats } from '@/db/schema'
-import { eq, and, desc, max, isNotNull } from 'drizzle-orm'
-import { AgentFormValues } from './agent.schema'
-import { Agent } from '@/db/types'
+import { getDatabase } from '~/middleware/setup-context.server'
+import { Agents, Chats } from '@gingga/db/schema'
+import { eq, and, desc, max, isNotNull } from '@gingga/db'
+import type { AgentFormValues } from './agent.schema'
+import type { Agent } from '@gingga/db/types'
 
 /**
  * Fetches the configuration for a specific agent from the database.

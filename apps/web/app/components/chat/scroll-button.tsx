@@ -1,4 +1,5 @@
-import { Button, buttonVariants } from '@gingga/ui/components/button'
+import type { buttonVariants } from '@gingga/ui/components/button'
+import { Button } from '@gingga/ui/components/button'
 import { cn } from '@gingga/ui/lib/utils'
 import type { VariantProps } from 'class-variance-authority'
 import { ChevronDown } from 'lucide-react'

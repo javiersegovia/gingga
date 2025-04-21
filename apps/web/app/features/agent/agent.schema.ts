@@ -1,4 +1,4 @@
-import { Agents } from '@/db/schema'
+import { Agents } from '@gingga/db/schema'
 import { z } from 'zod'
 import { formOptions } from '@tanstack/react-form'
 

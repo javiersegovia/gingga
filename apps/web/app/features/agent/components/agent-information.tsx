@@ -2,6 +2,7 @@ import { cn } from '@gingga/ui/lib/utils'
 import { Button } from '@gingga/ui/components/button'
 import { DotPattern } from '@gingga/ui/components/dot-pattern'
 import { Card } from '@gingga/ui/components/card'
+import type { LucideProps } from 'lucide-react'
 import {
   ArrowRightIcon,
   BarChart2Icon,
@@ -23,9 +24,8 @@ import {
   PaletteIcon,
   SplitIcon,
   LineChartIcon,
-  LucideProps,
 } from 'lucide-react'
-import type { Agent } from '@/features/agent/components/agentic-employees'
+import type { Agent } from '~/features/agent/components/agentic-employees'
 import { Link } from '@tanstack/react-router'
 
 interface AgentInformationProps {

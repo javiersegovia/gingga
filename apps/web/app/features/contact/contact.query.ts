@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 import { $submitContactForm } from './contact.api'
-import { ContactFormInput } from './contact.schema'
+import type { ContactFormInput } from './contact.schema'
 
 /**
  * Hook for submitting the contact form

@@ -1,10 +1,11 @@
-import { createServerAuth } from '@/features/auth/auth.server'
-import { createDatabaseClient } from '@/db'
+import { createServerAuth } from '~/features/auth/auth.server'
+import { createDatabaseClient, eq } from '@gingga/db'
 import { getEvent, getWebRequest } from '@tanstack/react-start/server'
-import { Users, UserMemberships } from '@/db/schema'
-import { eq } from 'drizzle-orm'
+import { Users, UserMemberships } from '@gingga/db/schema'
 import type { Session as BetterAuthSessionData } from 'better-auth'
-import type { AppAuthSession } from '@/features/auth/auth.types'
+import type { AppAuthSession } from '~/features/auth/auth.types'
+
+export const getDatabase = () => getEvent().context.db
 
 export async function setupAppContext() {
   const event = getEvent()

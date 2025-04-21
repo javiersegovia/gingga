@@ -1,4 +1,4 @@
-import { getClientEnv, getServerEnv } from '@/server/env'
+import { getClientEnv, getServerEnv } from '~/server/env'
 import { render } from '@react-email/components'
 import type { ReactElement } from 'react'
 import { z } from 'zod'

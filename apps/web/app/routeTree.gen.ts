@@ -11,6 +11,7 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as TestImport } from './routes/test'
 import { Route as SettingsImport } from './routes/settings'
 import { Route as ContactImport } from './routes/contact'
 import { Route as AdminImport } from './routes/admin'
@@ -51,6 +52,12 @@ import { Route as DemoChatAgentAgentIdEditSkillsNewImport } from './routes/_demo
 import { Route as DemoChatAgentAgentIdEditSkillsSkillIdImport } from './routes/_demo/chat/agent/$agentId/edit/skills/$skillId'
 
 // Create/Update Routes
+
+const TestRoute = TestImport.update({
+  id: '/test',
+  path: '/test',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const SettingsRoute = SettingsImport.update({
   id: '/settings',
@@ -329,6 +336,13 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof SettingsImport
+      parentRoute: typeof rootRoute
+    }
+    '/test': {
+      id: '/test'
+      path: '/test'
+      fullPath: '/test'
+      preLoaderRoute: typeof TestImport
       parentRoute: typeof rootRoute
     }
     '/_auth/forgot-password': {
@@ -698,6 +712,7 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRouteWithChildren
   '/contact': typeof ContactRoute
   '/settings': typeof SettingsRouteWithChildren
+  '/test': typeof TestRoute
   '/forgot-password': typeof AuthForgotPasswordRoute
   '/identify': typeof AuthIdentifyRoute
   '/register': typeof AuthRegisterRoute
@@ -737,6 +752,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/settings': typeof SettingsRouteWithChildren
+  '/test': typeof TestRoute
   '/forgot-password': typeof AuthForgotPasswordRoute
   '/identify': typeof AuthIdentifyRoute
   '/register': typeof AuthRegisterRoute
@@ -778,6 +794,7 @@ export interface FileRoutesById {
   '/admin': typeof AdminRouteWithChildren
   '/contact': typeof ContactRoute
   '/settings': typeof SettingsRouteWithChildren
+  '/test': typeof TestRoute
   '/_auth/forgot-password': typeof AuthForgotPasswordRoute
   '/_auth/identify': typeof AuthIdentifyRoute
   '/_auth/register': typeof AuthRegisterRoute
@@ -820,6 +837,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/contact'
     | '/settings'
+    | '/test'
     | '/forgot-password'
     | '/identify'
     | '/register'
@@ -858,6 +876,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/settings'
+    | '/test'
     | '/forgot-password'
     | '/identify'
     | '/register'
@@ -897,6 +916,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/contact'
     | '/settings'
+    | '/test'
     | '/_auth/forgot-password'
     | '/_auth/identify'
     | '/_auth/register'
@@ -939,6 +959,7 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRouteWithChildren
   ContactRoute: typeof ContactRoute
   SettingsRoute: typeof SettingsRouteWithChildren
+  TestRoute: typeof TestRoute
   DemoChatRoute: typeof DemoChatRouteWithChildren
   GrayolaIndexRoute: typeof GrayolaIndexRoute
   ProposalsExsisIndexRoute: typeof ProposalsExsisIndexRoute
@@ -951,6 +972,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRouteWithChildren,
   ContactRoute: ContactRoute,
   SettingsRoute: SettingsRouteWithChildren,
+  TestRoute: TestRoute,
   DemoChatRoute: DemoChatRouteWithChildren,
   GrayolaIndexRoute: GrayolaIndexRoute,
   ProposalsExsisIndexRoute: ProposalsExsisIndexRoute,
@@ -972,6 +994,7 @@ export const routeTree = rootRoute
         "/admin",
         "/contact",
         "/settings",
+        "/test",
         "/_demo/chat",
         "/grayola/",
         "/_proposals/exsis/"
@@ -1018,6 +1041,9 @@ export const routeTree = rootRoute
         "/settings/integrations",
         "/settings/preferences"
       ]
+    },
+    "/test": {
+      "filePath": "test.tsx"
     },
     "/_auth/forgot-password": {
       "filePath": "_auth/forgot-password.tsx",

@@ -2,7 +2,8 @@ import { motion } from 'motion/react'
 import { cn } from '@gingga/ui/lib/utils'
 import type { ReactNode } from 'react'
 import { Button } from '@gingga/ui/components/button'
-import { Link, LinkOptions } from '@tanstack/react-router'
+import type { LinkOptions } from '@tanstack/react-router'
+import { Link } from '@tanstack/react-router'
 import { Card } from '@gingga/ui/components/card'
 
 export type Tab = {

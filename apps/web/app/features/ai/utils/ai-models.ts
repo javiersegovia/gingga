@@ -1,4 +1,4 @@
-import { availableModelIds } from '@/db/schema'
+import { availableModelIds } from '@gingga/db/schema'
 
 export interface AIModel {
   id: string // The unique identifier of the model inside OpenRouter.

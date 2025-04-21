@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { Card, CardTitle } from '@gingga/ui/components/card'
 import { ImageIcon } from 'lucide-react'
-import { SkillOption } from '../skill.types'
+import type { SkillOption } from '../skill.types'
 import type { AgentSkillWithStatus } from '../skill.api' // Import for connection status type
 import { cn } from '@gingga/ui/lib/utils'
 import {
@@ -10,7 +10,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@gingga/ui/components/tooltip' // Import Tooltip components
-import { ConnectionStatus } from '@/features/settings/integrations/components/connection-status'
+import { ConnectionStatus } from '~/features/settings/integrations/components/connection-status'
 
 // Type for the optional connection status prop
 type ConnectionStatusProps = Pick<

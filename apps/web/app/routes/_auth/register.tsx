@@ -1,6 +1,6 @@
 import { createFileRoute, redirect, Link } from '@tanstack/react-router'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import type { z } from 'zod'
 import { Input } from '@gingga/ui/components/input'
 import {
   Form,
@@ -10,8 +10,8 @@ import {
   FormLabel,
   FormMessage,
 } from '@gingga/ui/components/form'
-import { SignUpSchema } from '@/features/auth/auth.schema'
-import { authClient } from '@/features/auth/auth.client'
+import { SignUpSchema } from '~/features/auth/auth.schema'
+import { authClient } from '~/features/auth/auth.client'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FormStatusButton } from '@gingga/ui/components/status-button'
 import { toast } from 'sonner'

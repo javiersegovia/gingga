@@ -1,14 +1,14 @@
-import { UIMessage } from 'ai'
+import type { UIMessage } from 'ai'
 import { PreviewMessage, ThinkingMessage } from './message'
-import { useScrollToBottom } from '../use-scroll-to-bottom'
+import type { useScrollToBottom } from '../use-scroll-to-bottom'
 import { EmptyOverview } from '../empty-overview'
 import { memo, useEffect, useRef } from 'react'
-// import { Vote } from '@/lib/db/schema'
+// import { Vote } from '~/lib/db/schema'
 import equal from 'fast-deep-equal'
-import { UseChatHelpers } from '@ai-sdk/react'
+import type { UseChatHelpers } from '@ai-sdk/react'
 import { useChatInput } from '../chat-input-context'
 import { cn } from '@gingga/ui/lib/utils'
-import { ToolResponse } from '@/features/ai/skills/skill.types'
+import type { ToolResponse } from '~/features/ai/skills/skill.types'
 
 interface MessagesProps {
   chatId: string

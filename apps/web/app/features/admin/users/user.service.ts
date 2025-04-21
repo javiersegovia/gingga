@@ -1,6 +1,6 @@
-import { getDatabase } from '@/db'
-import { Users, UserMemberships, Chats, ChatMessages } from '@/db/schema'
-import { eq, desc, count } from 'drizzle-orm'
+import { getDatabase } from '~/middleware/setup-context.server'
+import { Users, UserMemberships, Chats, ChatMessages } from '@gingga/db/schema'
+import { eq, desc, count } from '@gingga/db'
 import type { UpdateUserInput, BanUserInput, BaseUser } from './user.schema'
 
 // Helper function to potentially throw specific errors (e.g., NotFoundError)

@@ -1,5 +1,5 @@
 /* eslint-disable max-params */
-import { ColumnDef } from '@tanstack/react-table'
+import type { ColumnDef } from '@tanstack/react-table'
 import { Badge } from '@gingga/ui/components/badge'
 
 import { UsersDataTableRowActions } from './users-data-table-row-actions'
@@ -62,7 +62,7 @@ export const userColumns: ColumnDef<UserTableEntry>[] = [
             : 'outline'
       return <Badge variant={variant}>{tier}</Badge>
     },
-    filterFn: (row, id, value: unknown) => {
+    filterFn: (row, _id, value: unknown) => {
       const rowValue = row.original.membership?.tier
       if (Array.isArray(value)) {
         return value.includes(rowValue)

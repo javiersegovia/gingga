@@ -1,8 +1,8 @@
 import { createServerFn } from '@tanstack/react-start'
 import { zodValidator } from '@tanstack/zod-adapter'
 import { ContactFormSchema } from './contact.schema'
-import { sendEmail } from '@/server/email/email'
-import ContactFormEmail from '@/server/email/templates/contact-form-email'
+import { sendEmail } from '~/server/email/email'
+import ContactFormEmail from '~/server/email/templates/contact-form-email'
 
 /**
  * Server function to send contact form data to the contact email

@@ -5,7 +5,7 @@ import {
   queryOptions,
   useQueryClient,
 } from '@tanstack/react-query'
-import { useAuthQuery } from '@/features/auth/auth.query'
+import { useAuthQuery } from '~/features/auth/auth.query'
 import {
   $getUserChats,
   $renameChat,

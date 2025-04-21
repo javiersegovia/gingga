@@ -1,4 +1,4 @@
-import { setupAppContext } from '@/middleware/setup-context.server'
+import { setupAppContext } from '~/middleware/setup-context.server'
 import { createAPIFileRoute } from '@tanstack/react-start/api'
 import { setHeader } from '@tanstack/react-start/server'
 

@@ -2,7 +2,7 @@ import { z } from 'zod'
 import {
   ComposioAppNames,
   ComposioToolNameEnum,
-} from '@/features/settings/integrations/composio.schema'
+} from '~/features/settings/integrations/composio.schema'
 import { skillIds, toolNames } from './skill.types'
 
 /**

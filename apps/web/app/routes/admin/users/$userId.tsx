@@ -1,9 +1,9 @@
 import { createFileRoute, useParams } from '@tanstack/react-router'
 import { useQuery } from '@tanstack/react-query'
-import { UserForm } from '@/features/admin/users/components/user-form'
-import { userDetailsQueryOptions, useUpdateUser } from '@/features/admin/users/user.query'
-import { UserFormValues } from '@/features/admin/users/user.schema'
-import { UserMemberships } from '@/db/schema'
+import { UserForm } from '~/features/admin/users/components/user-form'
+import { userDetailsQueryOptions, useUpdateUser } from '~/features/admin/users/user.query'
+import type { UserFormValues } from '~/features/admin/users/user.schema'
+import type { UserMemberships } from '@gingga/db/schema'
 
 export const Route = createFileRoute('/admin/users/$userId')({
   component: RouteComponent,

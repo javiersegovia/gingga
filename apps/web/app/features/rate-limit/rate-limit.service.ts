@@ -1,7 +1,8 @@
-import { UserMemberships } from '@/db/schema'
-import { rateLimit, RateLimitResult, Tier } from '@/lib/ratelimiter'
-import { eq } from 'drizzle-orm'
-import { getDatabase } from '@/db'
+import { UserMemberships } from '@gingga/db/schema'
+import type { RateLimitResult, Tier } from '~/lib/ratelimiter'
+import { rateLimit } from '~/lib/ratelimiter'
+import { eq } from '@gingga/db'
+import { getDatabase } from '~/middleware/setup-context.server'
 import { ipAddress, waitUntil } from '@vercel/functions'
 
 export interface RateLimitContext {

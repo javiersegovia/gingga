@@ -1,5 +1,6 @@
 /* eslint-disable react-compiler/react-compiler */
-import React, { useState, useRef, useCallback, useEffect } from 'react'
+import type React from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 
 export type ScrollUtilities = {
   autoScrollEnabled: boolean

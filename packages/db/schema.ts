@@ -1,12 +1,9 @@
 import { sqliteTable, text, integer, primaryKey } from 'drizzle-orm/sqlite-core'
 import { relations, sql } from 'drizzle-orm'
 import { nanoid } from 'nanoid'
-import { Attachment } from 'ai'
-import { SkillId, ToolName } from '../features/ai/skills/skill.types'
-import {
-  ComposioAppNames,
-  ComposioToolName,
-} from '../features/settings/integrations/composio.schema'
+import type { Attachment } from 'ai'
+import type { ComposioToolName, SkillId, ToolName } from './enums'
+import { ComposioAppNames } from './enums'
 
 // Helper for NanoId default values
 const nanoIdDefault = () => text('id').notNull().$defaultFn(nanoid)
@@ -89,8 +86,12 @@ export const Accounts = sqliteTable('accounts', {
   providerId: text('provider_id').notNull(), // Id of the provider
   accessToken: text('access_token'), // The access token of the account. Returned by the provider
   refreshToken: text('refresh_token'), // The refresh token of the account. Returned by the provider
-  accessTokenExpiresAt: integer('access_token_expires_at', { mode: 'timestamp_ms' }), // The time when the verification request expires
-  refreshTokenExpiresAt: integer('refresh_token_expires_at', { mode: 'timestamp_ms' }), // The time when the verification request expires
+  accessTokenExpiresAt: integer('access_token_expires_at', {
+    mode: 'timestamp_ms',
+  }), // The time when the verification request expires
+  refreshTokenExpiresAt: integer('refresh_token_expires_at', {
+    mode: 'timestamp_ms',
+  }), // The time when the verification request expires
   scope: text('scope'), // The scope of the account. Returned by the provider
   password: text('password'), // The password of the account. Mainly used for email and password authentication
 })
@@ -185,7 +186,9 @@ export const Agents = sqliteTable('agents', {
   id: nanoIdDefault().primaryKey(),
   ...timestamps,
 
-  ownerId: text('owner_id').references(() => Users.id, { onDelete: 'set null' }),
+  ownerId: text('owner_id').references(() => Users.id, {
+    onDelete: 'set null',
+  }),
 
   title: text('title'),
   name: text('name').notNull(),
@@ -216,7 +219,9 @@ export const Chats = sqliteTable('chats', {
 
   // References
   userId: text('user_id').references(() => Users.id, { onDelete: 'set null' }),
-  agentId: text('agent_id').references(() => Agents.id, { onDelete: 'set null' }),
+  agentId: text('agent_id').references(() => Agents.id, {
+    onDelete: 'set null',
+  }),
 
   title: text('title'),
   visibility: text('visibility', { enum: ['public', 'private'] })

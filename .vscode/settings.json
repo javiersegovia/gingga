@@ -12,14 +12,14 @@
     "**/routeTree.gen.ts": true
   },
   "files.watcherExclude": {
-    "pnpm-lock.yaml": true
+    "pnpm-lock.yaml": true,
+    "bun.lockb": true
   },
   "search.exclude": {
     "**/routeTree.gen.ts": true,
-    "pnpm-lock.yaml": true
+    "pnpm-lock.yaml": true,
+    "bun.lockb": true
   },
-
-  // "typescript.tsdk": "./node_modules/typescript/lib",
 
   "files.eol": "\n",
 
@@ -37,7 +37,7 @@
   "editor.formatOnPaste": true,
 
   "files.associations": {
-    "*.vars": "dotenv",
+    "*.vars*": "dotenv",
     "*.css": "tailwindcss"
   },
 
@@ -45,7 +45,10 @@
     "./packages/ui/styles/tailwind.css": "**"
   },
 
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "javascript.preferences.importModuleSpecifier": "non-relative",
+
   "symbols.files.associations": {
-    "*.service.ts": "typescript"
+    "*service.ts": "typescript"
   }
 }

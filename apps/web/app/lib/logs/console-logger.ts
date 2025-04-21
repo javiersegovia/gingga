@@ -259,7 +259,7 @@ export class Logger {
  *
  * Usage example:
  * ```
- * import { createLogger } from '@/lib/console-logger'
+ * import { createLogger } from '~/lib/console-logger'
  *
  * const logger = createLogger('MyComponent')
  *

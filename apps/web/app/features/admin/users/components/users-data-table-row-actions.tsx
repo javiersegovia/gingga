@@ -6,7 +6,7 @@ import {
   TrashIcon,
   UserCheckIcon,
 } from 'lucide-react'
-import { Row } from '@tanstack/react-table'
+import type { Row } from '@tanstack/react-table'
 import { useRouter } from '@tanstack/react-router'
 
 import { Button } from '@gingga/ui/components/button'
@@ -17,7 +17,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@gingga/ui/components/dropdown-menu'
-import { UserTableEntry } from './users-columns'
+import type { UserTableEntry } from './users-columns'
 import { toast } from 'sonner'
 
 interface DataTableRowActionsProps<TData> {

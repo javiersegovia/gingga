@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { authMiddleware } from '@/middleware/auth-guard'
+import { authMiddleware } from '~/middleware/auth-guard'
 import { zodValidator } from '@tanstack/zod-adapter'
 import { createServerFn } from '@tanstack/react-start'
 import {
@@ -19,9 +19,9 @@ import {
   UpdateChatVisibilitySchema,
   ChatModelSchema,
 } from './chat.schema'
-import { getDatabase } from '@/db'
-import { and, eq } from 'drizzle-orm'
-import { Chats } from '@/db/schema'
+import { getDatabase } from '~/middleware/setup-context.server'
+import { and, eq } from '@gingga/db'
+import { Chats } from '@gingga/db/schema'
 
 export const $getChatModelId = createServerFn({
   method: 'GET',

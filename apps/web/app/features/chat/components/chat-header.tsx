@@ -1,5 +1,6 @@
 import { memo } from 'react'
-import { VisibilityType, VisibilitySelector } from './visibility-selector'
+import type { VisibilityType } from './visibility-selector'
+import { VisibilitySelector } from './visibility-selector'
 
 function PureChatHeader({
   chatId,

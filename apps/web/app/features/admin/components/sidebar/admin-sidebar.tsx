@@ -11,7 +11,7 @@ import {
   SidebarMenu,
   SidebarMenuItem,
 } from '@gingga/ui/components/sidebar'
-import { ThemeSwitch } from '@/components/ui/theme-switch'
+import { ThemeSwitch } from '~/components/ui/theme-switch'
 import { cn } from '@gingga/ui/lib/utils'
 
 export function AdminSidebar() {

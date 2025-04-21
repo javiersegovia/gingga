@@ -1,14 +1,47 @@
 import { QueryClient } from '@tanstack/react-query'
 import { createRouter as createTanStackRouter, isRedirect } from '@tanstack/react-router'
 import { routerWithQueryClient } from '@tanstack/react-router-with-query'
+import { routeTree } from './routeTree.gen'
+
+import SuperJSON from 'superjson'
+import { createTRPCClient, httpBatchLink, loggerLink } from '@trpc/client'
+import { createTRPCOptionsProxy } from '@trpc/tanstack-react-query'
+import type { TRPCOptionsProxy } from '@trpc/tanstack-react-query'
+import type { TRPCAppRouter } from '@gingga/api/src/trpc/routers/index'
+import { TRPCProvider } from './lib/trpc'
 
 import { DefaultCatchBoundary } from './components/shared/default-catch-boundary'
 import { NotFound } from './components/shared/not-found'
-import { routeTree } from './routeTree.gen'
+import { createIsomorphicFn } from '@tanstack/react-start'
+import { getHeaders } from '@tanstack/react-start/server'
+
+export type AppRouterContext = {
+  queryClient: QueryClient
+  trpc: TRPCOptionsProxy<TRPCAppRouter>
+}
+
+function getUrl() {
+  const base = (() => {
+    if (typeof window !== 'undefined') return ''
+    if (process.env.VITE_API_URL) return process.env.VITE_API_URL
+    return `http://localhost:${process.env.PORT ?? 3000}`
+  })()
+  return base + '/trpc'
+}
+
+const headers = createIsomorphicFn()
+  .client(() => ({}))
+  .server(() => getHeaders())
 
 export function createRouter() {
   const queryClient = new QueryClient({
     defaultOptions: {
+      dehydrate: {
+        serializeData: SuperJSON.serialize,
+      },
+      hydrate: {
+        deserializeData: SuperJSON.deserialize,
+      },
       queries: {
         refetchOnWindowFocus: false,
         staleTime: 1000 * 60, // 1 minute
@@ -17,15 +50,41 @@ export function createRouter() {
     },
   })
 
+  const trpcClient = createTRPCClient<TRPCAppRouter>({
+    links: [
+      loggerLink({
+        // Always logs to console in dev mode. In production, only logs errors.
+        enabled: (opts) =>
+          (import.meta.env.MODE === 'development' && typeof window !== 'undefined') ||
+          (opts.direction === 'down' && opts.result instanceof Error),
+      }),
+      httpBatchLink({
+        url: getUrl(),
+        transformer: SuperJSON,
+        headers,
+      }),
+    ],
+  })
+
+  const trpc = createTRPCOptionsProxy<TRPCAppRouter>({
+    client: trpcClient,
+    queryClient,
+  })
+
   const router = createTanStackRouter({
+    context: { queryClient, trpc },
     routeTree,
-    context: { queryClient },
     defaultPreload: 'intent',
     defaultPreloadStaleTime: 0,
     defaultErrorComponent: DefaultCatchBoundary,
     defaultNotFoundComponent: NotFound,
     scrollRestoration: true,
     defaultStructuralSharing: true,
+    Wrap: (props: { children: React.ReactNode }) => (
+      <TRPCProvider queryClient={queryClient} trpcClient={trpcClient}>
+        {props.children}
+      </TRPCProvider>
+    ),
   })
 
   // handle redirect without useServerFn when using tanstack query

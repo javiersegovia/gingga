@@ -1,8 +1,8 @@
-import { UIMessage, Attachment } from 'ai'
-import { $getChatById } from '@/features/chat/chat.api'
+import type { UIMessage, Attachment } from 'ai'
+import { $getChatById } from '~/features/chat/chat.api'
 import { createFileRoute, redirect } from '@tanstack/react-router'
-import { BaseChat } from '@/features/chat/components/base-chat'
-import { ChatMessage } from '@/db/types'
+import { BaseChat } from '~/features/chat/components/base-chat'
+import type { ChatMessage } from '@gingga/db/types'
 
 function convertToUIMessages(messages: Array<ChatMessage>): Array<UIMessage> {
   return messages.map((message) => ({

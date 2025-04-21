@@ -11,10 +11,10 @@ import {
   FormLabel,
   FormMessage,
 } from '@gingga/ui/components/form'
-import { EmailSchema } from '@/features/auth/auth.schema'
+import { EmailSchema } from '~/features/auth/auth.schema'
 import { FormStatusButton } from '@gingga/ui/components/status-button'
 import { toast } from 'sonner'
-import { authClient } from '@/features/auth/auth.client'
+import { authClient } from '~/features/auth/auth.client'
 
 const ForgotPasswordSchema = z.object({
   email: EmailSchema,

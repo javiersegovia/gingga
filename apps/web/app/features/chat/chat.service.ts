@@ -1,16 +1,12 @@
-import { and, asc, desc, eq, gte, inArray } from 'drizzle-orm'
-import { ChatMessages, Chats } from '@/db/schema'
-import { getDatabase } from '@/db'
-import {
-  CoreToolMessage,
-  generateText,
-  Message,
-  UIMessage,
-  CoreAssistantMessage,
-} from 'ai'
+import { and, asc, desc, eq, gte, inArray } from '@gingga/db'
+import { ChatMessages, Chats } from '@gingga/db/schema'
+import { getDatabase } from '~/middleware/setup-context.server'
+import type { CoreToolMessage, Message, UIMessage, CoreAssistantMessage } from 'ai'
+import { generateText } from 'ai'
 import { modelProvider } from '../ai/utils/providers'
-import { ChatSchema, ChatModelSchema } from './chat.schema'
-import { z } from 'zod'
+import type { ChatSchema } from './chat.schema'
+import { ChatModelSchema } from './chat.schema'
+import type { z } from 'zod'
 import { getCookie, getEvent, setCookie } from '@tanstack/react-start/server'
 
 export async function saveChat({

@@ -1,5 +1,5 @@
 import type { SkillOption } from '../skill.types'
-import type { AgentSkill } from '@/db/types'
+import type { AgentSkill } from '@gingga/db/types'
 import { useState } from 'react'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@gingga/ui/components/tabs'
 import { Button } from '@gingga/ui/components/button'
@@ -11,9 +11,9 @@ import { cn } from '@gingga/ui/lib/utils'
 
 import { toast } from 'sonner'
 import { useUpsertSkillMutation } from '../skill.query'
-import { useAppForm, formContext } from '@/components/form/tanstack-form'
+import { useAppForm } from '~/components/form/tanstack-form'
 import { formOptions } from '@tanstack/react-form'
-import type { ComposioToolName } from '@/features/settings/integrations/composio.schema'
+import type { ComposioToolName } from '~/features/settings/integrations/composio.schema'
 import { SheetDescription, SheetHeader, SheetTitle } from '@gingga/ui/components/sheet'
 import { Skeleton } from '@gingga/ui/components/skeleton'
 

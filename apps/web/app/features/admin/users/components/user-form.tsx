@@ -1,9 +1,11 @@
-import React, { Suspense } from 'react'
-import { useAppForm } from '@/components/form/tanstack-form'
+import type React from 'react'
+import { Suspense } from 'react'
+import { useAppForm } from '~/components/form/tanstack-form'
 import { Input } from '@gingga/ui/components/input'
 import { Skeleton } from '@gingga/ui/components/skeleton'
-import { Users, UserMemberships } from '@/db/schema'
-import { userFormOptions, UserFormSchema, UserFormValues } from '../user.schema'
+import { Users, UserMemberships } from '@gingga/db/schema'
+import type { UserFormValues } from '../user.schema'
+import { userFormOptions, UserFormSchema } from '../user.schema'
 import {
   Select,
   SelectContent,

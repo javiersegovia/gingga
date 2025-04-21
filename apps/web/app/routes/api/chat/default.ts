@@ -1,7 +1,6 @@
 import { json } from '@tanstack/react-start'
 import { createAPIFileRoute } from '@tanstack/react-start/api'
 import { streamText, appendResponseMessages, createDataStreamResponse } from 'ai'
-import { z } from 'zod'
 import {
   generateChatTitleFromUserMessage,
   getChatById,
@@ -9,11 +8,11 @@ import {
   getTrailingMessageId,
   saveChat,
   upsertChatMessage,
-} from '@/features/chat/chat.service'
-import { setupAppContext } from '@/middleware/setup-context.server'
-import { modelProvider } from '@/features/ai/utils/providers'
-// import { tools, executions } from '@/features/ai/skills/index'
-import { processToolCalls } from '@/features/ai/utils/human-in-the-loop'
+} from '~/features/chat/chat.service'
+import { setupAppContext } from '~/middleware/setup-context.server'
+import { modelProvider } from '~/features/ai/utils/providers'
+// import { tools, executions } from '~/features/ai/skills/index'
+import { processToolCalls } from '~/features/ai/utils/human-in-the-loop'
 import { nanoid } from 'nanoid'
 import { AIChatSchema } from '../../../features/chat/chat.schema'
 

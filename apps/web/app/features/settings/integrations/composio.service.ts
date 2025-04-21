@@ -5,13 +5,13 @@ import {
   Composio,
 } from 'composio-core'
 
-import { getServerEnv } from '@/server/env'
-import {
+import { getServerEnv } from '~/server/env'
+import type {
   ComposioAppName,
-  ComposioAppNameEnum,
   ComposioIntegration,
   UserConnection,
 } from './composio.schema'
+import { ComposioAppNameEnum } from './composio.schema'
 
 // Helper to initialize the Composio SDK
 export function getVercelToolset({ entityId }: { entityId?: string }): VercelAIToolSet {

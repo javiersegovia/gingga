@@ -29,6 +29,7 @@ export function IntegrationCard({ integration, userConnection }: IntegrationCard
     onSuccess: (data) => {
       if (data?.redirectUrl) {
         console.log('Redirecting user to:', data.redirectUrl)
+        // eslint-disable-next-line react-compiler/react-compiler
         window.location.href = data.redirectUrl
       } else {
         console.error('Composio connection initiated but no redirect URL received.')

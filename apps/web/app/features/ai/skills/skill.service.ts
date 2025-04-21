@@ -2,9 +2,9 @@
  * Business logic for AgentSkill CRUD operations.
  * All database interaction for AgentSkills should be implemented here.
  */
-import { getDatabase } from '@/db'
-import { AgentSkills } from '@/db/schema'
-import { eq } from 'drizzle-orm'
+import { getDatabase } from '~/middleware/setup-context.server'
+import { AgentSkills } from '@gingga/db/schema'
+import { eq } from '@gingga/db'
 
 /**
  * Create a new AgentSkill in the database.

@@ -1,6 +1,7 @@
-import { Users, Agents, UserMemberships } from '@/db/schema'
-import { getDatabase } from '@/db'
-import { eq } from 'drizzle-orm'
+import type { Users, UserMemberships } from '@gingga/db/schema'
+import { Agents } from '@gingga/db/schema'
+import { getDatabase } from '~/middleware/setup-context.server'
+import { eq } from '@gingga/db'
 
 // Define types based on schema for clarity
 type User = typeof Users.$inferSelect

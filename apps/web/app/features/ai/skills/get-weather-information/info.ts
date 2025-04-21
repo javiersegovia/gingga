@@ -1,4 +1,4 @@
-import { SkillInfo, ToolInfo } from '../skill.types'
+import type { SkillInfo, ToolInfo } from '../skill.types'
 
 const requiresConfirmation = true
 

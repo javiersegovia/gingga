@@ -1,6 +1,6 @@
 import { createServerFn } from '@tanstack/react-start'
 import { zodValidator } from '@tanstack/zod-adapter'
-import { authMiddleware } from '@/middleware/auth-guard' // Assuming this exists
+import { authMiddleware } from '~/middleware/auth-guard' // Assuming this exists
 import {
   getComposioIntegrations,
   getComposioIntegrationByAppName,

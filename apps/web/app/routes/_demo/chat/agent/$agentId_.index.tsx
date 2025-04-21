@@ -1,7 +1,7 @@
 import { createFileRoute, redirect } from '@tanstack/react-router'
 import { nanoid } from 'nanoid'
-import { BaseChat } from '@/features/chat/components/base-chat'
-import { agentQueryOptions } from '@/features/agent/agent.query'
+import { BaseChat } from '~/features/chat/components/base-chat'
+import { agentQueryOptions } from '~/features/agent/agent.query'
 
 export const Route = createFileRoute('/_demo/chat/agent/$agentId_/')({
   component: AgentChatRoute,

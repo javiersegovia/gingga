@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'motion/react'
 import { memo, useState } from 'react'
 import { PencilIcon, SparklesIcon } from 'lucide-react'
 
-// import type { Vote } from '@/lib/db/schema'
+// import type { Vote } from '~/lib/db/schema'
 // import { DocumentToolCall, DocumentToolResult } from './document'
 // import { MessageActions } from './message-actions'
 // import { Weather } from './weather'
@@ -23,9 +23,9 @@ import { Markdown } from '../markdown'
 import { PreviewAttachment } from './message-preview-attachment'
 import { MessageEditor } from './message-editor'
 import { MessageReasoning } from './message-reasoning'
-import { UseChatHelpers } from '@ai-sdk/react'
+import type { UseChatHelpers } from '@ai-sdk/react'
 import { Avatar, AvatarFallback } from '@gingga/ui/components/avatar'
-import { /* ToolName, */ ToolResponse } from '../../../ai/skills/skill.types'
+import type { /* ToolName, */ ToolResponse } from '../../../ai/skills/skill.types'
 // import {
 //   toolsRequiringConfirmation,
 //   APPROVAL /*skillsInfo*/,

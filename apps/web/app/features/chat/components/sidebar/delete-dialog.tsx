@@ -6,8 +6,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@gingga/ui/components/dialog'
-import { useDeleteChatMutation } from '@/features/chat/chat.query'
-import { Chat } from '@/db/types'
+import { useDeleteChatMutation } from '~/features/chat/chat.query'
+import type { Chat } from '@gingga/db/types'
 
 export function DeleteChatDialog({
   chat,

@@ -1,7 +1,7 @@
-import {
+import type {
   ComposioAppName,
   ComposioToolName,
-} from '@/features/settings/integrations/composio.schema'
+} from '~/features/settings/integrations/composio.schema'
 
 export interface SkillInstruction {
   appName: ComposioAppName

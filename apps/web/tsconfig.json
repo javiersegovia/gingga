@@ -5,10 +5,16 @@
     "app/**/.server/**/*",
     "app/**/.client/**/*",
     "drizzle.config.ts",
-    "app.config.ts"
+    "app.config.ts",
   ],
   "exclude": ["node_modules", "dist", ".vinxi", ".vercel"],
+  "references": [
+      {
+        "path": "../api"
+      }
+    ],
   "compilerOptions": {
+    "types": ["vite/client"],
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
@@ -18,7 +24,7 @@
     "baseUrl": ".",
     "outDir": "dist",
     "paths": {
-      "@/*": ["./app/*"]
-    }
+      "~/*": ["./app/*"],
+    },
   }
 }

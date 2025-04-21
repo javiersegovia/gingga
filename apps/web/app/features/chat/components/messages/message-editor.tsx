@@ -1,9 +1,10 @@
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
-import { Message } from 'ai'
+import type { Dispatch, SetStateAction } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import type { Message } from 'ai'
 import { Button } from '@gingga/ui/components/button'
 import { Textarea } from '@gingga/ui/components/textarea'
-import { UseChatHelpers } from '@ai-sdk/react'
-import { $deleteTrailingMessages } from '@/features/chat/chat.api'
+import type { UseChatHelpers } from '@ai-sdk/react'
+import { $deleteTrailingMessages } from '~/features/chat/chat.api'
 
 export type MessageEditorProps = {
   message: Message

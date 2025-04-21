@@ -1,12 +1,14 @@
-import React, { Suspense } from 'react'
-import { useAppForm } from '@/components/form/tanstack-form'
+import type React from 'react'
+import { Suspense } from 'react'
+import { useAppForm } from '~/components/form/tanstack-form'
 import { Input } from '@gingga/ui/components/input'
 import { Textarea } from '@gingga/ui/components/textarea'
 import { Skeleton } from '@gingga/ui/components/skeleton'
-import { agentFormOptions, AgentFormSchema, AgentFormValues } from '../agent.schema'
-import { availableModelIds } from '@/db/schema'
-import { availableModels } from '@/features/ai/utils/ai-models'
-import { SelectAIModel } from '@/components/ui/select-ai-model'
+import type { AgentFormValues } from '../agent.schema'
+import { agentFormOptions, AgentFormSchema } from '../agent.schema'
+import type { availableModelIds } from '@gingga/db/schema'
+import { availableModels } from '~/features/ai/utils/ai-models'
+import { SelectAIModel } from '~/components/ui/select-ai-model'
 
 interface AgentFormProps {
   initialValues?: Partial<AgentFormValues>

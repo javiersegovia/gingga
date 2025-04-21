@@ -8,7 +8,7 @@ import {
   FormMessage,
 } from '@gingga/ui/components/form'
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@gingga/ui/components/input-otp'
-import { VerifySchema } from '@/features/auth/auth.schema'
+import { VerifySchema } from '~/features/auth/auth.schema'
 import { useForm } from 'react-hook-form'
 import { zodValidator } from '@tanstack/zod-adapter'
 import { zodResolver } from '@hookform/resolvers/zod'

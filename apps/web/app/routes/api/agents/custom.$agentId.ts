@@ -1,6 +1,7 @@
 import { json } from '@tanstack/react-start'
 import { createAPIFileRoute } from '@tanstack/react-start/api'
-import { streamText, appendResponseMessages, createDataStreamResponse, Tool } from 'ai'
+import type { Tool } from 'ai'
+import { streamText, appendResponseMessages, createDataStreamResponse } from 'ai'
 import { nanoid } from 'nanoid'
 import {
   generateChatTitleFromUserMessage,
@@ -9,21 +10,19 @@ import {
   getTrailingMessageId,
   saveChat,
   upsertChatMessage,
-} from '@/features/chat/chat.service'
-import { setupAppContext } from '@/middleware/setup-context.server'
-import { modelProvider } from '@/features/ai/utils/providers'
-import { getAgentById } from '@/features/agent/agent.service'
-import { processToolCalls } from '@/features/ai/utils/human-in-the-loop'
-import { getVercelToolset } from '@/features/settings/integrations/composio.service'
-import {
+} from '~/features/chat/chat.service'
+import { setupAppContext } from '~/middleware/setup-context.server'
+import { modelProvider } from '~/features/ai/utils/providers'
+import { getAgentById } from '~/features/agent/agent.service'
+import { processToolCalls } from '~/features/ai/utils/human-in-the-loop'
+import { getVercelToolset } from '~/features/settings/integrations/composio.service'
+import type {
   ComposioAppName,
   ComposioToolName,
-} from '@/features/settings/integrations/composio.schema'
-import { AIChatSchema } from '@/features/chat/chat.schema'
-import {
-  getSystemPrompt,
-  SkillInstruction,
-} from '@/features/ai/utils/compose-system-message'
+} from '~/features/settings/integrations/composio.schema'
+import { AIChatSchema } from '~/features/chat/chat.schema'
+import type { SkillInstruction } from '~/features/ai/utils/compose-system-message'
+import { getSystemPrompt } from '~/features/ai/utils/compose-system-message'
 
 export const APIRoute = createAPIFileRoute('/api/agents/custom/$agentId')({
   POST: async ({ request, params: { agentId } }) => {

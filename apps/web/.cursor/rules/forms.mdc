@@ -27,7 +27,7 @@ alwaysApply: false
 
    ```typescript
    // agent.schema.ts example
-   import { Agents } from '@/db/schema'
+   import { Agents } from '@gingga/db/schema'
    import { z } from 'zod'
 
    // Schema specifically for the AgentForm component
@@ -73,7 +73,7 @@ alwaysApply: false
 
    ```typescript
    // agent-form.tsx example
-   import { useAppForm } from '@/components/form/tanstack-form'
+   import { useAppForm } from '~/components/form/tanstack-form'
    import { agentFormOptions, AgentFormSchema, AgentFormValues } from '../agent.schema'
 
    // Inside the component:
@@ -136,7 +136,7 @@ alwaysApply: false
    // agent.api.ts example
    import { createServerFn } from '@tanstack/react-start'
    import { zodValidator } from '@tanstack/zod-adapter'
-   import { authMiddleware } from '@/middleware/auth-guard'
+   import { authMiddleware } from '~/middleware/auth-guard'
    import { AgentFormSchema } from './agent.schema'
    import { createAgent } from './agent.service'
    import { setResponseStatus } from '@tanstack/react-start/server'

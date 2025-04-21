@@ -1,4 +1,4 @@
-import { useDeleteAgentMutation } from '@/features/agent/agent.query'
+import { useDeleteAgentMutation } from '~/features/agent/agent.query'
 import {
   Dialog,
   DialogContent,

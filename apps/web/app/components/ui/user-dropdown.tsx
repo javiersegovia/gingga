@@ -10,9 +10,9 @@ import {
 import { LogOut, PaletteIcon, ChevronsUpDown } from 'lucide-react'
 import { ThemeSwitch } from './theme-switch'
 import { cn, getInitials } from '@gingga/ui/lib/utils'
-import { useAuthedQuery, useSignOutMutation } from '@/features/auth/auth.query'
+import { useAuthedQuery, useSignOutMutation } from '~/features/auth/auth.query'
 import { SidebarMenuButton } from '@gingga/ui/components/sidebar'
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 
 // Common dropdown content component
 function UserDropdownContent({

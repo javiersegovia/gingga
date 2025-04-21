@@ -3,7 +3,7 @@ import type { DataStreamWriter, ToolExecutionOptions, ToolSet } from 'ai'
 import type { z } from 'zod'
 import { formatDataStreamPart } from '@ai-sdk/ui-utils'
 import { convertToCoreMessages } from 'ai'
-import { ToolResponse } from '../skills/skill.types'
+import type { ToolResponse } from '../skills/skill.types'
 import { APPROVAL } from '../skills/info'
 import { upsertChatMessage } from '../../chat/chat.service'
 

@@ -1,4 +1,4 @@
-import type { Agent } from '@/db/types'
+import type { Agent } from '@gingga/db/types'
 import {
   queryOptions,
   useMutation,

@@ -1,8 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { AgentForm } from '@/features/agent/components/agent-form'
-import { useUpdateAgentMutation } from '@/features/agent/agent.query'
-import { $getAgentById } from '@/features/agent/agent.api'
-import type { AgentFormValues } from '@/features/agent/agent.schema'
+import { AgentForm } from '~/features/agent/components/agent-form'
+import { useUpdateAgentMutation } from '~/features/agent/agent.query'
+import { $getAgentById } from '~/features/agent/agent.api'
+import type { AgentFormValues } from '~/features/agent/agent.schema'
 
 export const Route = createFileRoute('/_demo/chat/agent/$agentId/edit/instructions/')({
   loader: async ({ params }: { params: { agentId: string } }) => {

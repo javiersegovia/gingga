@@ -12,8 +12,8 @@ import { Switch } from '@gingga/ui/components/switch'
 import { Label } from '@gingga/ui/components/label'
 import { CopyIcon, CheckIcon } from 'lucide-react'
 import { useState } from 'react'
-import { useUpdateChatVisibilityMutation } from '@/features/chat/chat.query'
-import { Chat } from '@/db/types'
+import { useUpdateChatVisibilityMutation } from '~/features/chat/chat.query'
+import type { Chat } from '@gingga/db/types'
 
 export function ShareChatDialog({
   chat,

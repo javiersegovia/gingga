@@ -1,5 +1,5 @@
-import { getServerEnv } from '@/server/env'
-import { SkillOption } from './skill.types'
+import { getServerEnv } from '~/server/env'
+import type { SkillOption } from './skill.types'
 
 export const getSkills = (): SkillOption[] => {
   return [

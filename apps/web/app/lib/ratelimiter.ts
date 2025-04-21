@@ -1,7 +1,7 @@
 import { Ratelimit } from '@upstash/ratelimit'
 import { Redis } from '@upstash/redis'
-import { UserMemberships } from '@/db/schema'
-import { getServerEnv } from '@/server/env'
+import type { UserMemberships } from '@gingga/db/schema'
+import { getServerEnv } from '~/server/env'
 
 export type Tier = 'public' | (typeof UserMemberships.tier.enumValues)[number]
 export type MessageType = 'standard' | 'premium'

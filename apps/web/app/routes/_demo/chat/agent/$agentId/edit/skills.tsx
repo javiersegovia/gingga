@@ -1,11 +1,11 @@
 import { createFileRoute, Link, useParams, Outlet } from '@tanstack/react-router'
 import { useSuspenseQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import type { AgentSkillWithStatus } from '@/features/ai/skills/skill.api'
+import type { AgentSkillWithStatus } from '~/features/ai/skills/skill.api'
 import {
   skillOptionsQueryOptions,
   skillsByAgentIdQueryOptions,
-} from '@/features/ai/skills/skill.query'
-import { $updateSkillEnabledStatus } from '@/features/ai/skills/skill.api'
+} from '~/features/ai/skills/skill.query'
+import { $updateSkillEnabledStatus } from '~/features/ai/skills/skill.api'
 import { Card, CardTitle } from '@gingga/ui/components/card'
 import { Switch } from '@gingga/ui/components/switch'
 import { Button } from '@gingga/ui/components/button'
@@ -20,9 +20,9 @@ import {
   WrenchIcon,
 } from 'lucide-react'
 import { Skeleton } from '@gingga/ui/components/skeleton'
-import { AvailableSkillCard } from '@/features/ai/skills/components/available-skill-card'
-import { ComposioToolName } from '@/features/settings/integrations/composio.schema'
-import { userComposioConnectionsQueryOptions } from '@/features/settings/integrations/composio.query'
+import { AvailableSkillCard } from '~/features/ai/skills/components/available-skill-card'
+import type { ComposioToolName } from '~/features/settings/integrations/composio.schema'
+import { userComposioConnectionsQueryOptions } from '~/features/settings/integrations/composio.query'
 import { cn } from '@gingga/ui/lib/utils'
 import {
   Accordion,
@@ -32,7 +32,7 @@ import {
 } from '@gingga/ui/components/accordion'
 import { toast } from 'sonner'
 import { Badge } from '@gingga/ui/components/badge'
-import { ConnectionStatus } from '@/features/settings/integrations/components/connection-status'
+import { ConnectionStatus } from '~/features/settings/integrations/components/connection-status'
 
 export const Route = createFileRoute('/_demo/chat/agent/$agentId/edit/skills')({
   component: RouteComponent,

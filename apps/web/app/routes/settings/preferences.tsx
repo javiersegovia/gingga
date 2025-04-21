@@ -8,7 +8,7 @@ import {
 } from '@gingga/ui/components/card'
 import { Label } from '@gingga/ui/components/label'
 import { Switch } from '@gingga/ui/components/switch'
-import { ThemeSwitch } from '@/components/ui/theme-switch'
+import { ThemeSwitch } from '~/components/ui/theme-switch'
 
 export const Route = createFileRoute('/settings/preferences')({
   component: PreferencesSettingsComponent,

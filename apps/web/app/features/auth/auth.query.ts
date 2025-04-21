@@ -1,23 +1,12 @@
-import {
-  queryOptions,
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from '@tanstack/react-query'
-import type { UseSuspenseQueryResult } from '@tanstack/react-query'
+import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 
-import { $getAuthSession, $signOut } from './auth.api'
+import { $signOut } from './auth.api'
 import { useRouter } from '@tanstack/react-router'
-import { AppAuthSession } from './auth.types'
-
-export const authQueryOptions = () =>
-  queryOptions({
-    queryKey: ['getAuthSession'],
-    queryFn: $getAuthSession,
-  })
+import { useTRPC } from '~/lib/trpc'
 
 export const useAuthQuery = () => {
-  return useSuspenseQuery(authQueryOptions())
+  const trpc = useTRPC()
+  return useSuspenseQuery(trpc.auth.getSession.queryOptions())
 }
 
 export const useAuthedQuery = () => {
@@ -28,18 +17,19 @@ export const useAuthedQuery = () => {
     throw router.navigate({ to: '/identify' })
   }
 
-  return authQuery as UseSuspenseQueryResult<AppAuthSession>
+  return authQuery
 }
 
-// export const useSignOutMutation = (signOutServerFn: () => Promise<void>) => {
 export const useSignOutMutation = () => {
+  const trpc = useTRPC()
   const router = useRouter()
   const queryClient = useQueryClient()
+
   return useMutation({
     mutationFn: () => $signOut(),
     onSuccess: async () => {
       await router.invalidate()
-      await queryClient.invalidateQueries({ queryKey: authQueryOptions().queryKey })
+      await queryClient.invalidateQueries({ queryKey: trpc.auth.getSession.queryKey() })
       await router.navigate({ to: '/' })
     },
   })

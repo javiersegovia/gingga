@@ -1,7 +1,7 @@
 import {
   userChatsQueryOptions,
   useUpdateChatVisibilityMutation,
-} from '@/features/chat/chat.query'
+} from '~/features/chat/chat.query'
 import { useQueryClient } from '@tanstack/react-query'
 import { useMemo, useState } from 'react'
 

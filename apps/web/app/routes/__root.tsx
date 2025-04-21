@@ -1,7 +1,6 @@
 // import { scan } from 'react-scan' // react-scan must be imported before React and TanStack Start
 
 import { lazy, Suspense } from 'react'
-import type { QueryClient } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import {
   createRootRouteWithContext,
@@ -9,8 +8,8 @@ import {
   HeadContent,
   Scripts,
 } from '@tanstack/react-router'
-import globalCss from '@/styles/globals.css?url'
-import { ThemeProvider, useTheme } from '@/components/shared/theme'
+import globalCss from '~/styles/globals.css?url'
+import { ThemeProvider, useTheme } from '~/components/shared/theme'
 import fontsourceOutfit from '@fontsource-variable/outfit?url'
 import fontsourceUnbounded from '@fontsource-variable/unbounded?url'
 import fontsourceVariableManrope from '@fontsource-variable/manrope?url'
@@ -19,7 +18,7 @@ import fontsourceVariableNunito from '@fontsource-variable/nunito?url'
 import fontsourceVariableDMSans from '@fontsource-variable/dm-sans?url'
 
 import { Toaster } from '@gingga/ui/components/sonner'
-import { authQueryOptions } from '@/features/auth/auth.query'
+import type { AppRouterContext } from '../router'
 
 const TanStackRouterDevtools = import.meta.env.PROD
   ? () => null // Render nothing in production
@@ -29,9 +28,9 @@ const TanStackRouterDevtools = import.meta.env.PROD
       })),
     )
 
-export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  beforeLoad: async ({ context }) => {
-    const auth = await context.queryClient.ensureQueryData(authQueryOptions())
+export const Route = createRootRouteWithContext<AppRouterContext>()({
+  beforeLoad: async ({ context: { trpc, queryClient } }) => {
+    const auth = await queryClient.ensureQueryData(trpc.auth.getSession.queryOptions())
     return { auth }
   },
   head: () => ({

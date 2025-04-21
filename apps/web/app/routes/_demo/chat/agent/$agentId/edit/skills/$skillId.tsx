@@ -4,8 +4,8 @@ import { useSuspenseQueries } from '@tanstack/react-query'
 import {
   skillByIdQueryOptions,
   skillOptionsQueryOptions,
-} from '@/features/ai/skills/skill.query'
-import { SkillForm, SkillFormSkeleton } from '@/features/ai/skills/components/skill-form'
+} from '~/features/ai/skills/skill.query'
+import { SkillForm, SkillFormSkeleton } from '~/features/ai/skills/components/skill-form'
 import {
   Sheet,
   SheetContent,

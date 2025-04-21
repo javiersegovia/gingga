@@ -48,7 +48,7 @@ Example: (Illustrative - showing service delegation)
 // app/features/projects/project.api.ts
 import { createServerFn } from '@tanstack/react-start'
 import { GetProjectsSchema } from './project.schema' // Assume schema exists
-import { authMiddleware } from '@/middleware/auth-guard'
+import { authMiddleware } from '~/middleware/auth-guard'
 import { zodValidator } from '@tanstack/zod-adapter'
 import { getProjectsForUser } from './project.service' // Import service function
 
@@ -176,7 +176,7 @@ This file contains business logic for the feature. Functions here are called by 
 <service_requirements>
 - **Must be framework-agnostic (no direct dependency on React, TanStack Start/Router context, etc.).**
 - Accept necessary, validated data as parameters (e.g., `userId: string`, `projectData: ValidatedProjectData`). Do not accept raw HTTP request/context objects.
-- Perform database operations using Drizzle ORM (imported via `@/db`).
+- Perform database operations using Drizzle ORM (imported via `@gingga/db`).
 - Implement core business rules and logic.
 - Throw specific, meaningful errors (e.g., `NotFoundError`, `ValidationError`, `PermissionError`) or return result objects (`{ success: boolean, data?, error? }`).
 - Can import and use functions from other service files if needed, respecting dependency flow.
@@ -187,11 +187,11 @@ Example:
 
 ```ts
 // app/features/projects/project.service.ts
-import { getDatabase } from '@/db';
-import { Projects } from '@/db/schema';
-import { eq, and, isNull } from 'drizzle-orm';
+import { getDatabase } from '~/middleware/setup-context.server';
+import { Projects } from '@gingga/db/schema';
+import { eq, and, isNull } from '@gingga/db'';
 // Potentially import custom error types
-// import { NotFoundError } from '@/lib/errors'; 
+// import { NotFoundError } from '~/lib/errors'; 
 
 // Example service function called by $getProjects API
 export async function getProjectsByUserId(userId: string) {

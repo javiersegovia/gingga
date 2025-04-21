@@ -1,8 +1,8 @@
 import { Badge } from '@gingga/ui/components/badge'
 import { Link } from '@tanstack/react-router'
 import { ExternalLinkIcon, PlugZapIcon, AlertTriangleIcon, XIcon } from 'lucide-react'
-import { AgentSkillWithStatus } from '../../../ai/skills/skill.api'
-import { SkillOption } from '../../../ai/skills/skill.types'
+import type { AgentSkillWithStatus } from '../../../ai/skills/skill.api'
+import type { SkillOption } from '../../../ai/skills/skill.types'
 import {
   Tooltip,
   TooltipContent,

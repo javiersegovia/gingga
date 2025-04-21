@@ -1,5 +1,5 @@
 import { registerGlobalMiddleware, createMiddleware } from '@tanstack/react-start'
-import { createDatabaseClient } from './db'
+import type { createDatabaseClient } from '@gingga/db'
 import { setupAppContext } from './middleware/setup-context.server'
 import type { AppAuthSession } from './features/auth/auth.types'
 

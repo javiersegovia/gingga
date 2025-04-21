@@ -1,6 +1,6 @@
-import { Tool, ToolExecutionOptions } from 'ai'
+import type { Tool, ToolExecutionOptions } from 'ai'
 import { z } from 'zod'
-import {
+import type {
   ComposioAppName,
   ComposioToolName,
 } from '../../settings/integrations/composio.schema'

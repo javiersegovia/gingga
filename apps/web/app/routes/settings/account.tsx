@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from '@gingga/ui/components/card'
 import { Button } from '@gingga/ui/components/button'
-import { useAuthedQuery } from '@/features/auth/auth.query'
+import { useAuthedQuery } from '~/features/auth/auth.query'
 import { Progress } from '@gingga/ui/components/progress'
 import {
   AlertCircleIcon,

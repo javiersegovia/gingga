@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { Navbar } from '@/components/shared/navbar'
-import { Footer } from '@/components/shared/footer'
+import { Navbar } from '~/components/shared/navbar'
+import { Footer } from '~/components/shared/footer'
 
 export const Route = createFileRoute('/_home/privacy')({
   component: RouteComponent,

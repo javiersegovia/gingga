@@ -8,11 +8,11 @@ import {
   CardTitle,
 } from '@gingga/ui/components/card'
 
-import { IntegrationCard } from '@/features/settings/integrations/components/integration-card'
+import { IntegrationCard } from '~/features/settings/integrations/components/integration-card'
 import {
   composioIntegrationsQueryOptions,
   userComposioConnectionsQueryOptions,
-} from '@/features/settings/integrations/composio.query'
+} from '~/features/settings/integrations/composio.query'
 import { useSuspenseQuery } from '@tanstack/react-query'
 import { PlugZapIcon } from 'lucide-react'
 

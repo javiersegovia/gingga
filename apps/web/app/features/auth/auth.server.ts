@@ -1,11 +1,11 @@
 import { betterAuth } from 'better-auth'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 import { PASSWORD_MAX, PASSWORD_MIN } from './auth.schema'
-import { getDatabase } from '@/db'
-import { sendEmail } from '@/server/email/email'
-import VerificationEmail from '@/server/email/templates/verification-email'
-import { getServerEnv } from '@/server/env'
-import { Accounts, Sessions, Users, Verifications } from '@/db/schema'
+import { getDatabase } from '~/middleware/setup-context.server'
+import { sendEmail } from '~/server/email/email'
+import VerificationEmail from '~/server/email/templates/verification-email'
+import { getServerEnv } from '~/server/env'
+import { Accounts, Sessions, Users, Verifications } from '@gingga/db/schema'
 import { admin } from 'better-auth/plugins'
 
 export type Session = ReturnType<typeof createServerAuth>['$Infer']['Session']

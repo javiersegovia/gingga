@@ -4,8 +4,8 @@ import { Menu, X, Settings, LogOut, ArrowRightIcon, BotIcon } from 'lucide-react
 import { useState } from 'react'
 import { cn } from '@gingga/ui/lib/utils'
 import { Separator } from '@gingga/ui/components/separator'
-import { ThemeSwitch } from '@/components/ui/theme-switch'
-import { useAuthQuery, useSignOutMutation } from '@/features/auth/auth.query'
+import { ThemeSwitch } from '~/components/ui/theme-switch'
+import { useAuthQuery, useSignOutMutation } from '~/features/auth/auth.query'
 import {
   NavigationMenu,
   NavigationMenuContent,

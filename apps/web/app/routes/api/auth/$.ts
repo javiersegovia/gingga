@@ -1,5 +1,5 @@
 import { createAPIFileRoute } from '@tanstack/react-start/api'
-import { setupAppContext } from '@/middleware/setup-context.server'
+import { setupAppContext } from '~/middleware/setup-context.server'
 
 export const APIRoute = createAPIFileRoute('/api/auth/$')({
   GET: async ({ request }) => {

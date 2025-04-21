@@ -1,4 +1,4 @@
-import { ToolName } from './skill.types'
+import type { ToolName } from './skill.types'
 
 export function getToolsRequiringConfirmation(): ToolName[] {
   return []

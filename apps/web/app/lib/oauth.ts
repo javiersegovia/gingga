@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import {
   // AirtableIcon,
   // ConfluenceIcon,
@@ -11,8 +11,8 @@ import {
   GoogleSheetsIcon,
   // SupabaseIcon,
   // xIcon,
-} from '@/components/shared/icons'
-// import { createLogger } from '@/lib/logs/console-logger'
+} from '~/components/shared/icons'
+// import { createLogger } from '~/lib/logs/console-logger'
 
 // const logger = createLogger('OAuth')
 

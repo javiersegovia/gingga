@@ -1,7 +1,7 @@
 import { createServerFn } from '@tanstack/react-start'
 import { z } from 'zod'
 import { zodValidator } from '@tanstack/zod-adapter'
-import { authMiddleware } from '@/middleware/auth-guard'
+import { authMiddleware } from '~/middleware/auth-guard'
 import { AgentFormSchema } from './agent.schema'
 import {
   createAgent,
@@ -11,7 +11,7 @@ import {
   deleteAgentById,
   getRecentAgentsForUser,
 } from './agent.service'
-import { contextMiddleware } from '@/global-middleware'
+import { contextMiddleware } from '~/global-middleware'
 import { setResponseStatus } from '@tanstack/react-start/server'
 
 export const $getAgentById = createServerFn({

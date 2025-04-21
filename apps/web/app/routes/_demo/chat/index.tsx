@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { nanoid } from 'nanoid'
-import { BaseChat } from '@/features/chat/components/base-chat'
+import { BaseChat } from '~/features/chat/components/base-chat'
 
 export const Route = createFileRoute('/_demo/chat/')({
   component: ChatLayout,

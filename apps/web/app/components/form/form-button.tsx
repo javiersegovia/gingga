@@ -1,4 +1,4 @@
-import React from 'react'
+import type React from 'react'
 import { useFormContext } from './tanstack-form'
 import type { ButtonProps } from '@gingga/ui/components/button'
 import { Button } from '@gingga/ui/components/button'

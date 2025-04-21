@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { Users } from '@/db/schema' // For enum reference
+import { Users } from '@gingga/db/schema' // For enum reference
 import { formOptions } from '@tanstack/react-form'
 
 // Helper to transform DB timestamp (number) to Date

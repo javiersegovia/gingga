@@ -1,7 +1,7 @@
 import { createServerFn } from '@tanstack/react-start'
 import { setResponseStatus } from '@tanstack/react-start/server'
 import { zodValidator } from '@tanstack/zod-adapter'
-import { adminMiddleware } from '@/middleware/admin-guard'
+import { adminMiddleware } from '~/middleware/admin-guard'
 import {
   getUsers,
   getUserById,

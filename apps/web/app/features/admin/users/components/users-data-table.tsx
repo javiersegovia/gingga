@@ -1,17 +1,19 @@
 import * as React from 'react'
 import { useRouter } from '@tanstack/react-router'
-import {
+import type {
   ColumnDef,
   ColumnFiltersState,
   SortingState,
   VisibilityState,
+  Row,
+} from '@tanstack/react-table'
+import {
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-  Row,
 } from '@tanstack/react-table'
 
 import { Input } from '@gingga/ui/components/input'
@@ -26,7 +28,7 @@ import {
 import { UsersDataTablePagination } from './users-data-table-pagination'
 import { UsersDataTableViewOptions } from './users-data-table-view-options'
 import { cn } from '@gingga/ui/lib/utils'
-import { UserTableEntry } from './users-columns' // Import type
+import type { UserTableEntry } from './users-columns' // Import type
 
 interface UsersDataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { ChevronDownIcon, LoaderIcon } from 'lucide-react'
 import { motion, AnimatePresence } from 'motion/react'
-import { Markdown } from '@/features/chat/components/markdown'
+import { Markdown } from '~/features/chat/components/markdown'
 
 interface MessageReasoningProps {
   isLoading: boolean
