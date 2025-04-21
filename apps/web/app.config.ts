@@ -3,7 +3,7 @@ import { defineConfig } from '@tanstack/react-start/config'
 import { config } from 'dotenv'
 import { denyImports, envOnlyMacros } from 'vite-env-only'
 import tsconfigPaths from 'vite-tsconfig-paths'
-import { parseEnv } from './app/server/env'
+import { parseEnv } from './src/server/env'
 
 config()
 await parseEnv()
@@ -34,6 +34,7 @@ export default defineConfig({
     routeFileIgnorePrefix: '_components',
     quoteStyle: 'single',
     semicolons: false,
+    appDirectory: 'src',
   },
 
   vite: {
