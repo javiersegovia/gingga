@@ -1,9 +1,10 @@
+import type { DatabaseType } from '@gingga/db'
 import { Accounts, Sessions, Users, Verifications } from '@gingga/db/schema'
 import { betterAuth } from 'better-auth'
+
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 
 import { admin } from 'better-auth/plugins'
-
 import { getDB } from '~/context'
 import { apiEnv } from '~/env'
 import { sendEmail } from '~/lib/email'
@@ -12,8 +13,8 @@ import { PASSWORD_MAX, PASSWORD_MIN } from './auth.schema'
 
 export type Session = ReturnType<typeof createServerAuth>['$Infer']['Session']
 
-export function createServerAuth() {
-  const db = getDB()
+export function createServerAuth(database?: DatabaseType) {
+  const db = database ?? getDB()
   const adminUserIds = apiEnv.ADMIN_USER_IDS.split(',')
 
   return betterAuth({

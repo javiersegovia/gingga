@@ -20,5 +20,6 @@ export default antfu({
     '**/.vinxi/**/*',
     '**/.types/**/*',
     '**/migrations/meta/*.json',
+    'node_modules/**/*',
   ],
 })

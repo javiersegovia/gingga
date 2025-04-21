@@ -12,7 +12,7 @@ import { getEvent, getWebRequest } from '@tanstack/react-start/server'
 async function createWebTrpcContext(): Promise<Partial<APITrpcContext>> {
   const event = getEvent()
   const db = event.context.db || createDatabaseClient() // Reuse DB from event if available
-  const auth = createServerAuth()
+  const auth = createServerAuth(db)
 
   const req = getWebRequest()
 

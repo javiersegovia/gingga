@@ -14,7 +14,8 @@ export async function setupAppContext() {
   const db = createDatabaseClient()
   event.context.db = db
 
-  const auth = createServerAuth()
+  const auth = createServerAuth(db)
+  event.context.auth = auth
   const req = getWebRequest()
 
   if (!req) {
@@ -53,6 +54,8 @@ export async function setupAppContext() {
   else {
     authSession = { isAuthenticated: false }
   }
+
+  event.context.authSession = authSession
 
   return {
     db,
