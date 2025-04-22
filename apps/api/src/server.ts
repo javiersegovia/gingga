@@ -5,8 +5,9 @@ import { Hono } from 'hono'
 import { contextStorage } from 'hono/context-storage'
 import { cors } from 'hono/cors'
 import { logger } from 'hono/logger'
-import { createContext, getAuth } from '~/context'
+import { createContext } from '~/context'
 import { apiEnv } from '~/env'
+import { getAuth } from '~/lib/auth/auth.service'
 import { appRouter } from '~/trpc/routers'
 
 export interface ContextEnv {

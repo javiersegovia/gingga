@@ -1,7 +1,9 @@
+import type { ContextEnv } from '~/server'
 import { Accounts, Sessions, Users, Verifications } from '@gingga/db/schema'
 import { betterAuth } from 'better-auth'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 import { admin } from 'better-auth/plugins'
+import { getContext } from 'hono/context-storage'
 import { getDB } from '~/context'
 import { apiEnv } from '~/env'
 import { sendEmail } from '~/lib/email'
@@ -10,6 +12,16 @@ import { PASSWORD_MAX, PASSWORD_MIN } from './auth.schema'
 
 export type Session = ReturnType<typeof createServerAuth>['$Infer']['Session']
 export type BetterAuth = ReturnType<typeof createServerAuth>
+
+export function getAuth() {
+  const c = getContext<ContextEnv>()
+
+  if (!c.var.auth) {
+    c.set('auth', createServerAuth())
+  }
+
+  return c.var.auth
+}
 
 export function createServerAuth() {
   const db = getDB()

@@ -3,7 +3,7 @@ import type { ContextEnv } from './server'
 import { createDatabaseClient, eq } from '@gingga/db'
 import { Users } from '@gingga/db/schema'
 import { getContext } from 'hono/context-storage'
-import { createServerAuth } from '~/lib/auth/auth.service'
+import { getAuth } from '~/lib/auth/auth.service'
 
 export function getDB() {
   const c = getContext<ContextEnv>()
@@ -13,16 +13,6 @@ export function getDB() {
   }
 
   return c.var.db
-}
-
-export function getAuth() {
-  const c = getContext<ContextEnv>()
-
-  if (!c.var.auth) {
-    c.set('auth', createServerAuth())
-  }
-
-  return c.var.auth
 }
 
 export async function createContext(c: HonoContext) {
