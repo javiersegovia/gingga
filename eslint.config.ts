@@ -6,24 +6,7 @@ export default antfu(
     react: true,
     typescript: true,
   },
-  {
-    files: ['apps/api/**/*.ts', 'apps/api/**/*.tsx'],
-    languageOptions: {
-      parserOptions: {
-        project: ['./apps/api/tsconfig.json'],
-        // tsconfigRootDir: import.meta.dirname,
-      },
-    },
-  },
-  {
-    files: ['apps/web/**/*.ts', 'apps/web/**/*.tsx'],
-    languageOptions: {
-      parserOptions: {
-        project: ['./apps/web/tsconfig.json'],
-        // tsconfigRootDir: import.meta.dirname,
-      },
-    },
-  },
+
   {
     rules: {
       'node/prefer-global/process': 'off',

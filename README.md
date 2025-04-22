@@ -18,7 +18,7 @@ The monorepo is organized into two main directories: `apps` and `packages`.
 
 - **Monorepo Management**: [Turbo](https://turbo.build/)
 - **Runtime**: API [Workerd] / Web [Node.js](https://nodejs.org/) >= 20
-- **Package Manager**: [Bun](https://bun.sh/) (Managed via Bun)
+- **Package Manager**: [pnpm](https://pnpm.io/)
 - **Primary Language**: [TypeScript](https://www.typescriptlang.org/)
 - **Web Framework**: [TanStack Start](https://tanstack.com/start/latest/)
 - **API Framework**: [Hono](https://hono.dev/)
@@ -38,7 +38,7 @@ The monorepo is organized into two main directories: `apps` and `packages`.
 
 ## 📋 Prerequisites
 
-- [Bun](https://bun.sh/docs/installation) (We use only the package manager)
+- [Pnpm](https://pnpm.io/installation)
 - [Turso CLI](https://docs.turso.tech/cli/installation/)
 - Cloudflare Account (for API deployment and types)
 - Vercel Account (for Web App deployment)
@@ -56,7 +56,7 @@ The monorepo is organized into two main directories: `apps` and `packages`.
 2. **Install dependencies:**
 
    ```bash
-   bun install
+   pnpm install
    ```
 
 3. **Configure Environment Variables:**
@@ -83,25 +83,25 @@ The monorepo is organized into two main directories: `apps` and `packages`.
    - Apply the latest migrations to the new local database:
 
      ```bash
-     bun run db:migrate
+     pnpm run db:migrate
      ```
 
    - (Optional) To run a local libSQL server using this file for development (useful if using libSQL-specific features):
 
      ```bash
-     bun run dev # This runs 'turso dev --db-file local.db'
+     pnpm run dev # This runs 'turso dev --db-file local.db'
      ```
 
      Connect your application to `http://127.0.0.1:8080` when using this method. Refer to the [Turso Local Development Docs](https://docs.turso.tech/local-development) for more details.
 
-   - Alternatively, run `bunx drizzle-kit studio` in `packages/db` to manage the database visually.
+   - Alternatively, run `pnpx drizzle-kit studio` in `packages/db` to manage the database visually.
 
 ## 💻 Development
 
 To start all applications in development mode (uses Turbo):
 
 ```bash
-bun run dev
+pnpm dev
 ```
 
 This command runs the `dev` script defined in the `package.json` of each app/package concurrently.
@@ -110,7 +110,7 @@ You can also run specific apps using Turbo filters if needed (e.g., if you only 
 
 ```bash
 # Start only the web app
-bun run dev --filter=@gingga/web...
+pnpm dev --filter=@gingga/web...
 ```
 
 ## 🚀 Deployment
@@ -118,13 +118,13 @@ bun run dev --filter=@gingga/web...
 Build all apps and packages (uses Turbo):
 
 ```bash
-bun run build
+pnpm build
 ```
 
 Deployment varies by application:
 
 - **Web App (`apps/web`):**
-  Typically deployed via Vercel integration connected to this repository. Manual deployment might involve building (`bun run build --filter=@gingga/web...`) and using the Vercel CLI.
+  Typically deployed via Vercel integration connected to this repository. Manual deployment might involve building (`pnpm run build --filter=@gingga/web...`) and using the Vercel CLI.
 
 - **API (`apps/api`):**
   Deploy using Cloudflare Wrangler. You need to be in the `apps/api` directory or use a filter:
@@ -132,12 +132,12 @@ Deployment varies by application:
   ```bash
   # Option 1: Navigate and deploy
   cd apps/api
-  bun run deploy
+  pnpm run deploy
 
   # Option 2: Deploy from root using filter
-  # bun run deploy --filter=@gingga/api... # Note: 'deploy' script needs to be defined in root or use wrangler directly
-  # Assuming wrangler is installed globally or via npx/bunx:
-  bunx wrangler deploy --config ./apps/api/wrangler.toml
+  # pnpm run deploy --filter=@gingga/api... # Note: 'deploy' script needs to be defined in root or use wrangler directly
+  # Assuming wrangler is installed globally or via npx/pnpmx:
+  pnpmx wrangler deploy --config ./apps/api/wrangler.toml
   ```
 
 ## 🛠️ Useful Commands
@@ -147,24 +147,24 @@ Run these commands from the root directory:
 - **Linting (uses Turbo):**
 
   ```bash
-  bun run lint
-  bun run lint:fix
+  pnpm lint
+  pnpm lint:fix
   ```
 
 - **Type Checking (specific to apps/web):**
   Requires filtering as it's not a root script.
 
   ```bash
-  bun run typecheck --filter=@gingga/web...
-  # Or run from within apps/web: cd apps/web && bun run typecheck
+  pnpm run typecheck --filter=@gingga/web...
+  # Or run from within apps/web: cd apps/web && pnpm run typecheck
   ```
 
 - **Generate Cloudflare Types (for `apps/api`):**
   Requires filtering or running within the `apps/api` directory.
 
   ```bash
-  bun run cf-typegen --filter=@gingga/api...
-  # Or run from within apps/api: cd apps/api && bun run cf-typegen
+  pnpm run cf-typegen --filter=@gingga/api...
+  # Or run from within apps/api: cd apps/api && pnpm run cf-typegen
   ```
 
 - **Database Migrations (`packages/db`):**
@@ -172,16 +172,16 @@ Run these commands from the root directory:
 
   ```bash
   # Generate migration files based on schema changes
-  bun run db:generate
+  pnpm run db:generate
 
   # Apply migrations
-  bun run db:migrate
+  pnpm run db:migrate
 
   # Push schema changes directly (useful for development, resets DB)
-  bun run db:push
+  pnpm run db:push
 
   # Open Drizzle Studio
-  bun run db:studio
+  pnpm run db:studio
   ```
 
 ## 🔧 Configuration Files

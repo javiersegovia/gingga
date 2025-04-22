@@ -3,7 +3,7 @@
 // import { VercelAIToolSet } from 'composio-core'
 // import { eq } from '@gingga/db'
 // import { AgentSkills } from '@gingga/db/schema'
-// import { getDatabase } from '~/middleware/setup-context.server'
+// import { getDatabase } from '~/global-middleware'
 // import { ComposioAppName } from '../../../settings/integrations/composio.schema'
 // import { getServerEnv } from '../../../../server/env'
 // import { SkillId } from '../skill.types'

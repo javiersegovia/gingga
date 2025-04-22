@@ -17,8 +17,8 @@ updates:
     assignees:
       - javiersegovia
 
-  # Maintain dependencies for bun
-  - package-ecosystem: bun
+  # Maintain dependencies for pnpm
+  - package-ecosystem: pnpm
     directory: /
     open-pull-requests-limit: 10
     schedule:

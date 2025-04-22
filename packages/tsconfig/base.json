@@ -2,8 +2,6 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Base",
   "compilerOptions": {
-    "declaration": false,
-    "declarationMap": false,
     "strict": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
@@ -18,6 +16,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "verbatimModuleSyntax": true,
-    "importsNotUsedAsValues": "remove"
+    "importsNotUsedAsValues": "remove",
+    "outDir": "./.types"
   }
 }

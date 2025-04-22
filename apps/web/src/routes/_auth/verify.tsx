@@ -21,7 +21,7 @@ export const Route = createFileRoute('/_auth/verify')({
   component: VerifyPage,
   validateSearch: zodValidator(VerifySearchParams),
   beforeLoad: async ({ context }) => {
-    if (context.auth.isAuthenticated) {
+    if (context.auth?.session) {
       throw redirect({
         to: '/chat',
       })

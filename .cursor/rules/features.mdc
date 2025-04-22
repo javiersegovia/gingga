@@ -187,7 +187,7 @@ Example:
 
 ```ts
 // app/features/projects/project.service.ts
-import { getDatabase } from '~/middleware/setup-context.server';
+import { getDatabase } from '~/global-middleware';
 import { Projects } from '@gingga/db/schema';
 import { eq, and, isNull } from '@gingga/db'';
 // Potentially import custom error types

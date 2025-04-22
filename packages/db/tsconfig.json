@@ -1,12 +1,14 @@
 {
   "extends": "@gingga/tsconfig/base.json",
-  "include": ["**/*.ts"],
-  "exclude": ["node_modules"],
   "compilerOptions": {
-    "verbatimModuleSyntax": true,
+    "composite": true,
     "baseUrl": ".",
     "paths": {
       "~/*": ["./"]
     },
-  }
+    "outDir": "./.types"
+    // "verbatimModuleSyntax": true
+  },
+  "include": ["**/*.ts"],
+  "exclude": ["node_modules"]
 }

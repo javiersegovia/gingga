@@ -2,8 +2,8 @@ import { createServerFn } from '@tanstack/react-start'
 import { setResponseStatus } from '@tanstack/react-start/server'
 import { zodValidator } from '@tanstack/zod-adapter'
 import { z } from 'zod'
-import { contextMiddleware } from '~/global-middleware'
 import { authMiddleware } from '~/middleware/auth-middleware'
+import { sessionMiddleware } from '~/middleware/session-middleware'
 import { AgentFormSchema } from './agent.schema'
 import {
   createAgent,
@@ -39,13 +39,13 @@ export const $getAgents = createServerFn({
 export const $getRecentChatsWithAgents = createServerFn({
   method: 'GET',
 })
-  .middleware([contextMiddleware])
+  .middleware([sessionMiddleware])
   .handler(async ({ context }) => {
-    if (!context.authSession.isAuthenticated) {
+    if (!context?.session) {
       return null
     }
 
-    const userId = context.authSession.user.id
+    const userId = context.user.id
 
     try {
       // Call the service function to fetch recent agents

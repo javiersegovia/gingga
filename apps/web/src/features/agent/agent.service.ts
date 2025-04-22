@@ -2,7 +2,7 @@ import type { Agent } from '@gingga/db/types'
 import type { AgentFormValues } from './agent.schema'
 import { and, desc, eq, isNotNull, max } from '@gingga/db'
 import { Agents, Chats } from '@gingga/db/schema'
-import { getDatabase } from '~/middleware/setup-context.server'
+import { getDatabase } from '~/global-middleware'
 
 /**
  * Fetches the configuration for a specific agent from the database.

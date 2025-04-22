@@ -22,11 +22,11 @@ import {
   upsertChatMessage,
 } from '~/features/chat/chat.service'
 import { getVercelToolset } from '~/features/settings/integrations/composio.service'
-import { setupAppContext } from '~/middleware/setup-context.server'
+import { getSessionData } from '~/middleware/session-middleware'
 
 export const APIRoute = createAPIFileRoute('/api/agents/custom/$agentId')({
   POST: async ({ request, params: { agentId } }) => {
-    const { authSession } = await setupAppContext()
+    const sessionData = await getSessionData()
 
     const parsed = AIChatSchema.safeParse(await request.json())
     if (!parsed.success) {
@@ -49,7 +49,7 @@ export const APIRoute = createAPIFileRoute('/api/agents/custom/$agentId')({
     if (!chat) {
       chat = await saveChat({
         id,
-        userId: authSession && authSession.isAuthenticated ? authSession.user.id : null,
+        userId: sessionData?.user?.id ?? null,
         title: await generateChatTitleFromUserMessage({ message: lastUserMessage }),
         agentId,
       })
@@ -63,9 +63,7 @@ export const APIRoute = createAPIFileRoute('/api/agents/custom/$agentId')({
       attachments: lastUserMessage.experimental_attachments ?? [],
     })
 
-    const userId = authSession?.isAuthenticated ? authSession.user.id : undefined
-
-    // console.log('[!!! - User ID]:', userId)
+    const userId = sessionData?.user?.id ?? null
 
     const toolset = getVercelToolset({
       entityId: userId,
@@ -101,7 +99,7 @@ export const APIRoute = createAPIFileRoute('/api/agents/custom/$agentId')({
 
     const uniqueAppNames = Array.from(appToolsMap.keys())
     const connections = await toolset.client.connectedAccounts.list({
-      entityId: authSession?.isAuthenticated ? authSession.user.id : undefined,
+      entityId: userId ?? undefined,
       appUniqueKeys: uniqueAppNames,
       showActiveOnly: true,
       showDisabled: false,

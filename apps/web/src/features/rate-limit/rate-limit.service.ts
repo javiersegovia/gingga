@@ -2,8 +2,8 @@ import type { RateLimitResult, Tier } from '~/lib/ratelimiter'
 import { eq } from '@gingga/db'
 import { UserMemberships } from '@gingga/db/schema'
 import { ipAddress, waitUntil } from '@vercel/functions'
+import { getDatabase } from '~/global-middleware'
 import { rateLimit } from '~/lib/ratelimiter'
-import { getDatabase } from '~/middleware/setup-context.server'
 
 export interface RateLimitContext {
   identifier: string

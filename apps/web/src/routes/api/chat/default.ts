@@ -13,13 +13,13 @@ import {
   saveChat,
   upsertChatMessage,
 } from '~/features/chat/chat.service'
-import { setupAppContext } from '~/middleware/setup-context.server'
+import { getSessionData } from '~/middleware/session-middleware'
 import { AIChatSchema } from '../../../features/chat/chat.schema'
 
 export const APIRoute = createAPIFileRoute('/api/chat/default')({
   POST: async ({ request }) => {
     try {
-      const { authSession } = await setupAppContext()
+      const sessionData = await getSessionData()
 
       const parsed = AIChatSchema.safeParse(await request.json())
 
@@ -39,7 +39,7 @@ export const APIRoute = createAPIFileRoute('/api/chat/default')({
       if (!chat) {
         chat = await saveChat({
           id,
-          userId: authSession.isAuthenticated ? authSession.user.id : null,
+          userId: sessionData?.user?.id ?? null,
           title: await generateChatTitleFromUserMessage({ message: lastUserMessage }),
           agentId: null,
         })

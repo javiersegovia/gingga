@@ -119,7 +119,7 @@ function UserDropdownBase({
 // Avatar variant
 export function UserDropdownAvatar() {
   const { data } = useAuthedQuery()
-  if (!data?.isAuthenticated)
+  if (!data?.session)
     return null
   const { user } = data
 
@@ -141,7 +141,7 @@ export function UserDropdownAvatar() {
 // Sidebar variant
 export function UserDropdownSidebar({ isMobile }: { isMobile?: boolean }) {
   const { data } = useAuthedQuery()
-  if (!data?.isAuthenticated)
+  if (!data?.session)
     return null
   const { user } = data
 

@@ -19,7 +19,7 @@ import { authClient } from '~/features/auth/auth.client'
 export const Route = createFileRoute('/_auth/register')({
   component: RegisterPage,
   beforeLoad: async ({ context }) => {
-    if (context.auth.isAuthenticated) {
+    if (context.auth?.session) {
       throw redirect({
         to: '/chat',
       })

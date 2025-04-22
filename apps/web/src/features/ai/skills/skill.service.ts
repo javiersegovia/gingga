@@ -4,7 +4,7 @@ import { AgentSkills } from '@gingga/db/schema'
  * Business logic for AgentSkill CRUD operations.
  * All database interaction for AgentSkills should be implemented here.
  */
-import { getDatabase } from '~/middleware/setup-context.server'
+import { getDatabase } from '~/global-middleware'
 
 /**
  * Create a new AgentSkill in the database.

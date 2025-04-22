@@ -1,3 +1,4 @@
+import type { Session, User } from 'better-auth'
 import type { Context } from '../context'
 import { initTRPC, TRPCError } from '@trpc/server'
 import SuperJSON from 'superjson'
@@ -21,7 +22,7 @@ export const publicProcedure = t.procedure
 export const createCallerFactory = t.createCallerFactory
 
 export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
-  if (!ctx.authSession.isAuthenticated) {
+  if (!ctx.session || !ctx.user) {
     throw new TRPCError({
       code: 'UNAUTHORIZED',
       message: 'We could not find your session. Please sign in again.',
@@ -31,6 +32,8 @@ export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
   return next({
     ctx: {
       ...ctx,
+      session: ctx.session as Session,
+      user: ctx.user as User,
     },
   })
 })

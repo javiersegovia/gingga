@@ -13,7 +13,7 @@ interface EmptyOverviewProps {
 
 export function EmptyOverview({ setInput, agentId }: EmptyOverviewProps) {
   const { data: authData } = useAuthQuery()
-  const user = authData?.isAuthenticated ? authData.user : null
+  const user = authData ? authData.user : null
   const userName = user?.name?.split(' ')[0] || 'there'
 
   const { data: agentInfo } = useQuery({

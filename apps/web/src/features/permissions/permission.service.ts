@@ -1,7 +1,7 @@
 import type { UserMemberships, Users } from '@gingga/db/schema'
 import { eq } from '@gingga/db'
 import { Agents } from '@gingga/db/schema'
-import { getDatabase } from '~/middleware/setup-context.server'
+import { getDatabase } from '~/global-middleware'
 
 // Define types based on schema for clarity
 type User = typeof Users.$inferSelect

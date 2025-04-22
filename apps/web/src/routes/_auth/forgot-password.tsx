@@ -23,7 +23,7 @@ const ForgotPasswordSchema = z.object({
 export const Route = createFileRoute('/_auth/forgot-password')({
   component: ForgotPasswordPage,
   beforeLoad: async ({ context }) => {
-    if (context.auth.isAuthenticated) {
+    if (context.auth?.session) {
       throw redirect({
         to: '/chat',
       })

@@ -2,8 +2,8 @@ import { eq } from '@gingga/db'
 import { Users } from '@gingga/db/schema'
 import { createMiddleware } from '@tanstack/react-start'
 import { setResponseStatus } from '@tanstack/react-start/server'
+import { getDatabase } from '~/global-middleware'
 import { authMiddleware } from '~/middleware/auth-middleware'
-import { getDatabase } from '~/middleware/setup-context.server'
 
 /**
  * Middleware to enforce role-based access control.

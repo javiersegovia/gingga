@@ -10,7 +10,7 @@ import { useAuthedQuery, useSignOutMutation } from '~/features/auth/auth.query'
 export const Route = createFileRoute('/settings')({
   component: SettingsLayoutComponent,
   beforeLoad: async ({ context }) => {
-    if (!context.auth.isAuthenticated) {
+    if (!context.auth?.session) {
       return redirect({ to: '/identify' })
     }
   },
@@ -24,12 +24,12 @@ function SettingsLayoutComponent() {
   const { data: authData } = useAuthedQuery()
   const { mutateAsync: signOut, isPending: isSigningOut } = useSignOutMutation()
 
-  if (!authData?.isAuthenticated) {
+  if (!authData?.session) {
     // This should technically not happen due to beforeLoad, but good practice
     return null
   }
 
-  const { user, membership } = authData // Assuming membership is part of authData now
+  const { user } = authData // Assuming membership is part of authData now
 
   // Updated navItems structure for AnimatedLinkTabs
   const navItems: Tab[] = [
@@ -76,12 +76,12 @@ function SettingsLayoutComponent() {
               {user.name || 'User'}
             </h2>
             <p className="text-muted-foreground text-center text-sm">{user.email}</p>
-            {membership && (
+            {user.membership && (
               <Badge
-                variant={membership.tier === 'pro' ? 'secondary' : 'outline'}
+                variant={user.membership.tier === 'pro' ? 'secondary' : 'outline'}
                 className="capitalize"
               >
-                {membership.tier}
+                {user.membership.tier}
                 {' '}
                 Plan
               </Badge>

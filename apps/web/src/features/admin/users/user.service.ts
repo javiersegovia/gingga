@@ -1,7 +1,7 @@
 import type { BanUserInput, BaseUser, UpdateUserInput } from './user.schema'
 import { count, desc, eq } from '@gingga/db'
 import { ChatMessages, Chats, UserMemberships, Users } from '@gingga/db/schema'
-import { getDatabase } from '~/middleware/setup-context.server'
+import { getDatabase } from '~/global-middleware'
 
 // Helper function to potentially throw specific errors (e.g., NotFoundError)
 class NotFoundError extends Error {

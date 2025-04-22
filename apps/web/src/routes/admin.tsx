@@ -7,7 +7,7 @@ import { $isSidebarOpened } from '~/features/sidebar/sidebar.api'
 export const Route = createFileRoute('/admin')({
   component: AdminLayout,
   beforeLoad: async ({ context }) => {
-    if (!context.auth.isAuthenticated) {
+    if (!context.auth?.session) {
       throw redirect({ to: '/identify' })
     }
     if (context.auth.user.role !== 'admin') {

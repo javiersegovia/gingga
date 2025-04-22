@@ -2,8 +2,8 @@ import { and, eq, lt, or } from '@gingga/db'
 import { UserMemberships } from '@gingga/db/schema'
 import { json } from '@tanstack/react-start'
 import { createAPIFileRoute } from '@tanstack/react-start/api'
+import { getDatabase } from '~/global-middleware'
 import { resetRateLimit } from '~/lib/ratelimiter'
-import { getDatabase } from '~/middleware/setup-context.server'
 
 // todo: finish cron job!
 

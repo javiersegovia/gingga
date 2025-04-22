@@ -48,7 +48,7 @@ export function useUserChatsQuery() {
 
   return useQuery({
     ...userChatsQueryOptions(),
-    enabled: authData?.isAuthenticated,
+    enabled: !!authData?.session,
   })
 }
 

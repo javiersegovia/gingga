@@ -1,70 +1,64 @@
-import type { Session as BetterAuthSessionData } from 'better-auth'
 import type { Context as HonoContext } from 'hono'
 import type { ContextEnv } from './server'
-import type { AppAuthSession } from '~/lib/auth/auth.types'
-import { eq } from '@gingga/db'
-import { UserMemberships, Users } from '@gingga/db/schema'
+import { createDatabaseClient, eq } from '@gingga/db'
+import { Users } from '@gingga/db/schema'
 import { getContext } from 'hono/context-storage'
 import { createServerAuth } from '~/lib/auth/auth.service'
 
-export const getDB = () => getContext<ContextEnv>().var.db
+export function getDB() {
+  const c = getContext<ContextEnv>()
+
+  if (!c.var.db) {
+    c.set('db', createDatabaseClient())
+  }
+
+  return c.var.db
+}
+
+export function getAuth() {
+  const c = getContext<ContextEnv>()
+
+  if (!c.var.auth) {
+    c.set('auth', createServerAuth())
+  }
+
+  return c.var.auth
+}
 
 export async function createContext(c: HonoContext) {
   const cookie = c.req.header('Cookie')
   const authorization = c.req.header('Authorization')
-  const db = getDB()
 
   const h = new Headers()
-  if (cookie)
+  if (cookie) {
     h.set('Cookie', cookie)
-  if (authorization)
+  }
+  if (authorization) {
     h.set('Authorization', authorization)
+  }
 
-  const auth = createServerAuth()
-  const betterAuthSession = await auth.api.getSession({
+  const db = getDB()
+  const auth = getAuth()
+  const authSession = await auth.api.getSession({
     headers: h,
   })
 
-  const userId = betterAuthSession?.user?.id
-  let authSession: AppAuthSession
-
-  if (!userId) {
-    authSession = { isAuthenticated: false }
-    return {
-      db,
-      auth,
-      authSession,
-      c,
-    }
-  }
-
-  const [user, membership] = await Promise.all([
-    db.select().from(Users).where(eq(Users.id, userId)).get(),
-    db
-      .select()
-      .from(UserMemberships)
-      .where(eq(UserMemberships.userId, userId))
-      .get(),
-  ])
-
-  if (user) {
-    authSession = {
-      isAuthenticated: true,
-      session: betterAuthSession.session as BetterAuthSessionData,
-      user,
-      membership: membership ?? null,
-    }
-  }
-  else {
-    authSession = { isAuthenticated: false }
-  }
+  const user = authSession
+    ? await db.query.Users.findFirst({
+      where: eq(Users.id, authSession.user.id),
+      with: {
+        membership: true,
+      },
+    })
+    : null
 
   return {
     headers: h,
+    c,
     db,
     auth,
-    authSession,
-    c,
+    session: authSession?.session,
+    user,
   }
 }
 

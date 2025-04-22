@@ -5,7 +5,7 @@ import { and, asc, desc, eq, gte, inArray } from '@gingga/db'
 import { ChatMessages, Chats } from '@gingga/db/schema'
 import { getCookie, getEvent, setCookie } from '@tanstack/react-start/server'
 import { generateText } from 'ai'
-import { getDatabase } from '~/middleware/setup-context.server'
+import { getDatabase } from '~/global-middleware'
 import { modelProvider } from '../ai/utils/providers'
 import { ChatModelSchema } from './chat.schema'
 

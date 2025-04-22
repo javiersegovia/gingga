@@ -9,7 +9,7 @@ alwaysApply: false
 
 <tech_stack>
 - **Monorepo Management**: [Turbo](mdc:https:/turbo.build)
-- **Package Manager**: [Bun](mdc:https:/bun.sh)
+- **Package Manager**: [pnpm](mdc:https:/pnpm.io)
 - **Primary Languages**: TypeScript (strict mode) / JavaScript (ES6+)
 - **Runtime**: API ([Workerd](mdc:https:/developers.cloudflare.com/workers/runtime-apis/workerd)), Web ([Node.js](mdc:https:/nodejs.org) >= 20)
 - **UI Framework**: React 19+ (Functional Components + Hooks)
@@ -87,7 +87,7 @@ The application follows a monorepo structure managed by Turbo:
 │   ├── db/         # Drizzle ORM schema, migrations (Turso/SQLite)
 │   ├── ui/         # Shared React components (Shadcn/UI based)
 │   └── tsconfig/   # Shared TypeScript configurations
-├── bun.lockb
+├── pnpm-lock.yaml
 ├── package.json    # Root dependencies and scripts
 └── turbo.json      # Turbo configuration
 ```
@@ -98,10 +98,10 @@ The application follows a monorepo structure managed by Turbo:
 ## Monorepo Workflow
 
 <monorepo_workflow>
-- **Running Commands**: Use `bun run <script>` from the root directory. Turbo will execute the script across the relevant workspaces (e.g., `bun run dev`, `bun run build`, `bun run lint`).
+- **Running Commands**: Use `pnpm run <script>` from the root directory. Turbo will execute the script across the relevant workspaces (e.g., `pnpm run dev`, `pnpm run build`, `pnpm run lint`).
 - **Package-Specific Commands**: For scripts not defined in the root `package.json` (e.g., `db:migrate`, `cf-typegen`), either:
-    - Run the command from within the specific package directory (`cd packages/db && bun run db:migrate`).
-    - Use the `--filter` flag with Turbo from the root (`bun run db:migrate --filter=@gingga/db...`).
+    - Run the command from within the specific package directory (`cd packages/db && pnpm run db:migrate`).
+    - Use the `--filter` flag with Turbo from the root (`pnpm run db:migrate --filter=@gingga/db...`).
 </monorepo_workflow>
 
 ## Return Types

@@ -11,7 +11,7 @@ import { AuthLayout } from './_auth/_components'
 export const Route = createFileRoute('/_auth')({
   component: RouteComponent,
   beforeLoad: async ({ context }) => {
-    if (context.auth?.isAuthenticated) {
+    if (context.auth?.session) {
       throw redirect({
         to: '/chat',
       })

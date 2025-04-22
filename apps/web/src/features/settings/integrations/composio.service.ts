@@ -14,10 +14,10 @@ import { getServerEnv } from '~/server/env'
 import { ComposioAppNameEnum } from './composio.schema'
 
 // Helper to initialize the Composio SDK
-export function getVercelToolset({ entityId }: { entityId?: string }): VercelAIToolSet {
+export function getVercelToolset({ entityId }: { entityId?: string | null }): VercelAIToolSet {
   const env = getServerEnv()
   try {
-    return new VercelAIToolSet({ apiKey: env.COMPOSIO_API_KEY, entityId })
+    return new VercelAIToolSet({ apiKey: env.COMPOSIO_API_KEY, entityId: entityId ?? undefined })
   }
   catch (_error) {
     // console.error('Failed to initialize Composio SDK:', _error)

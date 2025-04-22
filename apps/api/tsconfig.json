@@ -1,26 +1,26 @@
 {
   "extends": "@gingga/tsconfig/base.json",
-  "include": ["src/**/*", "worker-configuration.d.ts"],
-  "exclude": ["node_modules", "dist", "tests"],
   "compilerOptions": {
-    "composite": true,
     "incremental": true,
-    "declaration": true,
-    "declarationMap": true,
-    "emitDeclarationOnly": true,
-    "outDir": "./.types",
-    "baseUrl": ".",
-    "paths": {
-      "~/*": ["./src/*"]
-    },
+    "composite": true,
     "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "jsxImportSource": "hono/jsx",
     "lib": [
       "ESNext"
     ],
-    "jsx": "react-jsx",
-    "jsxImportSource": "hono/jsx",
-    "types": ["node", "./worker-configuration.d.ts"]
-  }
+    "baseUrl": ".",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "paths": {
+      "~/*": ["./src/*"]
+    },
+    "types": ["node", "./worker-configuration.d.ts"],
+    "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": true,
+    "outDir": "./.types"
+  },
+  "include": ["src/**/*", "worker-configuration.d.ts"],
+  "exclude": ["node_modules", "dist", "tests"]
 }

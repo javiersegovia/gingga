@@ -1,12 +1,15 @@
 {
   "extends": "@gingga/tsconfig/react.json",
-  "include": ["**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"],
   "compilerOptions": {
-    "noEmit": true,
+    "composite": true,
     "baseUrl": ".",
     "paths": {
-      "@gingga/ui/*": ["./*"],
+      "@gingga/ui/*": ["./*"]
     },
+    "declaration": true,
+    "declarationMap": true,
+    "emitDeclarationOnly": true
   },
+  "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"]
 }

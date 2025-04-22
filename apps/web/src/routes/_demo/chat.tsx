@@ -11,7 +11,7 @@ export const Route = createFileRoute('/_demo/chat')({
   component: ChatLayout,
 
   loader: async ({ context }) => {
-    if (context?.auth?.isAuthenticated) {
+    if (context?.auth?.session) {
       context.queryClient.prefetchQuery(recentChatsWithAgentsQueryOptions())
       context.queryClient.prefetchQuery(userChatsQueryOptions())
     }

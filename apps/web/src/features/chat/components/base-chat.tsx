@@ -72,14 +72,14 @@ export function BaseChat({
     generateId: nanoid,
     initialMessages,
     onResponse: (response) => {
-      if (authData?.isAuthenticated) {
-        queryClient.invalidateQueries({ queryKey: userChatsQueryOptions().queryKey })
-        queryClient.invalidateQueries({
-          queryKey: recentChatsWithAgentsQueryOptions().queryKey,
-        })
-      }
-
       if (isNewChat && response.ok) {
+        if (authData?.session) {
+          queryClient.invalidateQueries({ queryKey: userChatsQueryOptions().queryKey })
+          queryClient.invalidateQueries({
+            queryKey: recentChatsWithAgentsQueryOptions().queryKey,
+          })
+        }
+
         const targetHref = agentId ? newAgentChatHref : newChatHref
         window.history.replaceState({}, '', targetHref)
       }

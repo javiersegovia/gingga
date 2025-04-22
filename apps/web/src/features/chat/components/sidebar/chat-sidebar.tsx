@@ -48,7 +48,6 @@ const MAX_RECENT_AGENTS_TO_SHOW = 3 as const
 
 export function ChatSidebar() {
   const { data: authData } = useAuthQuery()
-  const { isAuthenticated } = authData
 
   return (
     <Sidebar className="border-r">
@@ -87,13 +86,13 @@ export function ChatSidebar() {
         <RecentAgentsSection />
 
         {/* <Suspense fallback={<ChatHistoryLoading />}> */}
-        <SidebarChats user={isAuthenticated ? authData.user : null} />
+        <SidebarChats user={authData?.user ?? null} />
         {/* </Suspense> */}
       </SidebarContent>
 
       <SidebarFooter>
         <div className="flex gap-4">
-          <NavUser user={isAuthenticated ? authData.user : null} />
+          <NavUser user={authData?.user ?? null} />
           <ThemeSwitch />
         </div>
       </SidebarFooter>
@@ -327,14 +326,14 @@ function RecentAgentsListLoading() {
 }
 
 function RecentAgentsSection() {
-  const { data } = useAuthQuery()
+  const { data: authData } = useAuthQuery()
 
   return (
     <SidebarGroup className="p-0">
       <SidebarGroupLabel className="text-foreground font-bold">Agents</SidebarGroupLabel>
       <SidebarGroupContent>
         <SidebarMenu className="gap-0">
-          {data.isAuthenticated && (
+          {authData?.session && (
             <Suspense fallback={<RecentAgentsListLoading />}>
               <RecentAgentsList />
             </Suspense>

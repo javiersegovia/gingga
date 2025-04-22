@@ -160,7 +160,7 @@ export function Navbar({ navigation, variant = 'default' }: NavbarProps) {
             )}
             {/* Desktop Buttons */}
             <div className="hidden items-center gap-4 md:flex">
-              {!data?.isAuthenticated
+              {!data?.session
                 ? (
                     <>
                       <Button
@@ -265,7 +265,7 @@ export function Navbar({ navigation, variant = 'default' }: NavbarProps) {
               })}
             <div className="flex flex-col gap-2 pt-2 pb-4">
               <Separator className="my-4 bg-neutral-800" />
-              {!data?.isAuthenticated
+              {!data?.session
                 ? (
                     <>
                       <Button

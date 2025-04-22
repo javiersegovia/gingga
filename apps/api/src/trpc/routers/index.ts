@@ -10,8 +10,10 @@ export const appRouter = router({
   auth: authRouter,
   privateData: protectedProcedure.query(async ({ ctx }) => {
     const usersCount = await ctx.db.select({ count: count() }).from(Users)
+
     return {
       message: `We have ${usersCount[0].count} users`,
+      currentUser: `You are currently logged in as ${ctx.user.email}`,
     }
   }),
 })

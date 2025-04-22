@@ -1,17 +1,21 @@
-import type { createServerAuth } from '@gingga/api/src/lib/auth/auth.service'
-import type { AppAuthSession } from '@gingga/api/src/lib/auth/auth.types'
-import type { createDatabaseClient } from '@gingga/db'
+import { createDatabaseClient } from '@gingga/db'
 import { createMiddleware, registerGlobalMiddleware } from '@tanstack/react-start'
-import { setupAppContext } from './middleware/setup-context.server'
+import { getEvent } from '@tanstack/react-start/server'
+
+export function getDatabase() {
+  const event = getEvent()
+  if (!event.context.db) {
+    event.context.db = createDatabaseClient()
+  }
+  return event.context.db
+}
 
 export const contextMiddleware = createMiddleware().server(async ({ next }) => {
-  const { db, auth, authSession } = await setupAppContext()
+  const db = getDatabase()
 
   return next({
     context: {
       db,
-      auth,
-      authSession,
     },
   })
 })
@@ -22,8 +26,6 @@ registerGlobalMiddleware({
 
 declare module '@tanstack/react-start/server' {
   interface H3EventContext {
-    authSession: AppAuthSession
-    auth: ReturnType<typeof createServerAuth>
     db: ReturnType<typeof createDatabaseClient>
   }
 }

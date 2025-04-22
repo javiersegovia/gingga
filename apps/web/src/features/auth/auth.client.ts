@@ -6,8 +6,11 @@ import { createAuthClient } from 'better-auth/react'
 //   plugins: [inferAdditionalFields<typeof auth>()],
 // })
 
+console.log('import.meta.env.VITE_API_URL')
+console.log(import.meta.env.VITE_API_URL)
+
 export const authClient = createAuthClient({
-  baseURL: import.meta.env.VITE_SITE_URL,
+  baseURL: import.meta.env.VITE_API_URL,
   fetchOptions: {
     onResponse: async () => {
       if (typeof window !== 'undefined') {

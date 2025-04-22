@@ -13,7 +13,7 @@ export function useAuthedQuery() {
   const authQuery = useAuthQuery()
   const router = useRouter()
 
-  if (!authQuery.data.isAuthenticated) {
+  if (!authQuery.data?.session) {
     throw router.navigate({ to: '/identify' })
   }
 

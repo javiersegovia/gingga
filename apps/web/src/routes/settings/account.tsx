@@ -82,14 +82,14 @@ function AccountSettingsComponent() {
   const monthlyStandardLimit = 1000
   const monthlyPremiumLimit = 500
 
-  if (!authData?.isAuthenticated) {
+  if (!authData?.session) {
     // Should be handled by layout, but good practice
     return null // Or a loading state
   }
 
   // Render NoMembershipCard if membership data is missing or explicitly basic
   // Adjust this condition based on how your authData defines a non-paying user
-  if (!authData.membership /* || authData.membership.tier === 'basic' */) {
+  if (!authData.user.membership /* || authData.membership.tier === 'basic' */) {
     return (
       <div className="space-y-6">
         <NoMembershipCard />
@@ -109,7 +109,7 @@ function AccountSettingsComponent() {
       monthlyPremiumUsed,
       tier,
     },
-  } = authData
+  } = authData.user
 
   const formatResetDate = (timestamp: number) => {
     return new Date(timestamp).toLocaleDateString(undefined, {

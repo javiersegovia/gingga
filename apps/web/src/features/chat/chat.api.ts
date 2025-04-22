@@ -3,8 +3,8 @@ import { Chats } from '@gingga/db/schema'
 import { createServerFn } from '@tanstack/react-start'
 import { zodValidator } from '@tanstack/zod-adapter'
 import { z } from 'zod'
+import { getDatabase } from '~/global-middleware'
 import { authMiddleware } from '~/middleware/auth-middleware'
-import { getDatabase } from '~/middleware/setup-context.server'
 import {
   ChatModelSchema,
   DeleteChatSchema,
