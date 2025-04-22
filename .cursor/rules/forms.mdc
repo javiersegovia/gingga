@@ -1,0 +1,350 @@
+---
+description: Instructions for handling forms
+globs: 
+alwaysApply: false
+---
+# Form Handling Standards
+
+## Form Architecture
+
+<form_structure>
+1. Required Companion Files:
+    - Schema definition and form options in `[feature].schema.ts`.
+    - Server actions (API endpoints) in `[feature].api.ts`.
+    - Tanstack Query query/mutation hooks in `[feature].query.ts`.
+    - Business logic/database interactions in `[feature].service.ts`.
+</form_structure>
+
+## Validation & Schema
+
+<validation_rules>
+1. Zod Schema Definition:
+   - Define the form data structure and validation rules using Zod in `[feature].schema.ts`.
+
+   ```typescript
+   // agent.schema.ts example
+   import { Agents } from '@gingga/db/schema'
+   import { z } from 'zod'
+
+   // Schema specifically for the AgentForm component
+   export const AgentFormSchema = z.object({
+     name: z.string().min(1, 'Agent name is required.'),
+     description: z.string().nullable(),
+     instructions: z.string().min(1, 'Instructions are required.'),
+     modelId: z.enum(Agents.modelId.enumValues).nullable().optional(),
+     image: z.string().url({ message: 'Please enter a valid URL.' }).nullable(),
+   })
+   export type AgentFormValues = z.infer<typeof AgentFormSchema>
+   ```
+
+2. Tanstack Form Options:
+   - Create a `formOptions` object using `formOptions` from `@tanstack/react-form` in `[feature].schema.ts`.
+   - Define `defaultValues` matching the form values type (e.g., `AgentFormValues`).
+   - Set the `validators.onSubmit` property to the Zod schema for form-level validation upon submission.
+
+   ```typescript
+   // agent.schema.ts example
+   import { formOptions } from '@tanstack/react-form'
+   import { AgentFormSchema, AgentFormValues } from './agent.schema' // Assuming schema is in the same file
+
+   export const agentFormOptions = formOptions({
+     defaultValues: {
+       name: '',
+       description: null,
+       instructions: '',
+       modelId: null,
+       image: null,
+     } as AgentFormValues, // Cast or ensure type alignment
+     validators: {
+       onSubmit: AgentFormSchema, // Ensures the entire form is valid on submit
+     },
+   })
+   ```
+
+3. Form Hook Initialization (`useAppForm`):
+   - Use the custom `useAppForm` hook (defined in `~/components/form/tanstack-form.tsx`) in your form component.
+   - Spread the predefined `formOptions` imported from `[feature].schema.ts`.
+   - Provide `defaultValues`, merging the base defaults with any `initialValues` passed via props.
+   - Define the `onSubmit` async function to handle form submission logic (e.g., calling a mutation). Access the `formApi` in the `onSubmit` arguments if needed (e.g., for `formApi.reset()`).
+
+   ```typescript
+   // agent-form.tsx example
+   import { useAppForm } from '~/components/form/tanstack-form'
+   import { agentFormOptions, AgentFormSchema, AgentFormValues } from '../agent.schema'
+
+   // Inside the component:
+   const form = useAppForm({
+     ...agentFormOptions, // Spread base options from schema file
+     defaultValues: {
+       ...agentFormOptions.defaultValues,
+       ...initialValues, // Override with initial/edit values if provided
+     },
+     onSubmit: async ({ value, formApi }) => {
+       await onSubmit(value) // Call the mutation or passed onSubmit handler
+       formApi.reset() // Reset form state after successful submission
+     },
+     // Note: onSubmit validator is already set in agentFormOptions
+     // Field-level validators (onChange, onBlur) can be added per field using form.AppField
+   })
+   ```
+
+</validation_rules>
+
+## Server Integration
+
+<server_rules>
+1. Tanstack Query Mutation Pattern:
+   - Use `useMutation` from Tanstack Query (`@tanstack/react-query`) to handle server state changes (create, update, delete).
+   - The `mutationFn` should typically call the corresponding server action function (defined in `[feature].api.ts`).
+   - Use `onSuccess` to invalidate relevant queries (`queryClient.invalidateQueries`) to ensure data freshness across the app after the mutation succeeds.
+
+   ```typescript
+   // agent.query.ts example
+   import { useMutation, useQueryClient } from '@tanstack/react-query'
+   import { $createAgent } from './agent.api' // Import server action
+   import { agentsQueryOptions } from './agent.query' // Assuming query options exist for invalidation
+
+   export const useCreateAgentMutation = () => {
+     const queryClient = useQueryClient()
+     return useMutation({
+       mutationFn: $createAgent, // Reference to the server action
+       onSuccess: async () => {
+         // Invalidate queries that should refetch after creation
+         await queryClient.invalidateQueries({ queryKey: agentsQueryOptions().queryKey })
+       },
+       // Add onError for error handling (e.g., showing toast notifications)
+       onError: (error) => {
+         console.error("Failed to create agent:", error);
+         // Show error toast to user
+       }
+     })
+   }
+   ```
+
+2. Server Action (`createServerFn`) Structure:
+   - Define server actions in `[feature].api.ts` using `createServerFn` from `@tanstack/react-start`.
+   - Use the appropriate HTTP method (`POST` for create/update, `DELETE` for delete, `GET` for fetch).
+   - Apply middleware (e.g., `authMiddleware` from `~/middleware/auth-guard`) for authentication/authorization.
+   - Integrate Zod validation using `zodValidator` from `@tanstack/zod-adapter`, passing the appropriate schema (e.g., `AgentFormSchema`). This ensures data validity before the handler runs.
+   - Implement the handler logic, typically calling service functions (from `[feature].service.ts`) for database interactions or other business logic.
+   - Include robust error handling (try/catch) and use `setResponseStatus` from `@tanstack/react-start/server` to set appropriate HTTP status codes on errors.
+
+   ```typescript
+   // agent.api.ts example
+   import { createServerFn } from '@tanstack/react-start'
+   import { zodValidator } from '@tanstack/zod-adapter'
+   import { authMiddleware } from '~/middleware/auth-guard' // Corrected path assumption
+   import { AgentFormSchema } from './agent.schema'
+   import { createAgent } from './agent.service' // Service function for DB interaction
+   import { setResponseStatus } from '@tanstack/react-start/server'
+
+   export const $createAgent = createServerFn({
+       method: 'POST',
+     })
+     .middleware([authMiddleware])
+     .validator(zodValidator(AgentFormSchema)) // Use form schema for input validation
+     .handler(async ({ data }) => {
+       try {
+         const agent = await createAgent(data) // Call service function with validated data
+         return agent
+       } catch (e) {
+         console.error('Agent creation failed:', e)
+         setResponseStatus(500)
+         // Consider returning a structured error object
+         return { error: 'Failed to create agent due to a server error.' }
+       }
+     })
+   ```
+
+</server_rules>
+
+## UI Implementation
+
+<ui_rules>
+Our UI implementation leverages custom components built on top of TanStack Form, facilitated by the `useAppForm` hook defined in `~/components/form/tanstack-form.tsx`.
+
+1. Custom Form Hook (`useAppForm`):
+   - Provides `form.AppField` and `form.AppForm` components attached to the form instance.
+   - These components simplify binding fields and accessing form state.
+
+2. Field Rendering (`form.AppField`):
+   - Use the `form.AppField` component for each form input.
+   - Pass the `name` prop corresponding to the schema key.
+   - Optionally provide `validators.onChange` or `validators.onBlur` for field-level validation using the Zod schema's shape (e.g., `AgentFormSchema.shape.name`).
+   - Utilize the render prop pattern (`children={(field) => ...}`) to access the field API (`field`).
+
+3. Field Structure Components (via `field` prop):
+   - The `field` object passed to the `form.AppField` render prop contains pre-bound components for structuring the field:
+     - `field.FormFieldItem`: Wraps the entire field structure (label, control, messages).
+     - `field.FormFieldLabel`: Renders the `<label>`, automatically linked via context.
+     - `field.FormFieldControl`: Wraps the actual input element (`<Input>`, `<Textarea>`, `<Select>`, etc.).
+     - `field.FormFieldMessage`: Displays validation errors, automatically linked and populated based on `field.state.meta.errors`.
+     - `field.FormFieldDescription`: (Optional) Renders descriptive text for the field.
+
+4. Input Integration (Inside `field.FormFieldControl`):
+   - Bind standard HTML input props to the `field` object's properties and methods:
+     - `name={field.name}`
+     - `value={field.state.value}` (Handle potential `null` or `undefined` for controlled components like `Textarea` or `Input type="text"`, e.g., `value={field.state.value ?? ''}`)
+     - `onBlur={field.handleBlur}`
+     - `onChange={(e) => field.handleChange(e.target.value)}` (For simple inputs)
+     - For custom components like `Select` or `Checkbox`, use the appropriate event and value extraction (e.g., `onValueChange={value => field.handleChange(value)}`, `onCheckedChange={checked => field.handleChange(!!checked)}`).
+   - Use `field.state.meta.errors` to check for errors and set `aria-invalid`.
+   - ARIA linking (`aria-describedby`) between the input and message component is handled automatically by the `FormField...` components via context.
+
+   ```tsx
+   // agent-form.tsx <Input> example within form.AppField
+   import { Input } from '@gingga/ui/components/input'
+   import { AgentFormSchema } from '../agent.schema' // Import schema for validators
+
+   // ... inside form component returned by useAppForm ...
+   <form.AppField
+     name="name"
+     validators={{ // Optional: Validate on change
+       onChange: AgentFormSchema.shape.name,
+     }}
+     children={(field) => ( // Render prop provides 'field' object
+       <field.FormFieldItem> {/* Wrapper */}
+         <field.FormFieldLabel>Agent Name</field.FormFieldLabel> {/* Label */}
+         <field.FormFieldControl> {/* Input Wrapper */}
+           <Input
+             name={field.name}
+             value={field.state.value} // Bind value
+             onBlur={field.handleBlur} // Bind blur
+             onChange={(e) => field.handleChange(e.target.value)} // Bind change
+             disabled={isSubmitting} // Example: Use form state or prop
+             placeholder="e.g., Customer Support Pro"
+             aria-invalid={!!field.state.meta.errors.length} // Set aria-invalid based on errors
+             // aria-describedby is handled internally by FormFieldMessage
+           />
+         </field.FormFieldControl>
+         <field.FormFieldMessage /> {/* Displays errors automatically */}
+       </field.FormFieldItem>
+     )}
+   />
+   ```
+
+5. Form Submission Button (`form.FormButton`):
+   - Use `form.AppForm` component to wrap the section containing the submit button. This provides access to form-level state.
+   - Inside `form.AppForm`, use the `form.FormButton` component (defined in `~/components/form/form-button.tsx`).
+   - `form.FormButton` automatically uses `form.Subscribe` internally to react to `isSubmitting` and `canSubmit` states, disabling the button appropriately and showing a pending state.
+   - It accepts a render prop (`children`) to customize the button text based on state.
+
+   ```tsx
+   // agent-form.tsx submit button example
+   // ... inside main form component ...
+
+   {/* Subscribe to form state for button logic */}
+   <form.AppForm>
+     <form.FormButton variant="primary" size="xl" className="mt-10 w-full">
+       {/* Render prop to customize button text */}
+       {({ isSubmitting }) => (isSubmitting ? 'Saving...' : 'Save Agent')}
+     </form.FormButton>
+   </form.AppForm>
+   ```
+
+6. Triggering Submission (Main `<form>` tag):
+   - Attach an `onSubmit` handler to the root `<form>` element.
+   - Prevent the browser's default form submission (`e.preventDefault()`) and stop event propagation (`e.stopPropagation()`).
+   - Call `form.handleSubmit()` provided by `useAppForm`. This triggers TanStack Form's validation pipeline (including the `validators.onSubmit` schema) and executes the `onSubmit` function defined in `useAppForm` options if validation passes.
+
+   ```tsx
+   // agent-form.tsx form tag example
+   <form
+     onSubmit={(e) => {
+       e.preventDefault()
+       e.stopPropagation()
+       void form.handleSubmit() // Trigger Tanstack Form submission & validation
+     }}
+     {...formProps} // Spread any additional form props
+     className="space-y-4" // Example styling
+   >
+     {/* Render form fields using form.AppField here */}
+
+     {/* Render submit button wrapped in form.AppForm */}
+     <form.AppForm>
+       <form.FormButton /* ... */ />
+     </form.AppForm>
+   </form>
+   ```
+
+7. Handling Array Fields (`mode="array"`):
+   - For fields representing an array of objects (like the `variables` in `skill-form.tsx`), use `form.AppField` with the `mode="array"` prop.
+   - The render prop `children={(field) => ...}` will provide `field.state.value` as the array.
+   - Use standard array methods like `map` to iterate over `field.state.value`. Remember to provide a stable `key` prop for each item (e.g., using an index if items don't have unique IDs, though stable IDs are preferred).
+   - Inside the loop, use `form.AppField` again for each *sub-field* within the array item, using bracket notation for the `name` (e.g., `name={\`variables[${idx}].key\`}`).
+   - Use `field.pushValue(newItem)` to add an item to the array and `field.removeValue(index)` to remove an item.
+
+   ```tsx
+   // skill-form.tsx array field example (simplified)
+   import { Button } from '@gingga/ui/components/button';
+   import { Input } from '@gingga/ui/components/input';
+
+   // ... inside main form component ...
+   <form.AppField name="variables" mode="array">
+     {(field) => ( // 'field' here controls the 'variables' array
+       <field.FormFieldItem>
+         <field.FormFieldLabel>Variables</field.FormFieldLabel>
+         <div className="space-y-2">
+           {field.state.value.map((_, idx) => ( // Map over the array value
+             <div key={idx} className="flex items-center gap-2"> {/* Use index as key if no stable ID */}
+               {/* Sub-field for the 'key' property */}
+               <form.AppField name={`variables[${idx}].key`}>
+                 {(subField) => (
+                   <subField.FormFieldControl className="flex-1">
+                     <Input
+                       placeholder="Key"
+                       name={subField.name}
+                       value={subField.state.value}
+                       onBlur={subField.handleBlur}
+                       onChange={(e) => subField.handleChange(e.target.value)}
+                       disabled={isSaving}
+                     />
+                   </subField.FormFieldControl>
+                 )}
+               </form.AppField>
+
+               {/* Sub-field for the 'value' property */}
+               <form.AppField name={`variables[${idx}].value`}>
+                 {(subField) => (
+                    <subField.FormFieldControl className="flex-1">
+                      <Input
+                        placeholder="Value (Optional)"
+                        name={subField.name}
+                        value={subField.state.value ?? ''} // Handle null
+                        onBlur={subField.handleBlur}
+                        onChange={(e) => subField.handleChange(e.target.value)}
+                        disabled={isSaving}
+                      />
+                    </subField.FormFieldControl>
+                 )}
+               </form.AppField>
+
+               <Button
+                 type="button"
+                 variant="ghost"
+                 size="sm"
+                 onClick={() => field.removeValue(idx)} // Remove item at index
+                 disabled={isSaving}
+               >
+                 Remove
+               </Button>
+             </div>
+           ))}
+         </div>
+         <Button
+           type="button"
+           variant="outline"
+           onClick={() => field.pushValue({ key: '', value: null })} // Add new item
+           disabled={isSaving}
+         >
+           Add Variable
+         </Button>
+         <field.FormFieldMessage /> {/* For errors related to the array itself */}
+       </field.FormFieldItem>
+     )}
+   </form.AppField>
+   ```
+
+</ui_rules>
+
+

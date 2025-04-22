@@ -1,0 +1,93 @@
+---
+description: Design System and Theme Variables
+globs: 
+alwaysApply: false
+---
+## UI Theming and Styling Standards
+
+> **Source Files:**
+> - `packages/ui/styles/tailwind.css` (Theme CSS variables)
+> - `packages/ui/styles/utilities.css` (Custom utility classes)
+
+1. Theme Variable Usage
+
+   1.1 Reference CSS Variables
+   - All theme values are defined as CSS variables in `tailwind.css` under `:root` and `[data-theme="dark"]`.
+   - Tailwind class names map directly to CSS variables:
+     - `bg-{key}` → `--color-{key}`
+     - `text-{key}` → `--color-{key}-foreground`
+     - `border-{key}` → `--color-{key}`
+
+   1.2 Guidelines
+   - **Never** hardcode raw color values in components.
+   - Always use Tailwind classes that reference CSS variables.
+   - When adding new theme variables:
+     1. Define the variable in `tailwind.css` under both `:root` and dark mode.
+     2. Use the matching `bg-`, `text-`, or `border-` Tailwind utility.
+     3. We use "foreground" for the color of the text. Almost all colors should have a `foreground` companion.
+     4. Update this document if prefixes or naming conventions change.
+
+2. Common Theme Keys (Examples)
+
+   - background, foreground, card, card-foreground, dialog, dialog-foreground
+   - popover, popover-foreground, primary, primary-foreground
+   - secondary, secondary-foreground, accent, accent-foreground
+   - muted, muted-foreground, destructive, destructive-foreground
+   - warning, warning-foreground, success, success-foreground
+   - brand-blue, brand-blue-foreground, brand-green, brand-green-foreground
+   - brand-pink, brand-pink-foreground, brand-purple, brand-purple-foreground
+
+> **Tip:** Run `grep -R "--color-" packages/ui/styles/tailwind.css` to list all available keys.
+
+3. Custom Utility Classes
+
+   - Defined in `utilities.css` via `@utility` or scoped selectors:
+     - `line-stroke` (`@utility line-stroke`)
+     - `diagonal-pattern` (`@utility diagonal-pattern`)
+     - `svg-white` (`@utility svg-white`)
+     - `reverse-box-shadow` (`@utility reverse-box-shadow`)
+     - `shadow-reverse` (`.shadow-reverse`)
+
+   - To create new utilities:
+     1. Add the class definition to `utilities.css`.
+     2. Document the class name and purpose here.
+
+4. Best Practices for LLMs
+
+   - Always consult the source CSS files for up-to-date variable and utility definitions.
+   - Use exact Tailwind utility names to ensure consistency.
+   - If CSS files change structure or naming, regenerate or update examples in this document.
+
+<shadcn_theming>
+1. **Theme Variable Usage**:
+   - NEVER use direct color values (e.g., `text-gray-500`, `bg-gray-100`) in component styling
+   - ALWAYS use ShadcnUI theme variables for consistent theming:
+     - `bg-background`, `text-foreground` - For primary surfaces
+     - `bg-muted`, `text-muted-foreground` - For secondary/disabled elements
+     - `bg-primary`, `text-primary-foreground` - For primary interactive elements
+     - `bg-secondary`, `text-secondary-foreground` - For secondary interactive elements
+     - `bg-accent`, `text-accent-foreground` - For subtle background highlights
+     - `bg-destructive`, `text-destructive-foreground` - For errors/destructive actions
+     - `border-border` - For borders (not `border-gray-200`)
+
+2. **Brand Colors**:
+   - Use semantic brand colors defined in our theme when appropriate:
+     - `brand-blue` - Primary brand color
+     - `brand-green` - Attention-grabbing elements
+     - `brand-pink` - Feminine/creative elements
+     - `brand-purple` - Premium/exclusive features
+
+3. **Component Design Language**:
+   - If the route/component have a defined primary accent color documented at the top, we should prioritize it
+   - Maintain visual consistency within related UI elements
+   - Apply the same accent color to icons, borders, and interactive elements
+
+4. **Icon Usage**:
+   - Size icons appropriately to their context (e.g., `size={28}` for headings)
+   - Apply accent colors to icons using the theme variables
+   - Ensure icon and text alignment with proper spacing (e.g., `gap-3`)
+
+5. **Documentation**:
+   - Document the primary accent color at the top of component files with a STYLING NOTE comment
+   - Reference theme variables in component documentation where relevant
+</shadcn_theming>

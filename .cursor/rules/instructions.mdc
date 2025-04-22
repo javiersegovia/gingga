@@ -5,16 +5,25 @@ alwaysApply: false
 ---
 # Agent Behaviour Guide
 
-## Core Tech Stack 
+## Core Tech Stack
 
 <tech_stack>
-- **Primary Languages:** TypeScript (strict mode) / JavaScript (ES6+)
-- **UI Framework:** React 19+ (Functional Components + Hooks)
-- **State/Routing:** TanStack Ecosystem (Query, Router, Table)
-- **Styling:** Tailwind CSS v3+ with Shadcn/UI components
-- **Animation:** Motion and GSAP
-- **Validation:** Zod 3.22+
-- **Form:** React Hook Form with Zod
+- **Monorepo Management**: [Turbo](mdc:https:/turbo.build)
+- **Package Manager**: [Bun](mdc:https:/bun.sh)
+- **Primary Languages**: TypeScript (strict mode) / JavaScript (ES6+)
+- **Runtime**: API ([Workerd](mdc:https:/developers.cloudflare.com/workers/runtime-apis/workerd)), Web ([Node.js](mdc:https:/nodejs.org) >= 20)
+- **UI Framework**: React 19+ (Functional Components + Hooks)
+- **Web Framework**: [TanStack Start](mdc:https:/tanstack.com/start/latest)
+- **API Framework**: [Hono](mdc:https:/hono.dev)
+- **RPC**: [tRPC](mdc:https:/trpc.io)
+- **State/Routing**: TanStack Ecosystem (Query, Router, Table, Form)
+- **Styling**: Tailwind CSS v4+ with Shadcn/UI components
+- **Database**: [Turso](mdc:https:/turso.tech) (Serverless SQLite)
+- **ORM**: [Drizzle ORM](mdc:https:/orm.drizzle.team)
+- **Authentication**: [Better Auth](mdc:https:/better-auth.com)
+- **Validation**: Zod 3.22+
+- **Form**: React Hook Form / TanStack Form
+- **Animation**: Motion and GSAP
 </tech_stack>
 
 ## Agent Operating Protocol
@@ -32,7 +41,7 @@ alwaysApply: false
 - When developing features, refer to [features.mdc](mdc:.cursor/rules/features.mdc)
 - When working on UI/UX, refer to [design.mdc](mdc:.cursor/rules/design.mdc)
 - When working with forms, refer to [forms.mdc](mdc:.cursor/rules/forms.mdc)
-- Project vision → [roadmap.mdc](mdc:.cursor/rules/roadmap.mdc) (project general purpose)
+- Project vision → [agents-vision.mdc](mdc:.cursor/rules/agents-vision.mdc) (project general purpose)
 - Explicitly list ALL referenced sections from any instruction file at the end of the response. Just as an extra commentary.
 </agent_rules>
 
@@ -68,23 +77,32 @@ alwaysApply: false
 ## Project Anatomy
 
 <project_structure>
-The application follows a feature-based structure within the app directory:
+The application follows a monorepo structure managed by Turbo:
 ```
-app/
-├─ features/ # Feature modules (@features.mdc)
-│ ├─ [feature]/ # Kebab-case feature name
-│ │ ├─ *.api.ts # Server functions (@features.mdc#api)
-│ │ ├─ *.query.ts # React Query hooks (@features.mdc#query)
-│ │ ├─ *.schema.ts # Zod validations (@features.mdc#schema)
-│ │ ├─ *.service.ts # Business logic (@features.mdc#service)
-│ │ └─ components/ # Feature-specific UI components
-├─ components/
-│  ├─ ui/            # Shadcn/UI overrides
-│  └─ layouts/       # App-wide layouts
-├─ lib/
-│  └─ utils/         # Shared utilities
+.
+├── apps/
+│   ├── api/        # Cloudflare Worker API (Hono, tRPC)
+│   └── web/        # Web Application (TanStack Start, React)
+├── packages/
+│   ├── db/         # Drizzle ORM schema, migrations (Turso/SQLite)
+│   ├── ui/         # Shared React components (Shadcn/UI based)
+│   └── tsconfig/   # Shared TypeScript configurations
+├── bun.lockb
+├── package.json    # Root dependencies and scripts
+└── turbo.json      # Turbo configuration
 ```
+- Features within `apps/web` generally follow the structure outlined in [features.mdc](mdc:.cursor/rules/features.mdc).
+- API routes and logic reside within `apps/api`.
 </project_structure>
+
+## Monorepo Workflow
+
+<monorepo_workflow>
+- **Running Commands**: Use `bun run <script>` from the root directory. Turbo will execute the script across the relevant workspaces (e.g., `bun run dev`, `bun run build`, `bun run lint`).
+- **Package-Specific Commands**: For scripts not defined in the root `package.json` (e.g., `db:migrate`, `cf-typegen`), either:
+    - Run the command from within the specific package directory (`cd packages/db && bun run db:migrate`).
+    - Use the `--filter` flag with Turbo from the root (`bun run db:migrate --filter=@gingga/db...`).
+</monorepo_workflow>
 
 ## Return Types
 
