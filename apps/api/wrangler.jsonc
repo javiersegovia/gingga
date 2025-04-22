@@ -1,11 +1,11 @@
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
+  "$schema": "../../node_modules/wrangler/config-schema.json",
   "name": "gingga-api",
   "main": "src/server.ts",
   "compatibility_date": "2025-04-20",
   "compatibility_flags": [
     "nodejs_compat",
-		"nodejs_compat_populate_process_env"
+    "nodejs_compat_populate_process_env"
   ],
   // "vars": {
   //   "MY_VAR": "my-variable"

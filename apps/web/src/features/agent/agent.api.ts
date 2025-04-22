@@ -3,7 +3,7 @@ import { setResponseStatus } from '@tanstack/react-start/server'
 import { zodValidator } from '@tanstack/zod-adapter'
 import { z } from 'zod'
 import { contextMiddleware } from '~/global-middleware'
-import { authMiddleware } from '~/middleware/auth-guard'
+import { authMiddleware } from '~/middleware/auth-middleware'
 import { AgentFormSchema } from './agent.schema'
 import {
   createAgent,

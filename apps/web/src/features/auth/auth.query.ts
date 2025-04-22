@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 
 import { useRouter } from '@tanstack/react-router'
+import { authClient } from '~/features/auth/auth.client'
 import { useTRPC } from '~/lib/trpc'
-import { $signOut } from './auth.api'
 
 export function useAuthQuery() {
   const trpc = useTRPC()
@@ -26,11 +26,11 @@ export function useSignOutMutation() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: () => $signOut(),
+    mutationFn: () => authClient.signOut(),
     onSuccess: async () => {
-      await router.invalidate()
-      await queryClient.invalidateQueries({ queryKey: trpc.auth.getSession.queryKey() })
-      await router.navigate({ to: '/' })
+      router.invalidate()
+      queryClient.invalidateQueries({ queryKey: trpc.auth.getSession.queryKey() })
+      router.navigate({ to: '/' })
     },
   })
 }

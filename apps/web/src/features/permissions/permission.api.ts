@@ -1,7 +1,8 @@
 import { createServerFn } from '@tanstack/react-start'
 import { zodValidator } from '@tanstack/zod-adapter'
 import { z } from 'zod'
-import { authMiddleware } from '~/middleware/auth-guard' // Assuming you have this
+import { authMiddleware } from '~/middleware/auth-middleware'
+import { roleMiddleware } from '~/middleware/role-middleware'
 import {
   hasEnterpriseMembership,
   hasProMembership,
@@ -15,9 +16,9 @@ import {
 export const $isAdmin = createServerFn({
   method: 'GET',
 })
-  .middleware([authMiddleware])
+  .middleware([roleMiddleware])
   .handler(({ context }) => {
-    return { isAdmin: isAdmin(context.auth.user) }
+    return { isAdmin: isAdmin(context.user) }
   })
 
 /**
@@ -29,7 +30,7 @@ export const $isAgentOwner = createServerFn({
   .middleware([authMiddleware])
   .validator(zodValidator(z.object({ agentId: z.string() })))
   .handler(async ({ context, data }) => {
-    return { isOwner: await isAgentOwner(context.auth.user.id, data.agentId) }
+    return { isOwner: await isAgentOwner(context.user.id, data.agentId) }
   })
 
 /**
@@ -38,9 +39,9 @@ export const $isAgentOwner = createServerFn({
 export const $hasProMembership = createServerFn({
   method: 'GET',
 })
-  .middleware([authMiddleware])
+  .middleware([roleMiddleware])
   .handler(({ context }) => {
-    return { hasPro: hasProMembership(context.auth.membership) }
+    return { hasPro: hasProMembership(context.user.membership) }
   })
 
 /**
@@ -49,7 +50,7 @@ export const $hasProMembership = createServerFn({
 export const $hasEnterpriseMembership = createServerFn({
   method: 'GET',
 })
-  .middleware([authMiddleware])
+  .middleware([roleMiddleware])
   .handler(({ context }) => {
-    return { hasEnterprise: hasEnterpriseMembership(context.auth.membership) }
+    return { hasEnterprise: hasEnterpriseMembership(context.user.membership) }
   })

@@ -1,9 +1,7 @@
 // import { scan } from 'react-scan' // react-scan must be imported before React and TanStack Start
 
 import type { AppRouterContext } from '../router'
-import fontsourceVariableDMSans from '@fontsource-variable/dm-sans?url'
 import fontsourceVariableGeist from '@fontsource-variable/geist?url'
-import fontsourceVariableManrope from '@fontsource-variable/manrope?url'
 import fontsourceVariableNunito from '@fontsource-variable/nunito?url'
 import fontsourceOutfit from '@fontsource-variable/outfit?url'
 import fontsourceUnbounded from '@fontsource-variable/unbounded?url'
@@ -60,11 +58,6 @@ export const Route = createRootRouteWithContext<AppRouterContext>()({
         rel: 'stylesheet',
         href: fontsourceUnbounded,
       },
-
-      {
-        rel: 'stylesheet',
-        href: fontsourceVariableManrope,
-      },
       {
         rel: 'stylesheet',
         href: fontsourceVariableGeist,
@@ -72,10 +65,6 @@ export const Route = createRootRouteWithContext<AppRouterContext>()({
       {
         rel: 'stylesheet',
         href: fontsourceVariableNunito,
-      },
-      {
-        rel: 'stylesheet',
-        href: fontsourceVariableDMSans,
       },
     ],
   }),

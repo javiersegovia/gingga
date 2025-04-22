@@ -1,3 +1,4 @@
+import { EmailSchema } from '@gingga/api/src/lib/auth/auth.schema'
 import {
   Form,
   FormControl,
@@ -14,7 +15,6 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
 import { authClient } from '~/features/auth/auth.client'
-import { EmailSchema } from '~/features/auth/auth.schema'
 
 const ForgotPasswordSchema = z.object({
   email: EmailSchema,

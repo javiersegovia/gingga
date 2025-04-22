@@ -1,6 +1,6 @@
 import { createServerFn } from '@tanstack/react-start'
 import { zodValidator } from '@tanstack/zod-adapter'
-import { authMiddleware } from '~/middleware/auth-guard' // Assuming this exists
+import { authMiddleware } from '~/middleware/auth-middleware' // Assuming this exists
 import {
   DeleteConnectionSchema,
   GetIntegrationSchema,
@@ -66,7 +66,7 @@ export const $getUserComposioConnections = createServerFn({
 })
   .middleware([authMiddleware])
   .handler(async ({ context }) => {
-    const { userId } = context.auth.session
+    const { userId } = context.session
     try {
       const toolset = getVercelToolset({ entityId: userId })
       const connections = await toolset.client.connectedAccounts.list({
@@ -103,7 +103,7 @@ export const $initiateComposioConnection = createServerFn({
   .validator(zodValidator(InitiateConnectionSchema))
   .middleware([authMiddleware])
   .handler(async ({ context, data }) => {
-    const userId = context.auth.session.userId
+    const userId = context.session.userId
 
     try {
       const { redirectUrl } = await initiateComposioConnection({
@@ -138,7 +138,7 @@ export const $deleteUserComposioConnection = createServerFn({
   .validator(zodValidator(DeleteConnectionSchema))
   .middleware([authMiddleware])
   .handler(async ({ context, data }) => {
-    const userId = context.auth?.session?.userId // User ID primarily for auth context
+    const userId = context.session.userId
     if (!userId) {
       throw new Error('Authentication required.')
     }

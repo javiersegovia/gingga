@@ -3,7 +3,7 @@ import { Chats } from '@gingga/db/schema'
 import { createServerFn } from '@tanstack/react-start'
 import { zodValidator } from '@tanstack/zod-adapter'
 import { z } from 'zod'
-import { authMiddleware } from '~/middleware/auth-guard'
+import { authMiddleware } from '~/middleware/auth-middleware'
 import { getDatabase } from '~/middleware/setup-context.server'
 import {
   ChatModelSchema,
@@ -66,7 +66,7 @@ export const $getChatMessagesByChatId = createServerFn({ method: 'GET' })
 export const $getUserChats = createServerFn({ method: 'GET' })
   .middleware([authMiddleware])
   .handler(async ({ context }) => {
-    return getChatsByUserId({ id: context.auth.user.id })
+    return getChatsByUserId({ id: context.user.id })
   })
 
 export const $renameChat = createServerFn({ method: 'POST' })
@@ -77,7 +77,7 @@ export const $renameChat = createServerFn({ method: 'POST' })
     await db
       .update(Chats)
       .set({ title: data.title })
-      .where(and(eq(Chats.id, data.id), eq(Chats.userId, context.auth.user.id)))
+      .where(and(eq(Chats.id, data.id), eq(Chats.userId, context.user.id)))
     return data
   })
 

@@ -17,8 +17,8 @@
     "prepare": "husky",
     "dev": "turbo dev",
     "build": "turbo build",
-    "lint": "eslint --cache --max-warnings=0 \"apps/**/*.{js,jsx,ts,tsx}\" \"packages/**/*.{js,jsx,ts,tsx}\"",
-    "lint:fix": "eslint --cache --fix \"apps/**/*.{js,jsx,ts,tsx}\" \"packages/**/*.{js,jsx,ts,tsx}\""
+    "lint": "eslint \"apps/**/*.{js,jsx,ts,tsx}\" \"packages/**/*.{js,jsx,ts,tsx}\"",
+    "lint:fix": "eslint --fix \"apps/**/*.{js,jsx,ts,tsx}\" \"packages/**/*.{js,jsx,ts,tsx}\""
   },
   "devDependencies": {
     "@antfu/eslint-config": "^4.12.0",

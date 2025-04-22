@@ -1,4 +1,5 @@
 import type { z } from 'zod'
+import { SignUpSchema } from '@gingga/api/src/lib/auth/auth.schema'
 import {
   Form,
   FormControl,
@@ -14,7 +15,6 @@ import { createFileRoute, Link, redirect } from '@tanstack/react-router'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { authClient } from '~/features/auth/auth.client'
-import { SignUpSchema } from '~/features/auth/auth.schema'
 
 export const Route = createFileRoute('/_auth/register')({
   component: RegisterPage,

@@ -9,7 +9,7 @@ import type {
 import { createServerFn } from '@tanstack/react-start'
 import { zodValidator } from '@tanstack/zod-adapter'
 import { z } from 'zod'
-import { authMiddleware } from '../../../middleware/auth-guard'
+import { authMiddleware } from '../../../middleware/auth-middleware'
 import {
   getComposioIntegrations,
   getUserComposioConnections,
@@ -125,7 +125,7 @@ export const $getSkillsByAgentId = createServerFn({ method: 'GET' })
   .handler(async ({ data, context }): Promise<AgentSkillWithStatus[]> => {
     const [agentSkills, composioConnections, composioIntegrations] = await Promise.all([
       getAgentSkillsByAgentId(data.agentId),
-      getUserComposioConnections(context.auth.session.userId),
+      getUserComposioConnections(context.session.userId),
       getComposioIntegrations(),
     ])
 

@@ -92,12 +92,7 @@
   --brand-green-foreground: #000;
   --brand-sky: #42d3db;
   --brand-sky-foreground: #000;
-  --accent-main: #5ad1ffc4;
-  --accent-harlequin: #54e914;
-  --accent-cerise: #ff6fac;
-  --accent-lemon: #e6ff70;
-  --accent-rose: #ff8e99;
-  --accent-indigo: #8926ff;
+
   /** CUSTOM COLORS FOR THE THEME */
   --playful: #58dd24;
   --playful-foreground: #18191b;
@@ -259,14 +254,6 @@
   --shadow-default: var(--shadow);
   --shadow-small: var(--small-shadow);
   --shadow-expanded: var(--expanded-shadow);
-
-  /* Accent Colors */
-  --color-accent-main: var(--accent-main);
-  --color-accent-harlequin: var(--accent-harlequin);
-  --color-accent-cerise: var(--accent-cerise);
-  --color-accent-lemon: var(--accent-lemon);
-  --color-accent-rose: var(--accent-rose);
-  --color-accent-indigo: var(--accent-indigo);
 
   /* Playful Theme */
   --color-playful: var(--playful);

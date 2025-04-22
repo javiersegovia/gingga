@@ -1,7 +1,7 @@
+import { sendEmail } from '@gingga/api/src/lib/email'
+import ContactFormEmail from '@gingga/api/src/lib/email/templates/contact-form-email'
 import { createServerFn } from '@tanstack/react-start'
 import { zodValidator } from '@tanstack/zod-adapter'
-import { sendEmail } from '~/server/email/email'
-import ContactFormEmail from '~/server/email/templates/contact-form-email'
 import { ContactFormSchema } from './contact.schema'
 
 /**

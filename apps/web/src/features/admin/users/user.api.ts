@@ -1,7 +1,7 @@
 import { createServerFn } from '@tanstack/react-start'
 import { setResponseStatus } from '@tanstack/react-start/server'
 import { zodValidator } from '@tanstack/zod-adapter'
-import { adminMiddleware } from '~/middleware/admin-guard'
+import { adminMiddleware } from '~/middleware/admin-middleware'
 import { BanUserSchema, UpdateUserSchema, UserIdSchema } from './user.schema'
 import {
   banUser,
@@ -153,12 +153,12 @@ export const $impersonateUser = createServerFn({
   .middleware([adminMiddleware])
   .handler(async ({ data, context }) => {
     try {
-      const adminUserId = context.auth.user?.id
+      const adminUserId = context.user?.id
       if (!adminUserId) {
         setResponseStatus(401) // Should be caught by authMiddleware, but belt-and-suspenders
         throw new Error('Admin user ID not found in context')
       }
-      await impersonateUser(data.userId, adminUserId)
+      await impersonateUser(data.userId)
       // Impersonation likely involves setting a cookie or similar server-side state,
       // so a successful response (default 200 OK) is usually sufficient.
       // return { success: true }

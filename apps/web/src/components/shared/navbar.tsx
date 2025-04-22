@@ -294,7 +294,7 @@ export function Navbar({ navigation, variant = 'default' }: NavbarProps) {
                       <Button
                         variant="ghost"
                         className="text-muted-foreground hover:text-foreground w-full justify-start"
-                        onClick={async () => await signOut()}
+                        onClick={() => signOut()}
                         disabled={isSigningOut}
                       >
                         <LogOut className="h-4 w-4" />
