@@ -1,21 +1,21 @@
 import type { Agent } from '~/features/agent/agent.types'
-import { Button } from '@gingga/ui/components/button'
+import { useSuspenseQuery } from '@tanstack/react-query'
+import { createFileRoute, Link } from '@tanstack/react-router'
+import { ArrowRightIcon, BotIcon, EditIcon, MessageSquareTextIcon } from 'lucide-react'
+import { Suspense } from 'react'
+import { Button } from '~/components/ui/button'
 import {
   Card,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@gingga/ui/components/card'
-import { GridPattern } from '@gingga/ui/components/grid-pattern'
-import { Skeleton } from '@gingga/ui/components/skeleton'
-import { cn } from '@gingga/ui/lib/utils'
-import { useSuspenseQuery } from '@tanstack/react-query'
-import { createFileRoute, Link } from '@tanstack/react-router'
-import { ArrowRightIcon, BotIcon, EditIcon, MessageSquareTextIcon } from 'lucide-react'
-import { Suspense } from 'react'
+} from '~/components/ui/card'
+import { GridPattern } from '~/components/ui/grid-pattern'
+import { Skeleton } from '~/components/ui/skeleton'
 import { agentsQueryOptions } from '~/features/agent/agent.query'
 import { useAuthQuery } from '~/features/auth/auth.query'
+import { cn } from '~/lib/utils'
 
 export const Route = createFileRoute('/_demo/chat/agents/')({
   component: AgentsExploreComponent,

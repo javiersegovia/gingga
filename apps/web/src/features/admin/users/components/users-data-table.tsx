@@ -6,17 +6,6 @@ import type {
   VisibilityState,
 } from '@tanstack/react-table'
 import type { UserTableEntry } from './users-columns' // Import type
-import { Input } from '@gingga/ui/components/input'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@gingga/ui/components/table'
-
-import { cn } from '@gingga/ui/lib/utils'
 import { useRouter } from '@tanstack/react-router'
 import {
   flexRender,
@@ -26,7 +15,18 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
+
 import * as React from 'react'
+import { Input } from '~/components/ui/input'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '~/components/ui/table'
+import { cn } from '~/lib/utils'
 import { UsersDataTablePagination } from './users-data-table-pagination'
 import { UsersDataTableViewOptions } from './users-data-table-view-options'
 

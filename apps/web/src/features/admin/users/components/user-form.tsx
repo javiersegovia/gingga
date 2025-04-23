@@ -1,18 +1,18 @@
 import type React from 'react'
 import type { UserFormValues } from '../user.schema'
 import { UserMemberships, Users } from '@gingga/db/schema'
-import { Button } from '@gingga/ui/components/button'
-import { Input } from '@gingga/ui/components/input'
+import { Suspense } from 'react'
+import { useAppForm } from '~/components/form/tanstack-form'
+import { Button } from '~/components/ui/button'
+import { Input } from '~/components/ui/input'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@gingga/ui/components/select'
-import { Skeleton } from '@gingga/ui/components/skeleton'
-import { Suspense } from 'react'
-import { useAppForm } from '~/components/form/tanstack-form'
+} from '~/components/ui/select'
+import { Skeleton } from '~/components/ui/skeleton'
 import { useBanUser, useImpersonateUser } from '../user.query'
 import { userFormOptions, UserFormSchema } from '../user.schema'
 

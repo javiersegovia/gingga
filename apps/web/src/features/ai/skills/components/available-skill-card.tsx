@@ -1,16 +1,16 @@
 import type { AgentSkillWithStatus } from '../skill.api' // Import for connection status type
 import type { SkillOption } from '../skill.types'
-import { Card, CardTitle } from '@gingga/ui/components/card'
+import { Link } from '@tanstack/react-router'
+import { ImageIcon } from 'lucide-react'
+import { Card, CardTitle } from '~/components/ui/card'
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@gingga/ui/components/tooltip' // Import Tooltip components
-import { cn } from '@gingga/ui/lib/utils'
-import { Link } from '@tanstack/react-router'
-import { ImageIcon } from 'lucide-react'
+} from '~/components/ui/tooltip' // Import Tooltip components
 import { ConnectionStatus } from '~/features/settings/integrations/components/connection-status'
+import { cn } from '~/lib/utils'
 
 // Type for the optional connection status prop
 type ConnectionStatusProps = Pick<

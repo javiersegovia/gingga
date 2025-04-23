@@ -112,7 +112,7 @@
   - Prop validation.
   - Self-documenting code.
   - Accessibility.
-  - Tailwind CSS (`cn()` utility from `@gingga/ui/lib/utils` for conditional classes).
+  - Tailwind CSS (`cn()` utility from `~/lib/utils` for conditional classes).
   - Single-responsibility components.
   - Early returns.
   - Use `Icon` suffix for `lucide-react` imports.

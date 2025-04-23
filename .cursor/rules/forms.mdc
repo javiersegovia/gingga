@@ -193,7 +193,7 @@ Our UI implementation leverages custom components built on top of TanStack Form,
 
    ```tsx
    // agent-form.tsx <Input> example within form.AppField
-   import { Input } from '@gingga/ui/components/input'
+   import { Input } from '~/components/ui/input'
    import { AgentFormSchema } from '../agent.schema' // Import schema for validators
 
    // ... inside form component returned by useAppForm ...
@@ -276,8 +276,8 @@ Our UI implementation leverages custom components built on top of TanStack Form,
 
    ```tsx
    // skill-form.tsx array field example (simplified)
-   import { Button } from '@gingga/ui/components/button';
-   import { Input } from '@gingga/ui/components/input';
+   import { Button } from '~/components/ui/button';
+   import { Input } from '~/components/ui/input';
 
    // ... inside main form component ...
    <form.AppField name="variables" mode="array">

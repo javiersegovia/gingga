@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
-import { Avatar, AvatarFallback, AvatarImage } from '@gingga/ui/components/avatar'
+import { ChevronsUpDown, LogOut, PaletteIcon } from 'lucide-react'
+import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,11 +8,10 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-} from '@gingga/ui/components/dropdown-menu'
-import { SidebarMenuButton } from '@gingga/ui/components/sidebar'
-import { cn, getInitials } from '@gingga/ui/lib/utils'
-import { ChevronsUpDown, LogOut, PaletteIcon } from 'lucide-react'
+} from '~/components/ui/dropdown-menu'
+import { SidebarMenuButton } from '~/components/ui/sidebar'
 import { useAuthedQuery, useSignOutMutation } from '~/features/auth/auth.query'
+import { cn, getInitials } from '~/lib/utils'
 import { ThemeSwitch } from './theme-switch'
 
 // Common dropdown content component

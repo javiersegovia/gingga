@@ -1,7 +1,7 @@
-import { Badge } from '@gingga/ui/components/badge'
-import { Button } from '@gingga/ui/components/button'
 import { Link } from '@tanstack/react-router'
 import { ArrowRightIcon, SparklesIcon } from 'lucide-react'
+import { Badge } from '~/components/ui/badge'
+import { Button } from '~/components/ui/button'
 import { AgentInformation } from './agent-information'
 
 // STYLING NOTE: Using brand colors as primary accent colors

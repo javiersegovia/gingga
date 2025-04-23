@@ -1,9 +1,9 @@
 import type { PropsWithChildren } from 'react'
-import { createContextFactory } from '@gingga/ui/lib/utils'
 import { useDidUpdate } from '@mantine/hooks'
 import { ScriptOnce } from '@tanstack/react-router'
 import { outdent } from 'outdent'
 import { startTransition, useEffect, useState } from 'react'
+import { createContextFactory } from '~/lib/utils'
 
 type Theme = 'dark' | 'light' | 'system'
 type ResolvedTheme = Exclude<Theme, 'system'>

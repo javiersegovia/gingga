@@ -1,9 +1,7 @@
 {
   "references": [
     { "path": "./apps/api" },
-    { "path": "./packages/db" },
-    { "path": "./packages/ui" }
-    // Add other packages here if they need to be part of the build
+    { "path": "./packages/db" }
   ],
   "files": [],
   "include": ["eslint.config.ts"]

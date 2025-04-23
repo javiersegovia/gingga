@@ -1,15 +1,7 @@
 import type { Row } from '@tanstack/react-table'
 import type { UserTableEntry } from './users-columns'
-import { Button } from '@gingga/ui/components/button'
-
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@gingga/ui/components/dropdown-menu'
 import { useRouter } from '@tanstack/react-router'
+
 import {
   BanIcon,
   ClipboardCopyIcon,
@@ -19,6 +11,14 @@ import {
   UserCheckIcon,
 } from 'lucide-react'
 import { toast } from 'sonner'
+import { Button } from '~/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '~/components/ui/dropdown-menu'
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>

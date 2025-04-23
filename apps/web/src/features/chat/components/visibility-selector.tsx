@@ -1,15 +1,15 @@
 import type { ReactNode } from 'react'
-import { Button } from '@gingga/ui/components/button'
+import { CheckCircleIcon, ChevronDownIcon, GlobeIcon, LockIcon } from 'lucide-react'
+import { useMemo, useState } from 'react'
+import { Button } from '~/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@gingga/ui/components/dropdown-menu'
-import { cn } from '@gingga/ui/lib/utils'
-import { CheckCircleIcon, ChevronDownIcon, GlobeIcon, LockIcon } from 'lucide-react'
+} from '~/components/ui/dropdown-menu'
 
-import { useMemo, useState } from 'react'
+import { cn } from '~/lib/utils'
 import { useChatVisibility } from './use-chat-visibility'
 
 export type VisibilityType = 'private' | 'public'

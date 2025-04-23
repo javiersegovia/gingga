@@ -1,10 +1,10 @@
-import { Button } from '@gingga/ui/components/button'
-import { GithubIcon, GoogleIcon } from '@gingga/ui/components/social-icons'
-import { Tabs, TabsList, TabsTrigger } from '@gingga/ui/components/tabs'
 import { createFileRoute, Outlet, redirect, useNavigate } from '@tanstack/react-router'
 import { Loader2Icon } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
+import { Button } from '~/components/ui/button'
+import { GithubIcon, GoogleIcon } from '~/components/ui/social-icons'
+import { Tabs, TabsList, TabsTrigger } from '~/components/ui/tabs'
 import { authClient } from '~/features/auth/auth.client'
 import { AuthLayout } from './_auth/_components'
 

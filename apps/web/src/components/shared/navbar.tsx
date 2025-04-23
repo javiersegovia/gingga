@@ -1,4 +1,7 @@
-import { Button } from '@gingga/ui/components/button'
+import { Link } from '@tanstack/react-router'
+import { ArrowRightIcon, BotIcon, LogOut, Menu, Settings, X } from 'lucide-react'
+import { useState } from 'react'
+import { Button } from '~/components/ui/button'
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -6,14 +9,11 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-} from '@gingga/ui/components/navigation-menu'
-import { Separator } from '@gingga/ui/components/separator'
-import { cn } from '@gingga/ui/lib/utils'
-import { Link } from '@tanstack/react-router'
-import { ArrowRightIcon, BotIcon, LogOut, Menu, Settings, X } from 'lucide-react'
-import { useState } from 'react'
+} from '~/components/ui/navigation-menu'
+import { Separator } from '~/components/ui/separator'
 import { ThemeSwitch } from '~/components/ui/theme-switch'
 import { useAuthQuery, useSignOutMutation } from '~/features/auth/auth.query'
+import { cn } from '~/lib/utils'
 
 // Define types for navigation items
 export interface NavItem {

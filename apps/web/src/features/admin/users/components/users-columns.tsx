@@ -1,5 +1,5 @@
 import type { ColumnDef } from '@tanstack/react-table'
-import { Badge } from '@gingga/ui/components/badge'
+import { Badge } from '~/components/ui/badge'
 
 import { UsersDataTableColumnHeader } from './users-data-table-column-header'
 import { UsersDataTableRowActions } from './users-data-table-row-actions'

@@ -1,8 +1,8 @@
-import { Button } from '@gingga/ui/components/button'
-import { Marquee } from '@gingga/ui/components/marquee'
-import { cn } from '@gingga/ui/lib/utils'
 import { Link } from '@tanstack/react-router'
 import { ArrowRightIcon, Clock, Zap } from 'lucide-react'
+import { Button } from '~/components/ui/button'
+import { Marquee } from '~/components/ui/marquee'
+import { cn } from '~/lib/utils'
 
 interface MarqueeItemProps {
   id: string | number

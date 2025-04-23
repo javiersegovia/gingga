@@ -1,14 +1,14 @@
+import { Link } from '@tanstack/react-router'
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from '@gingga/ui/components/accordion'
-import { Badge } from '@gingga/ui/components/badge'
+} from '~/components/ui/accordion'
 
-import { Button } from '@gingga/ui/components/button'
-import { GridPattern } from '@gingga/ui/components/grid-pattern'
-import { Link } from '@tanstack/react-router'
+import { Badge } from '~/components/ui/badge'
+import { Button } from '~/components/ui/button'
+import { GridPattern } from '~/components/ui/grid-pattern'
 
 const faqs = [
   {

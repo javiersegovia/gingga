@@ -1,13 +1,13 @@
+import { createFileRoute } from '@tanstack/react-router'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@gingga/ui/components/card'
-import { Label } from '@gingga/ui/components/label'
-import { Switch } from '@gingga/ui/components/switch'
-import { createFileRoute } from '@tanstack/react-router'
+} from '~/components/ui/card'
+import { Label } from '~/components/ui/label'
+import { Switch } from '~/components/ui/switch'
 import { ThemeSwitch } from '~/components/ui/theme-switch'
 
 export const Route = createFileRoute('/settings/preferences')({

@@ -1,14 +1,14 @@
 /* eslint-disable no-alert */
-import { Badge } from '@gingga/ui/components/badge'
-import { Button } from '@gingga/ui/components/button'
+import { Check } from 'lucide-react'
+import { Badge } from '~/components/ui/badge'
+import { Button } from '~/components/ui/button'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@gingga/ui/components/card'
-import { Check } from 'lucide-react'
+} from '~/components/ui/card'
 
 export function PricingSection() {
   return (

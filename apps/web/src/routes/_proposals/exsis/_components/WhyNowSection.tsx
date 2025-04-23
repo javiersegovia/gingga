@@ -1,6 +1,6 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@gingga/ui/components/card'
 import { TrendingUp, Zap } from 'lucide-react'
 import React from 'react'
+import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card'
 
 interface Reason {
   title: string

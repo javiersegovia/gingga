@@ -1,17 +1,17 @@
-import { Badge } from '@gingga/ui/components/badge'
-import { Button } from '@gingga/ui/components/button'
+import { Link } from '@tanstack/react-router'
+import { Check } from 'lucide-react'
+import { useState } from 'react'
+import { Badge } from '~/components/ui/badge'
+import { Button } from '~/components/ui/button'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@gingga/ui/components/card'
-import { Tabs, TabsList, TabsTrigger } from '@gingga/ui/components/tabs'
-import { cn } from '@gingga/ui/lib/utils'
-import { Link } from '@tanstack/react-router'
-import { Check } from 'lucide-react'
-import { useState } from 'react'
+} from '~/components/ui/card'
+import { Tabs, TabsList, TabsTrigger } from '~/components/ui/tabs'
+import { cn } from '~/lib/utils'
 
 // Pricing constants - easy to change
 const PRICING = {

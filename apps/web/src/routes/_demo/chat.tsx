@@ -1,6 +1,6 @@
-import { SidebarProvider } from '@gingga/ui/components/sidebar'
 import { createFileRoute, Outlet } from '@tanstack/react-router'
 import { Suspense } from 'react'
+import { SidebarProvider } from '~/components/ui/sidebar'
 import { recentChatsWithAgentsQueryOptions } from '~/features/agent/agent.query'
 import { userChatsQueryOptions } from '~/features/chat/chat.query'
 import { ChatSidebar } from '~/features/chat/components/sidebar/chat-sidebar'

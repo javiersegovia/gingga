@@ -1,4 +1,4 @@
-import { Card } from '@gingga/ui/components/card'
+import { Card } from '~/components/ui/card'
 
 export function HybridTeamsSection() {
   return (

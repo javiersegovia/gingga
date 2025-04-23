@@ -1,5 +1,5 @@
-import { DotPattern } from '@gingga/ui/components/dot-pattern'
 import { createFileRoute } from '@tanstack/react-router'
+import { DotPattern } from '~/components/ui/dot-pattern'
 import { CoverSection } from './_components/CoverSection'
 import { FinalThoughtSection } from './_components/FinalThoughtSection'
 import { RoadmapSection } from './_components/RoadmapSection'

@@ -1,8 +1,8 @@
-import { Card, CardContent } from '@gingga/ui/components/card'
-import { cn } from '@gingga/ui/lib/utils'
 import { CheckCircle, Circle } from 'lucide-react'
 import { motion } from 'motion/react'
 import { useState } from 'react'
+import { Card, CardContent } from '~/components/ui/card'
+import { cn } from '~/lib/utils'
 
 const originalPhasesData = [
   {

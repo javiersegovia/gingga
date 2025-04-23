@@ -1,17 +1,5 @@
 import type { AgentSkillWithStatus } from '~/features/ai/skills/skill.api'
 import type { ComposioToolName } from '~/features/settings/integrations/composio.schema'
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@gingga/ui/components/accordion'
-import { Badge } from '@gingga/ui/components/badge'
-import { Button } from '@gingga/ui/components/button'
-import { Card, CardTitle } from '@gingga/ui/components/card'
-import { Skeleton } from '@gingga/ui/components/skeleton'
-import { Switch } from '@gingga/ui/components/switch'
-import { cn } from '@gingga/ui/lib/utils'
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 import { createFileRoute, Link, Outlet, useParams } from '@tanstack/react-router'
 import {
@@ -25,6 +13,17 @@ import {
   XIcon,
 } from 'lucide-react'
 import { toast } from 'sonner'
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '~/components/ui/accordion'
+import { Badge } from '~/components/ui/badge'
+import { Button } from '~/components/ui/button'
+import { Card, CardTitle } from '~/components/ui/card'
+import { Skeleton } from '~/components/ui/skeleton'
+import { Switch } from '~/components/ui/switch'
 import { AvailableSkillCard } from '~/features/ai/skills/components/available-skill-card'
 import { $updateSkillEnabledStatus } from '~/features/ai/skills/skill.api'
 import {
@@ -33,6 +32,7 @@ import {
 } from '~/features/ai/skills/skill.query'
 import { ConnectionStatus } from '~/features/settings/integrations/components/connection-status'
 import { userComposioConnectionsQueryOptions } from '~/features/settings/integrations/composio.query'
+import { cn } from '~/lib/utils'
 
 export const Route = createFileRoute('/_demo/chat/agent/$agentId/edit/skills')({
   component: RouteComponent,

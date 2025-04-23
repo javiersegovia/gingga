@@ -1,7 +1,7 @@
 import type { FormFieldItemContextValues } from './form-field-context'
-import { cn } from '@gingga/ui/lib/utils' // Adjusted path
 import React from 'react'
 import { useFieldContext } from '~/components/form/tanstack-form' // Assuming this hook provides the field context from TanStack Form
+import { cn } from '~/lib/utils' // Adjusted path
 import { FormFieldItemContext } from './form-field-context'
 
 type FormFieldItemProps = React.ComponentProps<'div'>

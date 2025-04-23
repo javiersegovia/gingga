@@ -1,5 +1,5 @@
-import { Card, CardContent } from '@gingga/ui/components/card'
 import { LinkedinIcon } from 'lucide-react'
+import { Card, CardContent } from '~/components/ui/card'
 
 export function FoundersSection() {
   return (

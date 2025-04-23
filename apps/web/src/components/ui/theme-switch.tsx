@@ -1,4 +1,4 @@
-import { Switch } from '@gingga/ui/components/switch'
+import { Switch } from '~/components/ui/switch'
 import { useTheme } from '../shared/theme'
 
 export function ThemeSwitch() {

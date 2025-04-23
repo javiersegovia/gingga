@@ -1,6 +1,6 @@
 import type React from 'react'
-import { Label } from '@gingga/ui/components/label' // Adjusted path
-import { cn } from '@gingga/ui/lib/utils' // Adjusted path
+import { Label } from '~/components/ui/label' // Adjusted path
+import { cn } from '~/lib/utils' // Adjusted path
 import { useFormFieldItemContext } from './form-field-context'
 
 // Use React.ComponentProps to get the type

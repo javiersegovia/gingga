@@ -67,7 +67,7 @@ alwaysApply: false
 6. Write self-documenting code with clear function and variable names.
 7. Follow accessibility best practices.
 8. Do not add descriptions to your response, unless it is explicitly asked for. Just write the code.
-9. Use Tailwind CSS, and import the `cn()` utility for conditional classes only if you need to. Import it from `@gingga/ui/lib/utils`.
+9. Use Tailwind CSS, and import the `cn()` utility for conditional classes only if you need to. Import it from `~/lib/utils`.
 10. Keep component files focused and single-responsibility
 11. Use early returns whenever possible to make the code more readable.
 12. Prefer using the "Icon" suffix whenever using icons from `lucide-react`. E.g., import `ExternalLinkIcon` instead of `ExternalLink`.

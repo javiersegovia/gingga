@@ -1,9 +1,9 @@
-import { Badge } from '@gingga/ui/components/badge'
-import { Card, CardContent } from '@gingga/ui/components/card'
-import { GridPattern } from '@gingga/ui/components/grid-pattern'
-import { Slider } from '@gingga/ui/components/slider'
-import { cn } from '@gingga/ui/lib/utils'
 import { useState } from 'react'
+import { Badge } from '~/components/ui/badge'
+import { Card, CardContent } from '~/components/ui/card'
+import { GridPattern } from '~/components/ui/grid-pattern'
+import { Slider } from '~/components/ui/slider'
+import { cn } from '~/lib/utils'
 
 export function ProblemSection() {
   const [hours, setHours] = useState(10)

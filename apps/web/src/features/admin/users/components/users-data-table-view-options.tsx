@@ -1,15 +1,15 @@
 import type { Table } from '@tanstack/react-table'
-import { Button } from '@gingga/ui/components/button'
+import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu'
+import { Settings2Icon } from 'lucide-react'
+
+import { Button } from '~/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-} from '@gingga/ui/components/dropdown-menu'
-
-import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu'
-import { Settings2Icon } from 'lucide-react'
+} from '~/components/ui/dropdown-menu'
 
 interface DataTableViewOptionsProps<TData> {
   table: Table<TData>

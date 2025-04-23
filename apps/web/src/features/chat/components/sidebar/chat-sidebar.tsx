@@ -1,28 +1,4 @@
 import type { Chat, User } from '@gingga/db/types'
-import { Avatar, AvatarFallback, AvatarImage } from '@gingga/ui/components/avatar'
-import { Button } from '@gingga/ui/components/button'
-import { Card, CardContent } from '@gingga/ui/components/card'
-import { Dialog, DialogContent, DialogTrigger } from '@gingga/ui/components/dialog'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@gingga/ui/components/dropdown-menu'
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuAction,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from '@gingga/ui/components/sidebar'
-import { cn, getInitials } from '@gingga/ui/lib/utils'
 import { Link } from '@tanstack/react-router'
 import {
   Loader2Icon,
@@ -35,10 +11,34 @@ import {
   Trash2,
 } from 'lucide-react'
 import { Fragment, Suspense, useState } from 'react'
+import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar'
+import { Button } from '~/components/ui/button'
+import { Card, CardContent } from '~/components/ui/card'
+import { Dialog, DialogContent, DialogTrigger } from '~/components/ui/dialog'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '~/components/ui/dropdown-menu'
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuAction,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from '~/components/ui/sidebar'
 import { ThemeSwitch } from '~/components/ui/theme-switch'
 import { useRecentChatsWithAgentsQuery } from '~/features/agent/agent.query'
 import { useAuthQuery } from '~/features/auth/auth.query'
 import { useUserChatsSuspenseQuery } from '~/features/chat/chat.query'
+import { cn, getInitials } from '~/lib/utils'
 import { DeleteChatDialog } from './delete-dialog'
 import { RenameChatDialog } from './rename-dialog'
 import { ShareChatDialog } from './share-dialog'

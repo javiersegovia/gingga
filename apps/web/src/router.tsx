@@ -5,7 +5,7 @@ import { createRouter as createTanStackRouter, isRedirect } from '@tanstack/reac
 import { routerWithQueryClient } from '@tanstack/react-router-with-query'
 
 import { createIsomorphicFn } from '@tanstack/react-start'
-import { getHeaders, getRequestHeaders } from '@tanstack/react-start/server'
+import { getRequestHeaders } from '@tanstack/react-start/server'
 import { createTRPCClient, httpBatchLink, loggerLink, TRPCClientError } from '@trpc/client'
 import { createTRPCOptionsProxy } from '@trpc/tanstack-react-query'
 import SuperJSON from 'superjson'
@@ -22,8 +22,6 @@ export interface AppRouterContext {
 
 function getUrl() {
   const base = (() => {
-    // if (typeof window !== 'undefined')
-    //   return ''
     if (process.env.VITE_API_URL)
       return process.env.VITE_API_URL
     return `http://localhost:${process.env.PORT ?? 3000}`
@@ -123,11 +121,6 @@ export function createRouter() {
       )
       return // Stop processing if it's a redirect
     }
-
-    console.log('Debugging')
-    console.log(router.state.location)
-    console.log(getUrl())
-    console.log(trpc.healthCheck.pathKey())
 
     // Next, check for the specific tRPC JSON parsing error
     if (error instanceof TRPCClientError && error.cause instanceof SyntaxError && error.message.includes('is not valid JSON')) {

@@ -1,9 +1,9 @@
-import { AnimatedBeam } from '@gingga/ui/components/animated-beam'
-import { Badge } from '@gingga/ui/components/badge'
-import { Card, CardContent, CardDescription, CardTitle } from '@gingga/ui/components/card'
-import { cn } from '@gingga/ui/lib/utils'
 import { BotIcon } from 'lucide-react'
 import { useRef } from 'react'
+import { AnimatedBeam } from '~/components/ui/animated-beam'
+import { Badge } from '~/components/ui/badge'
+import { Card, CardContent, CardDescription, CardTitle } from '~/components/ui/card'
+import { cn } from '~/lib/utils'
 
 // Icons for integrations
 const Icons = {

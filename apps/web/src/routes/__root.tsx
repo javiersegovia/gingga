@@ -5,7 +5,6 @@ import fontsourceVariableGeist from '@fontsource-variable/geist?url'
 import fontsourceVariableNunito from '@fontsource-variable/nunito?url'
 import fontsourceOutfit from '@fontsource-variable/outfit?url'
 import fontsourceUnbounded from '@fontsource-variable/unbounded?url'
-import { Toaster } from '@gingga/ui/components/sonner'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import {
   createRootRouteWithContext,
@@ -14,9 +13,10 @@ import {
   Scripts,
 } from '@tanstack/react-router'
 import { lazy, Suspense } from 'react'
-
 import { ThemeProvider, useTheme } from '~/components/shared/theme'
-import globalCss from '~/styles/globals.css?url'
+
+import { Toaster } from '~/components/ui/sonner'
+import globalCss from '~/styles/tailwind.css?url'
 
 const TanStackRouterDevtools = import.meta.env.PROD
   ? () => null // Render nothing in production

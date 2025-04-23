@@ -1,8 +1,8 @@
 import type { AgentFormValues } from '~/features/agent/agent.schema'
-import { Button } from '@gingga/ui/components/button'
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { ArrowLeftIcon } from 'lucide-react'
 import { toast } from 'sonner'
+import { Button } from '~/components/ui/button'
 import { useCreateAgentMutation } from '~/features/agent/agent.query'
 import { AgentForm } from '~/features/agent/components/agent-form'
 

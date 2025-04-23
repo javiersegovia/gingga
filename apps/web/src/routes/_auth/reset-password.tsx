@@ -1,5 +1,13 @@
 import { PasswordSchema } from '@gingga/api/src/lib/auth/auth.schema'
-import { Alert, AlertDescription, AlertTitle } from '@gingga/ui/components/alert'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { createFileRoute, Link, redirect, useNavigate } from '@tanstack/react-router'
+import { zodValidator } from '@tanstack/zod-adapter'
+import { TerminalIcon } from 'lucide-react'
+
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import { z } from 'zod'
+import { Alert, AlertDescription, AlertTitle } from '~/components/ui/alert'
 import {
   Form,
   FormControl,
@@ -7,17 +15,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@gingga/ui/components/form'
-import { Input } from '@gingga/ui/components/input'
-import { FormStatusButton } from '@gingga/ui/components/status-button'
-
-import { zodResolver } from '@hookform/resolvers/zod'
-import { createFileRoute, Link, redirect, useNavigate } from '@tanstack/react-router'
-import { zodValidator } from '@tanstack/zod-adapter'
-import { TerminalIcon } from 'lucide-react'
-import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
-import { z } from 'zod'
+} from '~/components/ui/form'
+import { Input } from '~/components/ui/input'
+import { FormStatusButton } from '~/components/ui/status-button'
 import { authClient } from '~/features/auth/auth.client'
 
 const ResetPasswordSchema = z

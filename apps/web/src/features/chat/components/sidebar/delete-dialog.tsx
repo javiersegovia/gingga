@@ -1,12 +1,12 @@
 import type { Chat } from '@gingga/db/types'
-import { Button } from '@gingga/ui/components/button'
+import { Button } from '~/components/ui/button'
 import {
   DialogClose,
   DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@gingga/ui/components/dialog'
+} from '~/components/ui/dialog'
 import { useDeleteChatMutation } from '~/features/chat/chat.query'
 
 export function DeleteChatDialog({

@@ -1,7 +1,9 @@
 /* eslint-disable react-hooks-extra/no-direct-set-state-in-use-effect */
 import type { AIModel } from '~/features/ai/utils/ai-models'
-import { Badge } from '@gingga/ui/components/badge'
-import { Button } from '@gingga/ui/components/button'
+import { Check, ChevronsUpDown, XIcon } from 'lucide-react'
+import * as React from 'react'
+import { Badge } from '~/components/ui/badge'
+import { Button } from '~/components/ui/button'
 import {
   Command,
   CommandEmpty,
@@ -9,12 +11,10 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '@gingga/ui/components/command'
-import { Popover, PopoverContent, PopoverTrigger } from '@gingga/ui/components/popover'
-import { cn } from '@gingga/ui/lib/utils'
-import { Check, ChevronsUpDown, XIcon } from 'lucide-react'
-import * as React from 'react'
+} from '~/components/ui/command'
+import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover'
 import { modelIconPaths } from '~/features/ai/utils/ai-models'
+import { cn } from '~/lib/utils'
 
 interface SelectAIModelProps {
   models: AIModel[]

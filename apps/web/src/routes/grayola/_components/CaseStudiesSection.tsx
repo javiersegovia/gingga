@@ -1,4 +1,4 @@
-import { Card, CardContent } from '@gingga/ui/components/card'
+import { Card, CardContent } from '~/components/ui/card'
 
 export function CaseStudiesSection() {
   return (

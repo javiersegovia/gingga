@@ -1,6 +1,6 @@
-import { SidebarProvider } from '@gingga/ui/components/sidebar'
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 import { Suspense } from 'react'
+import { SidebarProvider } from '~/components/ui/sidebar'
 import { AdminSidebar } from '~/features/admin/components/sidebar/admin-sidebar'
 import { $isSidebarOpened } from '~/features/sidebar/sidebar.api'
 

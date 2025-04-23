@@ -41,6 +41,7 @@ export default defineConfig({
     define: await defineVitePublicEnv(),
 
     build: {
+
       rollupOptions: {
         external: ['node:stream', 'node:stream/web', 'node:path', 'node:fs', 'node:async_hooks'],
       },

@@ -1,5 +1,8 @@
 import type { ComposioIntegration, UserConnection } from '../composio.schema'
-import { Button } from '@gingga/ui/components/button'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useServerFn } from '@tanstack/react-start'
+import { useState } from 'react'
+import { Button } from '~/components/ui/button'
 import {
   Dialog,
   DialogClose,
@@ -8,10 +11,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@gingga/ui/components/dialog'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useServerFn } from '@tanstack/react-start'
-import { useState } from 'react'
+} from '~/components/ui/dialog'
 import { $initiateComposioConnection } from '../composio.api'
 import { composioQueryKeys, useDeleteUserComposioConnection } from '../composio.query'
 

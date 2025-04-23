@@ -1,7 +1,7 @@
 import type { UseChatHelpers } from '@ai-sdk/react'
-import { Button } from '@gingga/ui/components/button'
 import { useQuery } from '@tanstack/react-query'
 import { motion } from 'motion/react'
+import { Button } from '~/components/ui/button'
 import { agentQueryOptions } from '~/features/agent/agent.query'
 import { useAuthQuery } from '~/features/auth/auth.query'
 

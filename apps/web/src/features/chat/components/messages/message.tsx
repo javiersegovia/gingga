@@ -1,7 +1,7 @@
 import type { UseChatHelpers } from '@ai-sdk/react'
 import type { UIMessage } from 'ai'
 import type { /* ToolName, */ ToolResponse } from '../../../ai/skills/skill.types'
-import { Avatar, AvatarFallback } from '@gingga/ui/components/avatar'
+import equal from 'fast-deep-equal'
 
 // import type { Vote } from '~/lib/db/schema'
 // import { DocumentToolCall, DocumentToolResult } from './document'
@@ -9,19 +9,19 @@ import { Avatar, AvatarFallback } from '@gingga/ui/components/avatar'
 // import { Weather } from './weather'
 // import { DocumentPreview } from './document-preview'
 
-import { Button } from '@gingga/ui/components/button'
+import { PencilIcon, SparklesIcon } from 'lucide-react'
+import { AnimatePresence, motion } from 'motion/react'
+import { memo, useState } from 'react'
+import { Avatar, AvatarFallback } from '~/components/ui/avatar'
+
+import { Button } from '~/components/ui/button'
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@gingga/ui/components/tooltip'
-import { cn } from '@gingga/ui/lib/utils'
-import equal from 'fast-deep-equal'
-
-import { PencilIcon, SparklesIcon } from 'lucide-react'
-import { AnimatePresence, motion } from 'motion/react'
-import { memo, useState } from 'react'
+} from '~/components/ui/tooltip'
+import { cn } from '~/lib/utils'
 import { Markdown } from '../markdown'
 import { MessageEditor } from './message-editor'
 import { PreviewAttachment } from './message-preview-attachment'

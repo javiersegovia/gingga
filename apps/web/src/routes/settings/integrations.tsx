@@ -1,15 +1,15 @@
+import { useSuspenseQuery } from '@tanstack/react-query'
+import { createFileRoute } from '@tanstack/react-router'
+import { PlugZapIcon } from 'lucide-react'
+
+import { Suspense } from 'react'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@gingga/ui/components/card'
-import { useSuspenseQuery } from '@tanstack/react-query'
-import { createFileRoute } from '@tanstack/react-router'
-
-import { PlugZapIcon } from 'lucide-react'
-import { Suspense } from 'react'
+} from '~/components/ui/card'
 import { IntegrationCard } from '~/features/settings/integrations/components/integration-card'
 import {
   composioIntegrationsQueryOptions,

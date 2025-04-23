@@ -1,22 +1,22 @@
 import type { Chat } from '@gingga/db/types'
 import type { z } from 'zod'
-import { Button } from '@gingga/ui/components/button'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { Button } from '~/components/ui/button'
 import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@gingga/ui/components/dialog'
+} from '~/components/ui/dialog'
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormMessage,
-} from '@gingga/ui/components/form'
-import { Input } from '@gingga/ui/components/input'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
+} from '~/components/ui/form'
+import { Input } from '~/components/ui/input'
 import { useRenameChatMutation } from '~/features/chat/chat.query'
 import { RenameChatSchema } from '~/features/chat/chat.schema'
 

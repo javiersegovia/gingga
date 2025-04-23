@@ -1,10 +1,10 @@
 import type { LinkOptions } from '@tanstack/react-router'
 import type { ReactNode } from 'react'
-import { Button } from '@gingga/ui/components/button'
-import { Card } from '@gingga/ui/components/card'
-import { cn } from '@gingga/ui/lib/utils'
 import { Link } from '@tanstack/react-router'
 import { motion } from 'motion/react'
+import { Button } from '~/components/ui/button'
+import { Card } from '~/components/ui/card'
+import { cn } from '~/lib/utils'
 
 export interface Tab {
   label: string

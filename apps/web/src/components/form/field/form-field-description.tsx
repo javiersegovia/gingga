@@ -1,5 +1,5 @@
 import type React from 'react'
-import { cn } from '@gingga/ui/lib/utils' // Adjusted path
+import { cn } from '~/lib/utils' // Adjusted path
 import { useFormFieldItemContext } from './form-field-context'
 
 type FormFieldDescriptionProps = React.ComponentProps<'p'>

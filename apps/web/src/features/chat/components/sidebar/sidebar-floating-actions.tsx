@@ -1,14 +1,14 @@
 import type { ComponentProps } from 'react'
-import { Button } from '@gingga/ui/components/button'
-
-import { SidebarTrigger, useSidebar } from '@gingga/ui/components/sidebar'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@gingga/ui/components/tooltip'
-
-import { cn } from '@gingga/ui/lib/utils'
 import { Link } from '@tanstack/react-router'
+
 import { PlusIcon } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
+
 import { useWindowSize } from 'usehooks-ts'
+import { Button } from '~/components/ui/button'
+import { SidebarTrigger, useSidebar } from '~/components/ui/sidebar'
+import { Tooltip, TooltipContent, TooltipTrigger } from '~/components/ui/tooltip'
+import { cn } from '~/lib/utils'
 
 export function SidebarFloatingActions({
   className,

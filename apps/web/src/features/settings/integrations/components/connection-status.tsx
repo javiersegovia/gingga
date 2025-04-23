@@ -1,15 +1,15 @@
 import type { AgentSkillWithStatus } from '../../../ai/skills/skill.api'
 import type { SkillOption } from '../../../ai/skills/skill.types'
-import { Badge } from '@gingga/ui/components/badge'
+import { Link } from '@tanstack/react-router'
+import { AlertTriangleIcon, ExternalLinkIcon, PlugZapIcon, XIcon } from 'lucide-react'
+import { Badge } from '~/components/ui/badge'
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@gingga/ui/components/tooltip'
-import { cn } from '@gingga/ui/lib/utils'
-import { Link } from '@tanstack/react-router'
-import { AlertTriangleIcon, ExternalLinkIcon, PlugZapIcon, XIcon } from 'lucide-react'
+} from '~/components/ui/tooltip'
+import { cn } from '~/lib/utils'
 
 type ConnectionStatusType = 'connected' | 'disabled' | 'deleted' | 'connection-required'
 

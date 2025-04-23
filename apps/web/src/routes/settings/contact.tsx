@@ -1,13 +1,13 @@
-import { Button } from '@gingga/ui/components/button'
+import { createFileRoute } from '@tanstack/react-router'
+import { CalendarIcon, MailIcon, PhoneIcon } from 'lucide-react'
+import { Button } from '~/components/ui/button'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@gingga/ui/components/card'
-import { createFileRoute } from '@tanstack/react-router'
-import { CalendarIcon, MailIcon, PhoneIcon } from 'lucide-react'
+} from '~/components/ui/card'
 
 export const Route = createFileRoute('/settings/contact')({
   component: ContactSettingsComponent,

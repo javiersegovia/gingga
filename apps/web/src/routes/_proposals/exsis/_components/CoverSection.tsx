@@ -1,5 +1,5 @@
-import { cn } from '@gingga/ui/lib/utils'
 import { motion } from 'motion/react'
+import { cn } from '~/lib/utils'
 
 // ElegantShape component (provided by refiner tool)
 function ElegantShape({

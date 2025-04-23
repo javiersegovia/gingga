@@ -1,7 +1,5 @@
 /** @jsxImportSource react */
 import type { ComponentProps } from 'react'
-import { cn } from '@gingga/ui/lib/utils'
-
 import {
   Body,
   Button,
@@ -12,6 +10,8 @@ import {
   Preview,
   Tailwind,
 } from '@react-email/components'
+
+import { cn } from '~/lib/utils'
 
 type EmailLayoutProps = ComponentProps<typeof Container> & {
   preview?: string

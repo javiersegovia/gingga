@@ -1,6 +1,6 @@
-import type { ButtonProps } from '@gingga/ui/components/button'
 import type React from 'react'
-import { Button } from '@gingga/ui/components/button'
+import type { ButtonProps } from '~/components/ui/button'
+import { Button } from '~/components/ui/button'
 import { useFormContext } from './tanstack-form'
 
 type FormButtonProps = Omit<ButtonProps, 'children'> & {

@@ -1,5 +1,5 @@
-import { DotPattern } from '@gingga/ui/components/dot-pattern'
 import { createFileRoute } from '@tanstack/react-router'
+import { DotPattern } from '~/components/ui/dot-pattern'
 import { AIAgentsSection } from './_components/AIAgentsSection'
 import { CaseStudiesSection } from './_components/CaseStudiesSection'
 import { DeliverablesSection } from './_components/DeliverablesSection'

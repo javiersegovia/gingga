@@ -1,9 +1,9 @@
 /* eslint-disable react/no-unstable-default-props */
-import { Avatar, AvatarFallback, AvatarImage } from '@gingga/ui/components/avatar'
-import { Button } from '@gingga/ui/components/button'
-import { Card, CardContent } from '@gingga/ui/components/card'
-import { cn } from '@gingga/ui/lib/utils'
 import { ExternalLinkIcon, Linkedin, StarIcon } from 'lucide-react'
+import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar'
+import { Button } from '~/components/ui/button'
+import { Card, CardContent } from '~/components/ui/card'
+import { cn } from '~/lib/utils'
 
 const teamMembers = [
   {

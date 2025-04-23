@@ -1,14 +1,14 @@
+import { useSuspenseQuery } from '@tanstack/react-query'
+import { createFileRoute, ErrorComponent, useRouter } from '@tanstack/react-router'
+import { Suspense } from 'react'
+import { z } from 'zod'
 import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from '@gingga/ui/components/sheet'
-import { useSuspenseQuery } from '@tanstack/react-query'
-import { createFileRoute, ErrorComponent, useRouter } from '@tanstack/react-router'
-import { Suspense } from 'react'
-import { z } from 'zod'
+} from '~/components/ui/sheet'
 import { SkillForm, SkillFormSkeleton } from '~/features/ai/skills/components/skill-form'
 import { skillOptionsQueryOptions } from '~/features/ai/skills/skill.query'
 

@@ -1,10 +1,10 @@
-import { Button } from '@gingga/ui/components/button'
-import { Card, CardContent } from '@gingga/ui/components/card'
-import { DirectionAwareTabs } from '@gingga/ui/components/direction-aware-tabs'
 import { createFileRoute } from '@tanstack/react-router'
 import { CalendarIcon, MailIcon } from 'lucide-react'
 import { Footer } from '~/components/shared/footer'
 import { Navbar } from '~/components/shared/navbar'
+import { Button } from '~/components/ui/button'
+import { Card, CardContent } from '~/components/ui/card'
+import { DirectionAwareTabs } from '~/components/ui/direction-aware-tabs'
 import { ContactForm } from '~/features/contact/components/contact-form'
 
 // Constants shared across routes

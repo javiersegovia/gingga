@@ -8,7 +8,6 @@
   },
   "dependencies": {
     "@gingga/db": "workspace:*",
-    "@gingga/ui": "workspace:*",
     "@hono/trpc-server": "catalog:",
     "@react-email/components": "catalog:",
     "@t3-oss/env-core": "catalog:",
@@ -16,10 +15,12 @@
     "ai": "catalog:",
     "better-auth": "catalog:",
     "better-auth-harmony": "catalog:",
+    "clsx": "catalog:",
     "hono": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
     "superjson": "catalog:",
+    "tailwind-merge": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {

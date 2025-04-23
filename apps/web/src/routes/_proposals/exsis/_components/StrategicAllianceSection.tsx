@@ -1,6 +1,6 @@
 import type { LucideIcon } from 'lucide-react'
-import { Card, CardContent, CardHeader, CardTitle } from '@gingga/ui/components/card'
 import { Copyleft, Layers3, Scale, TrendingUp } from 'lucide-react'
+import { Card, CardContent, CardHeader, CardTitle } from '~/components/ui/card'
 
 const allianceIdeas: {
   title: string

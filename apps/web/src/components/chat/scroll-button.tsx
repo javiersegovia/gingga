@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks-extra/no-direct-set-state-in-use-effect */
-import type { buttonVariants } from '@gingga/ui/components/button'
 import type { VariantProps } from 'class-variance-authority'
-import { Button } from '@gingga/ui/components/button'
-import { cn } from '@gingga/ui/lib/utils'
+import type { buttonVariants } from '~/components/ui/button'
 import { ChevronDown } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { Button } from '~/components/ui/button'
+import { cn } from '~/lib/utils'
 
 export type ScrollButtonProps = {
   messagesContainerRef: React.RefObject<HTMLElement | null>

@@ -1,7 +1,7 @@
 /* eslint-disable no-alert */
-import { Button } from '@gingga/ui/components/button'
-import { Card, CardContent } from '@gingga/ui/components/card'
-import { cn } from '@gingga/ui/lib/utils'
+import { Button } from '~/components/ui/button'
+import { Card, CardContent } from '~/components/ui/card'
+import { cn } from '~/lib/utils'
 
 interface PricingCardProps {
   title: string

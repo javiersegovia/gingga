@@ -1,5 +1,9 @@
 import type { z } from 'zod'
 import { VerifySchema } from '@gingga/api/src/lib/auth/auth.schema'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { createFileRoute, redirect } from '@tanstack/react-router'
+import { zodValidator } from '@tanstack/zod-adapter'
+import { useForm } from 'react-hook-form'
 import {
   Form,
   FormControl,
@@ -7,13 +11,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@gingga/ui/components/form'
-import { InputOTP, InputOTPGroup, InputOTPSlot } from '@gingga/ui/components/input-otp'
-import { FormStatusButton } from '@gingga/ui/components/status-button'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { createFileRoute, redirect } from '@tanstack/react-router'
-import { zodValidator } from '@tanstack/zod-adapter'
-import { useForm } from 'react-hook-form'
+} from '~/components/ui/form'
+import { InputOTP, InputOTPGroup, InputOTPSlot } from '~/components/ui/input-otp'
+import { FormStatusButton } from '~/components/ui/status-button'
 
 const VerifySearchParams = VerifySchema.partial()
 

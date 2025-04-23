@@ -1,10 +1,10 @@
 import type { Tab } from '~/components/ui/animated-link-tabs'
-import { Avatar, AvatarFallback, AvatarImage } from '@gingga/ui/components/avatar'
-import { Badge } from '@gingga/ui/components/badge'
-import { Button } from '@gingga/ui/components/button'
 import { createFileRoute, Link, Outlet, redirect } from '@tanstack/react-router'
 import { ArrowLeftIcon, LogOutIcon } from 'lucide-react'
 import { AnimatedLinkTabs } from '~/components/ui/animated-link-tabs'
+import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar'
+import { Badge } from '~/components/ui/badge'
+import { Button } from '~/components/ui/button'
 import { useAuthedQuery, useSignOutMutation } from '~/features/auth/auth.query'
 
 export const Route = createFileRoute('/settings')({

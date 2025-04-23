@@ -1,4 +1,5 @@
-import { Button } from '@gingga/ui/components/button'
+import { useNavigate } from '@tanstack/react-router'
+import { Button } from '~/components/ui/button'
 import {
   Dialog,
   DialogClose,
@@ -8,8 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@gingga/ui/components/dialog'
-import { useNavigate } from '@tanstack/react-router'
+} from '~/components/ui/dialog'
 import { useDeleteAgentMutation } from '~/features/agent/agent.query'
 
 interface DeleteAgentDialogProps {

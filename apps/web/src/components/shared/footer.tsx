@@ -1,10 +1,10 @@
+import { Link } from '@tanstack/react-router'
 import {
   GithubIcon,
   LinkedInIcon,
   XTwitterIcon,
-} from '@gingga/ui/components/social-icons'
-import { cn } from '@gingga/ui/lib/utils'
-import { Link } from '@tanstack/react-router'
+} from '~/components/ui/social-icons'
+import { cn } from '~/lib/utils'
 
 export function Footer({ className }: { className?: string }) {
   return (

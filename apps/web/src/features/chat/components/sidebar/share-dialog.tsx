@@ -1,18 +1,18 @@
 import type { Chat } from '@gingga/db/types'
-import { Button } from '@gingga/ui/components/button'
+import { CheckIcon, CopyIcon } from 'lucide-react'
 
+import { useState } from 'react'
+
+import { Button } from '~/components/ui/button'
 import {
   DialogClose,
   DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@gingga/ui/components/dialog'
-
-import { Label } from '@gingga/ui/components/label'
-import { Switch } from '@gingga/ui/components/switch'
-import { CheckIcon, CopyIcon } from 'lucide-react'
-import { useState } from 'react'
+} from '~/components/ui/dialog'
+import { Label } from '~/components/ui/label'
+import { Switch } from '~/components/ui/switch'
 import { useUpdateChatVisibilityMutation } from '~/features/chat/chat.query'
 
 export function ShareChatDialog({

@@ -1,13 +1,13 @@
+import { useSuspenseQueries } from '@tanstack/react-query'
+import { createFileRoute, useRouter } from '@tanstack/react-router'
+import { Suspense } from 'react'
 import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from '@gingga/ui/components/sheet'
-import { useSuspenseQueries } from '@tanstack/react-query'
-import { createFileRoute, useRouter } from '@tanstack/react-router'
-import { Suspense } from 'react'
+} from '~/components/ui/sheet'
 import { SkillForm, SkillFormSkeleton } from '~/features/ai/skills/components/skill-form'
 import {
   skillByIdQueryOptions,

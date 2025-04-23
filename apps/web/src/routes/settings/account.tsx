@@ -1,13 +1,3 @@
-import { Button } from '@gingga/ui/components/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@gingga/ui/components/card'
-import { Progress } from '@gingga/ui/components/progress'
 import { createFileRoute, Link } from '@tanstack/react-router'
 import {
   AlertCircleIcon,
@@ -16,6 +6,16 @@ import {
   InfoIcon,
   Trash2Icon,
 } from 'lucide-react'
+import { Button } from '~/components/ui/button'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '~/components/ui/card'
+import { Progress } from '~/components/ui/progress'
 import { useAuthedQuery } from '~/features/auth/auth.query'
 
 export const Route = createFileRoute('/settings/account')({

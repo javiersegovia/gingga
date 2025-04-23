@@ -1,5 +1,9 @@
 import type { z } from 'zod'
 import { SignInSchema } from '@gingga/api/src/lib/auth/auth.schema'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { createFileRoute, Link, redirect } from '@tanstack/react-router'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import {
   Form,
   FormControl,
@@ -7,13 +11,9 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@gingga/ui/components/form'
-import { Input } from '@gingga/ui/components/input'
-import { FormStatusButton } from '@gingga/ui/components/status-button'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { createFileRoute, Link, redirect } from '@tanstack/react-router'
-import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
+} from '~/components/ui/form'
+import { Input } from '~/components/ui/input'
+import { FormStatusButton } from '~/components/ui/status-button'
 import { authClient } from '~/features/auth/auth.client'
 
 export const Route = createFileRoute('/_auth/identify')({
