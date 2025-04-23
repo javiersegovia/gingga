@@ -10,6 +10,7 @@ import { authClient } from '~/features/auth/auth.client'
 export async function getSessionData() {
   const { data } = await authClient.getSession({
     fetchOptions: {
+      credentials: 'include',
       headers: getHeaders() as HeadersInit,
     },
   })
