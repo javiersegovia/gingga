@@ -105,6 +105,11 @@ export function createRouter() {
       return // Stop processing if it's a redirect
     }
 
+    console.log('Debugging')
+    console.log(router.state.location)
+    console.log(getUrl())
+    console.log(trpc.healthCheck.pathKey())
+
     // Next, check for the specific tRPC JSON parsing error
     if (error instanceof TRPCClientError && error.cause instanceof SyntaxError && error.message.includes('is not valid JSON')) {
       console.error(
