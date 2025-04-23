@@ -5,7 +5,7 @@ import { createRouter as createTanStackRouter, isRedirect } from '@tanstack/reac
 import { routerWithQueryClient } from '@tanstack/react-router-with-query'
 
 import { createIsomorphicFn } from '@tanstack/react-start'
-import { getHeaders } from '@tanstack/react-start/server'
+import { getHeaders, getRequestHeaders } from '@tanstack/react-start/server'
 import { createTRPCClient, httpBatchLink, loggerLink, TRPCClientError } from '@trpc/client'
 import { createTRPCOptionsProxy } from '@trpc/tanstack-react-query'
 import SuperJSON from 'superjson'
@@ -32,8 +32,27 @@ function getUrl() {
 }
 
 const headers = createIsomorphicFn()
-  .client(() => ({}))
-  .server(() => getHeaders())
+  .client(() => ({
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+  }))
+  .server(() => {
+    const originalHeaders = getRequestHeaders() ?? {}
+    // Access cookie using standard object property access
+    const cookie = originalHeaders.cookie
+
+    const newHeaders: Record<string, string> = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    }
+
+    // Only add the cookie header if it exists and is a string
+    if (typeof cookie === 'string') {
+      newHeaders.cookie = cookie
+    }
+
+    return newHeaders
+  })
 
 export function createRouter() {
   const queryClient = new QueryClient({
