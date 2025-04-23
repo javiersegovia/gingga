@@ -9,7 +9,6 @@ const ServerEnvSchema = createEnvSchema('server', {
   TURSO_API_TOKEN: z.string().min(1),
 
   // SESSION
-  SESSION_SECRET: z.string().min(16),
   AUTH_SECRET: z.string().min(16),
 
   // AUTH SOCIAL PROVIDERS
@@ -38,7 +37,7 @@ const ServerEnvSchema = createEnvSchema('server', {
   KV_REST_API_URL: z.string().url(),
 
   // MONITORING
-  SENTRY_AUTH_TOKEN: z.string().min(1),
+  // SENTRY_AUTH_TOKEN: z.string().min(1),
 
   // CI/CD
   GH_TOKEN: z.string().min(1),
