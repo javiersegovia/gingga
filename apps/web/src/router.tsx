@@ -22,8 +22,8 @@ export interface AppRouterContext {
 
 function getUrl() {
   const base = (() => {
-    if (typeof window !== 'undefined')
-      return ''
+    // if (typeof window !== 'undefined')
+    //   return ''
     if (process.env.VITE_API_URL)
       return process.env.VITE_API_URL
     return `http://localhost:${process.env.PORT ?? 3000}`
