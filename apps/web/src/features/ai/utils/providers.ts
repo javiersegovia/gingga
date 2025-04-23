@@ -1,6 +1,6 @@
 import { createOpenRouter } from '@openrouter/ai-sdk-provider'
 import { customProvider, extractReasoningMiddleware, wrapLanguageModel } from 'ai'
-import { getServerEnv } from '~/server/env'
+import { getServerEnv } from '~/web-env'
 
 const env = getServerEnv()
 const openrouter = createOpenRouter({

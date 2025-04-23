@@ -21,7 +21,7 @@
     "zod": "catalog:"
   },
   "devDependencies": {
-    "@gingga/tsconfig": "workspace:*",
+    "@gingga/config": "workspace:*",
     "drizzle-kit": "catalog:"
   }
 }

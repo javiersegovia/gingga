@@ -1,5 +1,5 @@
 import type { SkillOption } from './skill.types'
-import { getServerEnv } from '~/server/env'
+import { getServerEnv } from '~/web-env'
 
 export function getSkills(): SkillOption[] {
   return [

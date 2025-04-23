@@ -41,6 +41,7 @@
     "@radix-ui/react-switch": "catalog:",
     "@radix-ui/react-tabs": "catalog:",
     "@radix-ui/react-tooltip": "catalog:",
+    "@t3-oss/env-core": "catalog:",
     "@tailwindcss/vite": "catalog:",
     "@tanstack/query-devtools": "catalog:",
     "@tanstack/react-form": "catalog:",
@@ -92,7 +93,7 @@
   },
   "devDependencies": {
     "@gingga/api": "workspace:*",
-    "@gingga/tsconfig": "workspace:*",
+    "@gingga/config": "workspace:*",
     "@tailwindcss/postcss": "catalog:",
     "@types/node": "catalog:",
     "@types/react": "catalog:",

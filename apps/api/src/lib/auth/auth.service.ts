@@ -1,11 +1,12 @@
+import type { DatabaseType } from '@gingga/db'
 import type { ContextEnv } from '~/server'
 import { Accounts, Sessions, Users, Verifications } from '@gingga/db/schema'
 import { betterAuth } from 'better-auth'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 import { admin } from 'better-auth/plugins'
 import { getContext } from 'hono/context-storage'
+import { apiEnv } from '~/api-env'
 import { getDB } from '~/context'
-import { apiEnv } from '~/env'
 import { sendEmail } from '~/lib/email'
 import VerificationEmail from '~/lib/email/templates/verification-email'
 import { PASSWORD_MAX, PASSWORD_MIN } from './auth.schema'
@@ -13,31 +14,47 @@ import { PASSWORD_MAX, PASSWORD_MIN } from './auth.schema'
 export type Session = ReturnType<typeof createServerAuth>['$Infer']['Session']
 export type BetterAuth = ReturnType<typeof createServerAuth>
 
-export function getAuth() {
+// Define the required environment variables structure
+export interface AuthEnv {
+  ADMIN_USER_IDS: string
+  VITE_API_URL: string
+  AUTH_SECRET: string
+  VITE_SITE_URL: string
+  VITE_SITE_DOMAIN: string
+  GOOGLE_CLIENT_ID: string
+  GOOGLE_CLIENT_SECRET: string
+  GITHUB_CLIENT_ID: string
+  GITHUB_CLIENT_SECRET: string
+}
+
+export function getAuth(): BetterAuth {
   const c = getContext<ContextEnv>()
 
   if (!c.var.auth) {
-    c.set('auth', createServerAuth())
+    // Pass the db instance and apiEnv to createServerAuth
+    c.set('auth', createServerAuth(getDB(), apiEnv))
   }
 
   return c.var.auth
 }
 
-export function createServerAuth() {
-  const db = getDB()
-  const adminUserIds = apiEnv.ADMIN_USER_IDS.split(',')
+export function createServerAuth(
+  db: DatabaseType,
+  env: AuthEnv,
+): ReturnType<typeof betterAuth> {
+  const adminUserIds = env.ADMIN_USER_IDS.split(',')
 
   return betterAuth({
-    baseURL: apiEnv.VITE_API_URL,
-    secret: apiEnv.AUTH_SECRET,
+    baseURL: env.VITE_API_URL,
+    secret: env.AUTH_SECRET,
 
-    trustedOrigins: [apiEnv.VITE_SITE_URL],
+    trustedOrigins: [env.VITE_SITE_URL],
 
     advanced: {
       useSecureCookies: true,
       crossSubDomainCookies: {
         enabled: true,
-        domain: `.${apiEnv.VITE_SITE_DOMAIN}`,
+        domain: `.${env.VITE_SITE_DOMAIN}`,
       },
       defaultCookieAttributes: {
         secure: true,
@@ -47,6 +64,7 @@ export function createServerAuth() {
     },
     database: drizzleAdapter(db, {
       provider: 'sqlite',
+      // Use the explicitly imported tables for the schema
       schema: {
         user: Users,
         account: Accounts,
@@ -112,12 +130,12 @@ export function createServerAuth() {
     },
     socialProviders: {
       google: {
-        clientId: apiEnv.GOOGLE_CLIENT_ID,
-        clientSecret: apiEnv.GOOGLE_CLIENT_SECRET,
+        clientId: env.GOOGLE_CLIENT_ID,
+        clientSecret: env.GOOGLE_CLIENT_SECRET,
       },
       github: {
-        clientId: apiEnv.GITHUB_CLIENT_ID,
-        clientSecret: apiEnv.GITHUB_CLIENT_SECRET,
+        clientId: env.GITHUB_CLIENT_ID,
+        clientSecret: env.GITHUB_CLIENT_SECRET,
       },
     },
     plugins: [

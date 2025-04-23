@@ -2,7 +2,7 @@
 import type { UserMemberships } from '@gingga/db/schema'
 import { Ratelimit } from '@upstash/ratelimit'
 import { Redis } from '@upstash/redis'
-import { getServerEnv } from '~/server/env'
+import { getServerEnv } from '~/web-env'
 
 export type Tier = 'public' | (typeof UserMemberships.tier.enumValues)[number]
 export type MessageType = 'standard' | 'premium'

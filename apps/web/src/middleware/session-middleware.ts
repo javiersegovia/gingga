@@ -1,6 +1,8 @@
+import { createServerAuth } from '@gingga/api/src/lib/auth/auth.service'
 import { createMiddleware } from '@tanstack/react-start'
-import { getHeaders } from '@tanstack/react-start/server'
-import { authClient } from '~/features/auth/auth.client'
+import { getWebRequest } from '@tanstack/react-start/server'
+import { getDatabase } from '~/global-middleware'
+import { webEnv } from '~/web-env'
 
 /**
  * This function is only exported for use in TanStack Start API Routes
@@ -8,25 +10,29 @@ import { authClient } from '~/features/auth/auth.client'
  * In every other place, we should use the sessionMiddleware instead
  */
 export async function getSessionData() {
-  const { data } = await authClient.getSession({
-    fetchOptions: {
-      credentials: 'include',
-      headers: getHeaders() as HeadersInit,
-    },
+  const auth = createServerAuth(getDatabase(), webEnv)
+  const req = getWebRequest()!
+  const authSession = await auth.api.getSession({
+    headers: req.headers,
   })
 
-  if (!data) {
-    return null
-  }
-
-  return { session: data.session, user: data.user }
+  return authSession ? { session: authSession.session, user: authSession.user } : null
 }
 
 /**
  * Middleware to add the session data to the context
  */
 export const sessionMiddleware = createMiddleware().server(async ({ next }) => {
-  const data = await getSessionData()
+  const auth = createServerAuth(getDatabase(), webEnv)
+  const req = getWebRequest()!
+
+  const authSession = await auth.api.getSession({
+    headers: req.headers,
+  })
+  const data = authSession ? {
+    session: authSession.session,
+    user: authSession.user,
+  } : null
 
   return next({
     context: data,

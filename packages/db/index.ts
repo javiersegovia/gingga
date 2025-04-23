@@ -1,6 +1,6 @@
 import { createClient } from '@libsql/client'
 import { drizzle } from 'drizzle-orm/libsql'
-import { dbEnv } from './env'
+import { dbEnv } from './db-env'
 import * as schema from './schema'
 
 export function createDatabaseClient() {

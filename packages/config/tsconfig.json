@@ -1,5 +1,5 @@
 {
-  "extends": "@gingga/config/base.json",
+  "extends": "./base.json",
   "compilerOptions": {
     "composite": true,
     "baseUrl": ".",
@@ -7,7 +7,6 @@
       "~/*": ["./"]
     },
     "outDir": "./.types"
-    // "verbatimModuleSyntax": true
   },
   "include": ["**/*.ts"],
   "exclude": ["node_modules"]

@@ -10,7 +10,7 @@ import {
   ComposioError,
   VercelAIToolSet,
 } from 'composio-core'
-import { getServerEnv } from '~/server/env'
+import { getServerEnv } from '~/web-env'
 import { ComposioAppNameEnum } from './composio.schema'
 
 // Helper to initialize the Composio SDK

@@ -12,7 +12,7 @@ import {
   Section,
   Text,
 } from '@react-email/components'
-import { apiEnv } from '~/env'
+import { apiEnv } from '~/api-env'
 
 const main = {
   backgroundColor: '#ffffff',

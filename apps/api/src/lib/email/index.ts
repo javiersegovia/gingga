@@ -1,7 +1,7 @@
 import type { ReactElement } from 'react'
 import { render } from '@react-email/components'
 import { z } from 'zod'
-import { apiEnv } from '~/env'
+import { apiEnv } from '~/api-env'
 
 const ResendErrorSchema = z.union([
   z.object({

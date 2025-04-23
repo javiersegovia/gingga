@@ -1,0 +1,12 @@
+{
+  "name": "@gingga/config",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "@t3-oss/env-core": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:"
+  }
+}

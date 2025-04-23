@@ -1,5 +1,5 @@
 {
-  "extends": "@gingga/tsconfig/react.json",
+  "extends": "@gingga/config/react.json",
   "compilerOptions": {
     "target": "ES2022",
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
