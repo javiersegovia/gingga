@@ -38,7 +38,11 @@ function AuthPage() {
 
   async function onSubmit(data: z.infer<typeof SignInSchema>) {
     await authClient.signIn.email(
-      { ...data, callbackURL: '/chat', rememberMe: true },
+      {
+        ...data,
+        callbackURL: `${import.meta.env.VITE_SITE_URL}/chat`,
+        rememberMe: true,
+      },
       {
         onError: ({ error }) => {
           toast.error('An error occurred', {

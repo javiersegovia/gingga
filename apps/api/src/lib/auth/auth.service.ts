@@ -34,7 +34,12 @@ export function createServerAuth() {
       useSecureCookies: true,
       crossSubDomainCookies: {
         enabled: true,
-        domain: apiEnv.VITE_SITE_DOMAIN,
+        domain: `.${apiEnv.VITE_SITE_DOMAIN}`,
+      },
+      defaultCookieAttributes: {
+        secure: true,
+        httpOnly: true,
+        sameSite: 'Lax',
       },
     },
     database: drizzleAdapter(db, {

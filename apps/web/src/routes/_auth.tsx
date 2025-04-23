@@ -41,7 +41,7 @@ function RouteComponent() {
     try {
       await authClient.signIn.social({
         provider,
-        callbackURL: '/chat',
+        callbackURL: `${import.meta.env.VITE_SITE_URL}/chat`,
       })
     }
     catch (error: unknown) {
