@@ -28,8 +28,15 @@ export function createServerAuth() {
   const adminUserIds = apiEnv.ADMIN_USER_IDS.split(',')
 
   return betterAuth({
-    baseURL: apiEnv.VITE_SITE_URL,
+    baseURL: apiEnv.VITE_API_URL,
     secret: apiEnv.AUTH_SECRET,
+    advanced: {
+      useSecureCookies: true,
+      crossSubDomainCookies: {
+        enabled: true,
+        domain: apiEnv.VITE_SITE_DOMAIN,
+      },
+    },
     database: drizzleAdapter(db, {
       provider: 'sqlite',
       schema: {
@@ -39,6 +46,7 @@ export function createServerAuth() {
         verification: Verifications,
       },
     }),
+
     emailAndPassword: {
       enabled: true,
       autoSignIn: true,
