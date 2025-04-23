@@ -22,11 +22,11 @@ import {
   upsertChatMessage,
 } from '~/features/chat/chat.service'
 import { getVercelToolset } from '~/features/settings/integrations/composio.service'
-import { getSessionData } from '~/middleware/session-middleware'
+import { getAuth } from '~/global-middleware'
 
 export const APIRoute = createAPIFileRoute('/api/agents/custom/$agentId')({
   POST: async ({ request, params: { agentId } }) => {
-    const sessionData = await getSessionData()
+    const sessionData = await getAuth()
 
     const parsed = AIChatSchema.safeParse(await request.json())
     if (!parsed.success) {

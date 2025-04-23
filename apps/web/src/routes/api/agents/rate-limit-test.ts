@@ -1,11 +1,11 @@
 import { json } from '@tanstack/react-start'
 import { createAPIFileRoute } from '@tanstack/react-start/api'
 import { checkRateLimit } from '~/features/rate-limit/rate-limit.service'
-import { getSessionData } from '~/middleware/session-middleware'
+import { getAuth } from '~/global-middleware'
 
 export const APIRoute = createAPIFileRoute('/api/agents/rate-limit-test')({
   GET: async ({ request }) => {
-    const sessionData = await getSessionData()
+    const sessionData = await getAuth()
 
     try {
       const { success, remaining, reset, identifier, tier } = await checkRateLimit({

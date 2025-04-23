@@ -5,6 +5,7 @@ import { nanoid } from 'nanoid'
 // import { tools, executions } from '~/features/ai/skills/index'
 import { processToolCalls } from '~/features/ai/utils/human-in-the-loop'
 import { modelProvider } from '~/features/ai/utils/providers'
+import { AIChatSchema } from '~/features/chat/chat.schema'
 import {
   generateChatTitleFromUserMessage,
   getChatById,
@@ -13,13 +14,12 @@ import {
   saveChat,
   upsertChatMessage,
 } from '~/features/chat/chat.service'
-import { getSessionData } from '~/middleware/session-middleware'
-import { AIChatSchema } from '../../../features/chat/chat.schema'
+import { getAuth } from '~/global-middleware'
 
 export const APIRoute = createAPIFileRoute('/api/chat/default')({
   POST: async ({ request }) => {
     try {
-      const sessionData = await getSessionData()
+      const sessionData = await getAuth()
 
       const parsed = AIChatSchema.safeParse(await request.json())
 

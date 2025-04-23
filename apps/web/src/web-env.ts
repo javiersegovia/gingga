@@ -1,7 +1,10 @@
 import { configEnv } from '@gingga/config/config-env'
 import { dbEnv } from '@gingga/db/db-env'
 import { createEnv } from '@t3-oss/env-core'
+import { config } from 'dotenv'
 import { z } from 'zod'
+
+config()
 
 export const webEnv = createEnv({
   extends: [dbEnv(), configEnv()],
@@ -18,10 +21,7 @@ export const webEnv = createEnv({
   server: {
     // Web-specific server variables can go here if needed in the future
   },
-  runtimeEnv: {
-    ...(typeof document === 'undefined' ? process.env : {}),
-    ...(typeof document !== 'undefined' ? import.meta.env : {}),
-  },
+  runtimeEnv: process.env,
   skipValidation: !!import.meta.env.SKIP_ENV_VALIDATION,
 })
 
