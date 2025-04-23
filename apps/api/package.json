@@ -9,25 +9,26 @@
   "dependencies": {
     "@gingga/db": "workspace:*",
     "@gingga/ui": "workspace:*",
-    "@hono/trpc-server": "^0.3.4",
-    "@react-email/components": "^0.0.36",
-    "@t3-oss/env-core": "^0.12.0",
-    "@trpc/server": "^11.1.0",
-    "@types/react": "^19.1.2",
-    "ai": "^4.3.9",
-    "better-auth": "^1.2.7",
-    "better-auth-harmony": "^1.2.4",
-    "hono": "^4.7.7",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
-    "superjson": "^2.2.2",
-    "zod": "^3.24.3"
+    "@hono/trpc-server": "catalog:",
+    "@react-email/components": "catalog:",
+    "@t3-oss/env-core": "catalog:",
+    "@trpc/server": "catalog:",
+    "ai": "catalog:",
+    "better-auth": "catalog:",
+    "better-auth-harmony": "catalog:",
+    "hono": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "superjson": "catalog:",
+    "zod": "catalog:"
   },
   "devDependencies": {
-    "@cloudflare/vitest-pool-workers": "^0.8.18",
+    "@cloudflare/vitest-pool-workers": "catalog:",
     "@gingga/tsconfig": "workspace:*",
-    "@types/node": "^22.14.1",
-    "vitest": "^3.1.1",
-    "wrangler": "^4.12.0"
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "vitest": "catalog:",
+    "wrangler": "catalog:"
   }
 }

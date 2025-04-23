@@ -12,16 +12,16 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@libsql/client": "^0.15.4",
-    "@t3-oss/env-core": "^0.12.0",
-    "ai": "^4.3.9",
-    "dotenv": "^16.5.0",
-    "drizzle-orm": "^0.42.0",
-    "nanoid": "^5.1.5",
-    "zod": "^3.24.3"
+    "@libsql/client": "catalog:",
+    "@t3-oss/env-core": "catalog:",
+    "ai": "catalog:",
+    "dotenv": "catalog:",
+    "drizzle-orm": "catalog:",
+    "nanoid": "catalog:",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@gingga/tsconfig": "workspace:*",
-    "drizzle-kit": "^0.31.0"
+    "drizzle-kit": "catalog:"
   }
 }
