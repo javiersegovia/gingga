@@ -2,11 +2,11 @@ import type { TRPCAppRouter } from '@gingga/api/src/trpc/routers/index'
 import type { TRPCOptionsProxy } from '@trpc/tanstack-react-query'
 import { QueryClient } from '@tanstack/react-query'
 import { createRouter as createTanStackRouter, isRedirect } from '@tanstack/react-router'
-
 import { routerWithQueryClient } from '@tanstack/react-router-with-query'
+
 import { createIsomorphicFn } from '@tanstack/react-start'
 import { getHeaders } from '@tanstack/react-start/server'
-import { createTRPCClient, httpBatchLink, loggerLink } from '@trpc/client'
+import { createTRPCClient, httpBatchLink, loggerLink, TRPCClientError } from '@trpc/client'
 import { createTRPCOptionsProxy } from '@trpc/tanstack-react-query'
 import SuperJSON from 'superjson'
 
@@ -89,11 +89,12 @@ export function createRouter() {
     ),
   })
 
-  // handle redirect without useServerFn when using tanstack query
-  queryClient.getQueryCache().config.onError = handleRedirectError
-  queryClient.getMutationCache().config.onError = handleRedirectError
+  // handle errors globally
+  queryClient.getQueryCache().config.onError = handleGlobalError
+  queryClient.getMutationCache().config.onError = handleGlobalError
 
-  function handleRedirectError(error: Error) {
+  function handleGlobalError(error: unknown) {
+    // First, handle redirects specifically
     if (isRedirect(error)) {
       router.navigate(
         router.resolveRedirect({
@@ -101,7 +102,24 @@ export function createRouter() {
           _fromLocation: router.state.location,
         }),
       )
+      return // Stop processing if it's a redirect
     }
+
+    // Next, check for the specific tRPC JSON parsing error
+    if (error instanceof TRPCClientError && error.cause instanceof SyntaxError && error.message.includes('is not valid JSON')) {
+      console.error(
+        'Caught tRPC JSON Parsing Error globally:',
+        error, // Now correctly typed as TRPCClientError
+      )
+      // TODO: Implement user-facing error handling here
+      // e.g., show a toast notification: toast.error("Server communication error. Please try again later.")
+      return // Stop processing if handled
+    }
+
+    // TODO: Add handling for other types of global errors if needed
+
+    // Default error logging for unhandled cases
+    console.error('Unhandled global error:', error)
   }
 
   if (typeof window !== 'undefined') {
