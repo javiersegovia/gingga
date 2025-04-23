@@ -12,7 +12,7 @@ if (!TURSO_AUTH_TOKEN)
 
 export default defineConfig({
   out: './drizzle',
-  schema: './src/schema.ts',
+  schema: './schema.ts',
 
   verbose: true,
 
