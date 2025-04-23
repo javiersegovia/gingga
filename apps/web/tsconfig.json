@@ -18,6 +18,7 @@
     }
   ],
   "include": [
+    "app.config.ts",
     "src/**/*.ts",
     "src/**/*.tsx"
   ],

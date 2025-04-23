@@ -39,6 +39,17 @@ export default defineConfig({
 
   vite: {
     define: await defineVitePublicEnv(),
+
+    optimizeDeps: {
+      include: ['stream', 'stream/web', 'path', 'fs', 'async_hooks'], // Include Node.js built-in modules
+    },
+
+    build: {
+      rollupOptions: {
+        external: ['node:stream', 'node:stream/web', 'node:path', 'node:fs', 'node:async_hooks'],
+      },
+    },
+
     plugins: [
       tsconfigPaths({
         projects: ['./tsconfig.json'],
