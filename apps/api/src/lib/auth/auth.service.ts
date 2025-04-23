@@ -30,6 +30,9 @@ export function createServerAuth() {
   return betterAuth({
     baseURL: apiEnv.VITE_API_URL,
     secret: apiEnv.AUTH_SECRET,
+
+    trustedOrigins: [apiEnv.VITE_SITE_URL],
+
     advanced: {
       useSecureCookies: true,
       crossSubDomainCookies: {
