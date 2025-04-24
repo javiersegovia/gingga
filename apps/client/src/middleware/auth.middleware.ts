@@ -1,0 +1,22 @@
+import { href, redirect, type unstable_MiddlewareFunction } from "react-router"
+import { getAuthSession } from "~/middleware/context-storage.server"
+
+export const authMiddleware: unstable_MiddlewareFunction = async (_, next) => {
+  const authSession = await getAuthSession()
+
+  if (!authSession.isAuthenticated) {
+    throw redirect(href('/identify'), 302)
+  }
+
+  return next()
+}
+
+export const anonymousMiddleware: unstable_MiddlewareFunction = async (_, next) => {
+  const authSession = await getAuthSession()
+
+  if (authSession.isAuthenticated) {
+    throw redirect(href('/chat'), 302)
+  }
+
+  return next()
+}

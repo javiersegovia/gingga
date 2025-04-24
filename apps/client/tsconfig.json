@@ -1,0 +1,44 @@
+{
+  "extends": "@gingga/config/react.json",
+  "compilerOptions": {
+    "composite": true,
+    "target": "ES2022",
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    "baseUrl": ".",
+    "rootDirs": [".", "./.react-router/types"],
+
+    "module": "ES2022",
+    "moduleResolution": "Bundler",
+
+    "paths": {
+      "~/*": ["./src/*"]
+    },
+    "types": [
+      "vite/client",
+      "node"
+    ],
+    "checkJs": true,
+    "strictNullChecks": true,
+    "noEmit": true
+  },
+
+  "references": [
+    {
+      "path": "../api"
+    },
+    {
+      "path": "../../packages/ui"
+    }
+  ],
+
+  "include": [
+    "vite.config.ts",
+    ".react-router/types/**/*",
+    "src/**/*",
+    "src/**/.server/**/*",
+    "src/**/.client/**/*",
+    "workers/**/*",
+    "react-router.config.ts",
+    "./worker-configuration.d.ts"
+  ]
+}

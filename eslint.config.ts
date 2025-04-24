@@ -17,6 +17,7 @@ export default antfu(
       'react-refresh/only-export-components': 'off',
       'unused-imports/no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' }],
       'style/multiline-ternary': 'off',
+      'no-empty-pattern': 'off',
     },
   },
   // Ignores
@@ -33,6 +34,7 @@ export default antfu(
       '.wrangler/**/*',
       '.vscode/**/*',
       '.husky/**/*',
+      '**/.react-router/**/*',
     ],
   },
 )

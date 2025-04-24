@@ -1,7 +1,8 @@
 {
   "references": [
     { "path": "./apps/api" },
-    { "path": "./packages/db" }
+    { "path": "./packages/db" },
+    { "path": "./packages/ui" }
   ],
   "files": [],
   "include": ["eslint.config.ts"]

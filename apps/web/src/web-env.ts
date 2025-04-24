@@ -8,8 +8,8 @@ config()
 
 export const webEnv = createEnv({
   extends: [dbEnv(), configEnv()],
-  clientPrefix: 'VITE_' as const,
-  client: {
+  // clientPrefix: 'VITE_' as const,
+  shared: {
     // These are already defined in configEnv.shared,
     // but need to be explicitly listed here for the client build
     VITE_SITE_URL: z.string().url(),
@@ -23,6 +23,7 @@ export const webEnv = createEnv({
   },
   runtimeEnv: process.env,
   skipValidation: !!import.meta.env.SKIP_ENV_VALIDATION,
+
 })
 
 // Helper functions (optional, can be removed if not needed)
@@ -32,12 +33,4 @@ export function getServerEnv() {
 
 export function getClientEnv() {
   return webEnv
-}
-
-export async function parseEnv() {
-  // Validation happens automatically in createEnv
-  // eslint-disable-next-line no-console -- its fine.
-  console.log(
-    `Environment variables parsed successfully (${Object.keys(webEnv).length} variables)`,
-  )
 }
