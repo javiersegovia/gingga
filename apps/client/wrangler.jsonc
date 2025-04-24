@@ -16,7 +16,13 @@
   "upload_source_maps": true,
   "vars": {
     "VALUE_FROM_CLOUDFLARE": "Hello from Cloudflare"
-  }
+  },
+
+  "routes": [
+    { "pattern": "www.gingga.com/*", "zone_name": "gingga.com" },
+    { "pattern": "gingga.com/*", "zone_name": "gingga.com" }
+  ]
+
   /**
    * Smart Placement
    * Docs: https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
