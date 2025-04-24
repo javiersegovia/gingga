@@ -24,13 +24,6 @@ export function configEnv() {
       GATEWAY_BASE_OPENAI_URL: z.string().url(),
       GATEWAY_BASE_OPENROUTER_URL: z.string().url(),
 
-      // UPSTASH REDIS
-      KV_URL: z.string().url(),
-      KV_REST_API_READ_ONLY_TOKEN: z.string().min(1),
-      REDIS_URL: z.string().url(),
-      KV_REST_API_TOKEN: z.string().min(1),
-      KV_REST_API_URL: z.string().url(),
-
       // CI/CD & NODE
       GH_TOKEN: z.string().min(1),
       NODE_ENV: z.enum(['development', 'production', 'test']).optional(),
