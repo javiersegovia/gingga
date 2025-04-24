@@ -19,8 +19,8 @@
   },
 
   "routes": [
-    { "pattern": "www.gingga.com/*", "zone_name": "gingga.com", "custom_domain": true },
-    { "pattern": "gingga.com/*", "zone_name": "gingga.com", "custom_domain": true }
+    { "pattern": "www.gingga.com", "zone_name": "gingga.com", "custom_domain": true },
+    { "pattern": "gingga.com", "zone_name": "gingga.com", "custom_domain": true }
   ]
 
   /**
