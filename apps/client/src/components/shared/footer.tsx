@@ -1,12 +1,15 @@
-import { Link } from 'react-router'
 import {
   GithubIcon,
   LinkedInIcon,
   XTwitterIcon,
 } from '@gingga/ui/components/social-icons'
 import { cn } from '@gingga/ui/lib/utils'
+import { Link } from 'react-router'
+import { useClientEnv } from '~/hooks/use-client-env'
 
 export function Footer({ className }: { className?: string }) {
+  const env = useClientEnv()
+
   return (
     <footer
       className={cn('w-full border-t border-white/10 bg-black text-white', className)}
@@ -17,7 +20,7 @@ export function Footer({ className }: { className?: string }) {
           <div className="space-y-4 md:max-w-md">
             <Link to="/" className="inline-block">
               <img
-                src={`${import.meta.env.VITE_ASSETS_URL || ''}/logo/logo-dark-v2.png`}
+                src={`${env.VITE_ASSETS_URL || ''}/logo/logo-dark-v2.png`}
                 alt="Gingga Logo"
                 className="h-8"
               />

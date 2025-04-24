@@ -32,3 +32,5 @@ export const clientEnv = createEnv({
   runtimeEnv: { ...cloudflareEnv },
   skipValidation: !!import.meta.env.SKIP_ENV_VALIDATION,
 })
+
+export type ClientEnv = typeof clientEnv

@@ -1,6 +1,6 @@
-import { useMutation } from "@tanstack/react-query"
-import { useRevalidator, useNavigate, href } from "react-router"
-import { authClient } from "~/lib/auth/auth-client"
+import { useMutation } from '@tanstack/react-query'
+import { href, useNavigate, useRevalidator } from 'react-router'
+import { authClient } from '~/lib/auth/auth-client'
 
 export function useSignOutMutation() {
   const r = useRevalidator()

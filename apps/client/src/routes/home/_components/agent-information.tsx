@@ -1,6 +1,9 @@
 import type { LucideProps } from 'lucide-react'
 import type { Agent } from './agentic-employees'
-import { Link } from 'react-router'
+import { Button } from '@gingga/ui/components/button'
+import { Card } from '@gingga/ui/components/card'
+import { DotPattern } from '@gingga/ui/components/dot-pattern'
+import { cn } from '@gingga/ui/lib/utils'
 import {
   ArrowRightIcon,
   BarChart2Icon,
@@ -23,10 +26,7 @@ import {
   UserPlusIcon,
   ZapIcon,
 } from 'lucide-react'
-import { Button } from '@gingga/ui/components/button'
-import { Card } from '@gingga/ui/components/card'
-import { DotPattern } from '@gingga/ui/components/dot-pattern'
-import { cn } from '@gingga/ui/lib/utils'
+import { Link } from 'react-router'
 
 interface AgentInformationProps {
   agent: Agent

@@ -1,78 +1,80 @@
-import { BotIcon } from 'lucide-react'
-import { useRef } from 'react'
+import type { ClientEnv } from '~/lib/env.server'
 import { AnimatedBeam } from '@gingga/ui/components/animated-beam'
 import { Badge } from '@gingga/ui/components/badge'
 import { Card, CardContent, CardDescription, CardTitle } from '@gingga/ui/components/card'
 import { cn } from '@gingga/ui/lib/utils'
+import { BotIcon } from 'lucide-react'
+import { useRef } from 'react'
+import { useClientEnv } from '~/hooks/use-client-env'
 
 // Icons for integrations
 const Icons = {
-  user: () => (
+  user: (env: ClientEnv) => (
     <img
-      src={`${import.meta.env.VITE_ASSETS_URL || ''}/whirrls/person_icon.svg`}
+      src={`${env.VITE_ASSETS_URL || ''}/whirrls/person_icon.svg`}
       alt="User Icon"
       className="h-10 w-10"
     />
   ),
-  whatsapp: () => (
+  whatsapp: (env: ClientEnv) => (
     <img
-      src={`${import.meta.env.VITE_ASSETS_URL || ''}/company_logos/whatsapp.svg`}
+      src={`${env.VITE_ASSETS_URL || ''}/company_logos/whatsapp.svg`}
       alt="WhatsApp"
       className="-mt-2 h-10 w-10"
     />
   ),
-  slack: () => (
+  slack: (env: ClientEnv) => (
     <img
-      src={`${import.meta.env.VITE_ASSETS_URL || ''}/company_logos/facebook.svg`}
+      src={`${env.VITE_ASSETS_URL || ''}/company_logos/facebook.svg`}
       alt="Facebook"
       className="h-10 w-10"
     />
   ),
-  email: () => (
+  email: (env: ClientEnv) => (
     <img
-      src={`${import.meta.env.VITE_ASSETS_URL || ''}/company_logos/google_gmail.svg`}
+      src={`${env.VITE_ASSETS_URL || ''}/company_logos/google_gmail.svg`}
       alt="Gmail"
       className="h-10 w-10"
     />
   ),
-  googleSheets: () => (
+  googleSheets: (env: ClientEnv) => (
     <img
-      src={`${import.meta.env.VITE_ASSETS_URL || ''}/company_logos/google_docs.svg`}
+      src={`${env.VITE_ASSETS_URL || ''}/company_logos/google_docs.svg`}
       alt="Google Docs"
       className="h-10 w-10"
     />
   ),
-  notion: () => (
+  notion: (env: ClientEnv) => (
     <img
-      src={`${import.meta.env.VITE_ASSETS_URL || ''}/company_logos/notion.svg`}
+      src={`${env.VITE_ASSETS_URL || ''}/company_logos/notion.svg`}
       alt="Notion"
       className="h-10 w-10"
     />
   ),
-  stripe: () => (
+  stripe: (env: ClientEnv) => (
     <img
-      src={`${import.meta.env.VITE_ASSETS_URL || ''}/company_logos/google_drive.svg`}
+      src={`${env.VITE_ASSETS_URL || ''}/company_logos/google_drive.svg`}
       alt="Google Drive"
       className="h-10 w-10"
     />
   ),
-  analytics: () => (
+  analytics: (env: ClientEnv) => (
     <img
-      src={`${import.meta.env.VITE_ASSETS_URL || ''}/company_logos/google_calendar.svg`}
+      src={`${env.VITE_ASSETS_URL || ''}/company_logos/google_calendar.svg`}
       alt="Google Calendar"
       className="h-10 w-10"
     />
   ),
-  telegram: () => (
+  telegram: (env: ClientEnv) => (
     <img
-      src={`${import.meta.env.VITE_ASSETS_URL || ''}/company_logos/telegram.svg`}
+      src={`${env.VITE_ASSETS_URL || ''}/company_logos/telegram.svg`}
       alt="Telegram"
       className="h-10 w-10"
     />
   ),
-  chatbot: () => (
+  chatbot: (env: ClientEnv) => (
     <img
-      src={`${import.meta.env.VITE_ASSETS_URL || ''}/company_logos/chatbot.svg`}
+      src={`${env.VITE_ASSETS_URL || ''}/company_logos/chatbot.svg`}
       alt="Custom Chatbot"
       className="h-10 w-10"
     />
@@ -164,6 +166,8 @@ export function IntegrationCapabilities() {
     },
   ]
 
+  const env = useClientEnv()
+
   return (
     <div className="bg-muted/5 w-full py-20">
       <div className="container-marketing">
@@ -239,7 +243,7 @@ export function IntegrationCapabilities() {
                   ref={userRef}
                   className="bg-blank dark:bg-foreground border-border z-20 flex items-center justify-center rounded-sm border-2 p-2"
                 >
-                  {Icons.user()}
+                  {Icons.user(env)}
                 </div>
               </div>
 
@@ -250,7 +254,7 @@ export function IntegrationCapabilities() {
                   className="bg-secondary z-20 flex size-25 items-center justify-center rounded-sm border-2 p-0 shadow-[0_0_25px_-12px_rgba(0,0,0,0.8)]"
                 >
                   <img
-                    src={`${import.meta.env.VITE_ASSETS_URL}/automatas/agent_1.webp`}
+                    src={`${env.VITE_ASSETS_URL || ''}/automatas/agent_1.webp`}
                     alt="AI Agent"
                     className="size-full rounded-full object-cover"
                   />
@@ -271,7 +275,7 @@ export function IntegrationCapabilities() {
                     ref={tool.ref}
                     className="bg-blank dark:bg-foreground border-border z-20 flex h-12 w-12 items-center justify-center rounded-sm border-2 p-1"
                   >
-                    {tool.icon()}
+                    {tool.icon(env)}
                   </div>
                 </div>
               ))}
@@ -302,7 +306,7 @@ export function IntegrationCapabilities() {
                       // integration.name !== 'Web Chat' && 'border-border border',
                     )}
                   >
-                    {integration.icon()}
+                    {integration.icon(env)}
                   </div>
                   <CardTitle className="mb-2 text-xl">{integration.name}</CardTitle>
                   <CardDescription className={cn('text-center text-sm')}>

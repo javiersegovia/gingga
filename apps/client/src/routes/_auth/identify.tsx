@@ -14,9 +14,11 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router'
 import { toast } from 'sonner'
+import { useClientEnv } from '~/hooks/use-client-env'
 import { authClient } from '~/lib/auth/auth-client'
 
 export default function AuthPage() {
+  const env = useClientEnv()
   const form = useForm<z.infer<typeof SignInSchema>>({
     resolver: zodResolver(SignInSchema),
     defaultValues: {
@@ -29,7 +31,7 @@ export default function AuthPage() {
     await authClient.signIn.email(
       {
         ...data,
-        callbackURL: `${import.meta.env.VITE_SITE_URL}/chat`,
+        callbackURL: `${env.VITE_SITE_URL}/chat`,
         rememberMe: true,
       },
       {

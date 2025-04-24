@@ -1,8 +1,11 @@
-import { Link } from 'react-router'
-import { ArrowRight } from 'lucide-react'
 import { Button } from '@gingga/ui/components/button'
+import { ArrowRight } from 'lucide-react'
+import { Link } from 'react-router'
+import { useClientEnv } from '~/hooks/use-client-env'
 
 export function CtaSection() {
+  const env = useClientEnv()
+
   return (
     <div className="w-full bg-black py-48 text-white">
       <div className="container-marketing">
@@ -28,7 +31,7 @@ export function CtaSection() {
             <div className="rounded-base relative aspect-video w-full max-w-lg border-2 border-white/20 backdrop-blur-sm">
               <div className="inset-x-0 flex justify-center">
                 <img
-                  src={`${import.meta.env.VITE_ASSETS_URL || ''}/automatas/hero_5.webp`}
+                  src={`${env.VITE_ASSETS_URL || ''}/automatas/hero_5.webp`}
                   alt="AI Agent Squad"
                   className="rounded-base w-full drop-shadow-lg"
                 />

@@ -1,6 +1,6 @@
-import { Bot, FileQuestion, Presentation } from 'lucide-react'
 import { Badge } from '@gingga/ui/components/badge'
 import { Card, CardContent, CardDescription, CardTitle } from '@gingga/ui/components/card'
+import { Bot, FileQuestion, Presentation } from 'lucide-react'
 
 const processSteps = [
   {

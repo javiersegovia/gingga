@@ -1,16 +1,19 @@
 import { Link } from 'react-router'
+import { useClientEnv } from '~/hooks/use-client-env'
 
 interface AuthLayoutProps {
   children: React.ReactNode
 }
 
 export function AuthLayout({ children }: AuthLayoutProps) {
+  const env = useClientEnv()
+
   return (
     <div className="text-foreground flex min-h-screen divide-black md:divide-x-6 dark:bg-[#02362b]">
       {/* Right column with image */}
       <div className="hidden min-h-[100vh] flex-col overflow-hidden md:flex md:w-1/2">
         <img
-          src={`${import.meta.env.VITE_ASSETS_URL || ''}/automatas/footer_1.webp`}
+          src={`${env.VITE_ASSETS_URL || ''}/automatas/footer_1.webp`}
           alt="Acme Inc."
           className="h-full w-full object-cover"
         />
@@ -20,12 +23,12 @@ export function AuthLayout({ children }: AuthLayoutProps) {
       <div className="relative flex w-full flex-col items-center md:w-1/2">
         <Link to="/" className="mx-auto block self-start pt-2 md:mr-auto">
           <img
-            src={`${import.meta.env.VITE_ASSETS_URL}/logo/logo-dark-v2.png`}
+            src={`${env.VITE_ASSETS_URL}/logo/logo-dark-v2.png`}
             alt="Logo"
             className="hidden w-32 dark:block"
           />
           <img
-            src={`${import.meta.env.VITE_ASSETS_URL}/logo/logo-light-v2.png`}
+            src={`${env.VITE_ASSETS_URL}/logo/logo-light-v2.png`}
             alt="Logo"
             className="w-32 dark:hidden"
           />

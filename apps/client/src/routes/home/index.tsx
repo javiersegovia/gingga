@@ -1,7 +1,7 @@
 import type { NavigationItems } from '~/components/shared/navbar'
+import { Separator } from '@gingga/ui/components/separator'
 import { Footer } from '~/components/shared/footer'
 import { Navbar } from '~/components/shared/navbar'
-import { Separator } from '@gingga/ui/components/separator'
 import { AgenticEmployees } from './_components/agentic-employees'
 import { AgentsHero } from './_components/agents-hero'
 import { AgentsIntroduction } from './_components/agents-introduction'

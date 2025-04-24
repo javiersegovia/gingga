@@ -1,6 +1,3 @@
-import { Link } from 'react-router'
-import { Check } from 'lucide-react'
-import { useState } from 'react'
 import { Badge } from '@gingga/ui/components/badge'
 import { Button } from '@gingga/ui/components/button'
 import {
@@ -12,6 +9,9 @@ import {
 } from '@gingga/ui/components/card'
 import { Tabs, TabsList, TabsTrigger } from '@gingga/ui/components/tabs'
 import { cn } from '@gingga/ui/lib/utils'
+import { Check } from 'lucide-react'
+import { useState } from 'react'
+import { Link } from 'react-router'
 
 // Pricing constants - easy to change
 const PRICING = {

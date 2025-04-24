@@ -1,5 +1,7 @@
 import type { Route } from './+types/root'
 
+import type { ClientEnv } from '~/lib/env.server'
+import { Toaster } from '@gingga/ui/components/sonner'
 import {
   isRouteErrorResponse,
   Links,
@@ -8,9 +10,9 @@ import {
   Scripts,
   ScrollRestoration,
 } from 'react-router'
+import { clientEnv } from '~/lib/env.server'
 import { contextStorageMiddleware } from '~/middleware/context-storage.server'
 import './styles/app.css'
-import { Toaster } from '@gingga/ui/components/sonner'
 
 export const unstable_middleware = [contextStorageMiddleware]
 
@@ -27,6 +29,11 @@ export const links: Route.LinksFunction = () => [
   },
 ]
 
+export function loader() {
+  return {
+    ENV: clientEnv,
+  }
+}
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -48,14 +55,22 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export function ToasterWrapper() {
   // const { resolved } = useTheme()
-  return <Toaster position="top-center" theme={"light"} />
+  return <Toaster position="top-center" theme="light" />
 }
 
-export default function App() {
+export default function App({ loaderData }: { loaderData: { ENV: ClientEnv } }) {
   return (
     <>
       <Outlet />
       <ToasterWrapper />
+
+      {/* eslint-disable-next-line react-dom/no-dangerously-set-innerhtml */}
+      <script dangerouslySetInnerHTML={{
+        __html: `
+          window.ENV = ${JSON.stringify(loaderData.ENV)}
+        `,
+      }}
+      />
     </>
   )
 }
@@ -88,4 +103,12 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
       )}
     </main>
   )
+}
+
+declare global {
+  // Type for the public env available globally (server/client)
+  const ENV: ClientEnv
+  interface Window {
+    ENV: ClientEnv
+  }
 }

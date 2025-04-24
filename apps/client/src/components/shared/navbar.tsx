@@ -1,6 +1,3 @@
-import { Link } from 'react-router'
-import { ArrowRightIcon, Menu, X } from 'lucide-react'
-import { useState } from 'react'
 import { Button } from '@gingga/ui/components/button'
 import {
   NavigationMenu,
@@ -13,6 +10,10 @@ import {
 import { Separator } from '@gingga/ui/components/separator'
 // import { ThemeSwitch } from '@gingga/ui/components/theme-switch'
 import { cn } from '@gingga/ui/lib/utils'
+import { ArrowRightIcon, Menu, X } from 'lucide-react'
+import { useState } from 'react'
+import { Link } from 'react-router'
+import { useClientEnv } from '~/hooks/use-client-env'
 
 // Define types for navigation items
 export interface NavItem {
@@ -42,7 +43,7 @@ interface NavbarProps {
 
 export function Navbar({ navigation, variant = 'default' }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false)
-
+  const env = useClientEnv()
   return (
     <>
       <div className="h-16" />
@@ -71,12 +72,12 @@ export function Navbar({ navigation, variant = 'default' }: NavbarProps) {
             <div className="shrink-0">
               <Link to="/" className="flex items-center gap-2">
                 <img
-                  src={`${import.meta.env.VITE_ASSETS_URL || ''}/logo/logo-dark-v2.png`}
+                  src={`${env.VITE_ASSETS_URL || ''}/logo/logo-dark-v2.png`}
                   alt="Logo"
                   className="hidden w-40 dark:block"
                 />
                 <img
-                  src={`${import.meta.env.VITE_ASSETS_URL || ''}/logo/logo-light-v2.png`}
+                  src={`${env.VITE_ASSETS_URL || ''}/logo/logo-light-v2.png`}
                   alt="Logo"
                   className="w-40 dark:hidden"
                 />

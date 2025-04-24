@@ -1,14 +1,14 @@
-import { Link } from 'react-router'
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from '@gingga/ui/components/accordion'
-
 import { Badge } from '@gingga/ui/components/badge'
+
 import { Button } from '@gingga/ui/components/button'
 import { GridPattern } from '@gingga/ui/components/grid-pattern'
+import { Link } from 'react-router'
 
 const faqs = [
   {

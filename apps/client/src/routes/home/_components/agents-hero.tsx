@@ -1,8 +1,9 @@
-import { Link } from 'react-router'
-import { ArrowRightIcon, Clock, Zap } from 'lucide-react'
 import { Button } from '@gingga/ui/components/button'
 import { Marquee } from '@gingga/ui/components/marquee'
 import { cn } from '@gingga/ui/lib/utils'
+import { ArrowRightIcon, Clock, Zap } from 'lucide-react'
+import { Link } from 'react-router'
+import { useClientEnv } from '~/hooks/use-client-env'
 
 interface MarqueeItemProps {
   id: string | number
@@ -40,6 +41,8 @@ const marqueeItems: MarqueeItemProps[] = [
 ]
 
 export function AgentsHero() {
+  const env = useClientEnv()
+
   return (
     <>
       <section className="bg-brand-blue text-brand-blue-foreground w-full py-12 md:py-16 lg:py-24 dark:bg-black">
@@ -98,7 +101,7 @@ export function AgentsHero() {
             </div>
             <div className="mt-8 flex w-full justify-center md:mt-0 md:w-auto">
               <img
-                src={`${import.meta.env.VITE_ASSETS_URL || ''}/automatas/hero_1.webp`}
+                src={`${env.VITE_ASSETS_URL || ''}/automatas/hero_1.webp`}
                 alt="AI Agents Illustration"
                 className="w-auto max-w-xs scale-x-[-1] sm:max-w-sm md:max-w-md lg:max-w-xl"
               />

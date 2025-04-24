@@ -1,5 +1,5 @@
-import { Outlet } from "react-router";
-import { authMiddleware } from "~/middleware/auth.middleware";
+import { Outlet } from 'react-router'
+import { authMiddleware } from '~/middleware/auth.middleware'
 
 export const unstable_middleware = [authMiddleware]
 

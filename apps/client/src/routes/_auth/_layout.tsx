@@ -7,9 +7,10 @@ import { Loader2Icon } from 'lucide-react'
 import { useState } from 'react'
 import { Outlet, useNavigate } from 'react-router'
 import { toast } from 'sonner'
+import { useClientEnv } from '~/hooks/use-client-env'
 import { authClient } from '~/lib/auth/auth-client'
-import { AuthLayout } from './_components'
 import { anonymousMiddleware } from '~/middleware/auth.middleware'
+import { AuthLayout } from './_components'
 
 export const unstable_middleware = [anonymousMiddleware]
 
@@ -22,6 +23,7 @@ export async function loader({ request }: Route.LoaderArgs) {
 export default function RouteComponent({ loaderData: { activeRoute } }: Route.ComponentProps) {
   const navigate = useNavigate()
   const [loadingProvider, setLoadingProvider] = useState<'github' | 'google' | null>(null)
+  const env = useClientEnv()
 
   const handleTabChange = (value: string) => {
     navigate(`/${value}`)
@@ -35,7 +37,7 @@ export default function RouteComponent({ loaderData: { activeRoute } }: Route.Co
 
     await authClient.signIn.social({
       provider,
-      callbackURL: `${import.meta.env.VITE_SITE_URL}/chat`,
+      callbackURL: `${env.VITE_SITE_URL}/chat`,
     }, {
       onSuccess() {
         setLoadingProvider(null)

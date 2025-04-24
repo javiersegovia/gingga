@@ -1,9 +1,10 @@
-import { useState } from 'react'
 import { Badge } from '@gingga/ui/components/badge'
 import { Card, CardContent } from '@gingga/ui/components/card'
 import { GridPattern } from '@gingga/ui/components/grid-pattern'
 import { Slider } from '@gingga/ui/components/slider'
 import { cn } from '@gingga/ui/lib/utils'
+import { useState } from 'react'
+import { useClientEnv } from '~/hooks/use-client-env'
 
 export function ProblemSection() {
   const [hours, setHours] = useState(10)
@@ -18,6 +19,8 @@ export function ProblemSection() {
   const yearlyROI = (monthlySavings * 12) / monthlyAgentCost
   const roiPercentage = Math.floor(yearlyROI * 100)
 
+  const env = useClientEnv()
+
   const painPoints = [
     {
       title: 'Drowning in Repetition',
@@ -25,7 +28,7 @@ export function ProblemSection() {
         'Valuable hours lost that could be used to focus on... well, anything else.',
       icon: (
         <img
-          src={`${import.meta.env.VITE_ASSETS_URL || ''}/whirrls/time_icon.svg`}
+          src={`${env.VITE_ASSETS_URL || ''}/whirrls/time_icon.svg`}
           alt="Time Icon"
           className="dark:svg-white h-10 w-10 dark:opacity-50"
         />
@@ -38,7 +41,7 @@ export function ProblemSection() {
         'Every manual process requires human attention that costs 3-5x more than automation. Time is money, we should not waste it!',
       icon: (
         <img
-          src={`${import.meta.env.VITE_ASSETS_URL || ''}/whirrls/money_icon.svg`}
+          src={`${env.VITE_ASSETS_URL || ''}/whirrls/money_icon.svg`}
           alt="Money Icon"
           className="dark:svg-white h-10 w-10 dark:opacity-50"
         />
@@ -51,7 +54,7 @@ export function ProblemSection() {
         'Human error leads to variable outcomes in routine work. \nWe can do better!',
       icon: (
         <img
-          src={`${import.meta.env.VITE_ASSETS_URL || ''}/whirrls/alien_icon.svg`}
+          src={`${env.VITE_ASSETS_URL || ''}/whirrls/alien_icon.svg`}
           alt="Alien Icon"
           className="dark:svg-white h-10 w-10 dark:opacity-50"
         />
@@ -64,7 +67,7 @@ export function ProblemSection() {
         'Manual workflows delay responses to market opportunities. \nIf only we could respond faster...',
       icon: (
         <img
-          src={`${import.meta.env.VITE_ASSETS_URL || ''}/whirrls/bolt_icon.svg`}
+          src={`${env.VITE_ASSETS_URL || ''}/whirrls/bolt_icon.svg`}
           alt="Bolt Icon"
           className="dark:svg-white h-10 w-10 dark:opacity-50"
         />

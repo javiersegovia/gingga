@@ -1,10 +1,11 @@
+import type { BetterAuth } from '@gingga/api/lib/auth/auth.service'
 import type { DatabaseType } from '@gingga/db'
+import type { Session, User } from 'better-auth'
 import type { unstable_MiddlewareFunction, unstable_RouterContextProvider } from 'react-router'
 import { AsyncLocalStorage } from 'node:async_hooks'
+import { createServerAuth } from '@gingga/api/lib/auth/auth.service'
 import { createDatabaseClient } from '@gingga/db'
-import { createServerAuth, type BetterAuth } from '@gingga/api/lib/auth/auth.service'
 import { webEnv } from '~/lib/env.server'
-import type { Session, User } from 'better-auth'
 
 export type AuthSession = {
   isAuthenticated: boolean
@@ -63,7 +64,7 @@ export async function getAuthSession(): Promise<AuthSession> {
 
   if (!store.authSession) {
     const auth = getBetterAuth()
-    const request = getRequest()  
+    const request = getRequest()
     const data = await auth.api.getSession({
       headers: request.headers,
     })

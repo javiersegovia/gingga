@@ -1,5 +1,5 @@
-import { href, redirect } from "react-router"
-import { getAuthSession } from "~/middleware/context-storage.server"
+import { href, redirect } from 'react-router'
+import { getAuthSession } from '~/middleware/context-storage.server'
 
 export async function requireAuthSession() {
   const session = await getAuthSession()
