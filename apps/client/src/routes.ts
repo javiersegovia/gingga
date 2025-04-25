@@ -13,8 +13,34 @@ export default [
   ]),
 
   ...prefix('/chat', [
+
     layout('routes/chat/_layout.tsx', [
       index('routes/chat/index.tsx'),
+      route(':chatId', 'routes/chat/$chatId.tsx'),
+      // Agents routes (flat under /chat/agents)
+
+      ...prefix('/agents', [
+        index('routes/chat/agents/index.tsx'),
+        route('create', 'routes/chat/agents/create.tsx'),
+      ]),
+
+      ...prefix('/agent', [
+        route(':agentId', 'routes/chat/agent/$agentId/index.tsx'),
+        route(':agentId/chat/:chatId', 'routes/chat/agent/$agentId/chat/$chatId.tsx'),
+
+        // Index is handled above
+
+        // Define the 'edit' path segment and associate the layout directly
+        route(':agentId/edit', 'routes/chat/agent/$agentId/edit/_layout.tsx', [
+          // Child routes relative to the layout
+          index('routes/chat/agent/$agentId/edit/index.tsx'),
+          route('skills', 'routes/chat/agent/$agentId/edit/skills.tsx'),
+          route('instructions', 'routes/chat/agent/$agentId/edit/instructions.tsx'),
+          route('knowledge', 'routes/chat/agent/$agentId/edit/knowledge.tsx'),
+          route('workflows', 'routes/chat/agent/$agentId/edit/workflows.tsx'),
+        ]),
+
+      ]),
     ]),
   ]),
 

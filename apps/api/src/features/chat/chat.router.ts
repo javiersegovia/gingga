@@ -13,7 +13,7 @@ import {
   getChatMessageById,
   getChatMessagesByChatId,
   getChatsByUserId,
-  renameChatById, 
+  renameChatById,
   updateChatVisibilityById,
 } from './chat.service'
 
@@ -35,11 +35,10 @@ export const chatRouter = router({
       return chatMessages
     }),
 
-
   getUserChats: protectedProcedure
     .query(async ({ ctx }) => {
       const chats = await getChatsByUserId({ userId: ctx.user.id })
-      return { chats }
+      return chats
     }),
 
   renameChat: protectedProcedure
@@ -85,4 +84,4 @@ export const chatRouter = router({
     }),
 })
 
-export type ChatRouter = typeof chatRouter 
+export type ChatRouter = typeof chatRouter

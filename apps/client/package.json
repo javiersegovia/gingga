@@ -32,9 +32,11 @@
     "cross-env": "catalog:",
     "deepmerge": "catalog:",
     "fast-deep-equal": "catalog:",
+    "hono": "catalog:",
     "isbot": "catalog:",
     "lucide-react": "catalog:",
     "motion": "catalog:",
+    "nanoid": "catalog:",
     "react": "catalog:",
     "react-dom": "catalog:",
     "react-hook-form": "catalog:",
@@ -43,6 +45,7 @@
     "remark-gfm": "catalog:",
     "sonner": "catalog:",
     "superjson": "catalog:",
+    "usehooks-ts": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
