@@ -34,7 +34,7 @@ export function useRenameChatMutation() {
 
 export function useDeleteChatMutation() {
   const queryClient = useQueryClient()
-  const {revalidate} = useRevalidator()
+  const { revalidate } = useRevalidator()
   const trpc = useTRPC()
   return useMutation(trpc.chat.deleteChat.mutationOptions({
     onSuccess: async (data, variables) => {
@@ -63,11 +63,11 @@ export function useUpdateChatVisibilityMutation() {
 // Add hook for deleteTrailingMessages if needed
 export function useDeleteTrailingMessagesMutation() {
   const trpc = useTRPC()
-  const {revalidate} = useRevalidator()
+  const { revalidate } = useRevalidator()
   return useMutation(trpc.chat.deleteTrailingMessages.mutationOptions({
     onSuccess: () => {
       revalidate()
-    }
+    },
   }))
 }
 

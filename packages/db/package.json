@@ -9,6 +9,7 @@
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
     "dev": "turso dev --db-file local.db",
+    "preview": "turso dev --db-file local.db",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

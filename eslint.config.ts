@@ -35,6 +35,7 @@ export default antfu(
       '.vscode/**/*',
       '.husky/**/*',
       '**/.react-router/**/*',
+      '**/worker-configuration.d.ts',
     ],
   },
 )

@@ -5,6 +5,7 @@ import type { Route } from './+types/$chatId'
 import { getChatById } from '@gingga/api/features/chat/chat.service'
 import { href, redirect } from 'react-router'
 import { BaseChat } from '~/features/chat/components/base-chat'
+import { webEnv } from '~/lib/env.server'
 
 function convertToUIMessages(messages: Array<ChatMessage>): Array<UIMessage> {
   return messages.map(message => ({
@@ -40,11 +41,11 @@ export async function loader({ params }: Route.LoaderArgs) {
     return redirect(href('/chat'))
   }
 
-  return { chat }
+  return { chat, endpoint: `${webEnv.VITE_API_URL}/api/chat/default` }
 }
 
 export default function ChatIdRoute({ loaderData }: Route.ComponentProps) {
-  const { chat } = loaderData
+  const { chat, endpoint } = loaderData
 
   return (
     <>
@@ -52,10 +53,9 @@ export default function ChatIdRoute({ loaderData }: Route.ComponentProps) {
         key={chat.id}
         id={chat.id}
         initialMessages={convertToUIMessages(chat.messages)}
-        // todo: get from chat
-        selectedChatModel="gpt-4o"
         selectedVisibilityType={chat.visibility}
         isReadonly={false}
+        endpoint={endpoint}
       />
     </>
   )

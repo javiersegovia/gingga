@@ -1,17 +1,18 @@
 import type { Route } from './+types/index'
 import { nanoid } from 'nanoid'
-import { href, redirect, useParams } from 'react-router'
+import { href, redirect } from 'react-router'
 import { BaseChat } from '~/features/chat/components/base-chat'
+import { webEnv } from '~/lib/env.server'
 
 export function loader({ params }: Route.LoaderArgs) {
   if (!params.agentId) {
     return redirect(href('/chat/agents'), 302)
   }
-  return { agentId: params.agentId }
+  return { agentId: params.agentId, endpoint: `${webEnv.VITE_API_URL}/api/agents/custom/${params.agentId}` }
 }
 
-export default function AgentChatRoute() {
-  const { agentId } = useParams()
+export default function AgentChatRoute({ loaderData }: Route.ComponentProps) {
+  const { agentId, endpoint } = loaderData
   const chatId = nanoid()
 
   return (
@@ -20,7 +21,7 @@ export default function AgentChatRoute() {
         key={chatId}
         id={chatId}
         agentId={agentId}
-        endpoint={`/api/agents/custom/${agentId}`}
+        endpoint={endpoint}
         initialMessages={[]}
         selectedVisibilityType="private"
         isReadonly={false}

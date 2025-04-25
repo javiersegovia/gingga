@@ -15,6 +15,23 @@ export function getDB() {
   return c.var.db
 }
 
+export async function getAuthSession(h: Headers) {
+  const c = getContext<ContextEnv>()
+
+  if (c.var.authSession) {
+    return c.var.authSession
+  }
+
+  const auth = getAuth()
+  const data = await auth.api.getSession({
+    headers: h,
+  })
+
+  c.set('authSession', data ? { session: data?.session, user: data?.user } : null)
+
+  return c.var.authSession
+}
+
 export async function createContext(c: HonoContext) {
   const cookie = c.req.header('Cookie')
   const authorization = c.req.header('Authorization')

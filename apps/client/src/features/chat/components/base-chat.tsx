@@ -60,6 +60,7 @@ export function BaseChat({
     api: endpoint,
     body: { id, agentId, modelId: undefined },
     sendExtraMessageFields: true,
+    credentials: 'include',
     // experimental_throttle: 200,
     generateId: nanoid,
     initialMessages,

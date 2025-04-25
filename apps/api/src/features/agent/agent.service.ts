@@ -9,9 +9,9 @@ import { getDB } from '~/context' // Correct function name from context.ts
  * @param agentId The ID of the agent
  * @returns The agent configuration object or null if not found.
  */
-export async function getAgentById(agentId: string): Promise<Agent | null> {
+export async function getAgentById(agentId: string) {
   try {
-    const db = getDB() // Use the imported function
+    const db = getDB()
     const agent = await db.query.Agents.findFirst({
       where: eq(Agents.id, agentId),
       with: {

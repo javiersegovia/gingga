@@ -1,4 +1,5 @@
 import type { DatabaseType } from '@gingga/db'
+import type { Session, User } from 'better-auth'
 import type { BetterAuth } from '~/lib/auth/auth.service'
 import { trpcServer } from '@hono/trpc-server'
 import { Hono } from 'hono'
@@ -8,6 +9,8 @@ import { logger } from 'hono/logger'
 import { apiEnv } from '~/api-env'
 import { createContext } from '~/context'
 import { getAuth } from '~/lib/auth/auth.service'
+import { agentCustomRoute } from '~/routes/agents/$agentId'
+import { agentDefaultRoute } from '~/routes/agents/default'
 import { appRouter } from '~/trpc/routers'
 
 export interface ContextEnv {
@@ -15,6 +18,7 @@ export interface ContextEnv {
   Variables: {
     db: DatabaseType
     auth: BetterAuth
+    authSession: { session: Session, user: User } | null
   }
 }
 
@@ -41,6 +45,9 @@ app.use(
     createContext: (_, c) => createContext(c),
   }),
 )
+
+app.route('/api/chat/default', agentDefaultRoute)
+app.route('/api/agents/custom', agentCustomRoute)
 
 app.get('/', (c) => {
   return c.text('Hello Hono!')
