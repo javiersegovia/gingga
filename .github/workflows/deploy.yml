@@ -48,6 +48,7 @@ jobs:
           workingDirectory: ./apps/api
           environment: production
 
+      # We don't need to specify the environment here because it's already setup in the build step
       - name: Deploy Client Worker to Cloudflare
         uses: cloudflare/wrangler-action@v3
         with:
@@ -55,4 +56,3 @@ jobs:
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           packageManager: pnpm
           workingDirectory: ./apps/client
-          environment: production
