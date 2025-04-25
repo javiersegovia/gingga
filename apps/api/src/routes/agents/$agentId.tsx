@@ -180,7 +180,8 @@ agentCustomRoute.post('/:agentId', async (c) => {
           chatId: chat.id,
           dataStream,
           messages,
-          tools: activeTools,
+          tools: {},
+          // tools: activeTools,
           executions: {},
         })
 
@@ -190,7 +191,8 @@ agentCustomRoute.post('/:agentId', async (c) => {
           abortSignal: c.req.raw.signal,
           messages: [systemMessage, ...proccesedMessages],
 
-          tools: activeTools,
+          // tools: activeTools,
+          tools: {},
           experimental_generateMessageId: nanoid,
           maxSteps: 10,
           async onFinish({ response }) {

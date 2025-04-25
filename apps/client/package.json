@@ -20,6 +20,7 @@
     "@gingga/ui": "workspace:*",
     "@hookform/resolvers": "catalog:",
     "@openrouter/ai-sdk-provider": "catalog:",
+    "@radix-ui/react-slot": "catalog:",
     "@t3-oss/env-core": "catalog:",
     "@tanstack/react-form": "catalog:",
     "@tanstack/react-query": "catalog:",
