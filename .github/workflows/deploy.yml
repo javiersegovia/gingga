@@ -18,12 +18,12 @@ jobs:
       - name: Set up pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 9 # Use the pnpm version from your project/engine spec
+          version: 10.9.0 # Use the pnpm version from your project/engine spec
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # Use the Node.js version from your project/engine spec
+          node-version: 22.9.0 # Use the Node.js version from your project/engine spec
           cache: pnpm
 
       - name: Install dependencies
