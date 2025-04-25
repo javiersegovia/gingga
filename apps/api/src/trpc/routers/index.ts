@@ -1,6 +1,7 @@
 import { count } from '@gingga/db'
 import { Users } from '@gingga/db/schema'
 import { agentRouter } from '~/features/agent/agent.router'
+import { chatRouter } from '~/features/chat/chat.router'
 import { protectedProcedure, publicProcedure, router } from '../index'
 import { authRouter } from './auth.router'
 
@@ -10,6 +11,7 @@ export const appRouter = router({
   }),
   auth: authRouter,
   agent: agentRouter,
+  chat: chatRouter,
   privateData: protectedProcedure.query(async ({ ctx }) => {
     const usersCount = await ctx.db.select({ count: count() }).from(Users)
 

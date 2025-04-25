@@ -18,6 +18,7 @@
     "@gingga/db": "workspace:*",
     "@gingga/ui": "workspace:*",
     "@hono/trpc-server": "catalog:",
+    "@openrouter/ai-sdk-provider": "catalog:",
     "@react-email/components": "catalog:",
     "@t3-oss/env-core": "catalog:",
     "@trpc/server": "catalog:",

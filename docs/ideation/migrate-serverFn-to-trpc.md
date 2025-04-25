@@ -31,6 +31,12 @@ Based on the contents of `apps/web/src/features`:
 
 The following steps should be repeated for _each_ feature listed above. We will use the `agent` feature as a concrete example.
 
+**Important Rules for Migration:**
+
+- **No Extra Comments:** Do not add comments to the code beyond what is necessary for understanding complex logic. Avoid obvious comments.
+- **Preserve Schemas:** When moving schema files (`.schema.ts`), do **not** remove or modify existing fields. Migrate the schemas as they are. Only remove entire schemas if they are purely for UI/form logic and not used by any API endpoint.
+- **No New Queries/Mutations:** Only create tRPC procedures and corresponding client hooks for the existing server functions (`createServerFn`) found in the original `.api.ts` file. Do not introduce new queries or mutations that didn't have a server function counterpart.
+
 **Feature Example: `agent`**
 
 **1. Analyze Source Files (`apps/web/src/features/agent`):**
@@ -286,18 +292,9 @@ export function useDeleteAgentMutation() {
 // ... other hooks
 ```
 
-**8. Cleanup:**
-
-- Once the migration for the feature is complete and verified (including UI updates):
-  - Delete `apps/web/src/features/<FEATURE_NAME>/<FEATURE_NAME>.api.ts`.
-  - Delete `apps/web/src/features/<FEATURE_NAME>/<FEATURE_NAME>.query.ts`.
-  - Delete `apps/web/src/features/<FEATURE_NAME>/<FEATURE_NAME>.service.ts`.
-  - Delete `apps/web/src/features/<FEATURE_NAME>/<FEATURE_NAME>.schema.ts`.
-  - Delete `apps/web/src/features/<FEATURE_NAME>/<FEATURE_NAME>.types.ts` (if it existed).
-
 ## Repeat
 
-Repeat steps 1-9 for all other identified features.
+Repeat steps 1-8 for all other identified features.
 
 ---
 
