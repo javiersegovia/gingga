@@ -44,11 +44,15 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: deploy --filter=@gingga/api
+          packageManager: pnpm
+          workingDirectory: ./apps/api
+          command: deploy
 
       - name: Deploy Client Worker to Cloudflare
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: deploy --filter=@gingga/client
+          packageManager: pnpm
+          workingDirectory: ./apps/web
+          command: deploy
