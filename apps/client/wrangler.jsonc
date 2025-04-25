@@ -13,13 +13,18 @@
   "observability": {
     "enabled": true
   },
+
   "upload_source_maps": true,
+
   "vars": {
     "VALUE_FROM_CLOUDFLARE": "Hello from Cloudflare DEV"
   },
+
   "placement": { "mode": "smart" },
+
   "env": {
     "production": {
+      "name": "gingga-client",
       "vars": {
         "VALUE_FROM_CLOUDFLARE": "Hello from Cloudflare PROD"
       }

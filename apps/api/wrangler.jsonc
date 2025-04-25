@@ -14,7 +14,7 @@
   "env": {
     "production": {
       // Name suffix is often added automatically, but can be explicit
-      // "name": "gingga-api-production",
+      "name": "gingga-api"
       // Add any production-specific overrides here (e.g., different bindings, vars)
       // Wrangler will automatically load '.dev.vars.production' if it exists in apps/api
     }
