@@ -33,7 +33,8 @@ jobs:
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
-        run: pnpm run db:migrate --filter=@gingga/db
+        working-directory: ./packages/db # Change working directory
+        run: pnpm run db:migrate # Run the script directly within the package
 
       - name: Build Apps for Production
         run: pnpm run build:prod
