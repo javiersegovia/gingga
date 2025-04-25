@@ -39,7 +39,7 @@ export async function getAgentById(agentId: string) {
  */
 export async function createAgent(
   data: CreateAgentInput,
-): Promise<Agent> {
+) {
   try {
     const db = getDB() // Use the imported function
     const [agent] = await db

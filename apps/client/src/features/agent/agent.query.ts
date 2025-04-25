@@ -24,14 +24,10 @@ export function useCreateAgentMutation() {
   const queryClient = useQueryClient()
   const trpc = useTRPC()
   return useMutation(trpc.agent.createAgent.mutationOptions({
-    onSuccess: (createdAgent) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: trpc.agent.getAgents.queryKey(),
       })
-      queryClient.setQueryData(
-        trpc.agent.getAgentById.queryKey({ id: createdAgent.id }),
-        createdAgent,
-      )
       queryClient.invalidateQueries({
         queryKey: trpc.agent.getRecentChatsWithAgents.queryKey(),
       })
@@ -48,10 +44,9 @@ export function useUpdateAgentMutation() {
       queryClient.invalidateQueries({
         queryKey: trpc.agent.getAgents.queryKey(),
       })
-      queryClient.setQueryData(
-        trpc.agent.getAgentById.queryKey({ id: updatedAgent.id }),
-        updatedAgent,
-      )
+      queryClient.invalidateQueries({
+        queryKey: trpc.agent.getAgentById.queryKey({ id: updatedAgent.id }),
+      })
       queryClient.invalidateQueries({
         queryKey: trpc.agent.getRecentChatsWithAgents.queryKey(),
       })

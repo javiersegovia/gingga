@@ -44,4 +44,11 @@ export default [
     ]),
   ]),
 
+  route('/settings', 'routes/settings/_layout.tsx', [
+    route('account', 'routes/settings/account.tsx'),
+    route('integrations', 'routes/settings/integrations.tsx'),
+    route('preferences', 'routes/settings/preferences.tsx'),
+    route('contact', 'routes/settings/contact.tsx'),
+  ]),
+
 ] satisfies RouteConfig
