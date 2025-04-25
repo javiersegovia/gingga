@@ -1,7 +1,9 @@
 {
   "name": "@gingga/api",
   "exports": {
-    "./lib/auth/*": "./src/lib/auth/*.ts"
+    "./features/*": "./src/features/*.ts",
+    "./lib/*": "./src/lib/*.ts",
+    "./trpc/*": "./src/trpc/*.ts"
   },
   "scripts": {
     "predev": "pnpm run typegen",

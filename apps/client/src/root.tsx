@@ -2,6 +2,7 @@ import type { Route } from './+types/root'
 
 import type { ClientEnv } from '~/lib/env.server'
 import { Toaster } from '@gingga/ui/components/sonner'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import {
   isRouteErrorResponse,
   Links,
@@ -11,6 +12,7 @@ import {
   ScrollRestoration,
 } from 'react-router'
 import { clientEnv } from '~/lib/env.server'
+import { TRPCTanStackQueryProvider } from '~/lib/trpc/react'
 import { contextStorageMiddleware } from '~/middleware/context-storage.server'
 import './styles/app.css'
 
@@ -61,8 +63,12 @@ export function ToasterWrapper() {
 export default function App({ loaderData }: { loaderData: { ENV: ClientEnv } }) {
   return (
     <>
-      <Outlet />
-      <ToasterWrapper />
+      <TRPCTanStackQueryProvider API_URL={loaderData.ENV.VITE_API_URL}>
+        <Outlet />
+        <ToasterWrapper />
+
+        <ReactQueryDevtools buttonPosition="bottom-right" />
+      </TRPCTanStackQueryProvider>
 
       {/* eslint-disable-next-line react-dom/no-dangerously-set-innerhtml */}
       <script dangerouslySetInnerHTML={{
