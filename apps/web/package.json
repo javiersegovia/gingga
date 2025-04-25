@@ -3,10 +3,9 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "vinxi dev",
-    "build": "vinxi build",
-    "start": "vinxi start",
-    "typecheck": "tsc --noEmit"
+    "skip-dev": "vinxi dev",
+    "skip-build": "vinxi build",
+    "skip-start": "vinxi start"
   },
   "dependencies": {
     "@ai-sdk/openai": "catalog:",

@@ -1,16 +1,17 @@
 {
-  "name": "client",
+  "name": "@gingga/client",
   "type": "module",
-  "description": "Build a full-stack web application with React Router 7.",
+  "private": true,
   "scripts": {
-    "build": "react-router build",
-    "check": "tsc && react-router build && wrangler deploy --dry-run",
-    "deploy": "pnpm run build && wrangler deploy",
     "predev": "pnpm run typegen",
     "dev": "react-router dev",
-    "preview": "pnpm run build && vite preview",
+    "build": "react-router build",
+    "build:prod": "cross-env CLOUDFLARE_ENV=production react-router build",
+    "start": "vite preview",
+    "preview": "vite preview",
+    "deploy": "cross-env CLOUDFLARE_ENV=production wrangler deploy",
     "typegen": "wrangler types && react-router typegen",
-    "typecheck": "npm run typegen && tsc -b"
+    "typecheck": "pnpm run typegen && tsc -b"
   },
   "dependencies": {
     "@gingga/api": "workspace:*",
@@ -22,7 +23,7 @@
     "@tanstack/react-query": "catalog:",
     "@tanstack/react-query-devtools": "catalog:",
     "better-auth": "catalog:",
-    "dotenv": "catalog:",
+    "cross-env": "catalog:",
     "isbot": "catalog:",
     "lucide-react": "catalog:",
     "motion": "catalog:",
@@ -41,6 +42,7 @@
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
+    "dotenv": "catalog:",
     "tailwindcss": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",

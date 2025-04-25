@@ -23,6 +23,9 @@ const app = new Hono<ContextEnv>()
 app.use(logger())
 app.use(contextStorage())
 
+console.log('apiEnv.VITE_SITE_URL')
+console.log(apiEnv.VITE_SITE_URL)
+
 app.use(
   cors({
     origin: [apiEnv.VITE_SITE_URL],
@@ -31,6 +34,8 @@ app.use(
 )
 
 app.on(['POST', 'GET'], '/api/auth/*', (c) => {
+  console.log('c.req.raw')
+  console.log(c.req.raw)
   return getAuth().handler(c.req.raw)
 })
 

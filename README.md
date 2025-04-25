@@ -7,8 +7,8 @@ This repository contains the codebase for the Gingga project, structured as a mo
 The monorepo is organized into two main directories: `apps` and `packages`.
 
 - **`apps/`**: Contains the user-facing applications.
-  - `web`: The main web application built with TanStack Start, React, Tailwind CSS, and Shadcn/UI. Deployed on Vercel/Cloudflare.
-  - `api`: A Cloudflare Worker API built with Hono and tRPC, handling backend logic and authentication.
+  - `client`: The main web application built with React Router, Vite, React, Tailwind CSS, and Shadcn/UI. Hosted on Cloudflare Workers.
+  - `api`: API built with Hono and tRPC, handling backend logic and authentication. Hosted on Cloudflare Workers.
 - **`packages/`**: Contains shared libraries and configurations.
   - `db`: Drizzle ORM schemas, migrations, and database utilities using Turso (SQLite).
   - `ui`: Shared React UI components based on Shadcn/UI.
@@ -16,32 +16,29 @@ The monorepo is organized into two main directories: `apps` and `packages`.
 
 ## ✨ Core Technologies
 
-- **Monorepo Management**: [Turbo](https://turbo.build/)
-- **Runtime**: API [Workerd] / Web [Node.js](https://nodejs.org/) >= 20
-- **Package Manager**: [pnpm](https://pnpm.io/)
 - **Primary Language**: [TypeScript](https://www.typescriptlang.org/)
-- **Web Framework**: [TanStack Start](https://tanstack.com/start/latest/)
+- **Web Client**: [React Router](https://reactrouter.com/) + [Vite](https://vitejs.dev/)
 - **API Framework**: [Hono](https://hono.dev/)
 - **RPC**: [tRPC](https://trpc.io/)
 - **UI Framework**: [React](https://react.dev/) 19+
-- **Routing/State**: [TanStack Router](https://tanstack.com/router/latest), [TanStack Query](https://tanstack.com/query/latest)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/) v4+
-- **UI Components**: [Shadcn/UI](https://ui.shadcn.com/) (`packages/ui`)
-- **Database**: [Turso](https://turso.tech/) (Serverless SQLite)
-- **ORM**: [Drizzle ORM](https://orm.drizzle.team/) (`packages/db`)
+- **State**: [TanStack Query](https://tanstack.com/query/latest)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/) v4+ + [Shadcn/UI](https://ui.shadcn.com/) (`packages/ui`)
+- **Database**: [Turso](https://turso.tech/) (Serverless SQLite) + [Drizzle ORM](https://orm.drizzle.team/) (`packages/db`)
 - **Authentication**: [Better Auth](https://better-auth.com/)
 - **Validation**: [Zod](https://zod.dev/)
-- **Form Handling**: [React Hook Form](https://react-hook-form.com/) / [TanStack Form](https://tanstack.com/form/latest)
-- **Deployment**: Vercel (Web App), Cloudflare Workers (API)
+- **Form Handling**: [React Hook Form](https://react-hook-form.com/) (old) / [TanStack Form](https://tanstack.com/form/latest) (preferred)
+
 - **Linting/Formatting**: ESLint, Prettier
 - **Testing**: Vitest (planned)
+- **Monorepo Management**: [Turbo](https://turbo.build/)
+- **Runtime**: [Workerd with Node.js Compatibility](https://developers.cloudflare.com/workers/)
+- **Package Manager**: [pnpm](https://pnpm.io/)
 
 ## 📋 Prerequisites
 
-- [Pnpm](https://pnpm.io/installation)
+- [Pnpm](https://pnpm.io/installation) v10.9+
 - [Turso CLI](https://docs.turso.tech/cli/installation/)
-- Cloudflare Account (for API deployment and types)
-- Vercel Account (for Web App deployment)
+- Cloudflare Account (for deployment and types)
 - Environment variables set up (see below)
 
 ## 🛠️ Setup
@@ -61,10 +58,10 @@ The monorepo is organized into two main directories: `apps` and `packages`.
 
 3. **Configure Environment Variables:**
 
-   - Copy `.dev.vars.example` to `.dev.vars` in the `apps/api`.
-   - Copy `.env.example` to `.env` in the `apps/web`.
-   - Copy `.env.example` to `.env` in the `packages/db`.
-   - Fill in the required variables (API keys, database URLs, etc.).
+   - Copy `.dev.vars.example` to `.dev.vars` in `apps/api`. Create `.dev.vars.production` if needed for production API secrets.
+   - Copy `.dev.vars.example` to `.dev.vars` in `apps/client`. Create `.dev.vars.production` for production client variables.
+   - Copy `.env.example` to `.env` in `packages/db`.
+   - Fill in the required variables (API keys, database URLs, etc.). See individual example files for details.
 
 4. **Setup Local Database (Turso):**
 
@@ -86,110 +83,79 @@ The monorepo is organized into two main directories: `apps` and `packages`.
      pnpm run db:migrate
      ```
 
-   - (Optional) To run a local libSQL server using this file for development (useful if using libSQL-specific features):
+   - **Option 1: Use local file directly:** Ensure your `packages/db/.env` points `DATABASE_URL=./local.db`.
+   - **Option 2: Run local libSQL server (for libSQL features):**
 
      ```bash
      pnpm run dev # This runs 'turso dev --db-file local.db'
      ```
 
-     Connect your application to `http://127.0.0.1:8080` when using this method. Refer to the [Turso Local Development Docs](https://docs.turso.tech/local-development) for more details.
+     Connect your application to `http://127.0.0.1:8080` (set `DATABASE_URL` and `DATABASE_AUTH_TOKEN` accordingly in `.env` files). Refer to the [Turso Local Development Docs](https://docs.turso.tech/local-development).
 
-   - Alternatively, run `pnpx drizzle-kit studio` in `packages/db` to manage the database visually.
+   - Use `pnpm run db:studio` in `packages/db` to manage the database visually.
 
 ## 💻 Development
 
 To start all applications in development mode (uses Turbo):
 
 ```bash
+# Runs 'dev' script in both 'apps/api' and 'apps/client'
 pnpm dev
 ```
 
-This command runs the `dev` script defined in the `package.json` of each app/package concurrently.
-
-You can also run specific apps using Turbo filters if needed (e.g., if you only want to work on the web app):
-
-```bash
-# Start only the web app
-pnpm dev --filter=@gingga/web...
-```
+Turbo automatically handles running the necessary dev servers concurrently. The `api` will typically run on port `8787` and the `client` on `5173`.
 
 ## 🚀 Deployment
 
-Build all apps and packages (uses Turbo):
+Deployment involves building the applications for production and deploying them to Cloudflare Workers.
+
+**1. Local/Manual Deployment:**
+
+You can trigger a full production build and deployment of both the API and Client workers from the root directory using a single command:
 
 ```bash
-pnpm build
+# This command performs two main steps via Turbo:
+# 1. Runs the 'build:prod' script in relevant packages (e.g., apps/client).
+# 2. Runs the 'deploy' script in relevant packages (e.g., apps/api, apps/client).
+pnpm deploy
 ```
 
-Deployment varies by application:
+Make sure your Cloudflare Wrangler is logged in (`npx wrangler login`) and your `.dev.vars.production` files (or Cloudflare secrets for CI) contain the necessary environment variables.
 
-- **Web App (`apps/web`):**
-  Typically deployed via Vercel integration connected to this repository. Manual deployment might involve building (`pnpm run build --filter=@gingga/web...`) and using the Vercel CLI.
+**2. Automated Deployment (GitHub Actions):**
 
-- **API (`apps/api`):**
-  Deploy using Cloudflare Wrangler. You need to be in the `apps/api` directory or use a filter:
+The `.github/workflows/deploy.yml` workflow automates deployment on pushes to the `main` branch:
 
-  ```bash
-  # Option 1: Navigate and deploy
-  cd apps/api
-  pnpm run deploy
+- **Checkout & Setup:** Checks out the code, sets up Node.js and pnpm.
+- **Install Dependencies:** Runs `pnpm install --frozen-lockfile`.
+- **Database Migrations:** Runs `pnpm run db:migrate --filter=@gingga/db` using secrets for credentials.
+- **Build Production Apps:** Runs `pnpm run build:prod`. This uses Turbo to execute the `build:prod` script in necessary packages (like `apps/client`).
+- **Deploy API Worker:** Uses `cloudflare/wrangler-action` to execute the API's deploy command (`pnpm run deploy --filter=@gingga/api`).
+- **Deploy Client Worker:** Uses `cloudflare/wrangler-action` to execute the Client's deploy command (`pnpm run deploy --filter=@gingga/client`).
 
-  # Option 2: Deploy from root using filter
-  # pnpm run deploy --filter=@gingga/api... # Note: 'deploy' script needs to be defined in root or use wrangler directly
-  # Assuming wrangler is installed globally or via npx/pnpmx:
-  pnpmx wrangler deploy --config ./apps/api/wrangler.toml
-  ```
+This automated process ensures that database migrations and production builds are completed before the deployment commands are executed for each worker individually.
 
 ## 🛠️ Useful Commands
 
-Run these commands from the root directory:
+Run these commands from the **root directory** using `pnpm`:
 
-- **Linting (uses Turbo):**
-
-  ```bash
-  pnpm lint
-  pnpm lint:fix
-  ```
-
-- **Type Checking (specific to apps/web):**
-  Requires filtering as it's not a root script.
-
-  ```bash
-  pnpm run typecheck --filter=@gingga/web...
-  # Or run from within apps/web: cd apps/web && pnpm run typecheck
-  ```
-
-- **Generate Cloudflare Types (for `apps/api`):**
-  Requires filtering or running within the `apps/api` directory.
-
-  ```bash
-  pnpm run cf-typegen --filter=@gingga/api...
-  # Or run from within apps/api: cd apps/api && pnpm run cf-typegen
-  ```
-
-- **Database Migrations (`packages/db`):**
-  These commands need to be run within the `packages/db` directory (or using filters)
-
-  ```bash
-  # Generate migration files based on schema changes
-  pnpm run db:generate
-
-  # Apply migrations
-  pnpm run db:migrate
-
-  # Push schema changes directly (useful for development, resets DB)
-  pnpm run db:push
-
-  # Open Drizzle Studio
-  pnpm run db:studio
-  ```
+- `pnpm dev`: Starts development servers for all apps.
+- `pnpm build`: Builds all apps and packages using development configuration.
+- `pnpm build:prod`: Builds all apps and packages using production configuration.
+- `pnpm deploy`: Builds for production _and_ deploys apps (client & api) to Cloudflare.
+- `pnpm start`: Runs the built apps locally (behavior depends on app implementations).
+- `pnpm preview`: Previews the production build locally (client app).
+- `pnpm lint`: Lints the codebase across apps and packages.
+- `pnpm lint:fix`: Attempts to automatically fix linting issues.
+- `pnpm typecheck`: Runs TypeScript type checking across the monorepo.
 
 ## 🔧 Configuration Files
 
 - `turbo.json`: Turbo configuration for monorepo tasks.
 - `eslint.config.ts`: ESLint configuration.
-- `apps/web/app.config.ts`: TanStack Start configuration.
-- `apps/api/wrangler.jsonc`: Cloudflare Worker configuration.
+- `apps/client/vite.config.ts`: Vite configuration.
+- `apps/client/wrangler.jsonc`: Client CF Worker configuration.
+- `apps/api/wrangler.jsonc`: API CF Worker configuration.
 - `packages/db/drizzle.config.ts`: Drizzle ORM configuration.
 - `packages/tsconfig/base.json`: Base TypeScript configuration.
 

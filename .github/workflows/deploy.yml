@@ -1,0 +1,53 @@
+name: Deploy Production
+
+on:
+  push:
+    branches: [main] # Trigger deployment only on pushes to the main branch
+
+jobs:
+  deploy:
+    name: Deploy Production Worker
+    runs-on: ubuntu-latest
+    # Link to GitHub environment for potential rules/secrets later
+    environment: production
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9 # Use the pnpm version from your project/engine spec
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Use the Node.js version from your project/engine spec
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run Database Migrations
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
+        run: pnpm run db:migrate --filter=@gingga/db
+
+      - name: Build Apps for Production
+        run: pnpm run build:prod
+
+      - name: Deploy API Worker to Cloudflare
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy --filter=@gingga/api
+
+      - name: Deploy Client Worker to Cloudflare
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy --filter=@gingga/client

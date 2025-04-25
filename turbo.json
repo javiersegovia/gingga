@@ -2,9 +2,13 @@
   "$schema": "./node_modules/turbo/schema.json",
   "envMode": "loose",
   "tasks": {
+    "build:prod": {
+      "dependsOn": ["^build:prod"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*", ".dev.vars.production"]
+    },
     "build": {
       "dependsOn": ["^build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*", ".dev.vars*"]
+      "inputs": ["$TURBO_DEFAULT$", ".env*", ".dev.vars"]
     },
     "lint": {
       "dependsOn": ["^lint"]
@@ -15,6 +19,17 @@
     "dev": {
       "cache": false,
       "persistent": true
+    },
+    "start": {
+      "cache": false,
+      "persistent": true
+    },
+    "preview": {
+      "cache": false,
+      "persistent": true
+    },
+    "deploy": {
+      "dependsOn": ["^build:prod"]
     },
     "db:push": {
       "cache": false,

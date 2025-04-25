@@ -12,11 +12,14 @@
   "scripts": {
     "prepare": "husky",
     "dev": "turbo dev",
+    "start": "turbo start",
+    "preview": "turbo preview",
+    "deploy": "turbo deploy",
     "build": "turbo build",
+    "build:prod": "turbo run build:prod",
     "lint": "eslint \"apps/**/*.{js,jsx,ts,tsx}\" \"packages/**/*.{js,jsx,ts,tsx}\"",
     "lint:fix": "eslint --fix \"apps/**/*.{js,jsx,ts,tsx}\" \"packages/**/*.{js,jsx,ts,tsx}\"",
-    "typecheck": "turbo run typecheck",
-    "db:dev": "turbo run @gingga/db#dev"
+    "typecheck": "turbo run typecheck"
   },
   "devDependencies": {
     "@antfu/eslint-config": "catalog:",

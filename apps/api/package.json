@@ -4,13 +4,17 @@
     "./lib/auth/*": "./src/lib/auth/*.ts"
   },
   "scripts": {
+    "predev": "pnpm run typegen",
     "dev": "wrangler dev",
-    "deploy": "wrangler deploy --minify",
-    "typegen": "wrangler types",
-    "typecheck": "tsc"
+    "start": "wrangler dev",
+    "preview": "wrangler dev --env production",
+    "deploy": "wrangler deploy --minify --env production",
+    "typecheck": "pnpm run typegen && tsc",
+    "typegen": "wrangler types"
   },
   "dependencies": {
     "@gingga/db": "workspace:*",
+    "@gingga/ui": "workspace:*",
     "@hono/trpc-server": "catalog:",
     "@react-email/components": "catalog:",
     "@t3-oss/env-core": "catalog:",
