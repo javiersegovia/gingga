@@ -8,14 +8,16 @@ const requestHandler = createRequestHandler(
   import.meta.env.MODE,
 )
 
-const app = new Hono()
-app.use(contextStorage())
+export interface ContextEnv {
+  Bindings: Cloudflare.Env
+}
 
-// Handle React Router requests
-app.get('*', async (c) => {
-  const context = new Map([[CloudflareContext, { env: c.env, ctx: c.executionCtx }]])
-  return requestHandler(c.req.raw, context)
-})
+const app = new Hono<ContextEnv>()
+  .use(contextStorage())
+  .all('*', async (c) => {
+    const context = new Map([[CloudflareContext, { env: c.env, ctx: c.executionCtx }]])
+    return requestHandler(c.req.raw, context)
+  })
 
 export default {
   fetch: app.fetch,

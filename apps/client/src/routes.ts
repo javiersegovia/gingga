@@ -5,6 +5,10 @@ export default [
   index('routes/home/index.tsx'),
   route('test', 'routes/test.tsx'),
 
+  ...prefix('actions', [
+    route('update-theme', 'routes/_actions/update-theme.ts'),
+  ]),
+
   layout('routes/_auth/_layout.tsx', [
     route('identify', 'routes/_auth/identify.tsx'),
     route('register', 'routes/_auth/register.tsx'),

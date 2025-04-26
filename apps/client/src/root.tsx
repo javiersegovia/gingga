@@ -10,8 +10,10 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useRouteLoaderData,
 } from 'react-router'
 import { clientEnv } from '~/lib/env.server'
+import { getTheme } from '~/lib/theme.server'
 import { TRPCTanStackQueryProvider } from '~/lib/trpc/react'
 import { contextStorageMiddleware } from '~/middleware/context-storage.server'
 import './styles/app.css'
@@ -31,15 +33,18 @@ export const links: Route.LinksFunction = () => [
   },
 ]
 
-export function loader() {
+export async function loader() {
+  const theme = await getTheme()
   return {
     ENV: clientEnv,
+    theme,
   }
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const loaderData = useRouteLoaderData<typeof loader>('root')
   return (
-    <html lang="en">
+    <html lang="en" className={loaderData?.theme ?? 'system'} data-theme={loaderData?.theme ?? 'system'}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />

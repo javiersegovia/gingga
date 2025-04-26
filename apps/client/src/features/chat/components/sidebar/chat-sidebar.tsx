@@ -35,7 +35,7 @@ import {
 } from 'lucide-react'
 import { Fragment, Suspense, useState } from 'react'
 import { href, Link } from 'react-router'
-// import { ThemeSwitch } from '@gingga/ui/components/theme-switch'
+import { ThemeSwitch } from '~/components/ui/theme-switch'
 import { useGetRecentAgentsQuery } from '~/features/agent/agent.query'
 import { useGetUserChatsQuery } from '~/features/chat/chat.query'
 import { useClientEnv } from '~/hooks/use-client-env'
@@ -92,6 +92,7 @@ export function ChatSidebar() {
       <SidebarFooter>
         <div className="flex gap-4">
           <NavUser user={authData?.user ?? null} />
+          <ThemeSwitch />
         </div>
       </SidebarFooter>
     </Sidebar>

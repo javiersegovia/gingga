@@ -119,7 +119,7 @@
     var(--shadow-color, var(--shadow-border));
 }
 
-[data-theme="dark"] {
+.dark, [data-theme='dark'] {
   --background: #0c0c0d;
   --foreground: #e6e6e6;
   --card: #000000;

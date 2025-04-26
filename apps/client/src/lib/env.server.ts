@@ -1,3 +1,4 @@
+/* eslint-disable ts/no-explicit-any -- is fine here as we are validating the env */
 import { configEnv } from '@gingga/config/config-env'
 import { dbEnv } from '@gingga/db/db-env'
 import { createEnv } from '@t3-oss/env-core'
@@ -16,7 +17,7 @@ export const webEnv = createEnv({
   server: {
     // Web-specific server variables can go here if needed in the future
   },
-  runtimeEnv: { ...cloudflareEnv },
+  runtimeEnv: { ...cloudflareEnv as any },
   skipValidation: !!import.meta.env.SKIP_ENV_VALIDATION,
 })
 
@@ -29,7 +30,7 @@ export const clientEnv = createEnv({
     VITE_SUPPORT_EMAIL: z.string().min(1),
   },
   server: {},
-  runtimeEnv: { ...cloudflareEnv },
+  runtimeEnv: { ...cloudflareEnv as any },
   skipValidation: !!import.meta.env.SKIP_ENV_VALIDATION,
 })
 
