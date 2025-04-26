@@ -1,86 +1,51 @@
-import type { loader as rootLoader } from '~/root'
-import type { action as themeAction } from '~/routes/_actions/update-theme'
-import { Button } from '@gingga/ui/components/button'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@gingga/ui/components/dropdown-menu'
-import { Switch } from '@gingga/ui/components/switch'
-import { MoonIcon, SunIcon } from 'lucide-react'
-import { useCallback } from 'react'
-import { href, useFetcher, useRouteLoaderData } from 'react-router'
-
-const THEME_INPUT_NAME = 'color-scheme'
-type ThemeMode = 'light' | 'dark' | 'system'
+import { Label } from '@gingga/ui/components/label'
+import { RadioGroup, RadioGroupItem } from '@gingga/ui/components/radio-group'
+import { cn } from '@gingga/ui/lib/utils'
+import { MonitorIcon, MoonIcon, SunIcon } from 'lucide-react'
+import { useColorScheme } from '~/hooks/use-color-scheme'
 
 export function ThemeSwitch() {
-  const loaderData = useRouteLoaderData<typeof rootLoader>('root')
-  const isDark = loaderData?.theme === 'dark'
-  const fetcher = useFetcher<typeof themeAction>()
-
-  const handleThemeChange = useCallback(
-    (isChecked: boolean) => {
-      const formData = new FormData()
-      formData.append(THEME_INPUT_NAME, isChecked ? 'dark' : 'light')
-      fetcher.submit(formData, {
-        method: 'post',
-        action: href('/actions/update-theme'),
-      })
-    },
-    [fetcher.submit],
-  )
+  const [color, setColorScheme] = useColorScheme()
 
   return (
-    <div className="flex items-center justify-center">
-      <Switch
-        variant="theme"
-        checked={isDark}
-        onCheckedChange={handleThemeChange}
-        thumbIcon="theme"
-      />
-    </div>
-  )
-}
-
-export function ThemeMenu(): React.JSX.Element {
-  const fetcher = useFetcher<typeof themeAction>()
-
-  const handleThemeChange = useCallback(
-    (theme: ThemeMode) => {
-      const formData = new FormData()
-      formData.append(THEME_INPUT_NAME, theme)
-
-      fetcher.submit(formData, {
-        method: 'post',
-        action: href('/actions/update-theme'),
-      })
-    },
-    [fetcher.submit],
-  )
-
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon">
-          <SunIcon
-            className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"
-            aria-hidden="true"
-          />
-          <MoonIcon
-            className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
-            aria-hidden="true"
-          />
-          <span className="sr-only">Toggle Theme</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem className="cursor-pointer" onClick={() => handleThemeChange('light')}>
-          Light
-        </DropdownMenuItem>
-        <DropdownMenuItem className="cursor-pointer" onClick={() => handleThemeChange('dark')}>
-          Dark
-        </DropdownMenuItem>
-        <DropdownMenuItem className="cursor-pointer" onClick={() => handleThemeChange('system')}>
-          System
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <RadioGroup
+      className="inline-flex h-7 items-center gap-0 justify-center rounded-lg bg-muted p-1 text-muted-foreground"
+      value={color}
+      onValueChange={setColorScheme}
+    >
+      <Label
+        htmlFor="system"
+        className={cn(
+          'inline-flex m-0 items-center justify-center whitespace-nowrap rounded-md p-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 cursor-pointer',
+          'has-[>[data-state=checked]]:bg-background has-[>[data-state=checked]]:text-foreground dark:has-[>[data-state=checked]]:text-primary',
+        )}
+      >
+        <RadioGroupItem value="system" id="system" className="sr-only" />
+        <MonitorIcon className="h-4 w-4" />
+        <span className="sr-only">System</span>
+      </Label>
+      <Label
+        htmlFor="light"
+        className={cn(
+          'inline-flex m-0 items-center justify-center whitespace-nowrap rounded-md p-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 cursor-pointer',
+          'has-[>[data-state=checked]]:bg-background has-[>[data-state=checked]]:text-foreground dark:has-[>[data-state=checked]]:text-primary',
+        )}
+      >
+        <RadioGroupItem value="light" id="light" className="sr-only" />
+        <SunIcon className="h-4 w-4" />
+        <span className="sr-only">Light</span>
+      </Label>
+      <Label
+        htmlFor="dark"
+        className={cn(
+          'inline-flex m-0 items-center justify-center whitespace-nowrap rounded-md p-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 cursor-pointer',
+          'has-[>[data-state=checked]]:bg-background has-[>[data-state=checked]]:text-foreground dark:has-[>[data-state=checked]]:text-primary',
+        )}
+      >
+        <RadioGroupItem value="dark" id="dark" className="sr-only" />
+        <MoonIcon className="h-4 w-4" />
+        <span className="sr-only">Dark</span>
+      </Label>
+    </RadioGroup>
   )
 }

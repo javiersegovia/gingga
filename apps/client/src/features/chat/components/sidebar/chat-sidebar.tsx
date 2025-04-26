@@ -59,12 +59,12 @@ export function ChatSidebar() {
             <img
               src={`${env.VITE_ASSETS_URL}/logo/logo-dark-v2.png`}
               alt="Logo"
-              className="hidden w-32 dark:block"
+              className="w-32 hidden dark:block"
             />
             <img
               src={`${env.VITE_ASSETS_URL}/logo/logo-light-v2.png`}
               alt="Logo"
-              className="w-32 dark:hidden"
+              className="w-32 block dark:hidden"
             />
           </Link>
         </div>
@@ -90,7 +90,7 @@ export function ChatSidebar() {
       </SidebarContent>
 
       <SidebarFooter>
-        <div className="flex gap-4">
+        <div className="flex items-center gap-2">
           <NavUser user={authData?.user ?? null} />
           <ThemeSwitch />
         </div>
@@ -289,7 +289,7 @@ function NavUser({ user }: NavUserProps) {
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
                     <span className="truncate font-semibold">{user.name ?? user.email}</span>
-                    <span className="truncate text-xs">Account Settings</span>
+                    <span className="truncate text-xs">Free</span>
                   </div>
                 </SidebarMenuButton>
               </Link>

@@ -11,11 +11,11 @@
     "prefix": ""
   },
   "aliases": {
-    "components": "@gingga/ui/components",
-    "ui": "@gingga/ui/components",
-    "utils": "@gingga/ui/lib/utils",
-    "hooks": "@gingga/ui/hooks",
-    "lib": "@gingga/ui/lib"
+    "components": "@gingga/ui/src/components",
+    "ui": "@gingga/ui/src/components",
+    "utils": "@gingga/ui/src/lib/utils",
+    "hooks": "@gingga/ui/src/hooks",
+    "lib": "@gingga/ui/src/lib"
   },
   "iconLibrary": "lucide"
 }
