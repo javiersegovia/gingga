@@ -3,6 +3,7 @@ import { Users } from '@gingga/db/schema'
 import { agentRouter } from '~/features/agent/agent.router'
 import { chatRouter } from '~/features/chat/chat.router'
 import { composioRouter } from '~/features/composio/composio.router'
+import { contactRouter } from '~/trpc/routers/contact.router'
 import { protectedProcedure, publicProcedure, router } from '../index'
 import { authRouter } from './auth.router'
 
@@ -14,6 +15,7 @@ export const appRouter = router({
   agent: agentRouter,
   chat: chatRouter,
   composio: composioRouter,
+  contact: contactRouter,
   privateData: protectedProcedure.query(async ({ ctx }) => {
     const usersCount = await ctx.db.select({ count: count() }).from(Users)
 

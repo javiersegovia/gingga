@@ -4,6 +4,7 @@ import { index, layout, prefix, route } from '@react-router/dev/routes'
 export default [
   index('routes/home/index.tsx'),
   route('test', 'routes/test.tsx'),
+  route('contact', 'routes/contact.tsx'),
 
   ...prefix('actions', [
     route('update-theme', 'routes/_actions/update-theme.ts'),
