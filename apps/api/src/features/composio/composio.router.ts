@@ -1,4 +1,5 @@
 import { TRPCError } from '@trpc/server'
+import { apiEnv } from '~/api-env'
 import { protectedProcedure, publicProcedure, router } from '~/trpc'
 import {
   DeleteConnectionSchema,
@@ -99,7 +100,7 @@ export const composioRouter = router({
           userId,
           integrationId: input.integrationId,
           // Assuming VITE_SITE_URL is accessible via env in api context
-          redirectUri: `${env.VITE_SITE_URL}/settings/integrations`,
+          redirectUri: `${apiEnv.VITE_SITE_URL}/settings/integrations`,
         })
         return result // Should return { redirectUrl: string }
       }
