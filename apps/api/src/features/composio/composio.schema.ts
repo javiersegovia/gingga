@@ -66,7 +66,7 @@ export const ComposioToolNames = [
 export const ComposioToolNameEnum = z.enum(ComposioToolNames)
 export type ComposioToolName = z.infer<typeof ComposioToolNameEnum>
 
-// Integration details used by our UI
+// Integration details for API layer (similar to UI but may differ slightly)
 export interface ComposioIntegration {
   label: string
   appName: ComposioAppName
@@ -80,12 +80,16 @@ export interface ComposioIntegration {
   image?: string
 }
 
-// Flattened type for connection information returned to our API/UI
+// Connection information relevant to the API layer
 export interface UserConnection {
   id: string
-  appName: string | null
+  appName: ComposioAppName | null // Allow null explicitly
+  appUniqueId: string | null // Assuming this can also be null from SDK
   status: string
   createdAt: string
+  integrationId: string
+  logo?: string | null
+  isDisabled?: boolean | null
   enabled?: boolean
   deleted?: boolean
 }
@@ -93,24 +97,21 @@ export interface UserConnection {
 /** Here we add static information about the integrations */
 
 /**
- * Schema for initiating a new connection.
- * Requires the `appName` to specify which integration to connect to.
+ * Input schema for initiating a new connection.
  */
 export const InitiateConnectionSchema = z.object({
   integrationId: z.string().min(1, 'Integration ID cannot be empty'),
 })
 
 /**
- * Schema for deleting an existing connection.
- * Requires the `connectionId` of the connection to be deleted.
+ * Input schema for deleting an existing connection.
  */
 export const DeleteConnectionSchema = z.object({
   connectionId: z.string().min(1, 'Connection ID cannot be empty'),
 })
 
 /**
- * Schema for retrieving details of a specific integration.
- * Requires the `appName` of the integration.
+ * Input schema for retrieving details of a specific integration.
  */
 export const GetIntegrationSchema = z.object({
   appName: ComposioAppNameEnum,

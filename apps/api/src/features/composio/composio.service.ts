@@ -5,7 +5,6 @@ import type {
 } from './composio.schema'
 
 import {
-  Composio,
   COMPOSIO_SDK_ERROR_CODES,
   ComposioError,
   VercelAIToolSet,
@@ -23,38 +22,6 @@ export function getVercelToolset({ entityId }: { entityId?: string | null }): Ve
     throw new Error('Could not initialize Composio SDK.')
   }
 }
-
-// // Helper to check if the user already has an active connection for a given app
-// async function hasActiveConnection({
-//   userId,
-//   integrationId,
-//   toolset,
-// }: {
-//   userId: string
-//   integrationId: string
-//   toolset: VercelAIToolSet
-// }): Promise<boolean> {
-//   try {
-//     const { items } = await toolset.client.connectedAccounts.list({ entityId: userId })
-//     return (
-//       items?.some(
-//         (conn) =>
-//           conn.integrationId === integrationId && conn.status?.toUpperCase() === 'ACTIVE',
-//       ) || false
-//     )
-//   } catch (error) {
-//     if (
-//       error instanceof ComposioError &&
-//       (error.errCode === COMPOSIO_SDK_ERROR_CODES.SDK.NO_CONNECTED_ACCOUNT_FOUND ||
-//         error.message.includes('entity not found'))
-//     ) {
-//       return false
-//     }
-//     throw error
-//   }
-// }
-
-// --- Service Functions ---
 
 function getIntegrationsInfo(): Record<
   ComposioAppName,
@@ -146,6 +113,7 @@ export async function getComposioIntegrationByAppName(appName: ComposioAppName) 
 /**
  * Retrieves all active Composio connections for a given user (entityId).
  * Maps the SDK response to the UserConnection interface.
+ * The userId is now obtained from the context within the router procedure.
  */
 export async function getUserComposioConnections(
   userId: string,
@@ -159,7 +127,7 @@ export async function getUserComposioConnections(
     // )
     return sdkConnections.map(conn => ({
       id: conn.id,
-      appName: conn.appName ?? null,
+      appName: conn.appName as ComposioAppName | null,
       appUniqueId: conn.appUniqueId ?? null,
       status: conn.status,
       createdAt: conn.createdAt,
@@ -193,6 +161,7 @@ export async function getUserComposioConnections(
 /**
  * Initiates a new Composio connection for a user and a specific app.
  * Returns the redirect URL for the OAuth flow.
+ * userId is passed from the router context.
  */
 export async function initiateComposioConnection({
   userId,
@@ -204,10 +173,8 @@ export async function initiateComposioConnection({
   redirectUri: string
 }): Promise<{ redirectUrl: string }> {
   const toolset = getVercelToolset({ entityId: userId })
+
   try {
-    // console.log(
-    //   `[Composio Service] Initiating connection for user ${userId}, integration ${integrationId}...`,
-    // )
     const connectionRequest = await toolset.client.connectedAccounts.initiate({
       entityId: userId,
       integrationId,
@@ -226,47 +193,38 @@ export async function initiateComposioConnection({
     return { redirectUrl: connectionRequest.redirectUrl }
   }
   catch (error) {
-    // console.error(
-    //   `[Composio Service] Error initiating connection for user ${userId}, integration ${integrationId}:`,
-    //   error,
-    // )
-    if (error instanceof Error && error.message.includes('already exists')) {
-      throw error
+    if (error instanceof ComposioError) {
+      throw new TypeError(
+        `Composio error: ${error.message} (Code: ${error.errCode})`,
+      )
     }
-    throw new Error(`Failed to initiate connection process for ${integrationId}.`)
+    throw new Error('Failed to initiate connection with Composio.')
   }
 }
 
 /**
- * Deletes a specific Composio connection by its ID.
+ * Deletes a Composio connection by its ID.
+ * Does not require userId as connectionId is globally unique (within Composio).
  */
 export async function deleteUserComposioConnection(
   connectionId: string,
 ): Promise<boolean> {
-  // const toolset = getVercelToolset({ entityId: undefined })
-  // console.log(`[Composio Service] Attempting deletion of connection ${connectionId}...`)
-
-  const composio = new Composio({ apiKey: apiEnv.COMPOSIO_API_KEY })
+  const toolset = getVercelToolset({ entityId: undefined })
 
   try {
-    await composio.connectedAccounts.delete({ connectedAccountId: connectionId })
-
-    // console.log(`[Composio Service] Successfully deleted connection ${connectionId}.`)
-
+    await toolset.client.connectedAccounts.delete({
+      connectedAccountId: connectionId,
+    })
     return true
   }
   catch (error) {
-    // console.error(`[Composio Service] Error deleting connection ${connectionId}:`, error)
     if (
       error instanceof ComposioError
       && (error.errCode === COMPOSIO_SDK_ERROR_CODES.SDK.NO_CONNECTED_ACCOUNT_FOUND
         || error.message.includes('not found'))
     ) {
-      // console.warn(
-      //   `[Composio Service] Connection ${connectionId} not found during deletion attempt.`,
-      // )
-      throw new Error(`Connection with ID ${connectionId} not found.`)
+      throw new Error('Connection not found.')
     }
-    throw new Error('Failed to delete the connection from Composio.')
+    throw new Error('Failed to delete connection.')
   }
 }
