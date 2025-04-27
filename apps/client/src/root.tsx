@@ -1,7 +1,9 @@
+// apps/client/src/root.tsx
 import type { Route } from './+types/root'
 
 import type { ClientEnv } from '~/lib/env.server'
 import { Toaster } from '@gingga/ui/components/sonner'
+import { dehydrate } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import {
   isRouteErrorResponse,
@@ -15,10 +17,16 @@ import {
 import { clientEnv } from '~/lib/env.server'
 import { getTheme } from '~/lib/theme.server'
 import { TRPCTanStackQueryProvider } from '~/lib/trpc/react'
-import { contextStorageMiddleware } from '~/middleware/context-storage.server'
+import { sessionMiddleware } from '~/middleware/auth.middleware'
+// import { contextStorageMiddleware } from '~/middleware/context-storage.server'
+import { getQueryClient, honoContextMiddleware } from '~/middleware/context-hono.server'
+import '@fontsource-variable/outfit/wght.css'
+import '@fontsource-variable/unbounded/wght.css'
+import '@fontsource-variable/geist/wght.css'
+import '@fontsource-variable/plus-jakarta-sans/wght.css'
 import './styles/app.css'
 
-export const unstable_middleware = [contextStorageMiddleware]
+export const unstable_middleware = [honoContextMiddleware, sessionMiddleware]
 
 export const links: Route.LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
@@ -35,9 +43,11 @@ export const links: Route.LinksFunction = () => [
 
 export async function loader() {
   const theme = await getTheme()
+  const queryClient = getQueryClient()
   return {
     ENV: clientEnv,
     theme,
+    dehydratedState: dehydrate(queryClient),
   }
 }
 

@@ -1,19 +1,14 @@
-// TODO: Solve this! We need to check how to create the caller for the server
-// _______________________________________________________________________
+import { appRouter } from '@gingga/api/trpc/routers/index'
+import { createTRPCOptionsProxy } from '@trpc/tanstack-react-query'
+import { getQueryClient } from '~/middleware/context-hono.server'
+import { getAPIContext } from '~/middleware/context-storage.server'
 
-// import type { LoaderFunctionArgs } from 'react-router'
-// import { createCallerFactory } from '@gingga/api/trpc/index'
-// import { appRouter } from '@gingga/api/trpc/routers/index'
+export async function getTRPC() {
+  const queryClient = getQueryClient()
 
-// function createContext(opts: { headers: Headers }) {
-//   const headers = new Headers(opts.headers)
-//   headers.set('x-trpc-source', 'server-loader')
-//   return createTRPCContext({
-//     headers,
-//   })
-// }
-
-// const createCaller = createCallerFactory(appRouter)
-// export async function caller(loaderArgs: LoaderFunctionArgs) {
-//   return createCaller(await createContext({ headers: loaderArgs.request.headers }))
-// }
+  return createTRPCOptionsProxy({
+    ctx: await getAPIContext(),
+    queryClient,
+    router: appRouter,
+  })
+}

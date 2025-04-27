@@ -13,6 +13,7 @@ import { cn } from '@gingga/ui/lib/utils'
 import { ArrowRightIcon, Menu, X } from 'lucide-react'
 import { useState } from 'react'
 import { Link } from 'react-router'
+import { ThemeSwitch } from '~/components/ui/theme-switch'
 import { useClientEnv } from '~/hooks/use-client-env'
 
 // Define types for navigation items
@@ -172,7 +173,7 @@ export function Navbar({ navigation, variant = 'default' }: NavbarProps) {
                   <ArrowRightIcon size={16} />
                 </Link>
               </Button>
-              {/* <ThemeSwitch /> */}
+              <ThemeSwitch />
             </div>
             {/* Mobile menu button */}
             <div className="md:hidden">

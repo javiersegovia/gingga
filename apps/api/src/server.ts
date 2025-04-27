@@ -1,5 +1,6 @@
+// apps/api/src/server.ts
 import type { DatabaseType } from '@gingga/db'
-import type { Session, User } from 'better-auth'
+import type { AuthSession } from '~/context'
 import type { BetterAuth } from '~/lib/auth/auth.service'
 import { trpcServer } from '@hono/trpc-server'
 import { Hono } from 'hono'
@@ -18,7 +19,8 @@ export interface ContextEnv {
   Variables: {
     db: DatabaseType
     auth: BetterAuth
-    authSession: { session: Session, user: User } | null
+    authSession: AuthSession
+    __environment: 'server'
   }
 }
 
@@ -26,6 +28,11 @@ const app = new Hono<ContextEnv>()
 
 app.use(logger())
 app.use(contextStorage())
+
+app.use(async (c, next) => {
+  c.set('__environment', 'server')
+  await next()
+})
 
 app.use(
   cors({

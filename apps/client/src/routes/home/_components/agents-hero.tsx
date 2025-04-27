@@ -83,15 +83,15 @@ export function AgentsHero() {
               </div>
               <div className="flex flex-col gap-4 sm:flex-row">
                 <Button
-                  variant="outline"
-                  className="text-brand-blue-foreground dark:hover:border-secondary-accent-foreground dark:hover:text-secondary-accent-foreground dark:hover:bg-secondary-accent hover:bg-secondary hover:text-secondary-foreground"
+                  variant="hoverSecondary"
+                  // hover="hoverSecondary"
                   size="xl"
                   asChild
                 >
                   <a href="#agents">Explore Agents</a>
                 </Button>
 
-                <Button className="" variant="primary" size="xl" asChild>
+                <Button variant="primary" size="xl" asChild>
                   <Link to="/chat">
                     Try For Free
                     <ArrowRightIcon className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />

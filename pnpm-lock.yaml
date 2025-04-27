@@ -6,9 +6,6 @@ settings:
 
 catalogs:
   default:
-    '@ai-sdk/openai':
-      specifier: ^1.3.16
-      version: 1.3.16
     '@ai-sdk/react':
       specifier: ^1.2.9
       version: 1.2.9
@@ -42,6 +39,9 @@ catalogs:
     '@fontsource-variable/outfit':
       specifier: ^5.2.5
       version: 5.2.5
+    '@fontsource-variable/plus-jakarta-sans':
+      specifier: ^5.2.5
+      version: 5.2.5
     '@fontsource-variable/unbounded':
       specifier: ^5.2.5
       version: 5.2.5
@@ -54,9 +54,6 @@ catalogs:
     '@libsql/client':
       specifier: ^0.15.4
       version: 0.15.4
-    '@mantine/hooks':
-      specifier: ^7.17.4
-      version: 7.17.4
     '@openrouter/ai-sdk-provider':
       specifier: ^0.4.5
       version: 0.4.5
@@ -129,15 +126,9 @@ catalogs:
     '@t3-oss/env-core':
       specifier: ^0.12.0
       version: 0.12.0
-    '@tailwindcss/postcss':
-      specifier: ^4.1.4
-      version: 4.1.4
     '@tailwindcss/vite':
       specifier: ^4.1.4
       version: 4.1.4
-    '@tanstack/query-devtools':
-      specifier: ^5.74.6
-      version: 5.74.6
     '@tanstack/react-form':
       specifier: ^1.6.3
       version: 1.6.3
@@ -147,33 +138,6 @@ catalogs:
     '@tanstack/react-query-devtools':
       specifier: ^5.74.6
       version: 5.74.6
-    '@tanstack/react-router':
-      specifier: ^1.117.0
-      version: 1.117.0
-    '@tanstack/react-router-devtools':
-      specifier: ^1.117.0
-      version: 1.117.0
-    '@tanstack/react-router-with-query':
-      specifier: ^1.117.0
-      version: 1.117.0
-    '@tanstack/react-start':
-      specifier: ^1.117.0
-      version: 1.117.0
-    '@tanstack/react-table':
-      specifier: ^8.21.3
-      version: 8.21.3
-    '@tanstack/router-devtools':
-      specifier: ^1.117.0
-      version: 1.117.0
-    '@tanstack/router-zod-adapter':
-      specifier: ^1.81.5
-      version: 1.81.5
-    '@tanstack/start':
-      specifier: ^1.117.0
-      version: 1.117.0
-    '@tanstack/zod-adapter':
-      specifier: ^1.117.0
-      version: 1.117.0
     '@trpc/client':
       specifier: ^11.1.1
       version: 11.1.1
@@ -192,30 +156,15 @@ catalogs:
     '@types/react-dom':
       specifier: ^19.1.2
       version: 19.1.2
-    '@upstash/ratelimit':
-      specifier: ^2.0.5
-      version: 2.0.5
-    '@upstash/redis':
-      specifier: ^1.34.8
-      version: 1.34.8
-    '@vercel/functions':
-      specifier: ^2.0.0
-      version: 2.0.0
     ai:
       specifier: ^4.3.9
       version: 4.3.9
-    babel-plugin-react-compiler:
-      specifier: 19.0.0-beta-e993439-20250405
-      version: 19.0.0-beta-e993439-20250405
     better-auth:
       specifier: ^1.2.7
       version: 1.2.7
     better-auth-harmony:
       specifier: ^1.2.4
       version: 1.2.4
-    chalk:
-      specifier: ^5.4.1
-      version: 5.4.1
     class-variance-authority:
       specifier: ^0.7.1
       version: 0.7.1
@@ -276,18 +225,12 @@ catalogs:
     lucide-react:
       specifier: ^0.487.0
       version: 0.487.0
-    marked:
-      specifier: ^15.0.9
-      version: 15.0.9
     motion:
       specifier: ^12.7.4
       version: 12.7.4
     nanoid:
       specifier: ^5.1.5
       version: 5.1.5
-    outdent:
-      specifier: ^0.8.0
-      version: 0.8.0
     react:
       specifier: 19.1.0
       version: 19.1.0
@@ -303,9 +246,6 @@ catalogs:
     react-router:
       specifier: ^7.5.1
       version: 7.5.1
-    react-scan:
-      specifier: ^0.3.3
-      version: 0.3.3
     remark-gfm:
       specifier: ^4.0.1
       version: 4.0.1
@@ -333,9 +273,6 @@ catalogs:
     tailwindcss-animate:
       specifier: ^1.0.7
       version: 1.0.7
-    tsx:
-      specifier: ^4.19.3
-      version: 4.19.3
     turbo:
       specifier: ^2.5.0
       version: 2.5.0
@@ -345,15 +282,9 @@ catalogs:
     usehooks-ts:
       specifier: ^3.1.1
       version: 3.1.1
-    vinxi:
-      specifier: 0.5.4
-      version: 0.5.4
     vite:
       specifier: 6.3.2
       version: 6.3.2
-    vite-env-only:
-      specifier: ^3.0.3
-      version: 3.0.3
     vite-tsconfig-paths:
       specifier: ^5.1.4
       version: 5.1.4
@@ -498,6 +429,24 @@ importers:
       '@ai-sdk/react':
         specifier: 'catalog:'
         version: 1.2.9(react@19.1.0)(zod@3.24.3)
+      '@ai-sdk/ui-utils':
+        specifier: 'catalog:'
+        version: 1.2.8(zod@3.24.3)
+      '@fontsource-variable/geist':
+        specifier: 'catalog:'
+        version: 5.2.5
+      '@fontsource-variable/nunito':
+        specifier: 'catalog:'
+        version: 5.2.5
+      '@fontsource-variable/outfit':
+        specifier: 'catalog:'
+        version: 5.2.5
+      '@fontsource-variable/plus-jakarta-sans':
+        specifier: 'catalog:'
+        version: 5.2.5
+      '@fontsource-variable/unbounded':
+        specifier: 'catalog:'
+        version: 5.2.5
       '@gingga/api':
         specifier: workspace:*
         version: link:../api
@@ -507,6 +456,9 @@ importers:
       '@gingga/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      '@hono/trpc-server':
+        specifier: 'catalog:'
+        version: 0.3.4(@trpc/server@11.1.1(typescript@5.8.3))(hono@4.7.7)
       '@hookform/resolvers':
         specifier: 'catalog:'
         version: 5.0.1(react-hook-form@7.56.1(react@19.1.0))
@@ -516,6 +468,9 @@ importers:
       '@radix-ui/react-slot':
         specifier: 'catalog:'
         version: 1.2.0(@types/react@19.1.2)(react@19.1.0)
+      '@react-email/components':
+        specifier: 'catalog:'
+        version: 0.0.36(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@t3-oss/env-core':
         specifier: 'catalog:'
         version: 0.12.0(typescript@5.8.3)(zod@3.24.3)
@@ -543,6 +498,9 @@ importers:
       better-auth:
         specifier: 'catalog:'
         version: 1.2.7
+      composio-core:
+        specifier: 'catalog:'
+        version: 0.5.33(@ai-sdk/openai@1.3.16(zod@3.24.3))(@cloudflare/workers-types@4.20250423.0)(@langchain/core@0.3.46(openai@4.95.1(ws@8.18.1)(zod@3.24.3)))(@langchain/openai@0.5.6(@langchain/core@0.3.46(openai@4.95.1(ws@8.18.1)(zod@3.24.3)))(ws@8.18.1))(ai@4.3.9(react@19.1.0)(zod@3.24.3))(langchain@0.3.23(@langchain/core@0.3.46(openai@4.95.1(ws@8.18.1)(zod@3.24.3)))(axios@1.8.4)(openai@4.95.1(ws@8.18.1)(zod@3.24.3))(ws@8.18.1))(openai@4.95.1(ws@8.18.1)(zod@3.24.3))
       cross-env:
         specifier: 'catalog:'
         version: 7.0.3
@@ -2450,6 +2408,9 @@ packages:
 
   '@fontsource-variable/outfit@5.2.5':
     resolution: {integrity: sha512-MejrIp6Cbmd3u5AZtsot8kmhZiyQM5CATsdcBB2hktYIrv5CVekRSUmFDXL4FpF7K70IvFp2ZMfImm5VhnVf7Q==}
+
+  '@fontsource-variable/plus-jakarta-sans@5.2.5':
+    resolution: {integrity: sha512-nkAWzq+QWBSK+52HIlNCyoh5YXrZ/AwV1OqzxZz6VnPmsIpU68B1bf1YT8heRAJKY1kXNtWIJ9jJMYVaStgf+w==}
 
   '@fontsource-variable/unbounded@5.2.5':
     resolution: {integrity: sha512-gJdC3HPF0m/rFqfODURh1impz3mcQmXES2qVVhdp4neZ4983GZ8J7fq1/oQ2a+m+Pf3+asPOXALpG9pEtSNoxw==}
@@ -10913,6 +10874,8 @@ snapshots:
   '@fontsource-variable/nunito@5.2.5': {}
 
   '@fontsource-variable/outfit@5.2.5': {}
+
+  '@fontsource-variable/plus-jakarta-sans@5.2.5': {}
 
   '@fontsource-variable/unbounded@5.2.5': {}
 

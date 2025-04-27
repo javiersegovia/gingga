@@ -1,3 +1,4 @@
+// apps/api/src/trpc/routers/index.ts
 import { count } from '@gingga/db'
 import { Users } from '@gingga/db/schema'
 import { agentRouter } from '~/features/agent/agent.router'
@@ -21,7 +22,7 @@ export const appRouter = router({
 
     return {
       message: `We have ${usersCount[0].count} users`,
-      currentUser: `You are currently logged in as ${ctx.user.email}`,
+      currentUser: `You are currently logged in as ${ctx.authSession?.user?.email}`,
     }
   }),
 })

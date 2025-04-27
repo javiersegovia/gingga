@@ -20,7 +20,7 @@ export default function SettingsLayoutComponent({ loaderData }: Route.ComponentP
   const { data: authData } = useAuthQuery()
   const { mutateAsync: signOut, isPending: isSigningOut } = useSignOutMutation()
 
-  if (!authData?.session) {
+  if (!authData?.isAuthenticated) {
     // This should technically not happen due to beforeLoad, but good practice
     return null
   }
@@ -44,15 +44,15 @@ export default function SettingsLayoutComponent({ loaderData }: Route.ComponentP
   ]
 
   return (
-    <div className="container-marketing mx-auto flex min-h-[calc(100vh-theme(spacing.16))] flex-col gap-12 py-8 lg:flex-row">
+    <div className="container-marketing mx-auto flex min-h-[calc(100vh-theme(spacing.16))] max-w-2xl flex-col gap-12 py-8 lg:flex-row">
       {/* Left Sidebar */}
       <aside className="w-full shrink-0 lg:w-64">
         <div className="sticky top-0 space-y-6">
           <Button
             asChild
-            variant="ghost"
+            variant="outline"
             size="md"
-            hover="reverseShadow"
+            hover="reverse"
             className="w-auto"
           >
             <Link to="/chat">
@@ -63,21 +63,21 @@ export default function SettingsLayoutComponent({ loaderData }: Route.ComponentP
 
           <div className="flex flex-col items-center space-y-3">
             <Avatar className="border-border h-24 w-24 border-2">
-              <AvatarImage src={user.image || ''} alt={user.name || 'User'} />
+              <AvatarImage src={user?.image || ''} alt={user?.name || 'User'} />
               <AvatarFallback className="text-xl">
-                {user.name?.charAt(0) || user.email.charAt(0).toUpperCase()}
+                {user?.name?.charAt(0) || user?.email.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
             <h2 className="mb-0 text-center text-lg font-semibold">
-              {user.name || 'User'}
+              {user?.name || 'User'}
             </h2>
-            <p className="text-muted-foreground text-center text-sm">{user.email}</p>
-            {user.membership && (
+            <p className="text-muted-foreground text-center text-sm">{user?.email}</p>
+            {user?.membership && (
               <Badge
-                variant={user.membership.tier === 'pro' ? 'secondary' : 'outline'}
+                variant={user?.membership?.tier === 'pro' ? 'secondary' : 'outline'}
                 className="capitalize"
               >
-                {user.membership.tier}
+                {user?.membership?.tier}
                 {' '}
                 Plan
               </Badge>

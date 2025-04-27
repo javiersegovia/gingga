@@ -1,3 +1,5 @@
+// apps/api/src/context.ts
+import type { Session } from 'better-auth'
 import type { Context as HonoContext } from 'hono'
 import type { ContextEnv } from './server'
 import { createDatabaseClient, eq } from '@gingga/db'
@@ -15,20 +17,29 @@ export function getDB() {
   return c.var.db
 }
 
+export async function getUserById(id: string) {
+  const db = getDB()
+  return await db.query.Users.findFirst({
+    where: eq(Users.id, id),
+  })
+}
+
 export async function getAuthSession(h: Headers) {
   const c = getContext<ContextEnv>()
+  console.log('getAuthSession inside ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+  console.log(c.var.__environment)
 
   if (c.var.authSession) {
     return c.var.authSession
   }
-
-  const auth = getAuth()
-  const data = await auth.api.getSession({
+  const data = await getAuth().api.getSession({
     headers: h,
   })
 
-  c.set('authSession', data ? { session: data?.session, user: data?.user } : null)
+  console.log('data')
+  console.log(data)
 
+  c.set('authSession', data ? { isAuthenticated: true, session: data?.session, user: await getUserById(data.user.id) } : { isAuthenticated: false })
   return c.var.authSession
 }
 
@@ -44,29 +55,27 @@ export async function createContext(c: HonoContext) {
     h.set('Authorization', authorization)
   }
 
+  console.log('createContext inside... ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+  console.log(c.var.__environment)
+
   const db = getDB()
   const auth = getAuth()
-  const authSession = await auth.api.getSession({
-    headers: h,
-  })
-
-  const user = authSession
-    ? await db.query.Users.findFirst({
-      where: eq(Users.id, authSession.user.id),
-      with: {
-        membership: true,
-      },
-    })
-    : null
+  const authSession = await getAuthSession(h)
 
   return {
     headers: h,
     c,
     db,
     auth,
-    session: authSession?.session,
-    user,
+    authSession,
   }
 }
 
 export type Context = Awaited<ReturnType<typeof createContext>>
+export type AuthSession = {
+  isAuthenticated: true
+  session: Session
+  user: Awaited<ReturnType<typeof getUserById>>
+} | {
+  isAuthenticated: false
+}

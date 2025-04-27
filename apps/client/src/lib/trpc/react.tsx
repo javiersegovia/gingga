@@ -49,6 +49,9 @@ export function TRPCTanStackQueryProvider({ children, API_URL }: { children: Rea
   const [queryClient] = useState(() => makeQueryClient())
   const dehydratedState = useDehydratedState()
 
+  console.log('[1] - TRPCTanStackQueryProvider')
+  console.log(dehydratedState)
+
   return (
     <QueryClientProvider client={queryClient}>
       <HydrationBoundary state={dehydratedState}>

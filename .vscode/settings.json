@@ -40,7 +40,12 @@
   },
 
   "tailwindCSS.experimental.configFile": {
-    "./packages/ui/styles/tailwind.css": "**"
+    "./packages/ui/src/styles/tailwind.css": "**"
+  },
+
+  "tailwindCSS.includeLanguages": {
+    "typescript": "javascript",
+    "typescriptreact": "javascript"
   },
 
   "typescript.preferences.importModuleSpecifier": "non-relative",

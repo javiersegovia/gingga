@@ -9,15 +9,15 @@ export function ThemeSwitch() {
 
   return (
     <RadioGroup
-      className="inline-flex h-7 items-center gap-0 justify-center rounded-lg bg-muted p-1 text-muted-foreground"
+      className="inline-flex h-7 items-center gap-0 justify-center rounded-lg bg-muted p-0 text-muted-foreground"
       value={color}
       onValueChange={setColorScheme}
     >
       <Label
         htmlFor="system"
         className={cn(
-          'inline-flex m-0 items-center justify-center whitespace-nowrap rounded-md p-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 cursor-pointer',
-          'has-[>[data-state=checked]]:bg-background has-[>[data-state=checked]]:text-foreground dark:has-[>[data-state=checked]]:text-primary',
+          'inline-flex m-0 items-center justify-center whitespace-nowrap border border-transparent rounded-md p-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 cursor-pointer',
+          'dark:has-[>[data-state=checked]]:bg-background has-[>[data-state=checked]]:bg-secondary-accent dark:has-[>[data-state=checked]]:border-primary/50 has-[>[data-state=checked]]:border-black/20  has-[>[data-state=checked]]:text-foreground dark:has-[>[data-state=checked]]:text-primary',
         )}
       >
         <RadioGroupItem value="system" id="system" className="sr-only" />
@@ -27,8 +27,8 @@ export function ThemeSwitch() {
       <Label
         htmlFor="light"
         className={cn(
-          'inline-flex m-0 items-center justify-center whitespace-nowrap rounded-md p-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 cursor-pointer',
-          'has-[>[data-state=checked]]:bg-background has-[>[data-state=checked]]:text-foreground dark:has-[>[data-state=checked]]:text-primary',
+          'inline-flex m-0 items-center justify-center whitespace-nowrap border border-transparent rounded-md p-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 cursor-pointer',
+          'dark:has-[>[data-state=checked]]:bg-background has-[>[data-state=checked]]:bg-primary-accent dark:has-[>[data-state=checked]]:border-primary/50 has-[>[data-state=checked]]:border-black/20  has-[>[data-state=checked]]:text-foreground dark:has-[>[data-state=checked]]:text-primary',
         )}
       >
         <RadioGroupItem value="light" id="light" className="sr-only" />
@@ -38,8 +38,8 @@ export function ThemeSwitch() {
       <Label
         htmlFor="dark"
         className={cn(
-          'inline-flex m-0 items-center justify-center whitespace-nowrap rounded-md p-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 cursor-pointer',
-          'has-[>[data-state=checked]]:bg-background has-[>[data-state=checked]]:text-foreground dark:has-[>[data-state=checked]]:text-primary',
+          'inline-flex m-0 items-center justify-center whitespace-nowrap border border-transparent rounded-md p-1 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 cursor-pointer',
+          'dark:has-[>[data-state=checked]]:bg-background has-[>[data-state=checked]]:bg-secondary-accent dark:has-[>[data-state=checked]]:border-primary/50 has-[>[data-state=checked]]:border-black/20  has-[>[data-state=checked]]:text-foreground dark:has-[>[data-state=checked]]:text-primary',
         )}
       >
         <RadioGroupItem value="dark" id="dark" className="sr-only" />

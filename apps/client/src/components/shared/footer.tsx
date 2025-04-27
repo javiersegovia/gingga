@@ -91,9 +91,6 @@ export function Footer({ className }: { className?: string }) {
             <Link to="/terms" className="hover:text-primary transition-colors">
               Terms of Service
             </Link>
-            <Link to="/cookies" className="hover:text-primary transition-colors">
-              Cookie Policy
-            </Link>
             <a
               href="mailto:hello@gingga.com"
               className="text-primary hover:text-primary/80 transition-colors"

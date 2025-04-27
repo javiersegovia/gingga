@@ -86,12 +86,12 @@ export function ChatSidebar() {
 
       <SidebarContent>
         <RecentAgentsSection />
-        <SidebarChats user={authData?.user ?? null} />
+        <SidebarChats user={authData?.isAuthenticated ? authData.user : null} />
       </SidebarContent>
 
       <SidebarFooter>
         <div className="flex items-center gap-2">
-          <NavUser user={authData?.user ?? null} />
+          <NavUser user={authData?.isAuthenticated ? authData.user : null} />
           <ThemeSwitch />
         </div>
       </SidebarFooter>

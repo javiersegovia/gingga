@@ -37,8 +37,10 @@ function AgentGridSection() {
   const agents = agentsData?.agents ?? []
   const isEmpty = agents.length === 0
 
+  const isAdmin = authSession?.isAuthenticated && authSession?.user?.role === 'admin'
+
   // Admin button that will be shown regardless of empty state
-  const AdminCreateButton = authSession?.user.role === 'admin' && (
+  const AdminCreateButton = isAdmin && (
     <Button asChild size="md" className="absolute top-0 right-0 -translate-y-1/2">
       <Link to="/chat/agents/create">
         <BotIcon className="mr-2 h-4 w-4" />
@@ -85,7 +87,7 @@ function AgentGridSection() {
           <AgentCard
             key={agent.id}
             agent={agent}
-            isAdmin={authSession?.user.role === 'admin'}
+            isAdmin={isAdmin}
           />
         ))}
       </div>

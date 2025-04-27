@@ -53,10 +53,29 @@
 
 /* Box shadow utilities */
 @utility reverse-box-shadow {
-  box-shadow: var(--shadow-expanded);
+  box-shadow: var(--reduced-shadow) var(--shadow-border);
+}
+
+@utility reverse-box-shadow-primary {
+  /* box-shadow: 3px 3px 0px 0px var(--primary); */
+  box-shadow: var(--reduced-shadow) var(--primary);
+}
+
+@utility reverse-box-shadow-secondary {
+  /* box-shadow: 3px 3px 0px 0px var(--secondary); */
+  /* box-shadow: 0px 4.4px 0px 2.5px var(--secondary); */
+  box-shadow: var(--reduced-shadow) var(--secondary);
 }
 
 /* Shadow styles for hover effects */
 .shadow-reverse {
   @apply hover:reverse-box-shadow hover:border-shadow-border hover:shadow-shadow shadow-none;
+}
+
+.dark .shadow-reverse-primary {
+  @apply hover:reverse-box-shadow-primary hover:border-primary hover:shadow-primary shadow-none;
+}
+
+.dark .shadow-reverse-secondary {
+  @apply hover:reverse-box-shadow-secondary hover:border-secondary hover:shadow-secondary shadow-none;
 }

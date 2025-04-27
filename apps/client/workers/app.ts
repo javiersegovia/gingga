@@ -1,22 +1,23 @@
+// apps/client/workers/app.ts
+import type { ClientContextEnv } from '~/middleware/context-hono.server'
 import { Hono } from 'hono'
 import { contextStorage } from 'hono/context-storage'
 import { createRequestHandler } from 'react-router'
-import { CloudflareContext } from '~/middleware/cloudflare.server'
+import { getCloudflare, getTRPCProxy } from '~/middleware/context-hono.server'
 
 const requestHandler = createRequestHandler(
   () => import('virtual:react-router/server-build'),
   import.meta.env.MODE,
 )
 
-export interface ContextEnv {
-  Bindings: Cloudflare.Env
-}
-
-const app = new Hono<ContextEnv>()
+const app = new Hono<ClientContextEnv>()
   .use(contextStorage())
   .all('*', async (c) => {
-    const context = new Map([[CloudflareContext, { env: c.env, ctx: c.executionCtx }]])
-    return requestHandler(c.req.raw, context)
+    getTRPCProxy() // setup Context
+    getCloudflare() // setup Context
+    c.set('__environment', 'client')
+
+    return requestHandler(c.req.raw)
   })
 
 export default {
