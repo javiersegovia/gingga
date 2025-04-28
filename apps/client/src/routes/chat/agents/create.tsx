@@ -1,4 +1,4 @@
-import type { AgentFormValues } from '@gingga/api/features/agent/agent.schema'
+import type { AgentFormValues } from '~/features/agent/agent.schema'
 import { Button } from '@gingga/ui/components/button'
 import { ArrowLeftIcon } from 'lucide-react'
 import { href, Link, useNavigate } from 'react-router'

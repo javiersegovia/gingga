@@ -1,5 +1,4 @@
 import type { z } from 'zod'
-import { SignUpSchema } from '@gingga/api/lib/auth/auth.schema'
 import {
   Form,
   FormControl,
@@ -15,6 +14,7 @@ import { useForm } from 'react-hook-form'
 import { Link } from 'react-router'
 import { toast } from 'sonner'
 import { authClient } from '~/lib/auth/auth-client'
+import { SignUpSchema } from '~/lib/auth/auth.schema'
 
 export default function RegisterPage() {
   const form = useForm<z.infer<typeof SignUpSchema>>({

@@ -1,6 +1,5 @@
 import type { Route } from './+types/_layout'
 import type { Tab } from '~/components/ui/animated-link-tabs'
-import { getAgentById } from '@gingga/api/features/agent/agent.service'
 import { Avatar, AvatarFallback, AvatarImage } from '@gingga/ui/components/avatar'
 import { Button } from '@gingga/ui/components/button'
 import {
@@ -12,6 +11,7 @@ import {
 } from 'lucide-react'
 import { href, Link, Outlet, redirect } from 'react-router'
 import { AnimatedLinkTabs } from '~/components/ui/animated-link-tabs'
+import { getAgentById } from '~/features/agent/agent.service'
 
 export async function loader({ request, params }: Route.LoaderArgs) {
   const pathname = new URL(request.url).pathname

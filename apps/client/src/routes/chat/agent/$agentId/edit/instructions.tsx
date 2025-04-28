@@ -1,7 +1,7 @@
-import type { AgentFormValues } from '@gingga/api/features/agent/agent.schema'
 import type { Route } from './+types/instructions'
-import { getAgentById } from '@gingga/api/features/agent/agent.service'
+import type { AgentFormValues } from '~/features/agent/agent.schema'
 import { useUpdateAgentMutation } from '~/features/agent/agent.query'
+import { getAgentById } from '~/features/agent/agent.service'
 import { AgentForm } from '~/features/agent/components/agent-form'
 
 export async function loader({ params }: Route.LoaderArgs) {

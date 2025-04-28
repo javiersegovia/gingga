@@ -9,7 +9,6 @@ export const webEnv = createEnv({
   extends: [dbEnv(), configEnv()],
   shared: {
     VITE_SITE_URL: z.string().url(),
-    VITE_API_URL: z.string().url(),
     VITE_ASSETS_URL: z.string().url(),
     VITE_RESEND_EMAIL_FROM: z.string().min(1),
     VITE_SUPPORT_EMAIL: z.string().min(1),
@@ -24,7 +23,6 @@ export const webEnv = createEnv({
 export const clientEnv = createEnv({
   shared: {
     VITE_SITE_URL: z.string().url(),
-    VITE_API_URL: z.string().url(),
     VITE_ASSETS_URL: z.string().url(),
     VITE_RESEND_EMAIL_FROM: z.string().min(1),
     VITE_SUPPORT_EMAIL: z.string().min(1),

@@ -1,5 +1,5 @@
 import { availableModelIds } from '@gingga/db/schema'
-import { apiEnv } from '~/api-env'
+import { webEnv } from '~/lib/env.server'
 
 export interface AIModel {
   id: string // The unique identifier of the model inside OpenRouter.
@@ -13,7 +13,7 @@ export interface AIModel {
   tag?: 'Premium' | 'Enterprise'
 }
 
-const ASSETS_URL = apiEnv.VITE_ASSETS_URL
+const ASSETS_URL = webEnv.VITE_ASSETS_URL
 
 export const modelIconPaths: Record<AIModel['provider'], string> = {
   Anthropic: `${ASSETS_URL}/ai-logos/anthropic.svg`,

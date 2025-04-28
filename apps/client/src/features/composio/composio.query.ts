@@ -1,6 +1,6 @@
 import type {
   ComposioAppName,
-} from '@gingga/api/features/composio/composio.schema' // Combine imports
+} from '~/features/composio/composio.schema' // Combine imports
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useTRPC } from '~/lib/trpc/react'
 

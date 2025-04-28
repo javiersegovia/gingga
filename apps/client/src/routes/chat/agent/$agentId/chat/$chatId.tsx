@@ -1,10 +1,9 @@
 import type { ChatMessage } from '@gingga/db/types'
 import type { Attachment, UIMessage } from 'ai'
 import type { Route } from './+types/$chatId'
-import { getChatById } from '@gingga/api/features/chat/chat.service'
 import { href, redirect } from 'react-router'
+import { getChatById } from '~/features/chat/chat.service'
 import { BaseChat } from '~/features/chat/components/base-chat'
-import { webEnv } from '~/lib/env.server'
 
 function convertToUIMessages(messages: Array<ChatMessage>): Array<UIMessage> {
   return messages.map(message => ({
@@ -24,7 +23,7 @@ export async function loader({ params }: Route.LoaderArgs) {
     return redirect(href('/chat/agent/:agentId', { agentId: params.agentId }))
   }
 
-  return { chat, agentId: params.agentId, endpoint: `${webEnv.VITE_API_URL}/api/agents/custom/${params.agentId}` }
+  return { chat, agentId: params.agentId, endpoint: `/api/agents/custom/${params.agentId}` }
 }
 
 export default function AgentChatIdRoute({ loaderData }: Route.ComponentProps) {

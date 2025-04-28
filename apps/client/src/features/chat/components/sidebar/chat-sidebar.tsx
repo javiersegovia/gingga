@@ -277,7 +277,7 @@ function NavUser({ user }: NavUserProps) {
               <Link to="/settings/account" className="w-full">
                 <SidebarMenuButton
                   size="lg"
-                  className="hover:border-border hover:text-foreground data-[state=open]:border-y-border data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground cursor-pointer border border-transparent focus:ring-0 focus:outline-none focus-visible:ring-0 focus-visible:outline-none data-[state=open]:border-x-transparent"
+                  className="hover:border-border rounded-sm hover:text-foreground data-[state=open]:border-y-border data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground cursor-pointer border border-transparent focus:ring-0 focus:outline-none focus-visible:ring-0 focus-visible:outline-none data-[state=open]:border-x-transparent"
                 >
                   <Avatar className="h-8 w-8 rounded-md">
                     {user.image && (

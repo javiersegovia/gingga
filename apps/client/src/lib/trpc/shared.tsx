@@ -1,13 +1,20 @@
-import type { QueryClient } from '@tanstack/react-query'
-import type { TRPCClient } from '@trpc/client'
 import type { AppContext } from '~/server/context'
 import type { TRPCAppRouter } from '~/server/trpc/routers/app.router'
+import { QueryClient } from '@tanstack/react-query'
 import { createTRPCClient, httpBatchLink, loggerLink } from '@trpc/client'
-import { createTRPCOptionsProxy } from '@trpc/tanstack-react-query'
 import { getContext } from 'hono/context-storage'
 import SuperJSON from 'superjson'
-import { getQueryClient } from '~/server/context'
-import { appRouter } from '~/server/trpc/routers/app.router'
+
+export function makeQueryClient() {
+  return new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+        staleTime: 1000 * 60, // 1 minute
+      },
+    },
+  })
+}
 
 export function setupTRPCClient() {
   const trpcClient = createTRPCClient<TRPCAppRouter>({
@@ -34,25 +41,4 @@ export function setupTRPCClient() {
   })
 
   return trpcClient
-}
-
-export function setupTRPCProxy({ trpcClient, queryClient }: { trpcClient: TRPCClient<TRPCAppRouter>, queryClient: QueryClient }) {
-  const trpcProxy = createTRPCOptionsProxy<TRPCAppRouter>({
-    client: trpcClient,
-    queryClient,
-    router: appRouter,
-  })
-  return trpcProxy
-}
-
-export async function setupTRPC() {
-  const trpcClient = setupTRPCClient()
-  const queryClient = getQueryClient()
-  const trpcProxy = setupTRPCProxy({ trpcClient, queryClient })
-
-  const c = getContext<AppContext>()
-
-  c.set('trpcClient', trpcClient)
-  c.set('queryClient', queryClient)
-  c.set('trpcProxy', trpcProxy)
 }

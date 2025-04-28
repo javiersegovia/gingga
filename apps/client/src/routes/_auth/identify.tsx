@@ -1,5 +1,4 @@
 import type { z } from 'zod'
-import { SignInSchema } from '@gingga/api/lib/auth/auth.schema'
 import {
   Form,
   FormControl,
@@ -16,6 +15,7 @@ import { Link } from 'react-router'
 import { toast } from 'sonner'
 import { useClientEnv } from '~/hooks/use-client-env'
 import { authClient } from '~/lib/auth/auth-client'
+import { SignInSchema } from '~/lib/auth/auth.schema'
 
 export default function AuthPage() {
   const env = useClientEnv()

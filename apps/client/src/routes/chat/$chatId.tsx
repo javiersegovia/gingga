@@ -2,8 +2,8 @@ import type { ChatMessage } from '@gingga/db/types'
 import type { Attachment, UIMessage } from 'ai'
 import type { Route } from './+types/$chatId'
 
-import { getChatById } from '@gingga/api/features/chat/chat.service'
 import { href, redirect } from 'react-router'
+import { getChatById } from '~/features/chat/chat.service'
 import { BaseChat } from '~/features/chat/components/base-chat'
 import { webEnv } from '~/lib/env.server'
 
@@ -18,22 +18,6 @@ function convertToUIMessages(messages: Array<ChatMessage>): Array<UIMessage> {
   }))
 }
 
-// export const Route = createFileRoute('/_demo/chat/$chatId')({
-//   component: ChatIdRoute,
-//   loader: async ({ params }) => {
-//     const chat = await $getChatById({ data: { id: params.chatId } })
-
-//     if (!chat) {
-//       throw redirect({ to: '/chat' })
-//     }
-
-//     return { chat }
-//   },
-//   staleTime: 10_000,
-//   preloadStaleTime: 10_000,
-//   preload: true,
-// })
-
 export async function loader({ params }: Route.LoaderArgs) {
   const chat = await getChatById({ id: params.chatId })
 
@@ -41,7 +25,7 @@ export async function loader({ params }: Route.LoaderArgs) {
     return redirect(href('/chat'))
   }
 
-  return { chat, endpoint: `${webEnv.VITE_API_URL}/api/chat/default` }
+  return { chat, endpoint: `${webEnv.VITE_SITE_URL}/api/chat/default` }
 }
 
 export default function ChatIdRoute({ loaderData }: Route.ComponentProps) {

@@ -1,5 +1,4 @@
 import type { Route } from './+types/forgot-password'
-import { EmailSchema } from '@gingga/api/lib/auth/auth.schema'
 import {
   Form,
   FormControl,
@@ -16,6 +15,7 @@ import { Link } from 'react-router'
 import { toast } from 'sonner'
 import { z } from 'zod'
 import { authClient } from '~/lib/auth/auth-client'
+import { EmailSchema } from '~/lib/auth/auth.schema'
 
 const ForgotPasswordSchema = z.object({
   email: EmailSchema,

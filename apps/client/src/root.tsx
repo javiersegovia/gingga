@@ -17,8 +17,6 @@ import {
 import { clientEnv } from '~/lib/env.server'
 import { getTheme } from '~/lib/theme.server'
 import { TRPCTanStackQueryProvider } from '~/lib/trpc/react'
-import { sessionMiddleware } from '~/middleware/auth.middleware'
-// import { contextStorageMiddleware } from '~/middleware/context-storage.server'
 import { getQueryClient, honoContextMiddleware } from '~/server/context'
 import '@fontsource-variable/outfit/wght.css'
 import '@fontsource-variable/unbounded/wght.css'
@@ -26,7 +24,7 @@ import '@fontsource-variable/geist/wght.css'
 import '@fontsource-variable/plus-jakarta-sans/wght.css'
 import './styles/app.css'
 
-export const unstable_middleware = [honoContextMiddleware, sessionMiddleware]
+export const unstable_middleware = [honoContextMiddleware]
 
 export const links: Route.LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
@@ -44,6 +42,7 @@ export const links: Route.LinksFunction = () => [
 export async function loader() {
   const theme = await getTheme()
   const queryClient = getQueryClient()
+
   return {
     ENV: clientEnv,
     theme,

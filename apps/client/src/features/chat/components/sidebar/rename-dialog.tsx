@@ -1,6 +1,5 @@
 import type { Chat } from '@gingga/db/types'
 import type { z } from 'zod'
-import { RenameChatSchema } from '@gingga/api/features/chat/chat.schema'
 import { Button } from '@gingga/ui/components/button'
 import {
   DialogDescription,
@@ -19,6 +18,7 @@ import { Input } from '@gingga/ui/components/input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useRenameChatMutation } from '~/features/chat/chat.query'
+import { RenameChatSchema } from '~/features/chat/chat.schema'
 
 type RenameFormValues = z.infer<typeof RenameChatSchema>
 

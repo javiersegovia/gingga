@@ -130,7 +130,7 @@ The `.github/workflows/deploy.yml` workflow automates deployment on pushes to th
 - **Install Dependencies:** Runs `pnpm install --frozen-lockfile`.
 - **Database Migrations:** Runs `pnpm run db:migrate --filter=@gingga/db` using secrets for credentials.
 - **Build Production Apps:** Runs `pnpm run build:prod`. This uses Turbo to execute the `build:prod` script in necessary packages (like `apps/client`).
-- **Deploy API Worker:** Uses `cloudflare/wrangler-action` to execute the API's deploy command (`pnpm run deploy --filter=@gingga/api`).
+- **Deploy API Worker:** Uses `cloudflare/wrangler-action` to execute the API's deploy command (`pnpm run deploy --filter=~`).
 - **Deploy Client Worker:** Uses `cloudflare/wrangler-action` to execute the Client's deploy command (`pnpm run deploy --filter=@gingga/client`).
 
 This automated process ensures that database migrations and production builds are completed before the deployment commands are executed for each worker individually.

@@ -13,10 +13,11 @@ import { getUserById } from '~/features/user/user.service'
 import { createServerAuth } from '~/lib/auth/auth.server'
 import { webEnv } from '~/lib/env.server'
 
+export type AuthenticatedUser = NonNullable<Awaited<ReturnType<typeof getUserById>>>
 export type AuthSession = {
   isAuthenticated: true
   session: Session
-  user: Required<Awaited<ReturnType<typeof getUserById>>>
+  user: AuthenticatedUser
 } | {
   isAuthenticated: false
 }
@@ -82,7 +83,17 @@ export async function getAuthSession() {
   const data = await getBetterAuth().api.getSession({
     headers: c.req.raw.headers,
   })
-  const authSession = data ? { isAuthenticated: true as const, session: data?.session, user: await getUserById(data.user.id) } : { isAuthenticated: false as const }
+
+  if (!data) {
+    return { isAuthenticated: false as const }
+  }
+
+  const user = await getUserById(data.user.id)
+  if (!user) {
+    return { isAuthenticated: false as const }
+  }
+
+  const authSession = { isAuthenticated: true as const, session: data?.session, user }
   c.set('authSession', authSession)
   return authSession
 }

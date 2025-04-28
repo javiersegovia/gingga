@@ -43,7 +43,6 @@ export function configEnv() {
     shared: {
       VITE_SITE_URL: z.string().url(),
       VITE_SITE_DOMAIN: z.string().min(1), // Note: Only used in API currently
-      VITE_API_URL: z.string().url(),
       VITE_ASSETS_URL: z.string().url(),
       VITE_RESEND_EMAIL_FROM: z.string().min(1),
       VITE_SUPPORT_EMAIL: z.string().min(1),

@@ -1,5 +1,4 @@
 import type { Route } from './+types/reset-password'
-import { PasswordSchema } from '@gingga/api/lib/auth/auth.schema'
 import { Alert, AlertDescription, AlertTitle } from '@gingga/ui/components/alert'
 import {
   Form,
@@ -10,8 +9,8 @@ import {
   FormMessage,
 } from '@gingga/ui/components/form'
 import { Input } from '@gingga/ui/components/input'
-
 import { FormStatusButton } from '@gingga/ui/components/status-button'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 import { TerminalIcon } from 'lucide-react'
 import { useForm } from 'react-hook-form'
@@ -19,6 +18,7 @@ import { href, Link, useNavigate } from 'react-router'
 import { toast } from 'sonner'
 import { z } from 'zod'
 import { authClient } from '~/lib/auth/auth-client'
+import { PasswordSchema } from '~/lib/auth/auth.schema'
 
 const ResetPasswordSchema = z
   .object({

@@ -1,12 +1,12 @@
-import type { AgentFormValues } from '@gingga/api/features/agent/agent.schema'
 import type React from 'react'
-import { AgentFormSchema } from '@gingga/api/features/agent/agent.schema'
+import type { AgentFormValues } from '~/features/agent/agent.schema'
 import { Input } from '@gingga/ui/components/input'
 import { Skeleton } from '@gingga/ui/components/skeleton'
 import { Textarea } from '@gingga/ui/components/textarea'
 import { formOptions } from '@tanstack/react-form'
 import { Suspense } from 'react'
 import { useAppForm } from '~/components/form/tanstack-form'
+import { AgentFormSchema } from '~/features/agent/agent.schema'
 
 interface AgentFormProps {
   initialValues?: Partial<AgentFormValues>

@@ -1,7 +1,7 @@
 import type { UseChatHelpers } from '@ai-sdk/react'
 import type { Message } from 'ai'
 import type { Dispatch, SetStateAction } from 'react'
-// import { $deleteTrailingMessages } from '@gingga/api/features/chat/chat.api'
+// import { $deleteTrailingMessages } from '~/features/chat/chat.api'
 import { Button } from '@gingga/ui/components/button'
 import { Textarea } from '@gingga/ui/components/textarea'
 import { useEffect, useRef, useState } from 'react'

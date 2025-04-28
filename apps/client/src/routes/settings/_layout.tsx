@@ -85,10 +85,11 @@ export default function SettingsLayoutComponent({ loaderData }: Route.ComponentP
           </div>
 
           <Button
-            variant="default"
-            className="hover:bg-destructive hover:text-destructive-foreground w-full"
+            variant="outline"
+            // className="hover:bg-destructive hover:text-destructive-foreground w-full"
+            className="w-full"
             size="lg"
-            hover="noShadow"
+            hover="reverse"
             onClick={async () => await signOut()}
             disabled={isSigningOut}
             isPending={isSigningOut}

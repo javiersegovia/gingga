@@ -88,7 +88,7 @@
 - Setup local DB: `cd packages/db`, `touch local.db`, `bun run db:migrate`. Optionally run `bun run dev` in `packages/db` for a local libSQL server or use `bunx drizzle-kit studio`.
 - Start development server (all apps): `bun run dev` (from root)
 - Run commands across workspaces using Turbo (e.g., `bun run lint`).
-- Run package-specific commands using `cd` or Turbo filters (e.g., `bun run db:migrate --filter=@gingga/db...`, `bun run cf-typegen --filter=@gingga/api...`).
+- Run package-specific commands using `cd` or Turbo filters (e.g., `bun run db:migrate --filter=@gingga/db...`, `bun run cf-typegen --filter=~...`).
 
 **Deployment:**
 

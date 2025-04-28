@@ -15,7 +15,6 @@ export type BetterAuth = ReturnType<typeof createServerAuth>
 // Define the required environment variables structure
 export interface AuthEnv {
   ADMIN_USER_IDS: string
-  VITE_API_URL: string
   AUTH_SECRET: string
   VITE_SITE_URL: string
   VITE_SITE_DOMAIN: string
@@ -44,9 +43,8 @@ export function createServerAuth(
   const adminUserIds = env.ADMIN_USER_IDS.split(',')
 
   return betterAuth({
-    baseURL: env.VITE_API_URL,
+    baseURL: env.VITE_SITE_URL,
     secret: env.AUTH_SECRET,
-
     trustedOrigins: [env.VITE_SITE_URL],
 
     advanced: {

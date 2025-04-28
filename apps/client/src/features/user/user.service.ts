@@ -6,5 +6,8 @@ export async function getUserById(id: string) {
   const db = getDB()
   return await db.query.Users.findFirst({
     where: eq(Users.id, id),
+    with: {
+      membership: true,
+    },
   })
 }

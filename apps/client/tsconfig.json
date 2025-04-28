@@ -24,9 +24,6 @@
 
   "references": [
     {
-      "path": "../api"
-    },
-    {
       "path": "../../packages/ui"
     }
   ],

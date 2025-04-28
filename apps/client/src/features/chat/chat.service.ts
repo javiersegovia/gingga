@@ -49,15 +49,36 @@ export async function deleteChatById({ id }: { id: string }) {
 export async function getChatsByUserId({ userId }: { userId: string }) {
   const db = getDB() // Changed to getDB()
   try {
+    // Use innerJoin to link Chats with ChatMessages
+    // Select only the columns from the Chats table
+    // Group by Chats fields to ensure each chat appears only once
     return await db
-      .select()
+      .select({
+        id: Chats.id,
+        userId: Chats.userId,
+        title: Chats.title,
+        agentId: Chats.agentId,
+        createdAt: Chats.createdAt,
+        updatedAt: Chats.updatedAt,
+        visibility: Chats.visibility,
+      })
       .from(Chats)
-      .where(eq(Chats.userId, userId)) // Use renamed parameter
-      .orderBy(desc(Chats.createdAt))
+      .innerJoin(ChatMessages, eq(Chats.id, ChatMessages.chatId)) // Join ensures only chats with messages are considered
+      .where(eq(Chats.userId, userId)) // Filter by userId
+      .groupBy( // Group by all selected chat fields to ensure uniqueness
+        Chats.id,
+        Chats.userId,
+        Chats.title,
+        Chats.agentId,
+        Chats.createdAt,
+        Chats.updatedAt,
+        Chats.visibility,
+      )
+      .orderBy(desc(Chats.createdAt)) // Order the unique chats
   }
   catch (error) {
-    console.error('Failed to get chats by user from database')
-    throw error
+    console.error('Failed to get chats by user from database', error)
+    throw error // Re-throw the error after logging
   }
 }
 

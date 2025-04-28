@@ -198,7 +198,7 @@ export type TRPCAppRouter = typeof appRouter
   - Refer to the official tRPC TanStack Query usage docs: https://trpc.io/docs/client/tanstack-react-query/usage
 
 ```typescript
-import type { Agent } from '@gingga/api/features/agent/agent.types' // Adjust path as needed
+import type { Agent } from '~/features/agent/agent.types' // Adjust path as needed
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useTRPC } from '~/lib/trpc/react' // Adjust path if needed
 

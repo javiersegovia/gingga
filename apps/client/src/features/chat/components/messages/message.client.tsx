@@ -1,6 +1,6 @@
 import type { UseChatHelpers } from '@ai-sdk/react'
-import type { ToolResponse } from '@gingga/api/features/skills/skill.types'
 import type { UIMessage } from 'ai'
+import type { ToolResponse } from '~/features/skills/skill.types'
 import { Avatar, AvatarFallback } from '@gingga/ui/components/avatar'
 
 // import type { Vote } from '~/lib/db/schema'

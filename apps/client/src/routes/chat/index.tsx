@@ -2,12 +2,11 @@ import type { Route } from './+types/index'
 import { nanoid } from 'nanoid'
 import { Suspense } from 'react'
 import { BaseChat } from '~/features/chat/components/base-chat'
-import { webEnv } from '~/lib/env.server'
 
 export function loader() {
   return {
     chatId: nanoid(),
-    endpoint: `${webEnv.VITE_API_URL}/api/chat/default`,
+    endpoint: `/api/chat/default`,
   }
 }
 
