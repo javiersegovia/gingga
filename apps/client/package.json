@@ -21,7 +21,6 @@
     "@fontsource-variable/outfit": "catalog:",
     "@fontsource-variable/plus-jakarta-sans": "catalog:",
     "@fontsource-variable/unbounded": "catalog:",
-    "~": "workspace:*",
     "@gingga/db": "workspace:*",
     "@gingga/ui": "workspace:*",
     "@hono/trpc-server": "catalog:",
