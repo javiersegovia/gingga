@@ -1,9 +1,9 @@
 import type { Session } from 'better-auth'
-import type { AuthenticatedUser, AuthSession } from '~/server/context'
+import type { AuthenticatedUser, AuthSession } from '~/server/context.server'
 import { initTRPC, TRPCError } from '@trpc/server'
 import SuperJSON from 'superjson'
 import { ZodError } from 'zod'
-import { getAuthSession } from '~/server/context'
+import { getAuthSession } from '~/server/context.server'
 
 // Restore the type alias for clarity
 

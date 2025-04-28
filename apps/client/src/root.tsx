@@ -1,10 +1,9 @@
-// apps/client/src/root.tsx
 import type { Route } from './+types/root'
 
 import type { ClientEnv } from '~/lib/env.server'
 import { Toaster } from '@gingga/ui/components/sonner'
 import { dehydrate } from '@tanstack/react-query'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { Suspense } from 'react'
 import {
   isRouteErrorResponse,
   Links,
@@ -17,14 +16,14 @@ import {
 import { clientEnv } from '~/lib/env.server'
 import { getTheme } from '~/lib/theme.server'
 import { TRPCTanStackQueryProvider } from '~/lib/trpc/react'
-import { getQueryClient, honoContextMiddleware } from '~/server/context'
+import { getQueryClient } from '~/server/context.server'
 import '@fontsource-variable/outfit/wght.css'
 import '@fontsource-variable/unbounded/wght.css'
 import '@fontsource-variable/geist/wght.css'
 import '@fontsource-variable/plus-jakarta-sans/wght.css'
 import './styles/app.css'
 
-export const unstable_middleware = [honoContextMiddleware]
+// export const unstable_middleware = [honoContextMiddleware]
 
 export const links: Route.LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
@@ -50,10 +49,17 @@ export async function loader() {
   }
 }
 
+export const meta: Route.MetaFunction = () => {
+  return [
+    { title: 'Gingga — AI Agents' },
+    { name: 'description', content: 'A platform for creating and working with AI Agents.' },
+  ]
+}
+
 export function Layout({ children }: { children: React.ReactNode }) {
   const loaderData = useRouteLoaderData<typeof loader>('root')
   return (
-    <html lang="en" className={loaderData?.theme ?? 'system'}>
+    <html lang="en" suppressHydrationWarning className={loaderData?.theme ?? 'system'}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -70,19 +76,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export function ToasterWrapper() {
-  // const { resolved } = useTheme()
   return <Toaster position="top-center" theme="light" />
 }
 
 export default function App({ loaderData }: { loaderData: { ENV: ClientEnv } }) {
   return (
     <>
-      <TRPCTanStackQueryProvider>
-        <Outlet />
-        <ToasterWrapper />
-
-        <ReactQueryDevtools buttonPosition="bottom-right" />
-      </TRPCTanStackQueryProvider>
+      <Suspense>
+        <TRPCTanStackQueryProvider siteUrl={loaderData.ENV.VITE_SITE_URL}>
+          <Outlet />
+          <ToasterWrapper />
+        </TRPCTanStackQueryProvider>
+      </Suspense>
 
       {/* eslint-disable-next-line react-dom/no-dangerously-set-innerhtml */}
       <script dangerouslySetInnerHTML={{

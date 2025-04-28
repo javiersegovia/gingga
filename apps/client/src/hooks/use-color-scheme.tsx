@@ -12,7 +12,7 @@ export function useColorScheme(): [ThemeMode, (value: ThemeMode) => void] {
   const [color, setColor] = useState<ThemeMode>(loaderData?.theme ?? 'system')
 
   const setColorScheme = useCallback(
-    (value: ThemeMode) => {
+    async (value: ThemeMode) => {
       setColor(value)
 
       document.documentElement.classList.remove('dark', 'light', 'system')
@@ -20,7 +20,7 @@ export function useColorScheme(): [ThemeMode, (value: ThemeMode) => void] {
 
       const formData = new FormData()
       formData.append(THEME_INPUT_NAME, value)
-      fetcher.submit(formData, {
+      await fetcher.submit(formData, {
         method: 'post',
         action: href('/actions/update-theme'),
       })

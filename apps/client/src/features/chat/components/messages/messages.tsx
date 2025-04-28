@@ -6,6 +6,7 @@ import { cn } from '@gingga/ui/lib/utils'
 // import { Vote } from '~/lib/db/schema'
 import equal from 'fast-deep-equal'
 import { memo, Suspense, useEffect, useRef } from 'react'
+import { ClientOnly } from 'remix-utils/client-only'
 import { useChatInput } from '../chat-input-context'
 import { EmptyOverview } from '../empty-overview'
 import { PreviewMessage, ThinkingMessage } from './message.client'
@@ -125,20 +126,22 @@ function PureMessages({
         )}
 
         <Suspense>
-          {messages.map((message, index) => (
-            <PreviewMessage
-              key={message.id}
-              chatId={chatId}
-              message={message}
-              status={status}
-              isLoading={status === 'streaming' && messages.length - 1 === index}
-              // vote={votes ? votes.find((vote) => vote.messageId === message.id) : undefined}
-              setMessages={setMessages}
-              reload={reload}
-              addToolResult={addToolResult}
-              isReadonly={isReadonly}
-            />
-          ))}
+          <ClientOnly>
+            {() => messages.map((message, index) => (
+              <PreviewMessage
+                key={message.id}
+                chatId={chatId}
+                message={message}
+                status={status}
+                isLoading={status === 'streaming' && messages.length - 1 === index}
+                // vote={votes ? votes.find((vote) => vote.messageId === message.id) : undefined}
+                setMessages={setMessages}
+                reload={reload}
+                addToolResult={addToolResult}
+                isReadonly={isReadonly}
+              />
+            ))}
+          </ClientOnly>
         </Suspense>
 
         {status === 'submitted'

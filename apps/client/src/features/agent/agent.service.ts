@@ -2,7 +2,7 @@ import type { CreateAgentInput, UpdateAgentInput } from './agent.schema'
 import type { Agent } from './agent.types'
 import { and, desc, eq, isNotNull, max } from '@gingga/db'
 import { Agents, Chats } from '@gingga/db/schema'
-import { getDB } from '~/server/context'
+import { getDB } from '~/server/context.server'
 
 /**
  * Fetches the configuration for a specific agent from the database.

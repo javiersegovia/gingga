@@ -41,7 +41,7 @@ function AgentGridSection() {
 
   // Admin button that will be shown regardless of empty state
   const AdminCreateButton = isAdmin && (
-    <Button asChild size="md" className="absolute top-0 right-0 -translate-y-1/2">
+    <Button asChild variant="secondary" size="md" className="absolute top-0 right-0">
       <Link to="/chat/agents/create">
         <BotIcon className="mr-2 h-4 w-4" />
         Create Agent

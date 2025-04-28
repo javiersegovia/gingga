@@ -1,6 +1,6 @@
 import type { unstable_MiddlewareFunction } from 'react-router'
 import { href, redirect } from 'react-router'
-import { getAuthSession } from '~/server/context'
+import { getAuthSession } from '~/server/context.server'
 
 export const authMiddleware: unstable_MiddlewareFunction = async (_, next) => {
   const authSession = await getAuthSession()

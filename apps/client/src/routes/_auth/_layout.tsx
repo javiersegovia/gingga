@@ -25,8 +25,8 @@ export default function RouteComponent({ loaderData: { activeRoute } }: Route.Co
   const [loadingProvider, setLoadingProvider] = useState<'github' | 'google' | null>(null)
   const env = useClientEnv()
 
-  const handleTabChange = (value: string) => {
-    navigate(`/${value}`)
+  const handleTabChange = async (value: string) => {
+    await navigate(`/${value}`)
   }
 
   const handleSocialSignIn = async (provider: 'github' | 'google') => {

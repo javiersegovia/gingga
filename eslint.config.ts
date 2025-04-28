@@ -4,7 +4,11 @@ export default antfu(
   {
     formatters: true,
     react: true,
-    typescript: true,
+    typescript: {
+      parserOptions: {
+        project: ['./tsconfig.json', './apps/client/tsconfig.json', './packages/ui/tsconfig.json', './packages/db/tsconfig.json'],
+      },
+    },
     pnpm: true,
   },
 
@@ -18,6 +22,7 @@ export default antfu(
       'unused-imports/no-unused-vars': ['error', { argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' }],
       'style/multiline-ternary': 'off',
       'no-empty-pattern': 'off',
+      'ts/no-floating-promises': 'error',
     },
   },
   // Ignores

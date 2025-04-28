@@ -1,5 +1,5 @@
 // apps/api/src/trpc/routers/auth.router.ts
-import { getAuthSession, getBetterAuth, getHonoContext } from '~/server/context'
+import { getAuthSession, getBetterAuth, getHonoContext } from '~/server/context.server'
 import { publicProcedure, router } from '~/server/trpc'
 
 export const authRouter = router({

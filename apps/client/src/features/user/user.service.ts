@@ -1,6 +1,6 @@
 import { eq } from '@gingga/db'
 import { Users } from '@gingga/db/schema'
-import { getDB } from '~/server/context'
+import { getDB } from '~/server/context.server'
 
 export async function getUserById(id: string) {
   const db = getDB()

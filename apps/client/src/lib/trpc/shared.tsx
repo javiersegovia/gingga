@@ -1,22 +1,14 @@
-import type { AppContext } from '~/server/context'
+import type { AppContext } from '~/server/context.server'
 import type { TRPCAppRouter } from '~/server/trpc/routers/app.router'
-import { QueryClient } from '@tanstack/react-query'
 import { createTRPCClient, httpBatchLink, loggerLink } from '@trpc/client'
 import { getContext } from 'hono/context-storage'
 import SuperJSON from 'superjson'
-
-export function makeQueryClient() {
-  return new QueryClient({
-    defaultOptions: {
-      queries: {
-        refetchOnWindowFocus: false,
-        staleTime: 1000 * 60, // 1 minute
-      },
-    },
-  })
-}
+import { webEnv } from '~/lib/env.server'
 
 export function setupTRPCClient() {
+  const c = getContext<AppContext>()
+  const headers = c.req.raw.headers
+
   const trpcClient = createTRPCClient<TRPCAppRouter>({
     links: [
       loggerLink({
@@ -26,15 +18,9 @@ export function setupTRPCClient() {
       }),
       httpBatchLink({
         transformer: SuperJSON,
-        url: `/trpc`,
+        url: `${webEnv.VITE_SITE_URL}/api/trpc`,
         fetch(url, options) {
-          if (typeof window === 'undefined') {
-            const c = getContext<AppContext>()
-            // return appRouter.createCaller(await createContext(getContext<ClientContextEnv>())).$batch(opts)
-            return fetch(url, { ...options, headers: c.req.raw.headers, credentials: 'include' })
-          }
-
-          return fetch(url, { ...options, credentials: 'include' })
+          return fetch(url, { ...options, headers, credentials: 'include' })
         },
       }),
     ],

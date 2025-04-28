@@ -36,6 +36,5 @@
     "src/**/.client/**/*",
     "workers/**/*",
     "react-router.config.ts",
-    "./worker-configuration.d.ts"
-  ]
+    "./worker-configuration.d.ts"]
 }

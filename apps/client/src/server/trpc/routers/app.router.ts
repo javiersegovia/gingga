@@ -4,7 +4,7 @@ import { agentRouter } from '~/features/agent/agent.router'
 import { chatRouter } from '~/features/chat/chat.router'
 import { composioRouter } from '~/features/composio/composio.router'
 import { contactRouter } from '~/features/contact/contact.router'
-import { getDB } from '~/server/context'
+import { getDB } from '~/server/context.server'
 import { protectedProcedure, publicProcedure, router } from '../index'
 import { authRouter } from './auth.router'
 

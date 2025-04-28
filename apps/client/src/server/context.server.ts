@@ -66,11 +66,11 @@ export const honoContextMiddleware: unstable_MiddlewareFunction = ({ request }, 
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-export const getRequest = () => getHonoContext().var.request
-export const getCloudflare = () => getHonoContext().var.cloudflare
-export const getQueryClient = () => getHonoContext().var.queryClient
-export const getTRPCClient = () => getHonoContext().var.trpcClient
-export const getTRPCProxy = () => getHonoContext().var.trpcProxy
+export const getRequest = () => getContext<AppContext>().var.request
+export const getCloudflare = () => getContext<AppContext>().var.cloudflare
+export const getQueryClient = () => getContext<AppContext>().var.queryClient
+export const getTRPCClient = () => getContext<AppContext>().var.trpcClient
+export const getTRPCProxy = () => getContext<AppContext>().var.trpcProxy
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 

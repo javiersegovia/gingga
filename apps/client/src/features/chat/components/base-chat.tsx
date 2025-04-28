@@ -64,12 +64,14 @@ export function BaseChat({
     // experimental_throttle: 200,
     generateId: nanoid,
     initialMessages,
-    onResponse: (response) => {
+    onResponse: async (response) => {
       if (isNewChat && response.ok) {
         if (authData?.isAuthenticated) {
-          queryClient.invalidateQueries({ queryKey: trpc.chat.getUserChats.queryKey() })
-          queryClient.invalidateQueries({
-            queryKey: trpc.agent.getRecentChatsWithAgents.queryKey(),
+          await queryClient.invalidateQueries({
+            queryKey: [
+              trpc.chat.getUserChats.queryKey(),
+              trpc.agent.getRecentChatsWithAgents.queryKey(),
+            ],
           })
         }
 

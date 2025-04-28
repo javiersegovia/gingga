@@ -23,6 +23,7 @@ import {
   SidebarMenuItem,
 } from '@gingga/ui/components/sidebar'
 import { cn, getInitials } from '@gingga/ui/lib/utils'
+import { useSuspenseQuery } from '@tanstack/react-query'
 import {
   Loader2Icon,
   LogInIcon,
@@ -36,10 +37,9 @@ import {
 import { Fragment, Suspense, useState } from 'react'
 import { href, Link } from 'react-router'
 import { ThemeSwitch } from '~/components/ui/theme-switch'
-import { useGetRecentAgentsQuery } from '~/features/agent/agent.query'
-import { useGetUserChatsQuery } from '~/features/chat/chat.query'
 import { useClientEnv } from '~/hooks/use-client-env'
 import { useAuthQuery } from '~/lib/auth/auth.query'
+import { useTRPC } from '~/lib/trpc/react'
 import { DeleteChatDialog } from './delete-dialog'
 import { RenameChatDialog } from './rename-dialog'
 import { ShareChatDialog } from './share-dialog'
@@ -119,7 +119,8 @@ function AuthenticatedHistoryListLoading() {
 }
 
 function AuthenticatedHistoryList() {
-  const { data: chats } = useGetUserChatsQuery()
+  const trpc = useTRPC()
+  const { data: chats } = useSuspenseQuery(trpc.chat.getUserChats.queryOptions())
   const [dialog, setDialog] = useState<DialogState | null>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
 
@@ -142,7 +143,7 @@ function AuthenticatedHistoryList() {
               <DropdownMenu>
                 <SidebarMenuItem
                   className={cn(
-                    'group/item -mt-[2px] flex items-center justify-between rounded-none border border-r-0 border-l-0 border-transparent',
+                    'group/item -mt-[2px] text-xs flex items-center justify-between rounded-none border border-r-0 border-l-0 border-transparent',
                     'hover:border-border',
                     'hover:bg-sidebar-accent',
                     'focus:bg-sidebar-accent',
@@ -338,7 +339,8 @@ function RecentAgentsSection() {
 }
 
 export function RecentAgentsList() {
-  const { data: recentChatsWithAgentsData } = useGetRecentAgentsQuery()
+  const trpc = useTRPC()
+  const { data: recentChatsWithAgentsData } = useSuspenseQuery(trpc.agent.getRecentChatsWithAgents.queryOptions())
   const allAgents = recentChatsWithAgentsData?.agents ?? []
   const agentsToShow = allAgents.slice(0, MAX_RECENT_AGENTS_TO_SHOW)
 

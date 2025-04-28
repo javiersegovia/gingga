@@ -74,8 +74,8 @@ export function VisibilitySelector({
         {visibilities.map(visibility => (
           <DropdownMenuItem
             key={visibility.id}
-            onSelect={() => {
-              setVisibilityType(visibility.id)
+            onSelect={async () => {
+              await setVisibilityType(visibility.id)
               setOpen(false)
             }}
             className="group/item flex flex-row items-center justify-between gap-4"

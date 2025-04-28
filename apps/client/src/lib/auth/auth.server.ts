@@ -6,7 +6,7 @@ import { admin } from 'better-auth/plugins'
 import { sendEmail } from '~/lib/email'
 import VerificationEmail from '~/lib/email/templates/verification-email'
 import { webEnv } from '~/lib/env.server'
-import { getDB, getHonoContext } from '~/server/context'
+import { getDB, getHonoContext } from '~/server/context.server'
 import { PASSWORD_MAX, PASSWORD_MIN } from './auth.schema'
 
 export type Session = ReturnType<typeof createServerAuth>['$Infer']['Session']
@@ -78,7 +78,7 @@ export function createServerAuth(
       maxPasswordLength: PASSWORD_MAX,
       resetPasswordTokenExpiresIn: 10 * 60,
       async sendResetPassword({ url, user }) {
-        sendEmail({
+        await sendEmail({
           to: user.email,
           subject: 'Reset your password',
           react: VerificationEmail({
@@ -93,7 +93,7 @@ export function createServerAuth(
       expiresIn: 10 * 60,
       autoSignInAfterVerification: true,
       sendVerificationEmail: async ({ user, url }) => {
-        sendEmail({
+        await sendEmail({
           to: user.email,
           subject: 'Verify your email',
           react: VerificationEmail({
@@ -107,7 +107,7 @@ export function createServerAuth(
       changeEmail: {
         enabled: true,
         sendChangeEmailVerification: async ({ newEmail, url }) => {
-          sendEmail({
+          await sendEmail({
             to: newEmail,
             subject: 'Verify your new email',
             react: VerificationEmail({

@@ -63,9 +63,9 @@ export function useDeleteUserComposioConnectionMutation() {
   const trpc = useTRPC()
   return useMutation(
     trpc.composio.deleteUserComposioConnection.mutationOptions({
-      onSuccess: (data) => {
+      onSuccess: async (data) => {
         if (data.success) {
-          queryClient.invalidateQueries({
+          await queryClient.invalidateQueries({
             queryKey: trpc.composio.getUserComposioConnections.queryKey(),
           })
         }

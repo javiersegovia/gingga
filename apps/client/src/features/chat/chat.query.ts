@@ -12,21 +12,18 @@ export function useGetChatByIdQuery(chatId: string | undefined) {
   return useQuery(trpc.chat.getChatById.queryOptions({ id: chatId! }, { enabled: !!chatId }))
 }
 
-// Query Hook for user chats (replaces userChatsQueryOptions + useUserChatsQuery)
-export function useGetUserChatsQuery() {
-  const trpc = useTRPC()
-  // Use the getUserChats procedure. Auth state is handled by protectedProcedure.
-  return useQuery(trpc.chat.getUserChats.queryOptions())
-}
-
 // Mutation Hook for renaming a chat (replaces useRenameChatMutation)
 export function useRenameChatMutation() {
   const queryClient = useQueryClient()
   const trpc = useTRPC()
   return useMutation(trpc.chat.renameChat.mutationOptions({
     onSuccess: async (_data, variables) => {
-      queryClient.invalidateQueries({ queryKey: trpc.chat.getUserChats.queryKey() })
-      queryClient.invalidateQueries({ queryKey: trpc.chat.getChatById.queryKey({ id: variables.id }) })
+      await queryClient.invalidateQueries({
+        queryKey: [
+          trpc.chat.getUserChats.queryKey(),
+          trpc.chat.getChatById.queryKey({ id: variables.id }),
+        ],
+      })
     },
   }),
   )
@@ -40,9 +37,10 @@ export function useDeleteChatMutation() {
     onSuccess: async (data, variables) => {
       if (!data.success)
         return
-      queryClient.invalidateQueries({ queryKey: trpc.chat.getUserChats.queryKey() })
+
       queryClient.removeQueries({ queryKey: trpc.chat.getChatById.queryKey({ id: variables.id }) })
-      revalidate()
+      await queryClient.invalidateQueries({ queryKey: trpc.chat.getUserChats.queryKey() })
+      await revalidate()
     },
   }),
   )
@@ -53,8 +51,12 @@ export function useUpdateChatVisibilityMutation() {
   const trpc = useTRPC()
   return useMutation(trpc.chat.updateChatVisibility.mutationOptions({
     onSuccess: async (_data, variables) => {
-      queryClient.invalidateQueries({ queryKey: trpc.chat.getUserChats.queryKey() })
-      queryClient.invalidateQueries({ queryKey: trpc.chat.getChatById.queryKey({ id: variables.id }) })
+      await queryClient.invalidateQueries({
+        queryKey: [
+          trpc.chat.getUserChats.queryKey(),
+          trpc.chat.getChatById.queryKey({ id: variables.id }),
+        ],
+      })
     },
   }),
   )
@@ -65,8 +67,8 @@ export function useDeleteTrailingMessagesMutation() {
   const trpc = useTRPC()
   const { revalidate } = useRevalidator()
   return useMutation(trpc.chat.deleteTrailingMessages.mutationOptions({
-    onSuccess: () => {
-      revalidate()
+    onSuccess: async () => {
+      await revalidate()
     },
   }))
 }

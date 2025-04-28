@@ -1,4 +1,3 @@
-// Taken from https://github.com/maplegrove-io/use-dehydrated-state
 import type { DehydratedState } from '@tanstack/react-query'
 import merge from 'deepmerge'
 import { useMatches } from 'react-router'

@@ -81,17 +81,17 @@ export default function ResetPasswordPage({ loaderData: { token, tokenError } }:
         token,
       },
       {
-        onSuccess: () => {
+        onSuccess: async () => {
           toast.success('Password reset successfully!')
-          navigate(href('/identify'))
+          await navigate(href('/identify'))
         },
-        onError: (ctx) => {
+        onError: async (ctx) => {
           toast.error('Failed to reset password', {
             description: ctx.error.message,
           })
           // If token becomes invalid after submission attempt, redirect
           if (ctx.error.code === 'INVALID_TOKEN') {
-            navigate(href('/forgot-password'))
+            await navigate(href('/forgot-password'))
           }
         },
       },

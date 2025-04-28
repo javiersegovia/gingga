@@ -13,8 +13,8 @@ export function useSignOutMutation() {
 
   return useMutation({
     mutationFn: () => authClient.signOut(),
-    onSettled() {
-      navigate(href('/'))
+    onSettled: async () => {
+      await navigate(href('/'))
     },
   })
 }

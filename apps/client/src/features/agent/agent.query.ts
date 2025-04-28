@@ -13,23 +13,14 @@ export function useListAgentsQuery() {
   return useQuery(trpc.agent.getAgents.queryOptions())
 }
 
-// Query Hook for fetching recent agents for the current user
-export function useGetRecentAgentsQuery() {
-  const trpc = useTRPC()
-  return useQuery(trpc.agent.getRecentChatsWithAgents.queryOptions())
-}
-
 // Mutation Hook for creating an agent
 export function useCreateAgentMutation() {
   const queryClient = useQueryClient()
   const trpc = useTRPC()
   return useMutation(trpc.agent.createAgent.mutationOptions({
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: trpc.agent.getAgents.queryKey(),
-      })
-      queryClient.invalidateQueries({
-        queryKey: trpc.agent.getRecentChatsWithAgents.queryKey(),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: [trpc.agent.getAgents.queryKey(), trpc.agent.getRecentChatsWithAgents.queryKey()],
       })
     },
   }))
@@ -40,15 +31,13 @@ export function useUpdateAgentMutation() {
   const queryClient = useQueryClient()
   const trpc = useTRPC()
   return useMutation(trpc.agent.updateAgentById.mutationOptions({
-    onSuccess: (updatedAgent) => {
-      queryClient.invalidateQueries({
-        queryKey: trpc.agent.getAgents.queryKey(),
-      })
-      queryClient.invalidateQueries({
-        queryKey: trpc.agent.getAgentById.queryKey({ id: updatedAgent.id }),
-      })
-      queryClient.invalidateQueries({
-        queryKey: trpc.agent.getRecentChatsWithAgents.queryKey(),
+    onSuccess: async (updatedAgent) => {
+      await queryClient.invalidateQueries({
+        queryKey: [
+          trpc.agent.getAgents.queryKey(),
+          trpc.agent.getRecentChatsWithAgents.queryKey(),
+          trpc.agent.getAgentById.queryKey({ id: updatedAgent.id }),
+        ],
       })
     },
   }))
@@ -59,15 +48,13 @@ export function useDeleteAgentMutation() {
   const queryClient = useQueryClient()
   const trpc = useTRPC()
   return useMutation(trpc.agent.deleteAgentById.mutationOptions({
-    onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({
-        queryKey: trpc.agent.getAgents.queryKey(),
-      })
-      queryClient.removeQueries({
-        queryKey: trpc.agent.getAgentById.queryKey({ id: variables.id }),
-      })
-      queryClient.invalidateQueries({
-        queryKey: trpc.agent.getRecentChatsWithAgents.queryKey(),
+    onSuccess: async (_, variables) => {
+      await queryClient.invalidateQueries({
+        queryKey: [
+          trpc.agent.getAgents.queryKey(),
+          trpc.agent.getRecentChatsWithAgents.queryKey(),
+          trpc.agent.getAgentById.queryKey({ id: variables.id }),
+        ],
       })
     },
   }))
