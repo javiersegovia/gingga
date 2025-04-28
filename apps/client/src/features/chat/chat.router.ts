@@ -1,6 +1,6 @@
 import { TRPCError } from '@trpc/server'
 import { z } from 'zod'
-import { protectedProcedure, publicProcedure, router } from '~/trpc'
+import { protectedProcedure, publicProcedure, router } from '~/server/trpc'
 import {
   DeleteChatSchema,
   RenameChatSchema,

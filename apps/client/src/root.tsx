@@ -19,7 +19,7 @@ import { getTheme } from '~/lib/theme.server'
 import { TRPCTanStackQueryProvider } from '~/lib/trpc/react'
 import { sessionMiddleware } from '~/middleware/auth.middleware'
 // import { contextStorageMiddleware } from '~/middleware/context-storage.server'
-import { getQueryClient, honoContextMiddleware } from '~/middleware/context-hono.server'
+import { getQueryClient, honoContextMiddleware } from '~/server/context'
 import '@fontsource-variable/outfit/wght.css'
 import '@fontsource-variable/unbounded/wght.css'
 import '@fontsource-variable/geist/wght.css'
@@ -78,7 +78,7 @@ export function ToasterWrapper() {
 export default function App({ loaderData }: { loaderData: { ENV: ClientEnv } }) {
   return (
     <>
-      <TRPCTanStackQueryProvider API_URL={loaderData.ENV.VITE_API_URL}>
+      <TRPCTanStackQueryProvider>
         <Outlet />
         <ToasterWrapper />
 

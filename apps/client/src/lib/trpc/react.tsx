@@ -1,6 +1,5 @@
-import type { TRPCAppRouter } from '@gingga/api/trpc/routers/index'
-
 import type { inferRouterInputs, inferRouterOutputs } from '@trpc/server'
+import type { TRPCAppRouter } from '~/server/trpc/routers/app.router'
 import { HydrationBoundary, QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { createTRPCClient, httpBatchLink, loggerLink } from '@trpc/client'
 import { createTRPCContext } from '@trpc/tanstack-react-query'
@@ -18,7 +17,7 @@ function makeQueryClient() {
   })
 }
 
-function getLinks(apiUrl: string) {
+function getLinks() {
   return [
     loggerLink({
       enabled: op =>
@@ -27,7 +26,7 @@ function getLinks(apiUrl: string) {
     }),
     httpBatchLink({
       transformer: SuperJSON,
-      url: `${apiUrl}/trpc`,
+      url: `/trpc`,
       fetch(url, options) {
         const headers = new Headers(options?.headers)
         headers.set('x-trpc-source', 'react')
@@ -39,10 +38,10 @@ function getLinks(apiUrl: string) {
 
 export const { TRPCProvider, useTRPC } = createTRPCContext<TRPCAppRouter>()
 
-export function TRPCTanStackQueryProvider({ children, API_URL }: { children: React.ReactNode, API_URL: string }) {
+export function TRPCTanStackQueryProvider({ children }: { children: React.ReactNode }) {
   const [trpcClient] = useState(() =>
     createTRPCClient<TRPCAppRouter>({
-      links: getLinks(API_URL),
+      links: getLinks(),
     }),
   )
 

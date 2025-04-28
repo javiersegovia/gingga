@@ -86,12 +86,12 @@ export function ChatSidebar() {
 
       <SidebarContent>
         <RecentAgentsSection />
-        <SidebarChats user={authData?.isAuthenticated ? authData.user : null} />
+        <SidebarChats user={authData?.isAuthenticated && authData.user ? authData.user : null} />
       </SidebarContent>
 
       <SidebarFooter>
         <div className="flex items-center gap-2">
-          <NavUser user={authData?.isAuthenticated ? authData.user : null} />
+          <NavUser user={authData?.isAuthenticated && authData.user ? authData.user : null} />
           <ThemeSwitch />
         </div>
       </SidebarFooter>
@@ -326,7 +326,7 @@ function RecentAgentsSection() {
       <SidebarGroupLabel className="text-foreground font-bold">Agents</SidebarGroupLabel>
       <SidebarGroupContent>
         <SidebarMenu className="gap-0">
-          {authData?.session && (
+          {authData?.isAuthenticated && (
             <Suspense fallback={<RecentAgentsListLoading />}>
               <RecentAgentsList />
             </Suspense>

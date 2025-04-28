@@ -6,19 +6,23 @@ import SuperJSON from 'superjson'
 import { ZodError } from 'zod'
 import { getAuthSession } from '~/server/context'
 
-// Use the correct type for the user
-// type AuthenticatedUser = Awaited<ReturnType<typeof getUserById>>
+// Restore the type alias for clarity
+type AuthenticatedUser = NonNullable<Awaited<ReturnType<typeof getUserById>>>
 
-// Use function declaration as per linter rule
-export function assertAuthenticated(authSession: AuthSession) {
-  if (!authSession.isAuthenticated) {
+// Restore explicit return type and function declaration
+export function assertAuthenticated(authSession: AuthSession): { isAuthenticated: true, session: Session, user: AuthenticatedUser } {
+  if (!authSession.isAuthenticated || !authSession.user || !authSession.session) {
     throw new TRPCError({
       code: 'UNAUTHORIZED',
       message: 'We could not find your session. Please sign in again.',
     })
   }
 
-  return authSession
+  return {
+    isAuthenticated: true,
+    session: authSession.session,
+    user: authSession.user,
+  }
 }
 
 const t = initTRPC.context().create({
@@ -40,11 +44,13 @@ export const createCallerFactory = t.createCallerFactory
 
 export const protectedProcedure = t.procedure.use(async ({ next }) => {
   const authSession = await getAuthSession()
-  const authenticatedSession = assertAuthenticated(authSession)
+  const { isAuthenticated, session, user } = assertAuthenticated(authSession)
 
   return next({
     ctx: {
-      ...authenticatedSession,
+      isAuthenticated,
+      session,
+      user,
     },
   })
 })

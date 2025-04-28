@@ -1,7 +1,6 @@
 import type { Route } from './+types/test'
 import { Card } from '@gingga/ui/components/card'
-import { getBindings } from '~/middleware/cloudflare.server'
-import { getDB } from '~/middleware/context-storage.server'
+import { getCloudflare, getDB } from '~/server/context'
 import { Welcome } from '../welcome/welcome'
 
 export function meta({}: Route.MetaArgs) {
@@ -14,7 +13,7 @@ export function meta({}: Route.MetaArgs) {
 export async function loader({ }: Route.LoaderArgs) {
   const users = await getDB().query.Users.findMany()
   return {
-    message: getBindings().VALUE_FROM_CLOUDFLARE,
+    message: getCloudflare().env.VALUE_FROM_CLOUDFLARE,
     usersCount: users.length,
   }
 }

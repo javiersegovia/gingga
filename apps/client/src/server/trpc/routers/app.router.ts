@@ -1,4 +1,3 @@
-// apps/api/src/trpc/routers/index.ts
 import { count } from '@gingga/db'
 import { Users } from '@gingga/db/schema'
 import { agentRouter } from '~/features/agent/agent.router'

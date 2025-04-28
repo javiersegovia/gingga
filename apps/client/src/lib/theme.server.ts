@@ -1,7 +1,7 @@
 import { createCookie } from 'react-router'
 import { createTypedCookie } from 'remix-utils/typed-cookie'
 import { z } from 'zod'
-import { getRequest } from '~/middleware/context-hono.server'
+import { getRequest } from '~/server/context'
 
 export const ThemeSchema = z
   .enum(['dark', 'light', 'system']) // Possible color schemes

@@ -78,7 +78,7 @@ export default function AccountSettingsComponent() {
   const monthlyStandardLimit = 1000
   const monthlyPremiumLimit = 500
 
-  if (!authData?.session) {
+  if (!authData?.isAuthenticated) {
     // Should be handled by layout, but good practice
     return null // Or a loading state
   }

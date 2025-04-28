@@ -66,7 +66,7 @@ export function BaseChat({
     initialMessages,
     onResponse: (response) => {
       if (isNewChat && response.ok) {
-        if (authData?.session) {
+        if (authData?.isAuthenticated) {
           queryClient.invalidateQueries({ queryKey: trpc.chat.getUserChats.queryKey() })
           queryClient.invalidateQueries({
             queryKey: trpc.agent.getRecentChatsWithAgents.queryKey(),

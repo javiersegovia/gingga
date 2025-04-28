@@ -1,8 +1,6 @@
-// apps/client/src/middleware/auth.middleware.ts
 import type { unstable_MiddlewareFunction } from 'react-router'
 import { href, redirect } from 'react-router'
-import { getAuthSession } from '~/middleware/context-hono.server'
-// import { getAuthSession } from '~/middleware/context-storage.server'
+import { getAuthSession } from '~/server/context'
 
 export const sessionMiddleware: unstable_MiddlewareFunction = async (_, next) => {
   console.log('[1] - SESSION-MIDDLEWARE')

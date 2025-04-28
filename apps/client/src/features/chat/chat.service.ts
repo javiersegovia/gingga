@@ -4,8 +4,8 @@ import type { ChatSchema } from './chat.schema'
 import { and, asc, desc, eq, gte, inArray } from '@gingga/db'
 import { ChatMessages, Chats } from '@gingga/db/schema'
 import { generateText } from 'ai'
-import { getDB } from '~/context'
 import { modelProvider } from '~/lib/ai/providers'
+import { getDB } from '~/server/context'
 
 export async function saveChat({
   id,
