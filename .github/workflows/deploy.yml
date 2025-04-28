@@ -39,15 +39,6 @@ jobs:
       - name: Build Apps for Production
         run: pnpm run build:prod
 
-      - name: Deploy API Worker to Cloudflare
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          packageManager: pnpm
-          workingDirectory: ./apps/api
-          environment: production
-
       # We don't need to specify the environment here because it's already setup in the build step
       - name: Deploy Client Worker to Cloudflare
         uses: cloudflare/wrangler-action@v3

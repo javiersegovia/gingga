@@ -48,9 +48,6 @@ export function TRPCTanStackQueryProvider({ children }: { children: React.ReactN
   const [queryClient] = useState(() => makeQueryClient())
   const dehydratedState = useDehydratedState()
 
-  console.log('[1] - TRPCTanStackQueryProvider')
-  console.log(dehydratedState)
-
   return (
     <QueryClientProvider client={queryClient}>
       <HydrationBoundary state={dehydratedState}>

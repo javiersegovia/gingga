@@ -50,9 +50,7 @@ app.use(async (c, next) => {
     env: c.env,
     ctx: c.executionCtx,
   })
-  const data = await queryClient.ensureQueryData(trpcProxy.auth.getSession.queryOptions())
-  console.log(data)
-
+  await queryClient.prefetchQuery(trpcProxy.auth.getSession.queryOptions())
   return next()
 })
 

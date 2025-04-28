@@ -23,18 +23,26 @@ export default antfu(
   // Ignores
   {
     ignores: [
+      // Specific client ignores
+      'apps/client/build/**/*',
+      'apps/client/.turbo/**/*',
+      'apps/client/.wrangler/**/*',
+      'apps/client/.react-router/**/*',
+      'apps/client/node_modules/**/*',
+      // Global ignores (keep existing ones)
       '**/routeTree.gen.ts',
       '**/release/**/*',
       '**/.vinxi/**/*',
       '**/.types/**/*',
       '**/migrations/meta/*.json',
-      'node_modules/**/*',
+      'node_modules/**/*', // Keep this global one as well
       'dist/**/*',
-      '.turbo/**/*',
-      '.wrangler/**/*',
+      '.turbo/**/*', // Keep this global one as well
+      '.wrangler/**/*', // Keep this global one as well
       '.vscode/**/*',
       '.husky/**/*',
-      '**/.react-router/**/*',
+      'build/**/*', // Keep this global one as well
+      '**/.react-router/**/*', // Keep this global one as well
       '**/worker-configuration.d.ts',
     ],
   },
