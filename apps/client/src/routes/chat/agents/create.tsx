@@ -15,7 +15,7 @@ export default function RouteComponent() {
       values,
       {
         onSuccess: () => {
-          navigate(href('/chat/agents'))
+          void navigate(href('/chat/agents'))
         },
         onError: (error) => {
           toast.error('An error occurred', {

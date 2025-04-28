@@ -131,7 +131,7 @@ export const agentDefaultRoute = new Hono().post('/', async (c) => {
           // ],
         })
 
-        result.consumeStream()
+        void result.consumeStream()
         result.mergeIntoDataStream(dataStream)
       },
       onError(error) {
