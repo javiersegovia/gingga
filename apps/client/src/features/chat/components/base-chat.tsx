@@ -3,7 +3,6 @@ import type { VisibilityType } from './visibility-selector'
 import type { ToolName } from '~/features/skills/skill.types'
 import { useChat } from '@ai-sdk/react'
 import { useQueryClient } from '@tanstack/react-query'
-// import { useLinkProps } from '@tanstack/react-router'
 import { nanoid } from 'nanoid'
 import { useState } from 'react'
 import { href } from 'react-router'
@@ -22,7 +21,6 @@ export function BaseChat({
   endpoint = '/api/chat/default',
   agentId,
   initialMessages,
-  // selectedChatModel,
   selectedVisibilityType,
   isReadonly,
   isNewChat = false,
@@ -35,10 +33,7 @@ export function BaseChat({
   selectedVisibilityType: VisibilityType
   isReadonly: boolean
   isNewChat?: boolean
-  isAgent?: boolean
 }) {
-  const newChatHref = href('/chat/:chatId', { chatId: id })
-  const newAgentChatHref = href('/chat/agent/:agentId/chat/:chatId', { agentId: agentId ?? '', chatId: id })
   const trpc = useTRPC()
 
   const { data: authData } = useAuthQuery()
@@ -56,12 +51,10 @@ export function BaseChat({
     addToolResult,
   } = useChat({
     id,
-    streamProtocol: 'data',
     api: endpoint,
-    body: { id, agentId, modelId: undefined },
+    body: { id, agentId },
     sendExtraMessageFields: true,
     credentials: 'include',
-    // experimental_throttle: 200,
     generateId: nanoid,
     initialMessages,
     onResponse: async (response) => {
@@ -75,8 +68,7 @@ export function BaseChat({
           })
         }
 
-        const targetHref = agentId ? newAgentChatHref : newChatHref
-        window.history.replaceState({}, '', targetHref)
+        window.history.replaceState({}, '', href('/chat/agent/:agentId/chat/:chatId', { agentId: agentId ?? '', chatId: id }))
       }
     },
     onError: (error) => {
@@ -108,7 +100,6 @@ export function BaseChat({
       <div className="bg-background relative flex h-full max-h-dvh min-w-0 flex-col">
         <ChatHeader
           chatId={id}
-          // selectedModelId={selectedChatModel}
           selectedVisibilityType={selectedVisibilityType}
           isReadonly={isReadonly}
           hasMessages={messages.length > 0}

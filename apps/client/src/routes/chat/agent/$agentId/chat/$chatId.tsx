@@ -1,20 +1,8 @@
-import type { ChatMessage } from '@gingga/db/types'
-import type { Attachment, UIMessage } from 'ai'
 import type { Route } from './+types/$chatId'
 import { href, redirect } from 'react-router'
 import { getChatById } from '~/features/chat/chat.service'
 import { BaseChat } from '~/features/chat/components/base-chat'
-
-function convertToUIMessages(messages: Array<ChatMessage>): Array<UIMessage> {
-  return messages.map(message => ({
-    id: message.id,
-    parts: message.parts as UIMessage['parts'],
-    role: message.role,
-    createdAt: message.createdAt,
-    content: '',
-    experimental_attachments: (message.attachments as Array<Attachment>) ?? [],
-  }))
-}
+import { convertToUIMessages } from '~/lib/utils'
 
 export async function loader({ params }: Route.LoaderArgs) {
   const chat = await getChatById({ id: params.chatId })
@@ -39,7 +27,6 @@ export default function AgentChatIdRoute({ loaderData }: Route.ComponentProps) {
         initialMessages={convertToUIMessages(chat.messages)}
         selectedVisibilityType={chat.visibility}
         isReadonly={false}
-        isAgent
       />
     </>
   )

@@ -7,12 +7,11 @@ export function loader({ params }: Route.LoaderArgs) {
   if (!params.agentId) {
     return redirect(href('/chat/agents'), 302)
   }
-  return { agentId: params.agentId, endpoint: `/api/agents/custom/${params.agentId}` }
+  return { agentId: params.agentId, chatId: nanoid(), endpoint: `/api/agents/custom/${params.agentId}` }
 }
 
 export default function AgentChatRoute({ loaderData }: Route.ComponentProps) {
-  const { agentId, endpoint } = loaderData
-  const chatId = nanoid()
+  const { agentId, chatId, endpoint } = loaderData
 
   return (
     <>
@@ -25,7 +24,6 @@ export default function AgentChatRoute({ loaderData }: Route.ComponentProps) {
         selectedVisibilityType="private"
         isReadonly={false}
         isNewChat
-        isAgent
       />
     </>
   )

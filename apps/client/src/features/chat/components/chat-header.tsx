@@ -4,16 +4,14 @@ import { VisibilitySelector } from './visibility-selector'
 
 function PureChatHeader({
   chatId,
-  // selectedModelId,
-  selectedVisibilityType,
+  selectedVisibilityType = 'private',
   isReadonly,
   hasMessages,
 }: {
-  chatId: string
-  // selectedModelId: string
-  selectedVisibilityType: VisibilityType
   isReadonly: boolean
   hasMessages: boolean
+  chatId?: string | null
+  selectedVisibilityType?: VisibilityType
 }) {
   return (
     <header className="bg-background sticky top-0 z-10 flex items-center gap-2 px-2 py-1.5">
@@ -28,7 +26,7 @@ function PureChatHeader({
       {/* <SidebarFloatingActions /> */}
 
       <div className="ml-auto flex items-center gap-2">
-        {!isReadonly && hasMessages && (
+        {!isReadonly && hasMessages && chatId && (
           <VisibilitySelector
             chatId={chatId}
             selectedVisibilityType={selectedVisibilityType}

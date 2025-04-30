@@ -1,6 +1,7 @@
 import type { UseChatHelpers } from '@ai-sdk/react'
 import type { Message } from 'ai'
 import type { Dispatch, SetStateAction } from 'react'
+import type { UseAgentChatResult } from '~/features/agent/agent.types'
 // import { $deleteTrailingMessages } from '~/features/chat/chat.api'
 import { Button } from '@gingga/ui/components/button'
 import { Textarea } from '@gingga/ui/components/textarea'
@@ -9,8 +10,8 @@ import { useEffect, useRef, useState } from 'react'
 export interface MessageEditorProps {
   message: Message
   setMode: Dispatch<SetStateAction<'view' | 'edit'>>
-  setMessages: UseChatHelpers['setMessages']
-  reload: UseChatHelpers['reload']
+  setMessages: UseChatHelpers['setMessages'] | UseAgentChatResult['setMessages']
+  reload: UseChatHelpers['reload'] | UseAgentChatResult['reload']
 }
 
 export function MessageEditor({
@@ -76,10 +77,10 @@ export function MessageEditor({
             // await $deleteTrailingMessages({
             //   data: { id: message.id },
             // })
-
             // @ts-expect-error todo: support UIMessage in setMessages
+
             setMessages((messages) => {
-              const index = messages.findIndex(m => m.id === message.id)
+              const index = messages.findIndex((m: { id: string }) => m.id === message.id)
 
               if (index !== -1) {
                 const updatedMessage = {

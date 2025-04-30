@@ -68,6 +68,7 @@ catalog:
   '@upstash/ratelimit': ^2.0.5
   '@upstash/redis': ^1.34.8
   '@vercel/functions': ^2.0.0
+  agents: ^0.0.75
   ai: ^4.3.9
   babel-plugin-react-compiler: 19.0.0-beta-e993439-20250405
   better-auth: ^1.2.7
@@ -89,6 +90,7 @@ catalog:
   eslint-plugin-react-refresh: ^0.4.20
   fast-deep-equal: ^3.1.3
   hono: ^4.7.7
+  hono-agents: ^0.0.65
   husky: ^9.1.7
   input-otp: ^1.4.2
   isbot: 5.1.26

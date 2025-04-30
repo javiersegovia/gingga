@@ -18,7 +18,7 @@ import {
 } from './chat.service'
 
 export const chatRouter = router({
-  getChatById: publicProcedure // Assuming public based on original lack of authMiddleware
+  getChatById: publicProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ input }) => {
       const chat = await getChatById({ id: input.id })
@@ -28,7 +28,7 @@ export const chatRouter = router({
       return chat
     }),
 
-  getChatMessagesByChatId: publicProcedure // Assuming public
+  getChatMessagesByChatId: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ input }) => {
       const chatMessages = await getChatMessagesByChatId({ id: input.id })

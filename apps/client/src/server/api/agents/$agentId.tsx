@@ -1,4 +1,4 @@
-import type { Tool } from 'ai'
+import type { Tool, UIMessage } from 'ai'
 import type {
   ComposioAppName,
   ComposioToolName,
@@ -34,7 +34,7 @@ export const agentCustomRoute = new Hono().post('/:agentId', async (c) => {
     }
     const { id, messages } = parsed.data
 
-    const lastUserMessage = getMostRecentUserMessage(messages)
+    const lastUserMessage = getMostRecentUserMessage(messages as UIMessage[])
     if (!lastUserMessage) {
       return new Response('No user message found', { status: 400 })
     }

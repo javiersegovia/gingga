@@ -19,7 +19,9 @@
     "build:prod": "turbo run build:prod",
     "lint": "eslint \"apps/**/*.{js,jsx,ts,tsx}\" \"packages/**/*.{js,jsx,ts,tsx}\"",
     "lint:fix": "eslint --fix \"apps/**/*.{js,jsx,ts,tsx}\" \"packages/**/*.{js,jsx,ts,tsx}\"",
-    "typecheck": "turbo run typecheck"
+    "typecheck": "turbo run typecheck",
+    "db:generate": "turbo run db:generate",
+    "db:migrate": "turbo run db:migrate"
   },
   "devDependencies": {
     "@antfu/eslint-config": "catalog:",

@@ -1,5 +1,4 @@
 import { z } from 'zod'
-// Removed: import { aiModels } from '../ai/utils/ai-models' - No longer needed here
 
 export const ChatSchema = z.object({
   id: z.string(),
@@ -7,28 +6,26 @@ export const ChatSchema = z.object({
   title: z.string(),
   visibility: z.enum(['public', 'private']).default('private').optional(),
   agentId: z.string().nullable(),
+  durableObjectId: z.string().optional(),
 })
 
-// Schema for API input/output - consider renaming if needed
 export const ApiChatSchema = z.object({
   id: z.string(),
+  agentId: z.string().optional(),
   messages: z.array(
     z.object({
       id: z.string(),
-      role: z.enum(['system', 'user', 'assistant']),
+      role: z.enum(['user', 'assistant', 'system', 'data']),
       content: z.string(),
       parts: z.array(z.any()),
+      experimental_attachments: z.array(z.any()).optional(),
     }),
   ),
-  agentId: z.string().optional(),
 })
 
 export const RenameChatSchema = z.object({
   id: z.string(),
-  title: z
-    .string()
-    .min(1, 'Title is required')
-    .max(80, 'Title must be less than 80 characters'),
+  title: z.string().min(1, 'Title cannot be empty'),
 })
 
 export const DeleteChatSchema = z.object({
@@ -40,15 +37,7 @@ export const UpdateChatVisibilitySchema = z.object({
   visibility: z.enum(['public', 'private']),
 })
 
-// These types might be useful for API layer, keeping them for now.
 export type ChatType = z.infer<typeof ChatSchema>
 export type RenameChatType = z.infer<typeof RenameChatSchema>
 export type DeleteChatType = z.infer<typeof DeleteChatSchema>
 export type UpdateChatVisibilityType = z.infer<typeof UpdateChatVisibilitySchema>
-
-// Removed ChatModelSchema as cookie handling is out of scope for this service/schema file
-// export const ChatModelSchema = z
-//   .object({ modelId: z.string() })
-//   .refine(data => aiModels.some(model => model.id === data.modelId), {
-//     message: 'Invalid model id',
-//   })

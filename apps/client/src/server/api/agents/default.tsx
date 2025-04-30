@@ -32,8 +32,9 @@ export const agentDefaultRoute = new Hono().post('/', async (c) => {
     }
 
     let chat: { id: string } | undefined = await getChatById({ id })
-    if (!chat) {
-      const userId = (authSession.isAuthenticated && authSession.user.id) || null
+    const userId = (authSession.isAuthenticated && authSession.user.id) || null
+
+    if (!chat && userId) {
       chat = await saveChat({
         id,
         userId,
@@ -41,13 +42,11 @@ export const agentDefaultRoute = new Hono().post('/', async (c) => {
         agentId: null,
       })
     }
-    // Ensure chat exists before proceeding (saveChat should guarantee this, but belts and suspenders)
+
     if (!chat) {
       return new Response('Failed to create or retrieve chat', { status: 500 })
     }
 
-    // Removed the specific try-catch here. Let errors bubble up before streaming.
-    // If this fails, the main try-catch at the bottom will handle it.
     await saveChatMessages({ messages: [{
       id: lastUserMessage.id,
       role: 'user',
@@ -56,25 +55,23 @@ export const agentDefaultRoute = new Hono().post('/', async (c) => {
       attachments: lastUserMessage.experimental_attachments ?? [],
     }] })
 
-    // createDataStreamResponse returns a standard Response, compatible with Hono
     return createDataStreamResponse({
       execute: async (dataStream) => {
         const { proccesedMessages } = await processToolCalls({
           chatId: chat.id,
           dataStream,
           messages,
-          tools: {}, // Assuming tools/executions are handled correctly
+          tools: {},
           executions: {},
         })
 
-        // Now call the LLM with the potentially modified messages
         const result = streamText({
           model: modelProvider.languageModel('chat-agent'),
-          abortSignal: c.req.raw.signal, // Access signal from the raw Request object
+          abortSignal: c.req.raw.signal,
           messages: proccesedMessages,
           tools: {},
-          experimental_generateMessageId: nanoid, // Keep using nanoid if preferred (and installed)
-          maxSteps: 10, // Consider if maxSteps is appropriate here
+          experimental_generateMessageId: nanoid,
+          maxSteps: 10,
           async onFinish({ response }) {
             const assistantMessages = response.messages.filter(
               m => m.role === 'assistant',
@@ -82,7 +79,7 @@ export const agentDefaultRoute = new Hono().post('/', async (c) => {
 
             try {
               const newAssistantMessageId = getTrailingMessageId({
-                messages: assistantMessages, // Use filtered list
+                messages: assistantMessages,
               })
 
               if (!newAssistantMessageId) {
@@ -96,16 +93,8 @@ export const agentDefaultRoute = new Hono().post('/', async (c) => {
               if (
                 newAssistantMessage?.role === 'assistant'
                 && newAssistantMessage.parts
-                && newAssistantMessage.id === newAssistantMessageId // Sanity check ID
+                && newAssistantMessage.id === newAssistantMessageId
               ) {
-                // await upsertChatMessage({
-                //   id: newAssistantMessage.id,
-                //   chatId: chat.id,
-                //   role: 'assistant',
-                //   parts: newAssistantMessage.parts ?? [],
-                //   attachments: newAssistantMessage.experimental_attachments ?? [],
-                //   modelId: modelProvider.languageModel('chat-agent').modelId,
-                // })
                 await saveChatMessages({
                   messages: [{
                     id: newAssistantMessage.id,

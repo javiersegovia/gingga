@@ -8,11 +8,9 @@ import { useTRPC } from '~/lib/trpc/react'
 
 export function useGetChatByIdQuery(chatId: string | undefined) {
   const trpc = useTRPC()
-  // Use the getChatById procedure
   return useQuery(trpc.chat.getChatById.queryOptions({ id: chatId! }, { enabled: !!chatId }))
 }
 
-// Mutation Hook for renaming a chat (replaces useRenameChatMutation)
 export function useRenameChatMutation() {
   const queryClient = useQueryClient()
   const trpc = useTRPC()
@@ -62,7 +60,6 @@ export function useUpdateChatVisibilityMutation() {
   )
 }
 
-// Add hook for deleteTrailingMessages if needed
 export function useDeleteTrailingMessagesMutation() {
   const trpc = useTRPC()
   const { revalidate } = useRevalidator()
@@ -73,7 +70,6 @@ export function useDeleteTrailingMessagesMutation() {
   }))
 }
 
-// Add hook for getChatMessagesByChatId if needed
 export function useGetChatMessagesByChatIdQuery(chatId: string | undefined) {
   const trpc = useTRPC()
   return useQuery(trpc.chat.getChatMessagesByChatId.queryOptions({ id: chatId! }, { enabled: !!chatId }))

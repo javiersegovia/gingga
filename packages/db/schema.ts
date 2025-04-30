@@ -224,6 +224,8 @@ export const Chats = sqliteTable('chats', {
     onDelete: 'set null',
   }),
 
+  durableObjectId: text('durable_object_id'),
+
   title: text('title'),
   visibility: text('visibility', { enum: ['public', 'private'] })
     .notNull()

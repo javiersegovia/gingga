@@ -17,7 +17,7 @@ const components: Partial<Components> = {
   },
   li: ({ node: _, children, ...props }) => {
     return (
-      <li className="py-1" {...props}>
+      <li className="py-2" {...props}>
         {children}
       </li>
     )

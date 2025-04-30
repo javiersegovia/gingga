@@ -12,8 +12,9 @@ export async function saveChat({
   userId,
   title,
   agentId,
+  durableObjectId,
 }: z.infer<typeof ChatSchema>) {
-  const db = getDB() // Changed to getDB()
+  const db = getDB()
   try {
     const [newChat] = await db
       .insert(Chats)
@@ -22,6 +23,7 @@ export async function saveChat({
         userId,
         title,
         agentId,
+        durableObjectId,
       })
       .returning({ id: Chats.id })
 
@@ -63,9 +65,9 @@ export async function getChatsByUserId({ userId }: { userId: string }) {
         visibility: Chats.visibility,
       })
       .from(Chats)
-      .innerJoin(ChatMessages, eq(Chats.id, ChatMessages.chatId)) // Join ensures only chats with messages are considered
-      .where(eq(Chats.userId, userId)) // Filter by userId
-      .groupBy( // Group by all selected chat fields to ensure uniqueness
+      .innerJoin(ChatMessages, eq(Chats.id, ChatMessages.chatId))
+      .where(eq(Chats.userId, userId))
+      .groupBy(
         Chats.id,
         Chats.userId,
         Chats.title,
@@ -74,11 +76,11 @@ export async function getChatsByUserId({ userId }: { userId: string }) {
         Chats.updatedAt,
         Chats.visibility,
       )
-      .orderBy(desc(Chats.createdAt)) // Order the unique chats
+      .orderBy(desc(Chats.createdAt))
   }
   catch (error) {
     console.error('Failed to get chats by user from database', error)
-    throw error // Re-throw the error after logging
+    throw error
   }
 }
 
@@ -105,7 +107,7 @@ export async function saveChatMessages({
 }: {
   messages: Array<typeof ChatMessages.$inferInsert>
 }) {
-  const db = getDB() // Changed to getDB()
+  const db = getDB()
   try {
     return await db.insert(ChatMessages).values(messages).onConflictDoNothing()
   }
@@ -116,7 +118,7 @@ export async function saveChatMessages({
 }
 
 export async function upsertChatMessage(message: typeof ChatMessages.$inferInsert) {
-  const db = getDB() // Changed to getDB()
+  const db = getDB()
   try {
     return await db
       .insert(ChatMessages)

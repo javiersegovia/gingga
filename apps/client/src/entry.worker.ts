@@ -3,6 +3,7 @@ import type { TRPCAppRouter } from '~/server/trpc/routers/app.router'
 import { QueryClient } from '@tanstack/react-query'
 import { createTRPCOptionsProxy } from '@trpc/tanstack-react-query'
 import { Hono } from 'hono'
+import { agentsMiddleware } from 'hono-agents'
 import { contextStorage } from 'hono/context-storage'
 import { logger } from 'hono/logger'
 import { createRequestHandler } from 'react-router'
@@ -10,6 +11,8 @@ import { agentCustomRoute } from '~/server/api/agents/$agentId'
 import { agentDefaultRoute } from '~/server/api/agents/default'
 import { getBetterAuth } from '~/server/context.server'
 import { appRouter } from '~/server/trpc/routers/app.router'
+
+export { DefaultChatAgent } from '~/server/agents/default-chat-agent'
 
 const requestHandler = createRequestHandler(
   () => import('virtual:react-router/server-build'),
@@ -28,12 +31,25 @@ app.on(['POST', 'GET'], '/api/auth/*', (c) => {
 app.route('/api/chat/default', agentDefaultRoute)
 app.route('/api/agents/custom', agentCustomRoute)
 
+app.use(
+  '*',
+  agentsMiddleware({
+    options: {
+      prefix: 'agents',
+    },
+    onError(error) {
+      console.error('Error in agentsMiddleware')
+      console.error(error)
+    },
+  }),
+)
+
 app.use(async (c, next) => {
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
         refetchOnWindowFocus: false,
-        staleTime: 1000 * 60, // 1 minute
+        staleTime: 1000 * 60,
       },
     },
   })

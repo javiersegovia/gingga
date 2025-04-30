@@ -1,0 +1,1 @@
+ALTER TABLE `chats` ADD `durable_object_id` text;

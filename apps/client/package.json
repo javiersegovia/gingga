@@ -35,6 +35,7 @@
     "@trpc/client": "catalog:",
     "@trpc/server": "catalog:",
     "@trpc/tanstack-react-query": "catalog:",
+    "agents": "catalog:",
     "ai": "catalog:",
     "better-auth": "catalog:",
     "composio-core": "catalog:",
@@ -42,6 +43,7 @@
     "deepmerge": "catalog:",
     "fast-deep-equal": "catalog:",
     "hono": "catalog:",
+    "hono-agents": "catalog:",
     "isbot": "catalog:",
     "lucide-react": "catalog:",
     "motion": "catalog:",
@@ -56,9 +58,11 @@
     "sonner": "catalog:",
     "superjson": "catalog:",
     "usehooks-ts": "catalog:",
+    "vitest": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "catalog:",
     "@cloudflare/vite-plugin": "catalog:",
     "@gingga/config": "workspace:*",
     "@react-router/dev": "catalog:",
