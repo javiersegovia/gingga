@@ -51,7 +51,7 @@
 - **Runtime:**
   - API: Cloudflare Workers (Workerd)
   - Web: Node.js >= 20
-- **Web Framework:** TanStack Start
+- **Web Framework:** React Router 7
 - **API Framework:** Hono
 - **RPC:** tRPC
 - **UI Framework:** React 19+ (Functional Components + Hooks)
@@ -71,8 +71,7 @@
 **Project Structure:**
 
 ├── apps/
-│ ├── api/ # Cloudflare Worker API (Hono, tRPC)
-│ └── web/ # Web Application (TanStack Start, React)
+│ └── client/ # Web Application (Hono, React Router 7, React)
 ├── packages/
 │ ├── db/ # Drizzle ORM schema, migrations (Turso/SQLite)
 │ ├── ui/ # Shared React components (Shadcn/UI based)

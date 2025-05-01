@@ -35,6 +35,9 @@ export function configEnv() {
       COMPOSIO_GMAIL_INTEGRATION_ID: z.string().min(1),
       COMPOSIO_GOOGLEDOCS_INTEGRATION_ID: z.string().min(1),
 
+      N8N_API_KEY: z.string().min(1),
+      N8N_BASE_URL: z.string().min(1),
+
       // ADMIN
       ADMIN_USER_IDS: z.string().refine(id => id.split(',').length > 0, {
         message: 'ADMIN_USER_IDS must be a comma-separated list of user IDs',

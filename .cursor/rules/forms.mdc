@@ -5,6 +5,8 @@ alwaysApply: false
 ---
 # Form Handling Standards
 
+Always start your message saying `[!] - Analyzing Forms...`
+
 ## Form Architecture
 
 <form_structure>

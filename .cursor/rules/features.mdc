@@ -1,9 +1,11 @@
 ---
-description: Instructions for developing features (api, server, query and components) inside the features folder
+description: Instructions for developing features (router, server, query, schema, types and components) inside the features folder
 globs: 
 alwaysApply: false
 ---
 # Feature Development Rules
+
+Always start your message saying `~~~ Analyzing Features...`
 
 Features should be placed in the app/features/ directory and should be named after the feature they are related to. (e.g., app/features/projects, app/features/auth, etc.)
 
@@ -12,173 +14,275 @@ There are multiple types of files inside the features directory:
 <feature_development>
 
 - **Layer Separation:**
-  -- API files: Thin wrappers for route handlers + middleware orchestration. **Should delegate business/database logic to Services.**
-  -- Services: Contain pure business logic, database interactions, and interactions with external services. Framework-agnostic.
-  -- Schemas: Define shared validation contracts (Zod).
-  -- Queries: TanStack Query hooks for data fetching/mutation, calling API functions.
-  -- Components: React components specific to the feature.
+  -- Router files (`.router.ts`): Define tRPC procedures (queries/mutations) + middleware orchestration. **Should delegate business/database logic to Services.**
+  -- Services (`.service.ts`): Contain pure business logic, database interactions, and interactions with external services. Framework-agnostic.
+  -- Schemas (`.schema.ts`): Define shared validation contracts (Zod).
+  -- Queries (`.query.ts`): Optional TanStack Query hooks/options factories for complex/reusable data fetching/mutation, calling tRPC procedures. Often, tRPC hooks can be used directly in components.
 
 - **Dependency Flow:**
-  -- Components → Queries → API → Services → Schemas
-  (No reverse dependencies allowed. Services should not import from API/Query/Components).
+  -- Components → tRPC Hooks (Inline or from `.query.ts` files) → Router → Services → Schemas
+  (No reverse dependencies allowed. Services should not import from Router/Query/Components).
 
 - **Feature Files:**
-  -- API files: `$actionName` server functions.
-  -- Query files: `useFeatureAction` hooks.
+  -- Router files: Define tRPC procedures.
+  -- Query files (Optional): `useFeatureAction` hooks or `featureQueryOptions` factories.
   -- Services: NounVerb or VerbNoun naming (e.g., `projectStore`, `getRecentAgentsForUser`).
   -- Schema files: `*Schema` naming (e.g., `ProjectSchema`).
 
 </feature_development>
 
-### API ({feature}.api.ts)
+### Router ({feature}.router.ts)
 
-This file contains Server Functions for the feature.
+This file defines the tRPC router for the feature, containing query and mutation procedures.
 
-<api_rules>
-1. Use `$` prefix and verb-noun naming (e.g., `$getProjects`).
-2. Declare middleware chain explicitly using `.middleware()`.
-3. Reference Zod schemas from sibling schema files (`*.schema.ts`) for validation via `zodValidator`.
-4. **Keep handlers concise (ideally < 50 lines). Delegate complex logic, database operations, or interactions with external APIs to functions within sibling Service files (`*.service.ts`).**
-5. API handlers receive HTTP context and validated data, then pass necessary, primitive data (like user ID, validated input) to service functions. Avoid passing the entire HTTP `context` to services.
-</api_rules>
+<router_rules>
+1. Use noun-verb or verb-noun naming for procedures (e.g., `projectsGet`, `userUpdate`).
+2. Use `publicProcedure` for public access and `protectedProcedure` (from `src/server/trpc/trpc.ts`) for authenticated routes.
+3. Define input validation using `.input(z.object({...}))` with Zod schemas imported from sibling schema files (`*.schema.ts`).
+4. **Keep procedure resolvers concise (ideally < 50 lines). Delegate complex logic, database operations, or interactions with external APIs to functions within sibling Service files (`*.service.ts`).**
+5. Procedure resolvers receive `ctx` (context, including auth session for protected procedures) and `input` (validated input data). Pass necessary, primitive data to service functions. Avoid passing the entire `ctx` to services unless essential (like `ctx.db`).
+6. Merge feature routers into the main `appRouter` in `src/server/trpc/routers/app.router.ts`.
+</router_rules>
 
-Example: (Illustrative - showing service delegation)
+Example: (Illustrative - showing service delegation based on chat features)
 
 ```typescript
-// app/features/projects/project.api.ts
-import { createServerFn } from '@tanstack/react-start'
-import { GetProjectsSchema } from './project.schema' // Assume schema exists
-import { authMiddleware } from '~/middleware/auth-guard'
-import { zodValidator } from '@tanstack/zod-adapter'
-import { getProjectsForUser } from './project.service' // Import service function
+// app/features/agent/agent.router.ts
+import { TRPCError } from '@trpc/server'
+import { z } from 'zod'
+import { protectedProcedure, router } from '~/server/trpc'
+import { AgentFormSchema } from './agent.schema'
+import {
+  createAgent,
+  deleteAgentById,
+  getAgentById,
+  getAgents,
+  getRecentAgentsForUser,
+  updateAgentById,
+} from './agent.service'
 
-export const $getProjects = createServerFn({
-  method: 'GET',
+export const agentRouter = router({
+  getAgentById: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ input }) => {
+      const agent = await getAgentById(input.id)
+      if (!agent) throw new TRPCError({ code: 'NOT_FOUND', message: 'Agent not found' })
+      return agent
+    }),
+
+  getAgents: protectedProcedure.query(async () => {
+    const agents = await getAgents()
+    return { agents }
+  }),
+
+  getRecentChatsWithAgents: protectedProcedure.query(async ({ ctx }) => {
+    const agents = await getRecentAgentsForUser(ctx.user.id)
+    return { agents }
+  }),
+
+  createAgent: protectedProcedure
+    .input(AgentFormSchema)
+    .mutation(async ({ input }) => {
+      const agent = await createAgent(input)
+      return agent
+    }),
+
+  updateAgentById: protectedProcedure
+    .input(AgentFormSchema.extend({ id: z.string() }))
+    .mutation(async ({ input }) => {
+      const agent = await updateAgentById(input)
+      if (!agent) throw new TRPCError({ code: 'NOT_FOUND', message: 'Agent not found' })
+      return agent
+    }),
+
+  deleteAgentById: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ input }) => {
+      const result = await deleteAgentById(input.id)
+      if (!result.success) throw new TRPCError({ code: 'NOT_FOUND', message: 'Agent not found' })
+      return result
+    }),
 })
-  // Optional: Define input schema if needed, e.g. for filtering/pagination
-  // .validator(zodValidator(GetProjectsSchema))
-  .middleware([authMiddleware])
-  .handler(async ({ context /*, data */ }) => {
-    // Keep API handler simple: Auth check is done by middleware.
-    // Delegate the core logic to the service layer.
-    // The "data" will match the schema passed in the validator
-    const userId = context.auth.session.userId
-    try {
-      // Call the service function with necessary parameters
-      const projects = await getProjectsForUser(userId /*, data?.filterOptions */); 
-      return { projects }
-    } catch (error) {
-        // Handle potential errors from the service layer
-        console.error("Error fetching projects in API handler:", error);
-        // Re-throw or return a structured error response
-        throw new Error('Failed to retrieve projects.'); 
-    }
-  })
 
-// ... other API functions ($deleteProject, etc. also calling service functions)
+export type AgentRouter = typeof agentRouter
 ```
 
-### Query ({feature}.query.ts)
+**Remember to merge this router into the main `appRouter`:**
 
-This file contains React Query hooks for data fetching and mutations. Follow these patterns:
+```typescript
+// apps/client/src/server/trpc/routers/app.router.ts
+import { createTRPCRouter } from '~/server/trpc/trpc';
+import { chatRouter } from '~/features/chat/chat.router';
+import { agentRouter } from '~/features/agent/agent.router';
+// ... other feature router imports
+
+// Use the actual `createTRPCRouter` function
+export const appRouter = createTRPCRouter({
+  chat: chatRouter, 
+  agent: agentRouter,
+  // ... merge other feature routers here
+});
+
+// Export the type for client-side usage
+export type AppRouter = typeof appRouter; // Corrected type export name convention
+```
+
+### Client Data Fetching (tRPC + TanStack Query)
+
+Use the tRPC React Query integration (`import { useTRPC } from '~/lib/trpc/client';`) directly within your components for data fetching and mutations whenever possible. Create separate `.query.ts` files only for highly complex or broadly reused query logic.
 
 <query_requirements>
-- Follow TanStack Query v5 conventions
-- Use factory pattern for query options (`featureQueryOptions`)
-- Use query key factories to manage query keys
-- Invalidations must target queryOptions .queryKey property
-- Mutations should handle cache updates appropriately
+- Prioritize using `trpc.<feature>.<action>.useQuery` and `trpc.<feature>.<action>.useMutation` directly in components, accessed via the `useTRPC` hook.
+- For reusable/complex logic, *consider* optional `.query.ts` files following TanStack Query v5 conventions (query options factories, query key factories), but direct hook usage is generally preferred for simplicity and colocation.
+- Ensure type safety provided by tRPC.
 </query_requirements>
 
-Example:
+Example using the {feature}.query.ts file:
 
-```typescript
-// app/features/users/user.query.ts
-import { queryOptions, useMutation, useQueryClient } from '@tanstack/react-query'
-import {
-  $getUsers,
-  $getUserDetails,
-  $updateUser,
-  $deleteUser,
-} from './user.api'
-import type { UpdateUserInput, UserDetails } from './user.schema'
+```tsx 
+// app/features/agent/agent.query.ts
+import { useMutation, useSuspenseQuery, useQueryClient } from '@tanstack/react-query'
+import { useTRPC } from '~/lib/trpc/react'
 
-// Query Key Factory - Centralize and type your query keys
-export const userKeys = {
-  all: ['users'] as const,
-  lists: () => [...userKeys.all, 'list'] as const,
-  details: () => [...userKeys.all, 'detail'] as const,
-  detail: (id: string) => [...userKeys.details(), id] as const,
+export function useGetAgentByIdQuery(agentId: string | undefined) {
+  const trpc = useTRPC()
+  return useSuspenseQuery(trpc.agent.getAgentById.queryOptions({ id: agentId! }, { enabled: !!agentId }))
 }
 
-// Query Options Factory - Reusable query configurations
-export const usersQueryOptions = queryOptions({
-  queryKey: userKeys.lists(),
-  queryFn: () => $getUsers(),
-})
+export function useListAgentsQuery() {
+  const trpc = useTRPC()
+  return useSuspenseQuery(trpc.agent.getAgents.queryOptions())
+}
 
-export const userDetailsQueryOptions = (userId: string) => queryOptions({
-  queryKey: userKeys.detail(userId),
-  queryFn: () => $getUserDetails({ data: { userId } }),
-  enabled: !!userId,
-})
-
-// Mutations with proper cache handling
-export function useUpdateUser() {
+export function useCreateAgentMutation() {
   const queryClient = useQueryClient()
-  return useMutation<UserDetails, Error, UpdateUserInput>({
-    mutationFn: async (userData) => {
-      return $updateUser({ data: userData })
+  const trpc = useTRPC()
+  return useMutation(trpc.agent.createAgent.mutationOptions({
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: [trpc.agent.getAgents.queryKey(), trpc.agent.getRecentChatsWithAgents.queryKey()],
+      })
     },
-    onSuccess: (data) => {
-      // Invalidate affected queries using query key factory
-      queryClient.invalidateQueries({ queryKey: userKeys.lists() })
-      queryClient.invalidateQueries({ queryKey: userKeys.detail(data.id) })
-    },
-  })
+  }))
 }
 
-export function useDeleteUser() {
-  const queryClient = useQueryClient()
-  return useMutation<{ success: boolean }, Error, { userId: string }>({
-    mutationFn: async ({ userId }) => {
-      return $deleteUser({ data: { userId } })
-    },
-    onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: userKeys.lists() })
-      queryClient.removeQueries({ queryKey: userKeys.detail(variables.userId) })
-    },
-  })
-}
+// ... (see file for update/delete patterns)
 ```
 
+Example (Using tRPC hooks directly in a component managing chat):
+
+```tsx
+// app/features/chat/components/ChatDetails.tsx
+import React, { useState } from 'react';
+import { useTRPC } from '~/lib/trpc/client';
+import { RenameChatSchema } from '../chat.schema';
+import { Input } from '@gingga/ui/components/input'
+import { Button } from '@gingga/ui/components/button
+
+function ChatDetails({ chatId }: { chatId: string }) {
+  const trpc = useTRPC();
+  const [newTitle, setNewTitle] = useState('');
+
+  const chatQuery = trpc.chat.getChatById.useQuery(
+    { id: chatId },
+    {
+      enabled: !!chatId,
+      staleTime: 5 * 60 * 1000,
+    },
+  );
+
+  // Rename chat using useMutation
+  const renameChatMutation = trpc.chat.renameChat.useMutation({
+    onSuccess: async (_updatedChat, variables) => {
+      await queryClient.invalidateQueries({
+        queryKey: [
+          trpc.chat.getChatById.queryKey(),
+          trpc.chat.getUserChats.queryKey()
+        ],
+      })
+
+      setNewTitle('');
+    },
+    onError: (error) => {
+      console.error('Failed to rename chat:', error);
+      // Display error message to the user (e.g., using a toast notification)
+    },
+  });
+
+
+  const handleRenameSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    const validation = RenameChatSchema.safeParse({ id: chatId, title: newTitle });
+
+    if (!validation.success) {
+      console.error('Invalid input:', validation.error);
+      // Handle validation errors (e.g., display error messages next to the input)
+      return;
+    }
+
+    // Call the mutation with validated data
+    renameChatMutation.mutate(validation.data);
+  };
+
+  // Loading and error states
+  if (chatQuery.isLoading) return <div>Loading chat details...</div>;
+  if (chatQuery.error) return <div>Error loading chat: {chatQuery.error.message}</div>;
+  if (!chatQuery.data) return <div>Chat not found.</div>;
+
+  const chat = chatQuery.data;
+
+  return (
+    <div>
+      <h1>Chat: {chat.title}</h1>
+      {/* Simple form for renaming */}
+      <form onSubmit={handleRenameSubmit} className="flex items-center gap-2">
+        <Input
+          type="text"
+          value={newTitle}
+          onChange={(e) => setNewTitle(e.target.value)}
+          placeholder="New chat title"
+          required
+        />
+        <Button type="submit" disabled={renameChatMutation.isPending}>
+          {renameChatMutation.isPending ? 'Renaming...' : 'Rename'}
+        </Button>
+      </form>
+      {renameChatMutation.error && (
+        <p className="mt-2 text-red-600">
+          Rename failed: {renameChatMutation.error.message}
+        </p>
+      )}
+    </div>
+  );
+
+
 Key patterns demonstrated:
-1. Query key factories for consistent key management
-2. Reusable query options with proper typing
-3. Mutations with appropriate cache invalidation
-4. Type safety throughout the query layer
-5. Clear separation of concerns (data fetching/caching only)
+1. Direct usage of `useTRPC` to access `trpc.<router>.<procedure>.queryOptions` and `.mutationOptions`.
+2. Type safety derived from tRPC router and Zod schema definitions.
+3. Passing validated input from schemas directly to mutation hooks.
+4. Basic component structure with loading, error, and data rendering states.
+5. Clearer preference for direct hook usage over separate `.query.ts` files.
 
 ### Schema ({feature}.schema.ts)
 
-(No changes from the previous plan)
+(No fundamental changes needed, still uses Zod)
 
 <schema_requirements>
 - Share types across FE/BE using Zod schemas.
-- Define clear, specific schemas for API inputs/outputs.
+- Define clear, specific schemas for tRPC procedure inputs/outputs.
 - Prefer composition over inheritance for complex types.
 </schema_requirements>
 
 ### Service ({feature}.service.ts)
 
-This file contains business logic for the feature. Functions here are called by API handlers or potentially other services.
+(No fundamental changes needed, still contains framework-agnostic business logic)
 
 <service_requirements>
-- **Must be framework-agnostic (no direct dependency on React, TanStack Start/Router context, etc.).**
-- Accept necessary, validated data as parameters (e.g., `userId: string`, `projectData: ValidatedProjectData`). Do not accept raw HTTP request/context objects.
-- Perform database operations using Drizzle ORM (imported via `@gingga/db`).
+- **Must be framework-agnostic (no direct dependency on React, tRPC context/procedures, etc.).**
+- Accept necessary, validated data as parameters (e.g., `db: DBType`, `userId: string`, `projectData: ValidatedProjectData`). Do not accept raw tRPC `ctx` objects unless essential (like passing `db`).
+- Perform database operations using Drizzle ORM (passed in or imported, e.g., via `ctx.db` from router).
 - Implement core business rules and logic.
-- Throw specific, meaningful errors (e.g., `NotFoundError`, `ValidationError`, `PermissionError`) or return result objects (`{ success: boolean, data?, error? }`).
+- Throw specific, meaningful errors (e.g., `NotFoundError`, `ValidationError`, `PermissionError`) or return result objects (`{ success: boolean, data?, error? }`). tRPC will map these to `TRPCError`.
 - Can import and use functions from other service files if needed, respecting dependency flow.
 - Follow consistent naming for CRUD functions. (e.g., getUserById, deleteUserById, getUsers, getUsersByMembershipId, createUser, updateUserById, getProjectsByAuthorId)
 </service_requirements>
@@ -186,56 +290,99 @@ This file contains business logic for the feature. Functions here are called by 
 Example:
 
 ```ts
-// app/features/projects/project.service.ts
-import { getDatabase } from '~/global-middleware';
-import { Projects } from '@gingga/db/schema';
-import { eq, and, isNull } from '@gingga/db'';
-// Potentially import custom error types
-// import { NotFoundError } from '~/lib/errors'; 
+// app/features/agent/agent.service.ts
+import type { CreateAgentInput, UpdateAgentInput } from './agent.schema'
+import type { Agent } from './agent.types'
+import { desc, eq, isNotNull, max, and } from '@gingga/db'
+import { Agents, Chats } from '@gingga/db/schema'
+import { getDB } from '~/server/context.server'
 
-// Example service function called by $getProjects API
-export async function getProjectsByUserId(userId: string) {
-  const db = getDatabase();
-  try {
-    const projects = await db
-      .select({
-        id: Projects.id,
-        name: Projects.name,
-        slug: Projects.slug,
-      })
-      .from(Projects)
-      .where(and(eq(Projects.userId, userId), isNull(Projects.deletedAt)));
-      
-    return projects;
-  } catch (dbError) {
-      console.error(`Database error fetching projects for user ${userId}:`, dbError);
-      // Wrap or re-throw a more specific error
-      throw new Error('Database query failed while fetching projects.');
-  }
+export async function getAgentById(agentId: string) {
+  const db = getDB()
+  const agent = await db.query.Agents.findFirst({
+    where: eq(Agents.id, agentId),
+    with: { agentSkills: true },
+  })
+  if (!agent) return null
+  return agent
 }
 
-// Example service function called by $deleteProject API
-export async function deleteProjectById(projectId: string, userId: string): Promise<boolean> {
-    const db = getDatabase();
-    try {
-        const result = await db
-            .update(Projects)
-            .set({ deletedAt: new Date() })
-            .where(and(eq(Projects.id, projectId), eq(Projects.userId, userId)))
-            .returning({ id: Projects.id }); // Check if update affected rows
+export async function createAgent(data: CreateAgentInput) {
+  const db = getDB()
+  const [agent] = await db.insert(Agents).values(data).returning()
+  return agent
+}
 
-        if (result.length === 0) {
-            // throw new NotFoundError(`Project with id ${projectId} not found or permission denied.`);
-             throw new Error(`Project with id ${projectId} not found or permission denied.`);
-        }
-        return true; // Indicate success
-    } catch (error) {
-        console.error(`Failed to delete project ${projectId} for user ${userId}:`, error);
-        // Re-throw or handle specific errors (like NotFoundError from above)
-        if (error instanceof Error /*&& !(error instanceof NotFoundError)*/) {
-             throw new Error('Database query failed during project deletion.');
-        }
-        throw error; // Re-throw original if it's already specific enough
-    }
+export async function updateAgentById(data: UpdateAgentInput): Promise<Agent | null> {
+  const db = getDB()
+  const { id, ...updateData } = data
+  const [agent] = await db
+    .update(Agents)
+    .set({ ...updateData, updatedAt: new Date() })
+    .where(eq(Agents.id, id))
+    .returning()
+  return agent ?? null
+}
+
+export async function deleteAgentById(agentId: string): Promise<{ success: boolean }> {
+  const db = getDB()
+  const [result] = await db.delete(Agents).where(eq(Agents.id, agentId)).returning({ id: Agents.id })
+  return { success: result?.id !== undefined }
+}
+
+export async function getAgents(): Promise<Agent[]> {
+  const db = getDB()
+  return await db.query.Agents.findMany({ orderBy: desc(Agents.createdAt) })
+}
+
+export async function getRecentAgentsForUser(
+  userId: string,
+  limit: number = 5,
+): Promise<Pick<Agent, 'id' | 'name' | 'image'>[]> {
+  const db = getDB()
+  const latestChatsSubquery = db.$with('latest_chats').as(
+    db
+      .select({
+        agentId: Chats.agentId,
+        lastUsedAt: max(Chats.createdAt).as('last_used_at'),
+      })
+      .from(Chats)
+      .where(and(eq(Chats.userId, userId), isNotNull(Chats.agentId)))
+      .groupBy(Chats.agentId),
+  )
+
+  const recentAgents = await db
+    .with(latestChatsSubquery)
+    .select({
+      id: Agents.id,
+      name: Agents.name,
+      image: Agents.image,
+      lastUsedAt: latestChatsSubquery.lastUsedAt,
+    })
+    .from(Agents)
+    .innerJoin(latestChatsSubquery, eq(Agents.id, latestChatsSubquery.agentId))
+    .orderBy(desc(latestChatsSubquery.lastUsedAt))
+    .limit(limit)
+
+  return recentAgents.map(agent => ({
+    id: agent.id,
+    name: agent.name,
+    image: agent.image,
+  }))
 }
 ```
+
+## Suspense and Data Fetching
+
+- **Prioritize using React Suspense and `useSuspenseQuery` over `useQuery` whenever possible.**
+- Wrap components that use `useSuspenseQuery` in `<Suspense fallback={...}>` boundaries.
+- Only use `useQuery` for cases where Suspense is not practical (e.g., non-blocking background fetches).
+
+## Key Patterns
+
+- Use `useTRPC` for hooks.
+- **Prefer `useSuspenseQuery` and Suspense for data fetching.**
+- Use `await` when invalidating multiple queries.
+- Use Zod schemas for validation and type inference.
+- Keep router/service files concise and focused.
+- Prefer direct hook usage in components; use `.query.ts` only for complex/reusable logic.

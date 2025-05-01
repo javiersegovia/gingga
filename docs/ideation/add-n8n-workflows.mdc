@@ -1,0 +1,69 @@
+# Implementation Plan: n8n Workflows Integration (REST API)
+
+## Goal
+
+Enable robust integration with n8n workflows from our app, supporting:
+- Listing workflows (with filtering by tags and status)
+- Retrieving workflow details and current status
+- Triggering workflow runs and tracking their execution/results
+
+## 1. API Authentication
+
+- Use the provided `N8N_API_KEY` for all requests (as per [n8n authentication docs](https://docs.n8n.io/api/authentication/)).
+- Store the base URL and API key in environment variables or a secure config.
+
+## 2. Service Layer (`n8n.service.ts`)
+
+Implement the following service functions:
+
+### a. List Workflows
+
+- Endpoint: `GET /workflows`
+- Support filtering by:
+  - `tags` (array of tag names or IDs)
+  - `active` status (`true`/`false`)
+- Parse and return workflows with essential metadata (id, name, tags, status, etc.).
+
+### b. Get Workflow Details
+
+- Endpoint: `GET /workflows/:id`
+- Return workflow details, including:
+  - Name, tags, status, nodes, etc.
+  - (Optional) Current execution status, if available.
+
+### c. Trigger Workflow Run
+
+- Endpoint: `POST /workflows/:id/run`
+- Accept input data if required by the workflow.
+- Return the `executionId` (from response) for tracking.
+
+### d. Track Workflow Execution/Result
+
+- Endpoint: `GET /executions/:id`
+- Retrieve execution status (`running`, `success`, `failed`, etc.) and result data.
+- Optionally, poll or subscribe for updates.
+
+## 3. Database Interaction
+
+- For most operations, we can interact directly with the n8n REST API.
+- If not needed, we can skip DB persistence and always fetch live from n8n.
+
+## 4. Error Handling & Security
+
+- Handle API errors gracefully (invalid token, network issues, etc.).
+- Ensure API key is never leaked to the client.
+- Validate/filter all user input before sending to n8n.
+
+## 5. Example Usage Flow
+
+1. User requests list of workflows (optionally filtered).
+2. User selects a workflow to view details.
+3. User triggers a workflow run.
+4. App stores or displays the `executionId`.
+5. App polls or queries execution status/result and displays to the user.
+
+## 6. Next Steps
+
+- Implement the above service functions in `n8n.service.ts`.
+- (Optional) Propose DB schema changes if persistent execution tracking is required.
+- Build out the router and client hooks as needed for the UI.

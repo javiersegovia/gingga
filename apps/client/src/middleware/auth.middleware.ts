@@ -21,3 +21,13 @@ export const anonymousMiddleware: unstable_MiddlewareFunction = async (_, next) 
 
   return next()
 }
+
+export const adminMiddleware: unstable_MiddlewareFunction = async (_, next) => {
+  const authSession = await getAuthSession()
+
+  if (authSession.isAuthenticated && authSession.user.role !== 'admin') {
+    throw redirect(href('/chat'), 302)
+  }
+
+  return next()
+}

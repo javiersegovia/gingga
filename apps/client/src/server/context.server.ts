@@ -19,6 +19,8 @@ export type AuthSession = {
   session: Session
   user: AuthenticatedUser
 } | {
+  session: null
+  user: null
   isAuthenticated: false
 }
 
@@ -74,7 +76,7 @@ export const getTRPCProxy = () => getContext<AppContext>().var.trpcProxy
 
 /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
 
-export async function getAuthSession() {
+export async function getAuthSession(): Promise<AuthSession> {
   const c = getHonoContext()
 
   if (c.var.authSession) {
@@ -85,12 +87,12 @@ export async function getAuthSession() {
   })
 
   if (!data) {
-    return { isAuthenticated: false as const }
+    return { isAuthenticated: false as const, session: null, user: null }
   }
 
   const user = await getUserById(data.user.id)
   if (!user) {
-    return { isAuthenticated: false as const }
+    return { isAuthenticated: false as const, session: null, user: null }
   }
 
   const authSession = { isAuthenticated: true as const, session: data?.session, user }

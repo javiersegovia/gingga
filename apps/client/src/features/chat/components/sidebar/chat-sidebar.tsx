@@ -27,7 +27,6 @@ import { useSuspenseQuery } from '@tanstack/react-query'
 import {
   Loader2Icon,
   LogInIcon,
-  MessageSquarePlusIcon,
   MoreVertical,
   PencilIcon,
   Share,
@@ -69,14 +68,7 @@ export function ChatSidebar() {
           </Link>
         </div>
 
-        <Button variant="primary" size="md" hover="reverse" className="w-full" asChild>
-          <Link to="/chat">
-            <span>New Chat</span>
-            <MessageSquarePlusIcon className="ml-auto h-4 w-4" />
-          </Link>
-        </Button>
-
-        <Button variant="outline" size="md" className="w-full" asChild>
+        <Button variant="hoverSecondary" hover="reverse" size="md" className="w-full" asChild>
           <Link to="/chat/agents">
             <span>Explore Agents</span>
             <TelescopeIcon className="ml-auto h-4 w-4" />

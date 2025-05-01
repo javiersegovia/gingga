@@ -10,6 +10,16 @@ export default [
     route('update-theme', 'routes/_actions/update-theme.ts'),
   ]),
 
+  ...prefix('admin', [
+
+    layout('routes/admin/_layout.tsx', [
+      index('routes/admin/index.tsx'),
+      route('users', 'routes/admin/users/index.tsx'),
+      route('users/:userId', 'routes/admin/users/$userId.tsx'),
+    ]),
+
+  ]),
+
   layout('routes/_auth/_layout.tsx', [
     route('identify', 'routes/_auth/identify.tsx'),
     route('register', 'routes/_auth/register.tsx'),

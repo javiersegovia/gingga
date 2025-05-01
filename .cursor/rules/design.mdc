@@ -3,7 +3,9 @@ description: Design System and Theme Variables
 globs: 
 alwaysApply: false
 ---
-## UI Theming and Styling Standards
+# UI Theming and Styling Standards
+
+Always start your message saying `~~~ Analyzing Design...`
 
 > **Source Files:**
 > - `packages/ui/styles/tailwind.css` (Theme CSS variables)

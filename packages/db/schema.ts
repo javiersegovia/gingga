@@ -6,10 +6,8 @@ import { integer, primaryKey, sqliteTable, text } from 'drizzle-orm/sqlite-core'
 import { nanoid } from 'nanoid'
 import { ComposioAppNames } from './enums'
 
-// Helper for NanoId default values
 const nanoIdDefault = () => text('id').notNull().$defaultFn(nanoid)
 
-// Helper for timestamps
 const timestamps = {
   createdAt: integer('created_at', { mode: 'timestamp_ms' })
     .notNull()
@@ -311,4 +309,31 @@ export const agentSkillsRelations = relations(AgentSkills, ({ one }) => ({
     fields: [AgentSkills.agentId],
     references: [Agents.id],
   }),
+}))
+
+/* ________________________________________________________________________________________________ */
+/* N8n Workflows                                                                                    */
+/* ________________________________________________________________________________________________ */
+
+export const N8nWorkflows = sqliteTable('n8n_workflows', {
+  id: nanoIdDefault().primaryKey(),
+  ...timestamps,
+  n8nWorkflowId: text('n8n_workflow_id').notNull().unique(),
+  name: text('name'),
+  description: text('description'),
+  status: text('status', { enum: ['active', 'inactive', 'error'] }).default('inactive'),
+  webhookUrl: text('webhook_url').notNull(),
+
+  // eslint-disable-next-line ts/no-explicit-any
+  webhookInputSchema: text('webhook_input_schema', { mode: 'json' }).$type<Record<string, any>>(),
+  // eslint-disable-next-line ts/no-explicit-any
+  webhookOutputSchema: text('webhook_output_schema', { mode: 'json' }).$type<Record<string, any>>(),
+})
+
+export const n8nWorkflowsRelations = relations(N8nWorkflows, (/* { one } */) => ({
+  // Example relation if workflows are owned by users
+  // owner: one(Users, {
+  //   fields: [N8nWorkflows.ownerId],
+  //   references: [Users.id],
+  // }),
 }))
