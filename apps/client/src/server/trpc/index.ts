@@ -52,3 +52,23 @@ export const protectedProcedure = t.procedure.use(async ({ next }) => {
     },
   })
 })
+
+export const adminProcedure = t.procedure.use(async ({ next }) => {
+  const authSession = await getAuthSession()
+  const { isAuthenticated, session, user } = assertAuthenticated(authSession)
+
+  if (user.role !== 'admin') {
+    throw new TRPCError({
+      code: 'UNAUTHORIZED',
+      message: 'You are not authorized to access this resource.',
+    })
+  }
+
+  return next({
+    ctx: {
+      isAuthenticated,
+      session,
+      user,
+    },
+  })
+})

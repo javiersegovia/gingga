@@ -185,9 +185,12 @@ export const Agents = sqliteTable('agents', {
   id: nanoIdDefault().primaryKey(),
   ...timestamps,
 
+  // ownerName: text('owner_name'),
   ownerId: text('owner_id').references(() => Users.id, {
     onDelete: 'set null',
   }),
+
+  agentType: text('agent_type', { enum: ['chat', 'lead_capture', 'video_generator'] }).notNull().default('chat'),
 
   title: text('title'),
   name: text('name').notNull(),
@@ -210,6 +213,7 @@ export const agentsRelations = relations(Agents, ({ one, many }) => ({
     references: [Users.id],
   }),
   agentSkills: many(AgentSkills),
+  leads: many(Leads),
 }))
 
 export const Chats = sqliteTable('chats', {
@@ -280,6 +284,9 @@ export const chatMessagesRelations = relations(ChatMessages, ({ one }) => ({
 /* Agent Skills & Tools                                                                             */
 /* ________________________________________________________________________________________________ */
 
+/**
+ * @deprecated
+ */
 export const AgentSkills = sqliteTable('agent_skills', {
   ...timestamps,
   id: nanoIdDefault().primaryKey(),
@@ -311,11 +318,7 @@ export const agentSkillsRelations = relations(AgentSkills, ({ one }) => ({
   }),
 }))
 
-/* ________________________________________________________________________________________________ */
-/* N8n Workflows                                                                                    */
-/* ________________________________________________________________________________________________ */
-
-export const N8nWorkflows = sqliteTable('n8n_workflows', {
+export const N8NWorkflows = sqliteTable('workflows', {
   id: nanoIdDefault().primaryKey(),
   ...timestamps,
   n8nWorkflowId: text('n8n_workflow_id').notNull().unique(),
@@ -325,15 +328,51 @@ export const N8nWorkflows = sqliteTable('n8n_workflows', {
   webhookUrl: text('webhook_url').notNull(),
 
   // eslint-disable-next-line ts/no-explicit-any
-  webhookInputSchema: text('webhook_input_schema', { mode: 'json' }).$type<Record<string, any>>(),
+  inputSchema: text('input_schema', { mode: 'json' }).$type<Record<string, any>>(),
   // eslint-disable-next-line ts/no-explicit-any
-  webhookOutputSchema: text('webhook_output_schema', { mode: 'json' }).$type<Record<string, any>>(),
+  outputSchema: text('output_schema', { mode: 'json' }).$type<Record<string, any>>(),
+
+  lastSyncAt: integer('last_sync_at', { mode: 'timestamp_ms' }),
 })
 
-export const n8nWorkflowsRelations = relations(N8nWorkflows, (/* { one } */) => ({
+export const n8nWorkflowsRelations = relations(N8NWorkflows, (/* { one } */) => ({
   // Example relation if workflows are owned by users
   // owner: one(Users, {
-  //   fields: [N8nWorkflows.ownerId],
+  //   fields: [N8NWorkflows.ownerId],
   //   references: [Users.id],
   // }),
+}))
+
+/* ________________________________________________________________________________________________ */
+/* Leads Table                                                                                      */
+/* ________________________________________________________________________________________________ */
+
+export const Leads = sqliteTable('leads', {
+  id: nanoIdDefault().primaryKey(),
+  ...timestamps,
+
+  agentId: text('agent_id').references(() => Agents.id, { onDelete: 'set null' }),
+  chatId: text('chat_id').references(() => Chats.id, { onDelete: 'set null' }),
+
+  fullName: text('full_name'),
+  email: text('email'),
+  phone: text('phone'),
+  subjectInterest: text('subject_interest'),
+  // eslint-disable-next-line ts/no-explicit-any
+  rawMessageJson: text('raw_message_json', { mode: 'json' }).$type<any>().notNull(),
+
+  utmSource: text('utm_source'),
+  qualification: text('qualification', { enum: ['sales_qualified_lead', 'marketing_qualified_lead', 'not_qualified'] }),
+  qualificationScore: integer('qualification_score'),
+})
+
+export const leadsRelations = relations(Leads, ({ one }) => ({
+  agent: one(Agents, {
+    fields: [Leads.agentId],
+    references: [Agents.id],
+  }),
+  chat: one(Chats, {
+    fields: [Leads.chatId],
+    references: [Chats.id],
+  }),
 }))

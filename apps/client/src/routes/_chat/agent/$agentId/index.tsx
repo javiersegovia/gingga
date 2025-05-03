@@ -5,7 +5,7 @@ import { BaseChat } from '~/features/chat/components/base-chat'
 
 export function loader({ params }: Route.LoaderArgs) {
   if (!params.agentId) {
-    return redirect(href('/chat/agents'), 302)
+    return redirect(href('/agents'), 302)
   }
   return { agentId: params.agentId, chatId: nanoid(), endpoint: `/api/agents/custom/${params.agentId}` }
 }

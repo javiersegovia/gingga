@@ -1,8 +1,8 @@
 import type { CoreAssistantMessage, CoreToolMessage, Message, UIMessage } from 'ai'
 import type { z } from 'zod'
 import type { ChatSchema } from './chat.schema'
-import { and, asc, desc, eq, gte, inArray } from '@gingga/db'
-import { ChatMessages, Chats } from '@gingga/db/schema'
+import { and, asc, desc, eq, gte, inArray, isNotNull } from '@gingga/db'
+import { Agents, ChatMessages, Chats } from '@gingga/db/schema'
 import { generateText } from 'ai'
 import { modelProvider } from '~/lib/ai/providers'
 import { getDB } from '~/server/context.server'
@@ -66,7 +66,7 @@ export async function getChatsByUserId({ userId }: { userId: string }) {
       })
       .from(Chats)
       .innerJoin(ChatMessages, eq(Chats.id, ChatMessages.chatId))
-      .where(eq(Chats.userId, userId))
+      .where(and(eq(Chats.userId, userId), isNotNull(Chats.agentId)))
       .groupBy(
         Chats.id,
         Chats.userId,

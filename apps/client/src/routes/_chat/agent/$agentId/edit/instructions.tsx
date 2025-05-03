@@ -19,7 +19,6 @@ export async function loader({ params }: Route.LoaderArgs) {
 
 export default function RouteComponent({ loaderData }: Route.ComponentProps) {
   const { agent, agentId } = loaderData
-
   const updateAgentMutation = useUpdateAgentMutation()
 
   const handleSubmit = async (values: AgentFormValues) => {

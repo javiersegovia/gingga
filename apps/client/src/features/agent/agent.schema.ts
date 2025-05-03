@@ -4,32 +4,50 @@ import { z } from 'zod'
 // Core Agent Schema (for database interactions)
 export const AgentSchema = z.object({
   id: z.string(),
+  ownerId: z.string().nullable(),
+  agentType: z.enum(Agents.agentType.enumValues),
+  title: z.string().nullable(),
   name: z.string(),
-  description: z.string().optional().nullable(),
+  description: z.string().nullable(),
+  introduction: z.string().nullable(),
   instructions: z.string(),
-  modelId: z.enum(Agents.modelId.enumValues).optional().nullable(),
-  image: z.string().url().optional().nullable(),
-  // Add other fields from Agents schema as needed (e.g., createdAt, updatedAt)
-  // createdAt: z.date(),
-  // updatedAt: z.date().nullable(),
-  // userId: z.string().nullable(), // If agents are user-specific
+  starters: z.array(z.string()).nullable(),
+  modelId: z.enum(Agents.modelId.enumValues).nullable(),
+  image: z.string().url().nullable(),
+  createdAt: z.number(),
+  updatedAt: z.number().nullable(),
 })
 
 // Input Schema for Creating an Agent
 export const CreateAgentInputSchema = AgentSchema.omit({
   id: true,
-  // omit other generated fields like createdAt, updatedAt
+  createdAt: true,
+  updatedAt: true,
+  ownerId: true,
 }).extend({
-  // Fields required for creation but not part of the base AgentSchema
-  // (if any)
-  // userId: z.string(), // Example if userId is required on creation
+  name: z.string().min(1),
+  instructions: z.string().min(1),
+  agentType: z.enum(Agents.agentType.enumValues),
+  starters: z.array(z.string()).default([]).optional().nullable(),
+  title: z.string().optional().nullable(),
+  description: z.string().optional().nullable(),
+  introduction: z.string().optional().nullable(),
+  modelId: z.enum(Agents.modelId.enumValues).optional().nullable(),
+  image: z.string().url().optional().nullable().nullable(),
 })
 export type CreateAgentInput = z.infer<typeof CreateAgentInputSchema>
 
 // Input Schema for Updating an Agent
-export const UpdateAgentInputSchema = AgentSchema.partial().extend({
-  id: z.string(), // ID is required to know which agent to update
+export const UpdateAgentInputSchema = AgentSchema.omit({
+  createdAt: true,
+  updatedAt: true,
+  ownerId: true,
 })
+  .partial()
+  .extend({
+    id: z.string(),
+    starters: z.array(z.string()).default([]).optional().nullable(),
+  })
 export type UpdateAgentInput = z.infer<typeof UpdateAgentInputSchema>
 
 // Input Schema for Get/Delete Agent by ID
@@ -41,10 +59,16 @@ export type AgentIdInput = z.infer<typeof AgentIdInputSchema>
 // Schema specifically for the AgentForm component
 export const AgentFormSchema = z.object({
   name: z.string().min(1, 'Agent name is required.'),
-  description: z.string().nullable(),
+  title: z.string().nullable().optional(),
+  description: z.string().nullable().optional(),
+  introduction: z.string().nullable().optional(),
   instructions: z.string().min(1, 'Instructions are required.'),
+  starters: z.array(z.string()).max(5, 'Maximum of 5 starters allowed.').default([]).optional().nullable(),
   modelId: z.enum(Agents.modelId.enumValues).nullable().optional(),
-  image: z.string().url({ message: 'Please enter a valid URL.' }).nullable(),
+  image: z.string().url({ message: 'Please enter a valid URL.' }).nullable().optional(),
+  agentType: z.enum(Agents.agentType.enumValues, {
+    errorMap: () => ({ message: 'Please select an agent type.' }),
+  }),
 })
 export type AgentFormValues = z.infer<typeof AgentFormSchema>
 

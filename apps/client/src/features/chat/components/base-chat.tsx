@@ -1,13 +1,13 @@
 import type { Attachment, UIMessage } from 'ai'
 import type { VisibilityType } from './visibility-selector'
-import type { ToolName } from '~/features/skills/skill.types'
+import type { ToolName } from '~/features/tools/tool.types'
 import { useChat } from '@ai-sdk/react'
 import { useQueryClient } from '@tanstack/react-query'
 import { nanoid } from 'nanoid'
 import { useState } from 'react'
 import { href } from 'react-router'
 import { toast } from 'sonner'
-import { toolsRequiringConfirmation } from '~/features/skills/skill.info'
+import { toolsRequiringConfirmation } from '~/features/tools/tool.info'
 import { useAuthQuery } from '~/lib/auth/auth.query'
 import { useTRPC } from '~/lib/trpc/react'
 import { ChatHeader } from './chat-header'
@@ -68,7 +68,7 @@ export function BaseChat({
           })
         }
 
-        window.history.replaceState({}, '', href('/chat/agent/:agentId/chat/:chatId', { agentId: agentId ?? '', chatId: id }))
+        window.history.replaceState({}, '', href('/agent/:agentId/chat/:chatId', { agentId: agentId ?? '', chatId: id }))
       }
     },
     onError: (error) => {

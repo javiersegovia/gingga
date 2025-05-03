@@ -1,6 +1,6 @@
 import type { UIMessage } from 'ai'
 import type { UseAgentChatResult } from '~/features/agent/agent.types'
-import type { ToolResponse } from '~/features/skills/skill.types'
+import type { ToolResponse } from '~/features/tools/tool.types'
 
 // import type { Vote } from '~/lib/db/schema'
 // import { DocumentToolCall, DocumentToolResult } from './document'

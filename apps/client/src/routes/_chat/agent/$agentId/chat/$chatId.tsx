@@ -8,7 +8,7 @@ export async function loader({ params }: Route.LoaderArgs) {
   const chat = await getChatById({ id: params.chatId })
 
   if (!chat) {
-    return redirect(href('/chat/agent/:agentId', { agentId: params.agentId }))
+    return redirect(href('/agent/:agentId', { agentId: params.agentId }))
   }
 
   return { chat, agentId: params.agentId, endpoint: `/api/agents/custom/${params.agentId}` }

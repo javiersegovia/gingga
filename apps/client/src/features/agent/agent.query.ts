@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useRevalidator } from 'react-router'
 import { useTRPC } from '~/lib/trpc/react'
 
 // Query Hook for fetching a single agent
@@ -30,15 +31,17 @@ export function useCreateAgentMutation() {
 export function useUpdateAgentMutation() {
   const queryClient = useQueryClient()
   const trpc = useTRPC()
+  const { revalidate } = useRevalidator()
   return useMutation(trpc.agent.updateAgentById.mutationOptions({
     onSuccess: async (updatedAgent) => {
+      await queryClient.fetchQuery(trpc.agent.getAgentById.queryOptions({ id: updatedAgent.id }))
       await queryClient.invalidateQueries({
         queryKey: [
           trpc.agent.getAgents.queryKey(),
           trpc.agent.getRecentChatsWithAgents.queryKey(),
-          trpc.agent.getAgentById.queryKey({ id: updatedAgent.id }),
         ],
       })
+      await revalidate()
     },
   }))
 }

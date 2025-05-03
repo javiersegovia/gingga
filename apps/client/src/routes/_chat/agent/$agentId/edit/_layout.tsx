@@ -6,7 +6,6 @@ import {
   ArrowLeftIcon,
   BookIcon,
   BrainIcon,
-  LightbulbIcon,
   WorkflowIcon,
 } from 'lucide-react'
 import { href, Link, Outlet, redirect } from 'react-router'
@@ -16,13 +15,13 @@ import { getAgentById } from '~/features/agent/agent.service'
 export async function loader({ request, params }: Route.LoaderArgs) {
   const pathname = new URL(request.url).pathname
   if (!params.agentId) {
-    return redirect(href('/chat/agents'), 302)
+    return redirect(href('/agents'), 302)
   }
 
   const agent = await getAgentById(params.agentId)
 
   if (!agent) {
-    return redirect(href('/chat/agents'), 302)
+    return redirect(href('/agents'), 302)
   }
 
   return { agent, pathname }
@@ -34,26 +33,26 @@ export default function RouteComponent({ loaderData }: Route.ComponentProps) {
 
   const navItems: Tab[] = [
     {
-      to: href(`/chat/agent/:agentId/edit/instructions`, { agentId: agent.id }),
-      pathname: href(`/chat/agent/:agentId/edit/instructions`, { agentId: agent.id }),
+      to: href(`/agent/:agentId/edit/instructions`, { agentId: agent.id }),
+      pathname: href(`/agent/:agentId/edit/instructions`, { agentId: agent.id }),
       label: 'Instructions',
       icon: <BrainIcon className="h-4 w-4" />,
     },
+    // {
+    //   to: href(`/chat/agent/:agentId/edit/skills`, { agentId: agent.id }),
+    //   pathname: href(`/chat/agent/:agentId/edit/skills`, { agentId: agent.id }),
+    //   label: 'Skills',
+    //   icon: <LightbulbIcon className="h-4 w-4" />,
+    // },
     {
-      to: href(`/chat/agent/:agentId/edit/skills`, { agentId: agent.id }),
-      pathname: href(`/chat/agent/:agentId/edit/skills`, { agentId: agent.id }),
-      label: 'Skills',
-      icon: <LightbulbIcon className="h-4 w-4" />,
-    },
-    {
-      to: href(`/chat/agent/:agentId/edit/knowledge`, { agentId: agent.id }),
-      pathname: href(`/chat/agent/:agentId/edit/knowledge`, { agentId: agent.id }),
+      to: href(`/agent/:agentId/edit/knowledge`, { agentId: agent.id }),
+      pathname: href(`/agent/:agentId/edit/knowledge`, { agentId: agent.id }),
       label: 'Knowledge',
       icon: <BookIcon className="h-4 w-4" />,
     },
     {
-      to: href(`/chat/agent/:agentId/edit/workflows`, { agentId: agent.id }),
-      pathname: href(`/chat/agent/:agentId/edit/workflows`, { agentId: agent.id }),
+      to: href(`/agent/:agentId/edit/workflows`, { agentId: agent.id }),
+      pathname: href(`/agent/:agentId/edit/workflows`, { agentId: agent.id }),
       label: 'Workflows',
       icon: <WorkflowIcon className="h-4 w-4" />,
     },
@@ -64,7 +63,7 @@ export default function RouteComponent({ loaderData }: Route.ComponentProps) {
       <aside className="w-full shrink-0 lg:w-64">
         <div className="sticky top-10 space-y-6">
           <Button variant="outline" size="sm" asChild>
-            <Link to="/chat/agents">
+            <Link to={href('/agents')}>
               <ArrowLeftIcon className="mr-2 h-4 w-4" />
               Back to Agents
             </Link>
@@ -86,36 +85,6 @@ export default function RouteComponent({ loaderData }: Route.ComponentProps) {
               <p className="text-muted-foreground text-sm">
                 {agent.description || 'Agent Description'}
               </p>
-
-              {/* <h4 className="font-title mt-4 text-xs uppercase">Skills</h4>
-              {agent.agentSkills.length > 0
-                ? (
-                    <ul className="mt-2 flex flex-col items-start justify-start gap-2 text-xs">
-                      {agent.agentSkills.map((skill) => {
-                        const skillOption = skillOptions?.find(
-                          opt => opt.id === skill.skillId,
-                        )
-                        const displayName = skill.name || skillOption?.name || skill.skillId
-                        return (
-                          <li
-                            key={skill.id}
-                            className="flex items-center gap-2 rounded-md border px-4 py-2"
-                          >
-                            <div
-                              className={cn(
-                                'h-2 w-2 rounded-full',
-                                skill.isEnabled ? 'bg-green-500' : 'bg-red-500',
-                              )}
-                            />
-                            <span className="inline-block">{displayName}</span>
-                          </li>
-                        )
-                      })}
-                    </ul>
-                  )
-                : (
-                    <p className="text-muted-foreground text-sm">No skills added yet.</p>
-                  )} */}
             </div>
           </div>
         </div>

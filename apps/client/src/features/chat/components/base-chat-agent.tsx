@@ -1,13 +1,13 @@
 import type { Attachment, UIMessage } from 'ai'
 import type { VisibilityType } from './visibility-selector'
-import type { AgentType } from '~/features/agent/agent.types'
-import type { ToolName } from '~/features/skills/skill.types'
+import type { CFAgentType } from '~/features/agent/agent.types'
+import type { ToolName } from '~/features/tools/tool.types'
 import { useAgentChat } from 'agents/ai-react'
 import { useAgent } from 'agents/react'
 import { nanoid } from 'nanoid'
 import { useState } from 'react'
 import { toast } from 'sonner'
-import { toolsRequiringConfirmation } from '~/features/skills/skill.info'
+import { toolsRequiringConfirmation } from '~/features/tools/tool.info'
 import { Messages } from './messages/messages-agent'
 import { MultimodalInput } from './multimodal-input-agent'
 import { useScrollToBottom } from './use-scroll-to-bottom'
@@ -21,7 +21,7 @@ export function BaseChat({ // Removed isNewChat, endpoint
 }: {
   chatId: string
   agentId: string
-  agentType: AgentType
+  agentType: CFAgentType
   initialMessages: Array<UIMessage>
   selectedChatModel?: string
   selectedVisibilityType: VisibilityType

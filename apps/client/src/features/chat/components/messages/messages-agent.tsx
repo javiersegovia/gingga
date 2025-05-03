@@ -1,7 +1,7 @@
 import type { UIMessage } from 'ai'
 import type { useScrollToBottom } from '../use-scroll-to-bottom'
 import type { UseAgentChatResult } from '~/features/agent/agent.types'
-import type { ToolResponse } from '~/features/skills/skill.types'
+import type { ToolResponse } from '~/features/tools/tool.types'
 import { cn } from '@gingga/ui/lib/utils'
 // import { Vote } from '~/lib/db/schema'
 import equal from 'fast-deep-equal'

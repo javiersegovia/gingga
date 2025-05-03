@@ -42,9 +42,18 @@ export async function createAgent(
 ) {
   try {
     const db = getDB() // Use the imported function
+    // const userId = await getUserId() // Get current user ID
+
+    // Ensure starters is an array, defaulting to empty if not provided
+    const starters = data.starters ?? []
+
     const [agent] = await db
       .insert(Agents)
-      .values(data)
+      .values({
+        // ownerId: userId, // Assign ownership
+        ...data,
+        starters, // Use potentially defaulted starters
+      })
       .returning()
 
     return agent
@@ -64,12 +73,21 @@ export async function updateAgentById(data: UpdateAgentInput): Promise<Agent | n
   try {
     const db = getDB() // Use the imported function
     const { id, ...updateData } = data
+
+    // Ensure starters is handled correctly if provided (null or array)
+    const updatePayload: Partial<typeof Agents.$inferInsert> = {
+      ...updateData,
+      updatedAt: new Date(),
+    }
+
+    // Explicitly handle starters if it's part of the update data
+    if ('starters' in updateData) {
+      updatePayload.starters = updateData.starters ?? []
+    }
+
     const [agent] = await db
       .update(Agents)
-      .set({
-        ...updateData,
-        updatedAt: new Date(),
-      })
+      .set(updatePayload)
       .where(eq(Agents.id, id))
       .returning()
 

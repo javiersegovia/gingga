@@ -16,6 +16,7 @@
     "@libsql/client": "catalog:",
     "@t3-oss/env-core": "catalog:",
     "ai": "catalog:",
+    "ajv": "catalog:",
     "dotenv": "catalog:",
     "drizzle-orm": "catalog:",
     "nanoid": "catalog:",

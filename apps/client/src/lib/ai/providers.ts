@@ -4,7 +4,7 @@ import { webEnv } from '~/lib/env.server'
 
 const openrouter = createOpenRouter({
   apiKey: webEnv.OPENROUTER_API_KEY,
-  baseURL: webEnv.GATEWAY_BASE_OPENROUTER_URL,
+  baseURL: import.meta.env.DEV ? undefined : webEnv.GATEWAY_BASE_OPENROUTER_URL,
 })
 
 export const modelProvider = customProvider({
@@ -16,12 +16,11 @@ export const modelProvider = customProvider({
       middleware: extractReasoningMiddleware({ tagName: 'think' }),
     }),
 
-    'chat-basic': openrouter('meta-llama/llama-3.3-70b-instruct:free'),
     'chat-agent': openrouter('google/gemini-2.0-flash-001'),
-    // 'chat-agent-tools': openrouter('openai/gpt-4.1'),
-    // 'chat-agent-tools': openrouter('openai/gpt-4.1'),
     'chat-agent-tools': openrouter('google/gemini-2.0-flash-001'),
-
     'artifact-basic': openrouter('meta-llama/llama-3.3-70b-instruct:free'),
+
+    'qualify-lead': openrouter('google/gemini-2.0-flash-001'),
+    'video-generator-agent': openrouter('google/gemini-2.5-preview'),
   },
 })

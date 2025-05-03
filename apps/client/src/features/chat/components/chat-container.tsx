@@ -1,5 +1,5 @@
 import type { Attachment, UIMessage } from 'ai'
-import type { AgentType } from '~/features/agent/agent.types'
+import type { CFAgentType } from '~/features/agent/agent.types'
 import type { VisibilityType } from '~/features/chat/components/visibility-selector'
 import { nanoid } from 'nanoid'
 import { useState } from 'react'
@@ -10,7 +10,7 @@ import { MultimodalInput } from './multimodal-input-agent'
 
 interface ChatContainerProps {
   agentId: string
-  agentType: AgentType
+  agentType: CFAgentType
   chatId: string | null
   chatVisibility?: VisibilityType
   isReadonly: boolean

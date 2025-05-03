@@ -14,7 +14,7 @@ const BOOKING_LINK = 'https://calendly.com/guzman-vla/30min'
 
 export default function ContactSettingsComponent() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 w-full">
       <Card design="grid">
         <CardHeader>
           <CardTitle>Contact Us</CardTitle>
@@ -34,9 +34,8 @@ export default function ContactSettingsComponent() {
         <Card design="grid">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <MailIcon className="h-5 w-5" />
-              {' '}
-              Email Support
+              <MailIcon className="h-6 w-6" />
+              Email
             </CardTitle>
             <CardDescription>Best for non-urgent inquiries.</CardDescription>
           </CardHeader>
@@ -53,9 +52,8 @@ export default function ContactSettingsComponent() {
         <Card design="grid">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <PhoneIcon className="h-5 w-5" />
-              {' '}
-              Phone Support
+              <PhoneIcon className="h-6 w-6" />
+              Phone
             </CardTitle>
             <CardDescription>For more immediate assistance.</CardDescription>
           </CardHeader>

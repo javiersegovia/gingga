@@ -42,7 +42,7 @@ function AgentGridSection() {
   // Admin button that will be shown regardless of empty state
   const AdminCreateButton = isAdmin && (
     <Button asChild variant="secondary" size="md" className="absolute top-0 right-0">
-      <Link to="/chat/agents/create">
+      <Link to={href('/agents/create')}>
         <BotIcon className="mr-2 h-4 w-4" />
         Create Agent
       </Link>
@@ -58,14 +58,14 @@ function AgentGridSection() {
           <Card hover="noShadow" design="grid" className="w-full max-w-xs">
             <CardHeader>
               <CardTitle className="text-center">No agents found... yet</CardTitle>
-              <CardDescription className="text-center">
+              {/* <CardDescription className="text-center">
                 <Button asChild size="xl" variant="secondary" className="mt-4">
-                  <Link to="/chat">
+                  <Link to={href("/agents")}>
                     <BotIcon className="mr-2 h-4 w-4" />
                     Chat with Gingga
                   </Link>
                 </Button>
-              </CardDescription>
+              </CardDescription> */}
             </CardHeader>
           </Card>
         </div>
@@ -153,7 +153,7 @@ function AgentCard({ agent, isAdmin }: { agent: Agent, isAdmin?: boolean }) {
             className="absolute top-2 right-2 h-8 w-8 rounded-full p-0"
             asChild
           >
-            <Link to={href('/chat/agent/:agentId/edit/instructions', { agentId: agent.id })}>
+            <Link to={href('/agent/:agentId/edit/instructions', { agentId: agent.id })}>
               <EditIcon className="h-4 w-4" />
               <span className="sr-only">Edit agent</span>
             </Link>
@@ -184,8 +184,7 @@ function AgentCard({ agent, isAdmin }: { agent: Agent, isAdmin?: boolean }) {
           className={cn('mx-auto mt-4 w-auto gap-2')}
           asChild
         >
-          {/* <Link to="/chat/agent/$agentId" params={{ agentId: agent.id }}> */}
-          <Link to={href('/chat/agent/:agentId', { agentId: agent.id })}>
+          <Link to={href('/agent/:agentId', { agentId: agent.id })}>
             <MessageSquareTextIcon className="h-4 w-4" />
             Chat Now
             <ArrowRightIcon className="ml-1 h-4 w-4" />

@@ -39,6 +39,7 @@ import { ThemeSwitch } from '~/components/ui/theme-switch'
 import { useClientEnv } from '~/hooks/use-client-env'
 import { useAuthQuery } from '~/lib/auth/auth.query'
 import { useTRPC } from '~/lib/trpc/react'
+import { DASHBOARD_INDEX_PATH } from '~/routes'
 import { DeleteChatDialog } from './delete-dialog'
 import { RenameChatDialog } from './rename-dialog'
 import { ShareChatDialog } from './share-dialog'
@@ -54,7 +55,7 @@ export function ChatSidebar() {
     <Sidebar className="border-r">
       <SidebarHeader>
         <div className="p-4">
-          <Link to="/chat" className="flex justify-center gap-2">
+          <Link to={DASHBOARD_INDEX_PATH} className="flex justify-center gap-2">
             <img
               src={`${env.VITE_ASSETS_URL}/logo/logo-dark-v2.png`}
               alt="Logo"
@@ -69,7 +70,7 @@ export function ChatSidebar() {
         </div>
 
         <Button variant="hoverSecondary" hover="reverse" size="md" className="w-full" asChild>
-          <Link to="/chat/agents">
+          <Link to={href('/agents')}>
             <span>Explore Agents</span>
             <TelescopeIcon className="ml-auto h-4 w-4" />
           </Link>
@@ -126,9 +127,11 @@ function AuthenticatedHistoryList() {
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         {chats?.map((chat) => {
-          const url = chat.agentId
-            ? href('/chat/agent/:agentId/chat/:chatId', { agentId: chat.agentId, chatId: chat.id })
-            : href('/chat/:chatId', { chatId: chat.id })
+          if (!chat.agentId) {
+            return null
+          }
+
+          const url = href('/agent/:agentId/chat/:chatId', { agentId: chat.agentId, chatId: chat.id })
 
           return (
             <Fragment key={chat.id}>
@@ -241,7 +244,7 @@ function SidebarChats({ user }: SidebarChatsProps) {
                 >
                   <CardContent className="text-muted-foreground p-3 text-sm">
                     <Link
-                      to="/identify"
+                      to={href('/identify')}
                       className="text-brand-blue dark:text-primary font-medium hover:underline"
                     >
                       Log in
@@ -267,7 +270,7 @@ function NavUser({ user }: NavUserProps) {
       <SidebarMenuItem>
         {user
           ? (
-              <Link to="/settings/account" className="w-full">
+              <Link to={href('/settings/account')} className="w-full">
                 <SidebarMenuButton
                   size="lg"
                   className="hover:border-border rounded-sm hover:text-foreground data-[state=open]:border-y-border data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground cursor-pointer border border-transparent focus:ring-0 focus:outline-none focus-visible:ring-0 focus-visible:outline-none data-[state=open]:border-x-transparent"
@@ -341,7 +344,7 @@ export function RecentAgentsList() {
       {agentsToShow.map(agent => (
         <SidebarMenuItem key={agent.id}>
           <Link
-            to={href('/chat/agent/:agentId', { agentId: agent.id })}
+            to={href('/agent/:agentId', { agentId: agent.id })}
             className="flex items-center gap-3 p-2 hover:underline"
           >
             <Avatar className="h-8 w-8">

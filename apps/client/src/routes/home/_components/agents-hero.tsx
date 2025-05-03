@@ -4,6 +4,7 @@ import { cn } from '@gingga/ui/lib/utils'
 import { ArrowRightIcon, Clock, Zap } from 'lucide-react'
 import { Link } from 'react-router'
 import { useClientEnv } from '~/hooks/use-client-env'
+import { DASHBOARD_INDEX_PATH } from '~/routes'
 
 interface MarqueeItemProps {
   id: string | number
@@ -92,7 +93,7 @@ export function AgentsHero() {
                 </Button>
 
                 <Button variant="primary" size="xl" asChild>
-                  <Link to="/chat">
+                  <Link to={DASHBOARD_INDEX_PATH}>
                     Try For Free
                     <ArrowRightIcon className="ml-2 h-4 w-4 sm:h-5 sm:w-5" />
                   </Link>

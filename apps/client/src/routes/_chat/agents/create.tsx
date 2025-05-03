@@ -15,7 +15,7 @@ export default function RouteComponent() {
       values,
       {
         onSuccess: () => {
-          void navigate(href('/chat/agents'))
+          void navigate(href('/agents'))
         },
         onError: (error) => {
           toast.error('An error occurred', {
@@ -29,7 +29,7 @@ export default function RouteComponent() {
   return (
     <div className="m-auto w-full max-w-2xl space-y-4 py-10">
       <Button variant="outline" size="sm" asChild>
-        <Link to="/chat/agents">
+        <Link to={href('/agents')}>
           <ArrowLeftIcon className="mr-2 h-4 w-4" />
           Back to Agents
         </Link>

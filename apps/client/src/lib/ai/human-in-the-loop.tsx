@@ -2,11 +2,11 @@
 import type { Message } from '@ai-sdk/ui-utils'
 import type { DataStreamWriter, ToolExecutionOptions, ToolSet } from 'ai'
 import type { z } from 'zod'
-import type { ToolResponse } from '~/features/skills/skill.types'
+import type { ToolResponse } from '~/features/tools/tool.types'
 import { formatDataStreamPart } from '@ai-sdk/ui-utils'
 import { convertToCoreMessages } from 'ai'
 import { upsertChatMessage } from '~/features/chat/chat.service'
-import { APPROVAL } from '~/features/skills/skill.info'
+import { APPROVAL } from '~/features/tools/tool.info'
 
 function isValidToolName<K extends PropertyKey, T extends object>(
   key: K,

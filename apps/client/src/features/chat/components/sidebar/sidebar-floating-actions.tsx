@@ -1,21 +1,21 @@
 import type { ComponentProps } from 'react'
-import { Button } from '@gingga/ui/components/button'
+// import { Button } from '@gingga/ui/components/button'
 
-import { SidebarTrigger, useSidebar } from '@gingga/ui/components/sidebar'
+import { SidebarTrigger /* useSidebar */ } from '@gingga/ui/components/sidebar'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@gingga/ui/components/tooltip'
 
 import { cn } from '@gingga/ui/lib/utils'
-import { PlusIcon } from 'lucide-react'
-import { AnimatePresence, motion } from 'motion/react'
-import { Link } from 'react-router'
-import { useWindowSize } from 'usehooks-ts'
+// import { PlusIcon } from 'lucide-react'
+// import { AnimatePresence, motion } from 'motion/react'
+// import { Link } from 'react-router'
+// import { useWindowSize } from 'usehooks-ts'
 
 export function SidebarFloatingActions({
   className,
 }: ComponentProps<typeof SidebarTrigger>) {
-  const { state } = useSidebar()
+  // const { state } = useSidebar()
 
-  const { width: windowWidth } = useWindowSize()
+  // const { width: windowWidth } = useWindowSize()
 
   return (
     <div className={cn('pointer-events-auto z-50 flex flex-row gap-2 p-1', className)}>
@@ -29,7 +29,7 @@ export function SidebarFloatingActions({
         <TooltipContent align="start">Toggle Sidebar</TooltipContent>
       </Tooltip>
 
-      <AnimatePresence>
+      {/* <AnimatePresence>
         {(state === 'collapsed' || windowWidth < 768) && (
           <Tooltip delayDuration={0}>
             <TooltipTrigger asChild>
@@ -50,7 +50,7 @@ export function SidebarFloatingActions({
             <TooltipContent>New Chat</TooltipContent>
           </Tooltip>
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
     </div>
   )
 }

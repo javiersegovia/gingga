@@ -8,6 +8,7 @@ import { href, Link, Outlet } from 'react-router'
 import { AnimatedLinkTabs } from '~/components/ui/animated-link-tabs'
 import { useAuthQuery, useSignOutMutation } from '~/lib/auth/auth.query'
 import { authMiddleware } from '~/middleware/auth.middleware'
+import { DASHBOARD_INDEX_PATH } from '~/routes'
 
 export const unstable_middleware = [authMiddleware]
 
@@ -35,16 +36,16 @@ export default function SettingsLayoutComponent({ loaderData }: Route.ComponentP
       pathname: href('/settings/preferences'),
       label: 'Preferences',
     },
-    {
-      to: href('/settings/integrations'),
-      pathname: href('/settings/integrations'),
-      label: 'Integrations',
-    },
+    // {
+    //   to: href('/settings/integrations'),
+    //   pathname: href('/settings/integrations'),
+    //   label: 'Integrations',
+    // },
     { to: href('/settings/contact'), pathname: href('/settings/contact'), label: 'Contact' },
   ]
 
   return (
-    <div className="container-marketing mx-auto flex min-h-[calc(100vh-theme(spacing.16))] max-w-2xl flex-col gap-12 py-8 lg:flex-row">
+    <div className="container-marketing mx-auto w-full flex min-h-[calc(100vh-theme(spacing.16))] max-w-3xl flex-col gap-12 py-8 lg:flex-row">
       {/* Left Sidebar */}
       <aside className="w-full shrink-0 lg:w-64">
         <div className="sticky top-0 space-y-6">
@@ -55,9 +56,9 @@ export default function SettingsLayoutComponent({ loaderData }: Route.ComponentP
             hover="reverse"
             className="w-auto"
           >
-            <Link to="/chat">
+            <Link to={href(DASHBOARD_INDEX_PATH)}>
               <ArrowLeftIcon className="mr-2 h-4 w-4" />
-              Back to Chat
+              Go Back
             </Link>
           </Button>
 

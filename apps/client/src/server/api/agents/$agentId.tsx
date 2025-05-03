@@ -1,9 +1,4 @@
-import type { Tool, UIMessage } from 'ai'
-import type {
-  ComposioAppName,
-  ComposioToolName,
-} from '~/features/composio/composio.schema'
-import type { SkillInstruction } from '~/lib/ai/compose-system-message'
+import type { UIMessage } from 'ai'
 import { appendResponseMessages, createDataStreamResponse, streamText } from 'ai'
 import { Hono } from 'hono'
 import { nanoid } from 'nanoid'
@@ -17,10 +12,8 @@ import {
   saveChat,
   upsertChatMessage,
 } from '~/features/chat/chat.service'
-import { getVercelToolset } from '~/features/composio/composio.service'
-import { getSystemPrompt } from '~/lib/ai/compose-system-message'
 import { processToolCalls } from '~/lib/ai/human-in-the-loop'
-import { modelProvider } from '~/lib/ai/providers'
+import { getAgentData } from '~/server/agents'
 import { getAuthSession } from '~/server/context.server'
 
 export const agentCustomRoute = new Hono().post('/:agentId', async (c) => {
@@ -43,7 +36,6 @@ export const agentCustomRoute = new Hono().post('/:agentId', async (c) => {
     if (!agent) {
       return c.json({ result: `Agent with ID '${agentId}' not found.` }, { status: 404 })
     }
-    const { instructions: agentInstructions, modelId: agentModelId, agentSkills } = agent
 
     let chat: { id: string } | undefined = await getChatById({ id })
     const userId = (authSession.isAuthenticated && authSession.user.id) || null
@@ -68,106 +60,13 @@ export const agentCustomRoute = new Hono().post('/:agentId', async (c) => {
       attachments: lastUserMessage.experimental_attachments ?? [],
     })
 
-    const toolset = getVercelToolset({
-      entityId: userId ?? undefined,
-    })
-    const appToolsMap = new Map<ComposioAppName, Set<ComposioToolName>>()
-    const skillInstructions: SkillInstruction[] = []
-
-    for (const skill of agentSkills ?? []) {
-      if (
-        !skill.isEnabled
-        || !skill.composioIntegrationAppName
-        || !skill.composioToolNames
-      ) {
-        continue
-      }
-
-      const appName = skill.composioIntegrationAppName
-      const toolNames = skill.composioToolNames
-
-      const currentToolSet = appToolsMap.get(appName) ?? new Set<ComposioToolName>()
-
-      if (toolNames instanceof Set) {
-        toolNames.forEach(toolName => currentToolSet.add(toolName))
-      }
-      else if (Array.isArray(toolNames)) {
-        toolNames.forEach((toolName: ComposioToolName) => currentToolSet.add(toolName))
-      }
-      appToolsMap.set(appName, currentToolSet)
-
-      if (skill.instructions) {
-        skillInstructions.push({
-          skillName: skill.name ?? skill.skillId,
-          instructions: skill.instructions,
-          appName,
-          toolNames,
-        })
-      }
-    }
-
-    const uniqueAppNames = Array.from(appToolsMap.keys())
-    const connections = await toolset.client.connectedAccounts.list({
-      entityId: userId ?? undefined,
-      appUniqueKeys: uniqueAppNames,
-      showActiveOnly: true,
-      showDisabled: false,
-    })
-
-    const activeAppIds = new Set(
-      connections.items
-        .filter(conn => conn.status === 'ACTIVE')
-        .map(conn => conn.appUniqueId),
-    )
-
-    const toolPromises = uniqueAppNames.map(async (appName) => {
-      const toolNamesSet = appToolsMap.get(appName)
-      if (!toolNamesSet)
-        return {}
-
-      const toolNamesArray = Array.from(toolNamesSet)
-
-      try {
-        const tools = await toolset.getTools({
-          apps: [appName],
-          actions: toolNamesArray,
-        })
-        return tools
-      }
-      catch (_error) {
-        return {}
-      }
-    })
-
-    const toolsResults = await Promise.all(toolPromises)
-
-    const composioTools: Record<string, Tool> = toolsResults.reduce(
-      (acc, tools) => ({ ...acc, ...tools }),
-      {},
-    )
-
-    const activeTools = Object.entries(composioTools)
-      .filter(([toolKey]) => {
-        const appName = toolKey.split('_')[0]
-        return activeAppIds.has(appName)
-      })
-      .reduce(
-        (acc, [key, tool]) => {
-          acc[key] = tool
-          return acc
-        },
-        {} as Record<string, Tool>,
-      )
+    const { instructions } = agent
+    const { systemPrompt, model, tools } = getAgentData({ agentType: agent.agentType, agentId })
 
     const systemMessage = {
       role: 'system' as const,
-      content: getSystemPrompt({
-        agentName: agent.name,
-        agentInstructions,
-        skillInstructions,
-        tools: Object.keys(activeTools),
-        languagePref: 'English',
-      }),
+      content: `${systemPrompt}
+      ${instructions}`.trim(),
     }
 
     return createDataStreamResponse({
@@ -176,19 +75,17 @@ export const agentCustomRoute = new Hono().post('/:agentId', async (c) => {
           chatId: chat.id,
           dataStream,
           messages,
-          tools: {},
-          // tools: activeTools,
+          tools: tools ?? {},
           executions: {},
         })
 
         const result = streamText({
-          model: modelProvider.languageModel('chat-agent-tools'),
+          model,
 
           abortSignal: c.req.raw.signal,
           messages: [systemMessage, ...proccesedMessages],
 
-          // tools: activeTools,
-          tools: {},
+          tools: tools ?? {},
           experimental_generateMessageId: nanoid,
           maxSteps: 10,
           async onFinish({ response }) {
@@ -221,9 +118,7 @@ export const agentCustomRoute = new Hono().post('/:agentId', async (c) => {
                   role: 'assistant',
                   parts: newAssistantMessage.parts ?? [],
                   attachments: newAssistantMessage.experimental_attachments ?? [],
-                  modelId:
-                    agentModelId
-                    || modelProvider.languageModel('chat-agent-tools').modelId,
+                  modelId: model.modelId,
                 })
               }
             }

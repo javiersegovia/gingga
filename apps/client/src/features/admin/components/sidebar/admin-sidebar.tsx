@@ -72,6 +72,21 @@ export function AdminSidebar() {
                   <span>Users</span>
                 </NavLink>
               </SidebarMenuItem>
+              <SidebarMenuItem
+                className={cn(
+                  'group/item -mt-[2px] flex items-center justify-between rounded-none border border-r-0 border-l-0 border-transparent',
+                  'hover:border-border hover:bg-sidebar-accent focus:bg-sidebar-accent',
+                  'has-[[data-status=active]]:border-border has-[[data-status=active]]:bg-sidebar-accent has-[[data-status=active]]:text-sidebar-accent-foreground',
+                  'dark:has-[[data-status=active]]:text-primary dark:hover:text-primary',
+                )}
+              >
+                <NavLink
+                  to={href('/admin/n8n-workflows')}
+                  className="flex w-full items-center gap-2 truncate px-4 py-2 hover:underline"
+                >
+                  <span>N8N Workflows</span>
+                </NavLink>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -81,9 +96,9 @@ export function AdminSidebar() {
         <SidebarMenu className="flex items-center gap-4 justify-between">
           <SidebarMenuItem>
             <Button variant="outline" className="w-full justify-start" asChild>
-              <Link to="/chat">
+              <Link to={href('/agents')}>
                 <ArrowLeftIcon className="mr-2 h-4 w-4" />
-                Back to Chat
+                Back to Agents
               </Link>
             </Button>
           </SidebarMenuItem>

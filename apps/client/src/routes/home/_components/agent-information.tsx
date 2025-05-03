@@ -26,7 +26,7 @@ import {
   UserPlusIcon,
   ZapIcon,
 } from 'lucide-react'
-import { Link } from 'react-router'
+import { href, Link } from 'react-router'
 
 interface AgentInformationProps {
   agent: Agent
@@ -123,7 +123,7 @@ export function AgentInformation({ agent, className }: AgentInformationProps) {
                 'mb-6 flex flex-col justify-center gap-3 sm:flex-row md:justify-start',
               )}
             >
-              <Link to="/chat/agents">
+              <Link to={href('/agents')}>
                 <Button
                   size="default"
                   variant="outline"
