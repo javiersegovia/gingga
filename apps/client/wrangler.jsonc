@@ -16,34 +16,28 @@
     "enabled": true
   },
 
-  "durable_objects": {
-    "bindings": [
-      {
-        "name": "DefaultChatAgent",
-        "class_name": "DefaultChatAgent",
-      },
-    ],
-  },
+  // "durable_objects": {
+  //   "bindings": [
+  //     {
+  //       "name": "DefaultChatAgent",
+  //       "class_name": "DefaultChatAgent",
+  //     },
+  //   ],
+  // },
 
-  "migrations": [
-    {
-      "tag": "v1",
-      "new_sqlite_classes": ["DefaultChatAgent"],
-    },
-  ],
+  // "migrations": [
+  //   {
+  //     "tag": "v1",
+  //     "new_sqlite_classes": ["DefaultChatAgent"],
+  //   },
+  // ],
 
   "upload_source_maps": true,
 
-  "vars": {
-    "VALUE_FROM_CLOUDFLARE": "Hello from Cloudflare DEV"
-  },
 
   "env": {
     "production": {
-      "name": "gingga-client",
-      "vars": {
-        "VALUE_FROM_CLOUDFLARE": "Hello from Cloudflare PROD"
-      }
+      "name": "gingga-client"
     }
   }
 }

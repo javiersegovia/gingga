@@ -12,8 +12,6 @@ import { agentDefaultRoute } from '~/server/api/agents/default'
 import { getBetterAuth } from '~/server/context.server'
 import { appRouter } from '~/server/trpc/routers/app.router'
 
-// export { DefaultChatAgent } from '~/server/agents/default-chat-agent'
-
 const requestHandler = createRequestHandler(
   () => import('virtual:react-router/server-build'),
   import.meta.env.MODE,
