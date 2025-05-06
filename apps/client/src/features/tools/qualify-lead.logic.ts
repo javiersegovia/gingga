@@ -9,7 +9,8 @@ const qualifyInputSchema = z.object({
   email: z.string().email(),
   phone: z.string().optional(),
   topic: z.string(),
-  qualificationCriteria: z.string().describe('The criteria to qualify the lead against.'),
+  // qualificationCriteria is now passed as a separate argument
+  // qualificationCriteria: z.string().describe('The criteria to qualify the lead against.'),
 })
 
 type QualifyInput = z.infer<typeof qualifyInputSchema>
@@ -23,11 +24,25 @@ export interface QualifyLeadResult {
 
 /**
  * Qualifies a lead using an LLM based on provided details and criteria.
- * @param input - Lead details and qualification criteria.
+ * @param input - Lead details.
+ * @param qualificationCriteria - The criteria string to qualify against.
  * @returns Qualification result.
  */
-export async function qualifyLead(input: QualifyInput): Promise<QualifyLeadResult> {
-  const { qualificationCriteria, ...leadDetails } = qualifyInputSchema.parse(input)
+export async function qualifyLead(
+  input: QualifyInput,
+  qualificationCriteria: string | null | undefined,
+): Promise<QualifyLeadResult> {
+  // const { qualificationCriteria, ...leadDetails } = qualifyInputSchema.parse(input)
+  const leadDetails = qualifyInputSchema.parse(input) // Parse without criteria
+
+  if (!qualificationCriteria) {
+    console.warn('No qualification criteria provided for agent. Skipping LLM qualification.')
+    return {
+      qualificationScore: 0,
+      qualified: false, // Default to not qualified if no criteria
+      reason: 'No qualification criteria configured for this agent.',
+    }
+  }
 
   const userMessage: CoreMessage = {
     role: 'user',
@@ -42,7 +57,7 @@ export async function qualifyLead(input: QualifyInput): Promise<QualifyLeadResul
   const qualificationSystemPrompt = `
 You are an expert lead qualification assistant.
 Your task is to evaluate the provided lead information against the given criteria and determine if the lead is qualified.
-Respond ONLY with a JSON object containing 'qualificationScore' (0-100), and 'qualified' (boolean).
+Respond ONLY with a JSON object containing 'qualificationScore' (0-100), 'qualified' (boolean), and 'reason' (string explanation).
 Do not include any other text or markdown formatting.
 
 Qualification Criteria:

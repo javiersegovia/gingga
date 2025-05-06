@@ -19,7 +19,6 @@ import {
   ListWorkflowsOutputSchema,
   N8NExecutionDetailsSchema,
   N8NWorkflowDetailsSchema,
-  N8NWorkflowListItemSchema,
 } from './n8n.schema'
 
 const N8N_BASE_URL = webEnv.N8N_BASE_URL
@@ -174,8 +173,6 @@ export async function importN8NWorkflow(input: z.infer<typeof ImportN8NWorkflowI
 
   // Fetch workflow details from n8n
   const workflowDetails = await getN8NWorkflowById({ id: n8nWorkflowId })
-
-  console.log('workflowDetails', workflowDetails)
 
   // Find webhook node to extract webhook URL
   let webhookUrl = ''
@@ -385,7 +382,6 @@ function generateN8NWorkflowSchemas(workflowDetails: z.infer<typeof N8NWorkflowD
     })
   }
 
-  console.log(`Schemas generated for workflow ${workflowDetails.id}: Input schema parsed, Output schema parsed.`)
   return { inputSchema, outputSchema }
 }
 

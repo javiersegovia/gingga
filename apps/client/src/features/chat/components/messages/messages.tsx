@@ -14,6 +14,7 @@ import { PreviewMessage, ThinkingMessage } from './message.client'
 interface MessagesProps {
   chatId: string
   agentId?: string
+  agentImage?: string | null
   status: UseChatHelpers['status']
   // votes: Array<Vote> | undefined
   messages: Array<UIMessage>
@@ -42,6 +43,7 @@ interface MessagesProps {
 function PureMessages({
   chatId,
   agentId,
+  agentImage,
   status,
   // votes,
   messages,
@@ -131,6 +133,7 @@ function PureMessages({
               <PreviewMessage
                 key={message.id}
                 chatId={chatId}
+                agentImage={agentImage}
                 message={message}
                 status={status}
                 isLoading={status === 'streaming' && messages.length - 1 === index}

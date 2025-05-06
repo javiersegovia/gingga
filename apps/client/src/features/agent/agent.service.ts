@@ -1,7 +1,8 @@
 import type { CreateAgentInput, UpdateAgentInput } from './agent.schema'
 import type { Agent } from './agent.types'
-import { and, desc, eq, isNotNull, max } from '@gingga/db'
-import { Agents, Chats } from '@gingga/db/schema'
+import { and, desc, eq, isNotNull, max, or } from '@gingga/db'
+import { Agents, Chats, Leads } from '@gingga/db/schema'
+import { getUserByEmail } from '~/features/user/user.service'
 import { getDB } from '~/server/context.server'
 
 /**
@@ -16,6 +17,12 @@ export async function getAgentById(agentId: string) {
       where: eq(Agents.id, agentId),
       with: {
         agentSkills: true,
+        owner: {
+          columns: {
+            id: true,
+            email: true,
+          },
+        },
       },
     })
 
@@ -38,20 +45,26 @@ export async function getAgentById(agentId: string) {
  * @returns The created agent configuration
  */
 export async function createAgent(
-  data: CreateAgentInput,
+  data: CreateAgentInput & { ownerEmail?: string | null },
 ) {
   try {
-    const db = getDB() // Use the imported function
-    // const userId = await getUserId() // Get current user ID
-
-    // Ensure starters is an array, defaulting to empty if not provided
+    const db = getDB()
     const starters = data.starters ?? []
+
+    let ownerId: string | null = null
+    if (data.ownerEmail) {
+      const user = await getUserByEmail(data.ownerEmail)
+      if (!user) {
+        console.error(`No user found with the provided owner email: ${data.ownerEmail}`)
+      }
+      ownerId = user?.id ?? null
+    }
 
     const [agent] = await db
       .insert(Agents)
       .values({
-        // ownerId: userId, // Assign ownership
         ...data,
+        ownerId, // Set resolved ownerId
         starters, // Use potentially defaulted starters
       })
       .returning()
@@ -60,7 +73,7 @@ export async function createAgent(
   }
   catch (error) {
     console.error('Failed to create agent:', error)
-    throw new Error('Failed to create agent')
+    throw new Error(error instanceof Error ? error.message : 'Failed to create agent')
   }
 }
 
@@ -80,6 +93,15 @@ export async function updateAgentById(data: UpdateAgentInput): Promise<Agent | n
       updatedAt: new Date(),
     }
 
+    let ownerId: string | null = null
+    if (data.ownerEmail) {
+      const user = await getUserByEmail(data.ownerEmail)
+      if (!user) {
+        console.error(`No user found with the provided owner email: ${data.ownerEmail}`)
+      }
+      ownerId = user?.id ?? null
+    }
+
     // Explicitly handle starters if it's part of the update data
     if ('starters' in updateData) {
       updatePayload.starters = updateData.starters ?? []
@@ -87,7 +109,10 @@ export async function updateAgentById(data: UpdateAgentInput): Promise<Agent | n
 
     const [agent] = await db
       .update(Agents)
-      .set(updatePayload)
+      .set({
+        ...updatePayload,
+        ownerId,
+      })
       .where(eq(Agents.id, id))
       .returning()
 
@@ -125,14 +150,39 @@ export async function deleteAgentById(agentId: string): Promise<{ success: boole
 }
 
 /**
- * Lists all agents from the database.
+ * Lists agents based on user role, ownership, and authentication status.
+ * Admins see all agents.
+ * Authenticated users see public agents and their own private agents.
+ * Unauthenticated users see only public agents.
+ * @param userId The ID of the current user (or null if unauthenticated).
+ * @param role The role of the current user (or null if unauthenticated).
  * @returns Array of agent configurations
  */
-export async function getAgents(): Promise<Agent[]> {
+export async function getAgents(
+  userId: string | null,
+  role: 'admin' | 'user' | null,
+): Promise<Agent[]> {
   try {
     const db = getDB() // Use the imported function
+
+    let whereCondition
+
+    if (role === 'admin') {
+      // Admins see all agents - no where condition needed
+      whereCondition = undefined
+    }
+    else if (userId) {
+      // Authenticated users see public agents OR their own agents
+      whereCondition = or(eq(Agents.visibility, 'public'), eq(Agents.ownerId, userId))
+    }
+    else {
+      // Unauthenticated users see only public agents
+      whereCondition = eq(Agents.visibility, 'public')
+    }
+
     return await db.query.Agents.findMany({
       orderBy: desc(Agents.createdAt),
+      where: whereCondition,
     })
   }
   catch (error) {
@@ -150,7 +200,7 @@ export async function getAgents(): Promise<Agent[]> {
 export async function getRecentAgentsForUser(
   userId: string,
   limit: number = 5,
-): Promise<Pick<Agent, 'id' | 'name' | 'image'>[]> {
+): Promise<Pick<Agent, 'id' | 'name' | 'title' | 'image'>[]> {
   const db = getDB() // Use the imported function
   try {
     const latestChatsSubquery = db.$with('latest_chats').as(
@@ -169,6 +219,7 @@ export async function getRecentAgentsForUser(
       .select({
         id: Agents.id,
         name: Agents.name,
+        title: Agents.title,
         image: Agents.image,
         lastUsedAt: latestChatsSubquery.lastUsedAt,
       })
@@ -177,14 +228,17 @@ export async function getRecentAgentsForUser(
       .orderBy(desc(latestChatsSubquery.lastUsedAt))
       .limit(limit)
 
-    return recentAgents.map((agent: { id: string, name: string, image: string | null }): Pick<Agent, 'id' | 'name' | 'image'> => ({
-      id: agent.id,
-      name: agent.name,
-      image: agent.image,
-    }))
+    return recentAgents
   }
   catch (error) {
     console.error(`Database error fetching recent agents for user ${userId}:`, error)
     throw new Error('Database query failed while fetching recent agents.')
   }
+}
+
+export async function getLeadsByAgentId(agentId: string) {
+  const db = getDB()
+  return await db.query.Leads.findMany({
+    where: eq(Leads.agentId, agentId),
+  })
 }

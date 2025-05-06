@@ -1,23 +1,19 @@
 import type { Tool } from 'ai'
 import type { QualifyLeadResult } from './qualify-lead.logic'
-import type { ToolResponse } from './tool.types' // Updated path
-import { Leads } from '@gingga/db/schema' // Updated path, assuming schema name is Leads
+import type { ToolResponse } from './tool.types'
+import { eq } from '@gingga/db'
+import { Agents, Leads } from '@gingga/db/schema' // Add Agents import
 import { tool } from 'ai'
 import { z } from 'zod'
-import { getDB } from '~/server/context.server' // Updated path
+import { getDB } from '~/server/context.server'
 import { qualifyLead } from './qualify-lead.logic'
 
-// Define the input schema for the save lead tool, including qualification criteria
 const saveLeadSchema = z.object({
   name: z.string().describe('The name of the lead'),
   email: z.string().email().describe('The email address of the lead'),
   phone: z.string().optional().describe('The phone number of the lead'),
   topic: z.string().describe('The topic the lead is interested in'),
-  qualificationCriteria: z
-    .string()
-    .describe(
-      'The criteria used by the LLM to qualify the lead (e.g., budget > $10k AND timeline < 3 months)',
-    ),
+  notes: z.string().optional().describe('Any additional notes about the lead or conversation.'), // Add notes field
 })
 
 type SaveLeadInput = z.infer<typeof saveLeadSchema>
@@ -25,38 +21,45 @@ type SaveLeadInput = z.infer<typeof saveLeadSchema>
 // Define the output structure, including qualification results
 interface SaveLeadOutput extends QualifyLeadResult {
   leadId: string | null // null if saving failed
-  dbSaveSuccess: boolean
-  dbSaveMessage: string
 }
 
 export function saveLeadTool({ agentId }: { agentId: string }): Tool {
   return tool({
     description:
-    'Qualifies a lead using an LLM based on criteria and then saves the information to the database.',
+    'Saves lead information to the database and optionally qualifies it based on the agent\'s configured criteria.',
     parameters: saveLeadSchema,
     async execute(input: SaveLeadInput): Promise<ToolResponse<SaveLeadOutput>> {
       const startTime = new Date().toISOString()
       let endTime: string
       let qualificationResult: QualifyLeadResult | undefined
-      let dbResult: { success: boolean, leadId: string | null, message: string } = {
+      let dbResult: { success: boolean, leadId: string | null } = {
         success: false,
         leadId: null,
-        message: 'DB save not attempted.',
       }
 
       try {
-        qualificationResult = await qualifyLead(input)
-
         const db = getDB()
 
+        const agent = await db.query.Agents.findFirst({
+          where: eq(Agents.id, agentId),
+          columns: { qualificationCriteria: true },
+        })
+
+        if (!agent) {
+          throw new Error(`Agent with ID ${agentId} not found.`)
+        }
+
+        // Perform qualification using fetched criteria
+        qualificationResult = await qualifyLead(input, agent.qualificationCriteria)
+
         const leadDataToInsert = {
-          name: input.name,
+          fullName: input.name,
           email: input.email,
           phone: input.phone,
-          topic: input.topic,
-          isQualified: qualificationResult.qualified,
+          subjectInterest: input.topic,
+          notes: input.notes,
+          qualification: (qualificationResult.qualified ? 'sales_qualified_lead' : 'not_qualified') as typeof Leads.$inferInsert['qualification'],
           qualificationScore: qualificationResult.qualificationScore,
-          qualificationReason: qualificationResult.reason,
           rawMessageJson: JSON.stringify(input),
           agentId,
         }
@@ -69,13 +72,12 @@ export function saveLeadTool({ agentId }: { agentId: string }): Tool {
         if (insertedLead && insertedLead.insertedId) {
           dbResult = {
             success: true,
-            leadId: insertedLead.insertedId.toString(), // Assuming ID is number or string
-            message: 'Lead saved successfully.',
+            leadId: insertedLead.insertedId.toString(),
           }
         }
         else {
-          console.error('Error saving lead information to the database.')
-          throw new Error('We got an error. Please try again later.')
+          console.error('Error saving lead information to the database. Insert result:', insertedLead)
+          throw new Error('Failed to save lead data to the database.')
         }
 
         endTime = new Date().toISOString()
@@ -84,8 +86,6 @@ export function saveLeadTool({ agentId }: { agentId: string }): Tool {
           output: {
             ...qualificationResult,
             leadId: dbResult.leadId,
-            dbSaveSuccess: dbResult.success,
-            dbSaveMessage: dbResult.message,
           },
           timing: {
             startTime,
@@ -98,25 +98,20 @@ export function saveLeadTool({ agentId }: { agentId: string }): Tool {
         console.error('Error in saveLeadTool:', error)
         endTime = new Date().toISOString()
         const errorMessage = error instanceof Error ? error.message : 'Unknown error during save/qualification'
-        const output = qualificationResult
-          ? {
-              ...qualificationResult,
-              leadId: dbResult.leadId,
-              dbSaveSuccess: dbResult.success,
-              dbSaveMessage: dbResult.success ? dbResult.message : errorMessage,
-            }
-          : {
-              qualificationScore: 0,
-              qualified: false,
-              reason: 'Qualification step failed or was not reached.',
-              leadId: null,
-              dbSaveSuccess: false,
-              dbSaveMessage: errorMessage,
-            }
+        // Ensure output structure is consistent even on error
+        // We might not have agent context here if the initial fetch failed,
+        // so we can't reliably get qualificationCriteria in the catch block.
+        // If qualificationResult exists, use its reason; otherwise, provide a generic failure message.
+        const output: SaveLeadOutput = {
+          qualificationScore: qualificationResult?.qualificationScore ?? 0,
+          qualified: qualificationResult?.qualified ?? false,
+          reason: qualificationResult?.reason ?? 'Qualification step failed or was not reached.',
+          leadId: dbResult.leadId,
+        }
 
         return {
           success: false,
-          output: output as SaveLeadOutput, // Cast needed due to conditional structure
+          output,
           error: errorMessage,
           timing: {
             startTime,

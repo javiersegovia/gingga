@@ -81,12 +81,12 @@
   --chart-3: light-dark(#2c3d47, #f97316);
   --chart-4: light-dark(#ecc94b, #a855f7);
   --chart-5: light-dark(#f4733e, #ec4899);
-  --sidebar: light-dark(#e2e9f1, #000000);
+  --sidebar: light-dark(#e2e9f1, #131417);
   --sidebar-foreground: light-dark(#18191b, #999);
   --sidebar-primary: light-dark(#18191b, #3b82f6);
   --sidebar-primary-foreground: light-dark(#fafafa, #ffffff);
-  --sidebar-accent: light-dark(#fff9af, #1c1c1c);
-  --sidebar-accent-foreground: light-dark(#18191b, #000); /* Resolved var(--primary-foreground) for dark */
+  --sidebar-accent: light-dark(#fff9af, #e9db681a);
+  --sidebar-accent-foreground: light-dark(#18191b, #f9ec73); /* Resolved var(--primary-foreground) for dark */
   --sidebar-border: light-dark(#e8e8e8, #27272a);
   --sidebar-ring: light-dark(#3b82f6, #3b82f6);
 

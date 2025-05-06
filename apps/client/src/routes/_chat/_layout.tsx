@@ -1,7 +1,8 @@
 import { SidebarProvider } from '@gingga/ui/components/sidebar'
 import { Suspense } from 'react'
 import { Outlet } from 'react-router'
-import { ChatSidebar } from '~/features/chat/components/sidebar/chat-sidebar'
+import { AgentSidebar } from '~/features/chat/components/sidebar/agent-sidebar'
+// import { ChatSidebar } from '~/features/chat/components/sidebar/chat-sidebar'
 import { SidebarFloatingActions } from '~/features/chat/components/sidebar/sidebar-floating-actions'
 
 export default function ChatLayout() {
@@ -11,7 +12,8 @@ export default function ChatLayout() {
   return (
     <SidebarProvider defaultOpen={isSidebarOpened}>
       <Suspense fallback={<div>Loading Sidebar...</div>}>
-        <ChatSidebar />
+        <AgentSidebar />
+        {/* <ChatSidebar /> */}
       </Suspense>
 
       <section className="relative flex w-full flex-col">

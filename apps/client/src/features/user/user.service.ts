@@ -11,3 +11,13 @@ export async function getUserById(id: string) {
     },
   })
 }
+
+export async function getUserByEmail(email: string) {
+  const db = getDB()
+  return await db.query.Users.findFirst({
+    where: eq(Users.email, email),
+    with: {
+      membership: true,
+    },
+  })
+}

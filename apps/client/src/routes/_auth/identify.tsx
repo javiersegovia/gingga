@@ -31,7 +31,7 @@ export default function AuthPage() {
     await authClient.signIn.email(
       {
         ...data,
-        callbackURL: `${env.VITE_SITE_URL}/chat`,
+        callbackURL: `${env.VITE_SITE_URL}/agents`,
         rememberMe: true,
       },
       {

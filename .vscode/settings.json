@@ -108,5 +108,6 @@
   },
   "[typescript]": {
     "editor.defaultFormatter": "rvest.vs-code-prettier-eslint"
-  }
+  },
+  "editor.wordWrapColumn": 120
 }

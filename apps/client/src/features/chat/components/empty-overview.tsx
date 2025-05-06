@@ -38,23 +38,23 @@ export function EmptyOverview({ setInput, agentId }: EmptyOverviewProps) {
           />
         )}
 
-        <h1 className="text-xl font-bold sm:text-2xl">
-          Hello,
-          {' '}
-          {userName}
-          !
-          {' '}
-          <br />
-          {' '}
-        </h1>
-        <h3 className="text-primary line-stroke text-2xl whitespace-pre-line sm:text-3xl">
-          {chatIntroduction}
-        </h3>
+        <div>
+          <h1 className="text-xl font-bold sm:text-2xl">
+            Hello,
+            {' '}
+            {userName}
+            !
+            <br />
+          </h1>
+          <h3 className="text-primary line-stroke text-xl whitespace-pre-line sm:text-2xl">
+            {chatIntroduction}
+          </h3>
+        </div>
 
         <div className="pointer-events-auto mb-6">
           <div
             data-testid="suggested-actions"
-            className="grid w-full gap-2 sm:grid-cols-2"
+            className="flex flex-col w-full gap-2"
           >
             {starters.map((starter: string, index: number) => (
 
@@ -71,7 +71,7 @@ export function EmptyOverview({ setInput, agentId }: EmptyOverviewProps) {
                   onClick={() => {
                     setInput(starter)
                   }}
-                  className="hover:bg-blank border-border h-full w-full flex-1 items-start justify-start gap-1 rounded-sm border-2 px-4 py-3.5 text-left text-sm whitespace-pre-line sm:text-base"
+                  className="hover:bg-blank border-border h-full w-full flex-1 items-start justify-start gap-1 rounded-sm border px-4 py-3.5 text-left text-sm whitespace-pre-line sm:text-base"
                 >
                   <span className="font-medium">{starter}</span>
                 </Button>

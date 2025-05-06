@@ -18,6 +18,9 @@ import { Suspense } from 'react'
 import { z } from 'zod'
 import { useAppForm } from '~/components/form/tanstack-form'
 import { AgentFormSchema } from '~/features/agent/agent.schema'
+import { chatSystemPrompt } from '~/server/agents/chat-agent.prompt'
+import { leadCaptureSystemPrompt } from '~/server/agents/lead-capture-agent.prompt'
+import { videoGeneratorSystemPrompt } from '~/server/agents/video-generator.prompt'
 
 interface AgentFormProps {
   initialValues?: Partial<AgentFormValues>
@@ -37,6 +40,7 @@ export const agentFormOptions = formOptions({
     modelId: null,
     image: null,
     agentType: Agents.agentType.enumValues[0],
+    visibility: Agents.visibility.enumValues[0],
   } as AgentFormValues,
   validators: {
     onSubmit: AgentFormSchema,
@@ -65,6 +69,19 @@ export function AgentForm({
       onSubmit: AgentFormSchema,
     },
   })
+
+  const getSystemPrompt = (agentType: AgentFormValues['agentType']): string => {
+    switch (agentType) {
+      case 'lead_capture':
+        return leadCaptureSystemPrompt
+      case 'video_generator':
+        return videoGeneratorSystemPrompt
+      case 'chat':
+        return chatSystemPrompt
+      default:
+        return chatSystemPrompt
+    }
+  }
 
   return (
     <form
@@ -140,6 +157,45 @@ export function AgentForm({
             />
           </div>
 
+          {/* Visibility Field */}
+          <form.AppField
+            name="visibility"
+            validators={{
+              onChange: AgentFormSchema.shape.visibility,
+            }}
+            children={field => (
+              <field.FormFieldItem>
+                <field.FormFieldLabel>Visibility</field.FormFieldLabel>
+                <field.FormFieldControl>
+                  <Select
+                    name={field.name}
+                    value={field.state.value}
+                    onValueChange={value => field.handleChange(value as AgentFormValues['visibility'])}
+                    disabled={isSubmitting}
+                  >
+                    <SelectTrigger
+                      aria-invalid={!!field.state.meta.errors.length}
+                      aria-describedby={field.state.meta.errors.length ? `${field.name}-errors` : undefined}
+                    >
+                      <SelectValue placeholder="Select visibility..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Agents.visibility.enumValues.map(type => (
+                        <SelectItem key={type} value={type}>
+                          {type.charAt(0).toUpperCase() + type.slice(1)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </field.FormFieldControl>
+                <field.FormFieldDescription>
+                  Public agents can be discovered, private agents are only accessible via direct link.
+                </field.FormFieldDescription>
+                <field.FormFieldMessage id={`${field.name}-errors`} />
+              </field.FormFieldItem>
+            )}
+          />
+
           <form.AppField
             name="description"
             validators={{
@@ -167,39 +223,40 @@ export function AgentForm({
               </field.FormFieldItem>
             )}
           />
+
+          {/* Owner Email Field */}
+          <form.AppField
+            name="ownerEmail"
+            validators={{
+              onChange: AgentFormSchema.shape.ownerEmail,
+            }}
+            children={field => (
+              <field.FormFieldItem className="flex-1">
+                <field.FormFieldLabel>Owner Email</field.FormFieldLabel>
+                <field.FormFieldControl>
+                  <Input
+                    name={field.name}
+                    value={field.state.value ?? ''}
+                    onBlur={field.handleBlur}
+                    onChange={e => field.handleChange(e.target.value)}
+                    disabled={isSubmitting}
+                    placeholder="Optional: user@example.com"
+                    aria-invalid={!!field.state.meta.errors.length}
+                    aria-describedby={field.state.meta.errors.length ? `${field.name}-errors` : undefined}
+                  />
+                </field.FormFieldControl>
+                <field.FormFieldDescription>
+                  Optionally assign an owner by email. If left blank, the agent will not have a specific owner.
+                </field.FormFieldDescription>
+                <field.FormFieldMessage id={`${field.name}-errors`} />
+              </field.FormFieldItem>
+            )}
+          />
         </div>
 
         {/* Functionality Section */}
         <div className="space-y-4 rounded-md border p-4">
           <h3 className="text-lg font-medium">Functionality</h3>
-          <form.AppField
-            name="instructions"
-            validators={{
-              onChange: AgentFormSchema.shape.instructions,
-            }}
-            children={field => (
-              <field.FormFieldItem>
-                <field.FormFieldLabel>Instructions</field.FormFieldLabel>
-                <field.FormFieldControl>
-                  <Textarea
-                    name={field.name}
-                    value={field.state.value}
-                    onBlur={field.handleBlur}
-                    onChange={e => field.handleChange(e.target.value)}
-                    disabled={isSubmitting}
-                    placeholder="Define the agent core behavior..."
-                    rows={6}
-                    aria-invalid={!!field.state.meta.errors.length}
-                    aria-describedby={
-                      field.state.meta.errors.length ? `${field.name}-errors` : undefined
-                    }
-                  />
-                </field.FormFieldControl>
-                <field.FormFieldMessage id={`${field.name}-errors`} />
-              </field.FormFieldItem>
-            )}
-          />
-
           <form.AppField
             name="agentType"
             validators={{
@@ -232,6 +289,61 @@ export function AgentForm({
                     </SelectContent>
                   </Select>
                 </field.FormFieldControl>
+                <field.FormFieldMessage id={`${field.name}-errors`} />
+                <field.FormFieldDescription>
+                  Each agent type comes with a predefined system prompt that will be combined with your custom instructions.
+                </field.FormFieldDescription>
+              </field.FormFieldItem>
+            )}
+          />
+
+          {/* System Prompt Display */}
+          <form.Subscribe
+            selector={state => state.values.agentType}
+          >
+            {agentType => (
+              <div className="space-y-2">
+                <div className="text-sm font-medium">System Prompt</div>
+                <Textarea
+                  value={getSystemPrompt(agentType)}
+                  readOnly
+                  disabled
+                  rows={10}
+                  className="bg-muted"
+                />
+                <p className="text-muted-foreground text-[0.8rem] leading-5">
+                  This is the base system prompt for the selected agent type. Your custom instructions below will be combined with this prompt to create the final agent behavior.
+                </p>
+              </div>
+            )}
+          </form.Subscribe>
+
+          <form.AppField
+            name="instructions"
+            validators={{
+              onChange: AgentFormSchema.shape.instructions,
+            }}
+            children={field => (
+              <field.FormFieldItem>
+                <field.FormFieldLabel>Custom Instructions</field.FormFieldLabel>
+                <field.FormFieldControl>
+                  <Textarea
+                    name={field.name}
+                    value={field.state.value}
+                    onBlur={field.handleBlur}
+                    onChange={e => field.handleChange(e.target.value)}
+                    disabled={isSubmitting}
+                    placeholder="Define additional instructions or override default behavior..."
+                    rows={6}
+                    aria-invalid={!!field.state.meta.errors.length}
+                    aria-describedby={
+                      field.state.meta.errors.length ? `${field.name}-errors` : undefined
+                    }
+                  />
+                </field.FormFieldControl>
+                <field.FormFieldDescription className="mt-2">
+                  These instructions will be combined with the system prompt above to create the final agent behavior.
+                </field.FormFieldDescription>
                 <field.FormFieldMessage id={`${field.name}-errors`} />
               </field.FormFieldItem>
             )}
@@ -308,6 +420,7 @@ export function AgentForm({
                 </field.FormFieldDescription>
                 <div className="space-y-2 pt-2">
                   {(field.state.value ?? []).map((_, idx) => (
+                    // eslint-disable-next-line react/no-array-index-key
                     <div key={idx} className="flex items-center gap-2">
                       <form.AppField
                         name={`starters[${idx}]`}

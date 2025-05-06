@@ -1,3 +1,4 @@
+import type { Agent } from '@gingga/db/types'
 import type { Attachment, UIMessage } from 'ai'
 import type { VisibilityType } from './visibility-selector'
 import type { ToolName } from '~/features/tools/tool.types'
@@ -20,6 +21,7 @@ export function BaseChat({
   id,
   endpoint = '/api/chat/default',
   agentId,
+  agent,
   initialMessages,
   selectedVisibilityType,
   isReadonly,
@@ -28,6 +30,7 @@ export function BaseChat({
   id: string
   endpoint?: string
   agentId?: string
+  agent?: Agent
   initialMessages: Array<UIMessage>
   selectedChatModel?: string
   selectedVisibilityType: VisibilityType
@@ -108,6 +111,7 @@ export function BaseChat({
         <Messages
           chatId={id}
           agentId={agentId}
+          agentImage={agent?.image}
           status={status}
           // votes={votes}
           messages={messages}

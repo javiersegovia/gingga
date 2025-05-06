@@ -200,6 +200,12 @@ export const Agents = sqliteTable('agents', {
   instructions: text('instructions').notNull(),
   starters: text('starters', { mode: 'json' }).$type<string[]>(),
 
+  qualificationCriteria: text('qualification_criteria'),
+
+  visibility: text('visibility', { enum: ['public', 'private'] })
+    .notNull()
+    .default('private'),
+
   modelId: text('model_id', {
     enum: availableModelIds,
   }),
@@ -358,6 +364,7 @@ export const Leads = sqliteTable('leads', {
   email: text('email'),
   phone: text('phone'),
   subjectInterest: text('subject_interest'),
+  notes: text('notes'),
   // eslint-disable-next-line ts/no-explicit-any
   rawMessageJson: text('raw_message_json', { mode: 'json' }).$type<any>().notNull(),
 

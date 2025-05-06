@@ -34,6 +34,7 @@ import { MessageReasoning } from './message-reasoning'
 interface MessageProps {
   chatId: string
   message: UIMessage
+  agentImage?: string | null
   // vote: Vote | undefined
   isLoading: boolean
   status: UseChatHelpers['status']
@@ -63,6 +64,7 @@ function PurePreviewMessage({
   // chatId,
   message,
   // status,
+  agentImage,
   isLoading,
   setMessages,
   reload,
@@ -93,17 +95,17 @@ function PurePreviewMessage({
             )}
           >
             {message.role === 'assistant' && (
-              <Avatar className="border-border bg-blank flex h-8 w-8 items-center justify-center border">
-                <AvatarFallback className="size-8 shrink-0 items-center justify-center rounded-sm bg-transparent ring-1">
+              <Avatar className="bg-blank flex h-10 w-10 items-center justify-center">
+                <AvatarFallback className="size-10 shrink-0 items-center justify-center">
                   <img
-                    src={`${env.VITE_ASSETS_URL}/logo/logo-iso-light.svg`}
+                    src={agentImage ?? `${env.VITE_ASSETS_URL}/logo/logo-iso-light.svg`}
                     alt="logo"
-                    className="h-6 w-6 dark:hidden"
+                    className="h-10 w-10 object-contain dark:hidden"
                   />
                   <img
-                    src={`${env.VITE_ASSETS_URL}/logo/logo-iso-dark.svg`}
+                    src={agentImage ?? `${env.VITE_ASSETS_URL}/logo/logo-iso-dark.svg`}
                     alt="logo"
-                    className="hidden h-6 w-6 dark:block"
+                    className="hidden h-10 w-10 object-contain dark:block"
                   />
                 </AvatarFallback>
               </Avatar>

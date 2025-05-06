@@ -1,8 +1,9 @@
 import type { CoreAssistantMessage, CoreToolMessage, Message, UIMessage } from 'ai'
 import type { z } from 'zod'
-import type { ChatSchema } from './chat.schema'
+import type { ChatSchema } from '~/features/chat/chat.schema'
 import { and, asc, desc, eq, gte, inArray, isNotNull } from '@gingga/db'
-import { Agents, ChatMessages, Chats } from '@gingga/db/schema'
+import { ChatMessages, Chats } from '@gingga/db/schema'
+import { TRPCError } from '@trpc/server'
 import { generateText } from 'ai'
 import { modelProvider } from '~/lib/ai/providers'
 import { getDB } from '~/server/context.server'
@@ -85,7 +86,7 @@ export async function getChatsByUserId({ userId }: { userId: string }) {
 }
 
 export async function getChatById({ id }: { id: string }) {
-  const db = getDB() // Changed to getDB()
+  const db = getDB()
   try {
     const selectedChat = await db.query.Chats.findFirst({
       where: eq(Chats.id, id),
@@ -97,8 +98,8 @@ export async function getChatById({ id }: { id: string }) {
     return selectedChat
   }
   catch (error) {
-    console.error('Failed to get chat by id from database')
-    throw error
+    console.error(`Failed to fetch chat with ID: ${id}`, error)
+    throw new Error('Failed to fetch chat')
   }
 }
 
@@ -292,5 +293,36 @@ export function getTrailingMessageId({
   return trailingMessage.id
 }
 
-// Removed cookie related functions: getChatModelFromCookies, saveChatModelInCookies
-// These should be handled by the API layer if needed, possibly via context or dedicated procedures.
+/**
+ * Fetches chats for a specific agent and user, ordered by creation date descending.
+ * @param agentId The ID of the agent.
+ * @param userId The ID of the user.
+ * @param limit Optional limit for the number of chats to return.
+ * @returns An array of chats.
+ */
+export async function getChatsByAgentId(
+  agentId: string,
+  userId: string,
+  limit?: number,
+) {
+  const db = getDB()
+  try {
+    const query = db.query.Chats.findMany({
+      where: and(eq(Chats.agentId, agentId), eq(Chats.userId, userId)),
+      orderBy: desc(Chats.createdAt),
+      limit,
+    })
+    return await query
+  }
+  catch (error) {
+    console.error(
+      `Failed to fetch chats for agent ${agentId} and user ${userId}`,
+      error,
+    )
+    throw new TRPCError({
+      code: 'INTERNAL_SERVER_ERROR',
+      message: 'Failed to fetch chat history for this agent',
+      cause: error,
+    })
+  }
+}

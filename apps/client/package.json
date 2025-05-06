@@ -43,7 +43,7 @@
     "better-auth": "catalog:",
     "composio-core": "catalog:",
     "cross-env": "catalog:",
-    "date-fns": "^4.1.0",
+    "date-fns": "catalog:",
     "deepmerge": "catalog:",
     "fast-deep-equal": "catalog:",
     "hono": "catalog:",

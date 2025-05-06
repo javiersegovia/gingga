@@ -70,7 +70,7 @@ export function ChatSidebar() {
         </div>
 
         <Button variant="hoverSecondary" hover="reverse" size="md" className="w-full" asChild>
-          <Link to={href('/agents')}>
+          <Link to="/chat/agents">
             <span>Explore Agents</span>
             <TelescopeIcon className="ml-auto h-4 w-4" />
           </Link>

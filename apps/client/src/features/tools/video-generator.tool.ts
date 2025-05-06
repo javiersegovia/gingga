@@ -1,29 +1,10 @@
 import type { Tool } from 'ai'
+import type { ToolResponse } from './tool.types' // Import shared type
 import { tool } from 'ai'
 import { z } from 'zod'
 
-// Assuming ToolResponse structure based on common patterns or ai library conventions
-// If a specific ./tool.types exists, adjust accordingly.
-interface ToolTiming {
-  startTime: string
-  endTime: string
-  duration: number
-}
-
-interface ToolSuccessResponse<TOutput> {
-  success: true
-  output: TOutput
-  timing: ToolTiming
-}
-
-interface ToolErrorResponse<TOutput> {
-  success: false
-  output: TOutput // Include partial output if possible
-  error: string
-  timing: ToolTiming
-}
-
-type ToolExecuteResponse<TOutput> = ToolSuccessResponse<TOutput> | ToolErrorResponse<TOutput>
+// Removed unused ToolTiming, ToolSuccessResponse, ToolErrorResponse, ToolExecuteResponse interfaces
+// The ToolResponse type from tool.types.ts covers these now.
 
 interface VideoGeneratorToolProps {
   agentId: string
@@ -40,51 +21,70 @@ const videoGeneratorInputSchema = z.object({
 
 type VideoGeneratorInput = z.infer<typeof videoGeneratorInputSchema>
 
-const videoGeneratorOutputSchema = z.object({
-  success: z.boolean(),
-  message: z.string().describe('A confirmation message if successful, or an error message if failed.'),
-  videoId: z.string().optional().describe('The ID of the generated video if successful.'),
-})
+// Removed unused videoGeneratorOutputSchema constant
 
-type VideoGeneratorOutput = z.infer<typeof videoGeneratorOutputSchema>
+// Output type definition remains the same
+interface VideoGeneratorOutput {
+  success: boolean
+  message: string
+  videoId?: string
+}
 
 export function videoGeneratorTool({ agentId }: VideoGeneratorToolProps): Tool {
   return tool({
-  // Removed `name` property as it's likely not part of the ai library's tool definition structure
     description: 'Generates a short video based on user-provided details like topic, style, script idea, and length. Returns a confirmation message or an error.',
     parameters: videoGeneratorInputSchema,
-    async execute(input: VideoGeneratorInput): Promise<VideoGeneratorOutput> { // Return type matches output schema directly
+    // Update return type to use ToolResponse
+    async execute(input: VideoGeneratorInput): Promise<ToolResponse<VideoGeneratorOutput>> {
       const startTime = new Date().toISOString()
       let endTime: string
 
       console.log(`[Agent ${agentId}] Executing videoGeneratorTool with input:`, input)
 
       try {
-      // Simulate video generation
+        // Simulate video generation
         await new Promise(resolve => setTimeout(resolve, 3000))
         const fakeVideoId = `vid_${Date.now()}`
         console.log(`[Agent ${agentId}] Video generation successful (simulated). Video ID: ${fakeVideoId}`)
 
         endTime = new Date().toISOString()
-        // Directly return the object matching VideoGeneratorOutput
-        return {
+        const output: VideoGeneratorOutput = {
           success: true,
           message: `Video generation started successfully! Your video ID is ${fakeVideoId}. It might take a few moments to process.`,
           videoId: fakeVideoId,
+        }
+        // Wrap return in ToolSuccessResponse structure
+        return {
+          success: true,
+          output,
+          timing: {
+            startTime,
+            endTime,
+            duration: new Date(endTime).getTime() - new Date(startTime).getTime(),
+          },
         }
       }
       catch (error: unknown) {
         console.error(`[Agent ${agentId}] Error during video generation (simulated):`, error)
         endTime = new Date().toISOString()
         const errorMessage = error instanceof Error ? error.message : 'Unknown error generating video'
-        // Return an object matching VideoGeneratorOutput for errors too
-        return {
+        // Wrap return in ToolErrorResponse structure
+        const output: VideoGeneratorOutput = {
           success: false,
           message: `Sorry, there was an error generating the video: ${errorMessage}`,
+          // videoId is optional, so it's omitted on error
+        }
+        return {
+          success: false,
+          output, // Return the structured error output
+          error: errorMessage,
+          timing: {
+            startTime,
+            endTime,
+            duration: new Date(endTime).getTime() - new Date(startTime).getTime(),
+          },
         }
       }
-    // The timing info might be handled internally by the `ai` library or needs a different structure.
-    // Removing the custom ToolResponse wrapper for now to match the expected return type.
     },
   })
 }

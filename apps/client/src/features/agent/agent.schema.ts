@@ -14,6 +14,7 @@ export const AgentSchema = z.object({
   starters: z.array(z.string()).nullable(),
   modelId: z.enum(Agents.modelId.enumValues).nullable(),
   image: z.string().url().nullable(),
+  visibility: z.enum(Agents.visibility.enumValues),
   createdAt: z.number(),
   updatedAt: z.number().nullable(),
 })
@@ -34,6 +35,7 @@ export const CreateAgentInputSchema = AgentSchema.omit({
   introduction: z.string().optional().nullable(),
   modelId: z.enum(Agents.modelId.enumValues).optional().nullable(),
   image: z.string().url().optional().nullable().nullable(),
+  visibility: z.enum(Agents.visibility.enumValues).default(Agents.visibility.enumValues[0]),
 })
 export type CreateAgentInput = z.infer<typeof CreateAgentInputSchema>
 
@@ -47,6 +49,8 @@ export const UpdateAgentInputSchema = AgentSchema.omit({
   .extend({
     id: z.string(),
     starters: z.array(z.string()).default([]).optional().nullable(),
+    ownerEmail: z.string().email('Please enter a valid email address.').optional().nullable(),
+    visibility: z.enum(Agents.visibility.enumValues).optional(),
   })
 export type UpdateAgentInput = z.infer<typeof UpdateAgentInputSchema>
 
@@ -68,6 +72,10 @@ export const AgentFormSchema = z.object({
   image: z.string().url({ message: 'Please enter a valid URL.' }).nullable().optional(),
   agentType: z.enum(Agents.agentType.enumValues, {
     errorMap: () => ({ message: 'Please select an agent type.' }),
+  }),
+  ownerEmail: z.string().email('Please enter a valid email address.').optional().nullable(),
+  visibility: z.enum(Agents.visibility.enumValues, {
+    errorMap: () => ({ message: 'Please select agent visibility.' }),
   }),
 })
 export type AgentFormValues = z.infer<typeof AgentFormSchema>

@@ -34,11 +34,11 @@ export function useUpdateAgentMutation() {
   const { revalidate } = useRevalidator()
   return useMutation(trpc.agent.updateAgentById.mutationOptions({
     onSuccess: async (updatedAgent) => {
-      await queryClient.fetchQuery(trpc.agent.getAgentById.queryOptions({ id: updatedAgent.id }))
       await queryClient.invalidateQueries({
         queryKey: [
           trpc.agent.getAgents.queryKey(),
           trpc.agent.getRecentChatsWithAgents.queryKey(),
+          trpc.agent.getAgentById.queryKey({ id: updatedAgent.id }),
         ],
       })
       await revalidate()

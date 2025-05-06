@@ -1,18 +1,26 @@
-/* eslint-disable ts/no-explicit-any */
-
 import { z } from 'zod'
 
-export interface ToolResponse<TOutput = any> {
-  success: boolean // Whether the tool execution was successful
-  output: TOutput // The structured output from the tool
-  label?: string // The label of the tool, to be displayed in the UI
-  error?: string // Error message if success is false
-  timing?: {
-    startTime: string // ISO timestamp when the tool execution started
-    endTime: string // ISO timestamp when the tool execution ended
-    duration: number // Duration in milliseconds
-  }
+export interface ToolTiming {
+  startTime: string
+  endTime: string
+  duration: number
 }
+
+export interface ToolSuccessResponse<TOutput> {
+  success: true
+  output: TOutput
+  timing: ToolTiming
+}
+
+export interface ToolErrorResponse<TOutput> {
+  success: false
+  output: TOutput | Partial<TOutput> // Allow partial output on error
+  error: string
+  timing: ToolTiming
+}
+
+// eslint-disable-next-line ts/no-explicit-any
+export type ToolResponse<TOutput = any> = ToolSuccessResponse<TOutput> | ToolErrorResponse<TOutput>
 
 export const SEARCH_FAQ = 'search_faq' as const
 export const SAVE_LEAD = 'save_lead' as const

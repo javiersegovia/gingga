@@ -1,6 +1,7 @@
 import { TRPCError } from '@trpc/server'
 import { z } from 'zod'
-import { protectedProcedure, router } from '~/server/trpc'
+import { getAuthSession } from '~/server/context.server'
+import { protectedProcedure, publicProcedure, router } from '~/server/trpc'
 import {
   AgentFormSchema,
 } from './agent.schema'
@@ -24,8 +25,12 @@ export const agentRouter = router({
       return agent
     }),
 
-  getAgents: protectedProcedure.query(async () => {
-    const agents = await getAgents()
+  getAgents: publicProcedure.query(async () => {
+    const authSession = await getAuthSession()
+    const userId = authSession?.user?.id ?? null
+    const role = authSession?.user?.role ?? null
+
+    const agents = await getAgents(userId, role)
     return { agents }
   }),
 

@@ -46,12 +46,13 @@ export default [
     // route('create', 'routes/chat/agents/create.tsx'),
     // ]),
 
-    ...prefix('/agent', [
-      route(':agentId', 'routes/_chat/agent/$agentId/index.tsx'),
-      route(':agentId/chat/:chatId', 'routes/_chat/agent/$agentId/chat/$chatId.tsx'),
+    ...prefix('/agent/:agentId', [
+      index('routes/_chat/agent/$agentId/index.tsx'),
+      // route(':agentId', 'routes/_chat/agent/$agentId/index.tsx'),
+      route('/chat/:chatId', 'routes/_chat/agent/$agentId/chat/$chatId.tsx'),
 
       // Define the 'edit' path segment and associate the layout directly
-      route(':agentId/edit', 'routes/_chat/agent/$agentId/edit/_layout.tsx', [
+      route('/edit', 'routes/_chat/agent/$agentId/edit/_layout.tsx', [
         // Child routes relative to the layout
         index('routes/_chat/agent/$agentId/edit/index.tsx'),
         route('skills', 'routes/_chat/agent/$agentId/edit/skills.tsx'),
@@ -60,6 +61,13 @@ export default [
         route('workflows', 'routes/_chat/agent/$agentId/edit/workflows.tsx'),
       ]),
 
+      route('sessions', 'routes/_chat/agent/$agentId/sessions/index.tsx', [
+        route(':sessionId', 'routes/_chat/agent/$agentId/sessions/$sessionId.tsx'),
+      ]),
+
+      // Placeholder for automations route
+      route('automations', 'routes/_chat/agent/$agentId/automations/index.tsx'),
+      route('leads', 'routes/_chat/agent/$agentId/leads/index.tsx'),
     ]),
   ]),
 

@@ -12,6 +12,7 @@ import {
   getChatById,
   getChatMessageById,
   getChatMessagesByChatId,
+  getChatsByAgentId,
   getChatsByUserId,
   renameChatById,
   updateChatVisibilityById,
@@ -81,6 +82,22 @@ export const chatRouter = router({
         timestamp: message.createdAt,
       })
       return { success: true }
+    }),
+
+  getChatsByAgentId: protectedProcedure
+    .input(
+      z.object({
+        agentId: z.string(),
+        limit: z.number().optional(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const chats = await getChatsByAgentId(
+        input.agentId,
+        ctx.user.id,
+        input.limit,
+      )
+      return chats
     }),
 })
 

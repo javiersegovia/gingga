@@ -12,7 +12,7 @@ const FormFieldDescription: React.FC<FormFieldDescriptionProps> = ({
   return (
     <p
       id={formFieldDescriptionId}
-      className={cn('text-muted-foreground text-[0.8rem]', className)}
+      className={cn('text-muted-foreground text-[0.8rem] leading-5', className)}
       {...props}
     />
   )
