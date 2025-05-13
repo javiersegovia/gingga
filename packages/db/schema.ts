@@ -201,6 +201,7 @@ export const Agents = sqliteTable('agents', {
   starters: text('starters', { mode: 'json' }).$type<string[]>(),
 
   qualificationCriteria: text('qualification_criteria'),
+  hasEmailNotifications: integer('has_email_notifications', { mode: 'boolean' }).default(false),
 
   visibility: text('visibility', { enum: ['public', 'private'] })
     .notNull()

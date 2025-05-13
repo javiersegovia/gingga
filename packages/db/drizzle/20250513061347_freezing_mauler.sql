@@ -1,0 +1,1 @@
+ALTER TABLE `agents` ADD `has_email_notifications` integer DEFAULT false;

@@ -78,9 +78,7 @@ export function useChatVisibility({
       throw error
     }
     finally {
-      await queryClient.invalidateQueries({
-        queryKey: trpc.chat.getUserChats.queryKey(),
-      })
+      void queryClient.invalidateQueries({ queryKey: trpc.chat.getUserChats.queryKey() })
     }
   }
 

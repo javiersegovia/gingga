@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import type { Tool } from 'ai'
 import type { ToolResponse } from './tool.types' // Import shared type
 import { tool } from 'ai'
@@ -34,11 +35,7 @@ export function videoGeneratorTool({ agentId }: VideoGeneratorToolProps): Tool {
   return tool({
     description: 'Generates a short video based on user-provided details like topic, style, script idea, and length. Returns a confirmation message or an error.',
     parameters: videoGeneratorInputSchema,
-    // Update return type to use ToolResponse
     async execute(input: VideoGeneratorInput): Promise<ToolResponse<VideoGeneratorOutput>> {
-      const startTime = new Date().toISOString()
-      let endTime: string
-
       console.log(`[Agent ${agentId}] Executing videoGeneratorTool with input:`, input)
 
       try {
@@ -47,7 +44,6 @@ export function videoGeneratorTool({ agentId }: VideoGeneratorToolProps): Tool {
         const fakeVideoId = `vid_${Date.now()}`
         console.log(`[Agent ${agentId}] Video generation successful (simulated). Video ID: ${fakeVideoId}`)
 
-        endTime = new Date().toISOString()
         const output: VideoGeneratorOutput = {
           success: true,
           message: `Video generation started successfully! Your video ID is ${fakeVideoId}. It might take a few moments to process.`,
@@ -57,16 +53,10 @@ export function videoGeneratorTool({ agentId }: VideoGeneratorToolProps): Tool {
         return {
           success: true,
           output,
-          timing: {
-            startTime,
-            endTime,
-            duration: new Date(endTime).getTime() - new Date(startTime).getTime(),
-          },
         }
       }
       catch (error: unknown) {
         console.error(`[Agent ${agentId}] Error during video generation (simulated):`, error)
-        endTime = new Date().toISOString()
         const errorMessage = error instanceof Error ? error.message : 'Unknown error generating video'
         // Wrap return in ToolErrorResponse structure
         const output: VideoGeneratorOutput = {
@@ -78,11 +68,6 @@ export function videoGeneratorTool({ agentId }: VideoGeneratorToolProps): Tool {
           success: false,
           output, // Return the structured error output
           error: errorMessage,
-          timing: {
-            startTime,
-            endTime,
-            duration: new Date(endTime).getTime() - new Date(startTime).getTime(),
-          },
         }
       }
     },

@@ -2,9 +2,12 @@ import type { Tool } from 'ai'
 import type { QualifyLeadResult } from './qualify-lead.logic'
 import type { ToolResponse } from './tool.types'
 import { eq } from '@gingga/db'
-import { Agents, Leads } from '@gingga/db/schema' // Add Agents import
+import { Agents, Leads, Users } from '@gingga/db/schema' // Add Agents import and Users import
 import { tool } from 'ai'
 import { z } from 'zod'
+import { NOTIFICATIONS_EMAIL } from '~/lib/constants'
+import { sendEmail } from '~/lib/email'
+import LeadNotificationEmail from '~/lib/email/templates/lead-notification.email'
 import { getDB } from '~/server/context.server'
 import { qualifyLead } from './qualify-lead.logic'
 
@@ -18,9 +21,8 @@ const saveLeadSchema = z.object({
 
 type SaveLeadInput = z.infer<typeof saveLeadSchema>
 
-// Define the output structure, including qualification results
 interface SaveLeadOutput extends QualifyLeadResult {
-  leadId: string | null // null if saving failed
+  notificationSent?: boolean // To indicate if email was attempted/sent
 }
 
 export function saveLeadTool({ agentId }: { agentId: string }): Tool {
@@ -29,30 +31,29 @@ export function saveLeadTool({ agentId }: { agentId: string }): Tool {
     'Saves lead information to the database and optionally qualifies it based on the agent\'s configured criteria.',
     parameters: saveLeadSchema,
     async execute(input: SaveLeadInput): Promise<ToolResponse<SaveLeadOutput>> {
-      const startTime = new Date().toISOString()
-      let endTime: string
       let qualificationResult: QualifyLeadResult | undefined
       let dbResult: { success: boolean, leadId: string | null } = {
         success: false,
         leadId: null,
       }
+      let notificationSent = false
 
       try {
         const db = getDB()
 
         const agent = await db.query.Agents.findFirst({
           where: eq(Agents.id, agentId),
-          columns: { qualificationCriteria: true },
+          columns: { qualificationCriteria: true, hasEmailNotifications: true, ownerId: true }, // Fetch required fields
         })
 
         if (!agent) {
           throw new Error(`Agent with ID ${agentId} not found.`)
         }
 
-        // Perform qualification using fetched criteria
         qualificationResult = await qualifyLead(input, agent.qualificationCriteria)
 
         const leadDataToInsert = {
+          agentId,
           fullName: input.name,
           email: input.email,
           phone: input.phone,
@@ -60,8 +61,7 @@ export function saveLeadTool({ agentId }: { agentId: string }): Tool {
           notes: input.notes,
           qualification: (qualificationResult.qualified ? 'sales_qualified_lead' : 'not_qualified') as typeof Leads.$inferInsert['qualification'],
           qualificationScore: qualificationResult.qualificationScore,
-          rawMessageJson: JSON.stringify(input),
-          agentId,
+          rawMessageJson: JSON.stringify(input), // rawMessageJson should now be the input to the tool
         }
 
         const [insertedLead] = await db
@@ -74,29 +74,67 @@ export function saveLeadTool({ agentId }: { agentId: string }): Tool {
             success: true,
             leadId: insertedLead.insertedId.toString(),
           }
+
+          // Send email notification if enabled and lead saved successfully
+          if (agent.hasEmailNotifications && agent.ownerId && dbResult.leadId) {
+            const owner = await db.query.Users.findFirst({
+              where: eq(Users.id, agent.ownerId),
+              columns: { email: true },
+            })
+
+            // Prepare props for the email template
+            // We need to fetch the full lead object or construct it carefully
+            const fullLeadData = await db.query.Leads.findFirst({
+              where: eq(Leads.id, dbResult.leadId),
+            })
+
+            if (fullLeadData) {
+              const emailProps = {
+                leadId: fullLeadData.id,
+                agentId: fullLeadData.agentId,
+                fullName: fullLeadData.fullName,
+                email: fullLeadData.email,
+                phone: fullLeadData.phone,
+                subjectInterest: fullLeadData.subjectInterest,
+                notes: fullLeadData.notes,
+                utmSource: fullLeadData.utmSource,
+                qualification: fullLeadData.qualification,
+                qualificationScore: fullLeadData.qualificationScore,
+                createdAt: fullLeadData.createdAt || new Date(), // Fallback, though createdAt should exist
+                rawMessageJson: fullLeadData.rawMessageJson ? JSON.stringify(fullLeadData.rawMessageJson) : undefined,
+              }
+              try {
+                const destination = [NOTIFICATIONS_EMAIL, owner?.email].filter(Boolean) as string[]
+                void sendEmail({
+                  to: destination,
+                  subject: `🚀 New Lead Captured: ${input.name || input.email}`,
+                  react: LeadNotificationEmail({ ...emailProps }),
+                })
+
+                notificationSent = true
+              }
+              catch (emailError) {
+                console.error('Error sending lead notification email:', emailError)
+                // Decide if this error should make the whole tool fail or just log
+              }
+            }
+            else {
+              console.error(`Error fetching full lead data for notification: Lead ID ${dbResult.leadId}`)
+            }
+          }
         }
         else {
           console.error('Error saving lead information to the database. Insert result:', insertedLead)
           throw new Error('Failed to save lead data to the database.')
         }
 
-        endTime = new Date().toISOString()
         return {
           success: true,
-          output: {
-            ...qualificationResult,
-            leadId: dbResult.leadId,
-          },
-          timing: {
-            startTime,
-            endTime,
-            duration: new Date(endTime).getTime() - new Date(startTime).getTime(),
-          },
+          output: {},
         } as ToolResponse<SaveLeadOutput>
       }
       catch (error: unknown) {
         console.error('Error in saveLeadTool:', error)
-        endTime = new Date().toISOString()
         const errorMessage = error instanceof Error ? error.message : 'Unknown error during save/qualification'
         // Ensure output structure is consistent even on error
         // We might not have agent context here if the initial fetch failed,
@@ -106,18 +144,13 @@ export function saveLeadTool({ agentId }: { agentId: string }): Tool {
           qualificationScore: qualificationResult?.qualificationScore ?? 0,
           qualified: qualificationResult?.qualified ?? false,
           reason: qualificationResult?.reason ?? 'Qualification step failed or was not reached.',
-          leadId: dbResult.leadId,
+          notificationSent, // Ensure this is part of the error output too
         }
 
         return {
           success: false,
           output,
           error: errorMessage,
-          timing: {
-            startTime,
-            endTime,
-            duration: new Date(endTime).getTime() - new Date(startTime).getTime(),
-          },
         } as ToolResponse<SaveLeadOutput>
       }
     },

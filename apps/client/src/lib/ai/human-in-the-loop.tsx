@@ -91,7 +91,6 @@ export async function processToolCalls<
         else {
           result = {
             success: false,
-            label: 'Sorry! I cannot execute that action.',
             error: 'No execute function found on tool',
             output: null,
           }
@@ -100,17 +99,14 @@ export async function processToolCalls<
       else if (toolInvocation.result?.output === APPROVAL.NO) {
         result = {
           success: false,
-          label: 'Aborted! I did not receive the proper authorization.',
           error: 'User denied access to tool execution',
           output: null,
         }
       }
       else {
-        // For any unhandled responses, return the original part.
         return part
       }
 
-      // Forward updated tool result to the client.
       dataStream.write(
         formatDataStreamPart('tool_result', {
           toolCallId: toolInvocation.toolCallId,

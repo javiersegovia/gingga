@@ -1,22 +1,14 @@
 import { z } from 'zod'
 
-export interface ToolTiming {
-  startTime: string
-  endTime: string
-  duration: number
-}
-
 export interface ToolSuccessResponse<TOutput> {
   success: true
   output: TOutput
-  timing: ToolTiming
 }
 
 export interface ToolErrorResponse<TOutput> {
   success: false
   output: TOutput | Partial<TOutput> // Allow partial output on error
   error: string
-  timing: ToolTiming
 }
 
 // eslint-disable-next-line ts/no-explicit-any

@@ -27,7 +27,7 @@ export default function RouteComponent({ loaderData }: Route.ComponentProps) {
 
   return (
     <AgentForm
-      initialValues={{ ...agent, ownerEmail: agent.owner?.email ?? null }}
+      initialValues={{ ...agent, ownerEmail: agent.owner?.email ?? null, hasEmailNotifications: agent.hasEmailNotifications ?? false }}
       onSubmit={handleSubmit}
       isSubmitting={updateAgentMutation.isPending}
     />

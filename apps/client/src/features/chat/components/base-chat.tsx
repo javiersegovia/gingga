@@ -1,9 +1,8 @@
-import type { Agent } from '@gingga/db/types'
 import type { Attachment, UIMessage } from 'ai'
 import type { VisibilityType } from './visibility-selector'
 import type { ToolName } from '~/features/tools/tool.types'
 import { useChat } from '@ai-sdk/react'
-import { useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { nanoid } from 'nanoid'
 import { useState } from 'react'
 import { href } from 'react-router'
@@ -21,7 +20,6 @@ export function BaseChat({
   id,
   endpoint = '/api/chat/default',
   agentId,
-  agent,
   initialMessages,
   selectedVisibilityType,
   isReadonly,
@@ -30,7 +28,6 @@ export function BaseChat({
   id: string
   endpoint?: string
   agentId?: string
-  agent?: Agent
   initialMessages: Array<UIMessage>
   selectedChatModel?: string
   selectedVisibilityType: VisibilityType
@@ -41,6 +38,8 @@ export function BaseChat({
 
   const { data: authData } = useAuthQuery()
   const queryClient = useQueryClient()
+  const { data: agent } = useQuery(trpc.agent.getAgentById.queryOptions({ id: agentId ?? '' }, { enabled: !!agentId }))
+
   const {
     messages,
     setMessages,
@@ -63,12 +62,9 @@ export function BaseChat({
     onResponse: async (response) => {
       if (isNewChat && response.ok) {
         if (authData?.isAuthenticated) {
-          await queryClient.invalidateQueries({
-            queryKey: [
-              trpc.chat.getUserChats.queryKey(),
-              trpc.agent.getRecentChatsWithAgents.queryKey(),
-            ],
-          })
+          void queryClient.invalidateQueries({ queryKey: trpc.chat.getUserChats.queryKey() })
+          void queryClient.invalidateQueries({ queryKey: trpc.agent.getRecentChatsWithAgents.queryKey() })
+          void queryClient.invalidateQueries({ queryKey: trpc.chat.getChatsByAgentId.queryKey({ agentId }) })
         }
 
         window.history.replaceState({}, '', href('/agent/:agentId/chat/:chatId', { agentId: agentId ?? '', chatId: id }))

@@ -54,11 +54,11 @@ export default [
       // Define the 'edit' path segment and associate the layout directly
       route('/edit', 'routes/_chat/agent/$agentId/edit/_layout.tsx', [
         // Child routes relative to the layout
-        index('routes/_chat/agent/$agentId/edit/index.tsx'),
         route('skills', 'routes/_chat/agent/$agentId/edit/skills.tsx'),
         route('instructions', 'routes/_chat/agent/$agentId/edit/instructions.tsx'),
         route('knowledge', 'routes/_chat/agent/$agentId/edit/knowledge.tsx'),
         route('workflows', 'routes/_chat/agent/$agentId/edit/workflows.tsx'),
+        route('settings', 'routes/_chat/agent/$agentId/edit/settings.tsx'),
       ]),
 
       route('sessions', 'routes/_chat/agent/$agentId/sessions/index.tsx', [

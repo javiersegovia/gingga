@@ -20,9 +20,8 @@ export function useCreateAgentMutation() {
   const trpc = useTRPC()
   return useMutation(trpc.agent.createAgent.mutationOptions({
     onSuccess: async () => {
-      await queryClient.invalidateQueries({
-        queryKey: [trpc.agent.getAgents.queryKey(), trpc.agent.getRecentChatsWithAgents.queryKey()],
-      })
+      void queryClient.invalidateQueries({ queryKey: trpc.agent.getAgents.queryKey() })
+      void queryClient.invalidateQueries({ queryKey: trpc.agent.getRecentChatsWithAgents.queryKey() })
     },
   }))
 }
@@ -34,13 +33,9 @@ export function useUpdateAgentMutation() {
   const { revalidate } = useRevalidator()
   return useMutation(trpc.agent.updateAgentById.mutationOptions({
     onSuccess: async (updatedAgent) => {
-      await queryClient.invalidateQueries({
-        queryKey: [
-          trpc.agent.getAgents.queryKey(),
-          trpc.agent.getRecentChatsWithAgents.queryKey(),
-          trpc.agent.getAgentById.queryKey({ id: updatedAgent.id }),
-        ],
-      })
+      void queryClient.invalidateQueries({ queryKey: trpc.agent.getAgents.queryKey() })
+      void queryClient.invalidateQueries({ queryKey: trpc.agent.getRecentChatsWithAgents.queryKey() })
+      void queryClient.invalidateQueries({ queryKey: trpc.agent.getAgentById.queryKey({ id: updatedAgent.id }) })
       await revalidate()
     },
   }))
@@ -50,15 +45,13 @@ export function useUpdateAgentMutation() {
 export function useDeleteAgentMutation() {
   const queryClient = useQueryClient()
   const trpc = useTRPC()
+  const { revalidate } = useRevalidator()
   return useMutation(trpc.agent.deleteAgentById.mutationOptions({
     onSuccess: async (_, variables) => {
-      await queryClient.invalidateQueries({
-        queryKey: [
-          trpc.agent.getAgents.queryKey(),
-          trpc.agent.getRecentChatsWithAgents.queryKey(),
-          trpc.agent.getAgentById.queryKey({ id: variables.id }),
-        ],
-      })
+      void queryClient.invalidateQueries({ queryKey: trpc.agent.getAgents.queryKey() })
+      void queryClient.invalidateQueries({ queryKey: trpc.agent.getRecentChatsWithAgents.queryKey() })
+      void queryClient.invalidateQueries({ queryKey: trpc.agent.getAgentById.queryKey({ id: variables.id }) })
+      await revalidate()
     },
   }))
 }

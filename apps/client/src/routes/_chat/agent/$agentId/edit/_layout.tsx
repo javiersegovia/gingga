@@ -6,6 +6,7 @@ import {
   ArrowLeftIcon,
   BookIcon,
   BrainIcon,
+  SettingsIcon,
   WorkflowIcon,
 } from 'lucide-react'
 import { href, Link, Outlet, redirect } from 'react-router'
@@ -38,12 +39,6 @@ export default function RouteComponent({ loaderData }: Route.ComponentProps) {
       label: 'Instructions',
       icon: <BrainIcon className="h-4 w-4" />,
     },
-    // {
-    //   to: href(`/chat/agent/:agentId/edit/skills`, { agentId: agent.id }),
-    //   pathname: href(`/chat/agent/:agentId/edit/skills`, { agentId: agent.id }),
-    //   label: 'Skills',
-    //   icon: <LightbulbIcon className="h-4 w-4" />,
-    // },
     {
       to: href(`/agent/:agentId/edit/knowledge`, { agentId: agent.id }),
       pathname: href(`/agent/:agentId/edit/knowledge`, { agentId: agent.id }),
@@ -55,6 +50,12 @@ export default function RouteComponent({ loaderData }: Route.ComponentProps) {
       pathname: href(`/agent/:agentId/edit/workflows`, { agentId: agent.id }),
       label: 'Workflows',
       icon: <WorkflowIcon className="h-4 w-4" />,
+    },
+    {
+      to: href(`/agent/:agentId/edit/settings`, { agentId: agent.id }),
+      pathname: href(`/agent/:agentId/edit/settings`, { agentId: agent.id }),
+      label: 'Settings',
+      icon: <SettingsIcon className="h-4 w-4" />,
     },
   ]
 

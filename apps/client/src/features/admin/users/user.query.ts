@@ -18,9 +18,8 @@ export function useUpdateUserMutation() {
   return useMutation(
     trpc.user.updateUser.mutationOptions({
       onSuccess: async (updatedUser: UserDetails) => {
-        await queryClient.invalidateQueries({
-          queryKey: [trpc.user.getUsers.queryKey(), trpc.user.getUserDetails.queryKey({ userId: updatedUser.id })],
-        })
+        void queryClient.invalidateQueries({ queryKey: trpc.user.getUserDetails.queryKey({ userId: updatedUser.id }) })
+        void queryClient.invalidateQueries({ queryKey: trpc.user.getUsers.queryKey() })
       },
     }),
   )
@@ -35,12 +34,8 @@ export function useDeleteUserMutation() {
         if (!data.success)
           return
 
-        queryClient.removeQueries({
-          queryKey: trpc.user.getUserDetails.queryKey({ userId: variables.userId }),
-        })
-        await queryClient.invalidateQueries({
-          queryKey: trpc.user.getUsers.queryKey(),
-        })
+        queryClient.removeQueries({ queryKey: trpc.user.getUserDetails.queryKey({ userId: variables.userId }) })
+        void queryClient.invalidateQueries({ queryKey: trpc.user.getUsers.queryKey() })
       },
     }),
   )
@@ -54,9 +49,9 @@ export function useBanUserMutation() {
       onSuccess: async (data, variables) => {
         if (!data.success)
           return
-        await queryClient.invalidateQueries({
-          queryKey: [trpc.user.getUsers.queryKey(), trpc.user.getUserDetails.queryKey({ userId: variables.userId })],
-        })
+
+        void queryClient.invalidateQueries({ queryKey: trpc.user.getUserDetails.queryKey({ userId: variables.userId }) })
+        void queryClient.invalidateQueries({ queryKey: trpc.user.getUsers.queryKey() })
       },
     }),
   )
@@ -70,9 +65,8 @@ export function useUnbanUserMutation() {
       onSuccess: async (data, variables) => {
         if (!data.success)
           return
-        await queryClient.invalidateQueries({
-          queryKey: [trpc.user.getUsers.queryKey(), trpc.user.getUserDetails.queryKey({ userId: variables.userId })],
-        })
+        void queryClient.invalidateQueries({ queryKey: trpc.user.getUserDetails.queryKey({ userId: variables.userId }) })
+        void queryClient.invalidateQueries({ queryKey: trpc.user.getUsers.queryKey() })
       },
     }),
   )

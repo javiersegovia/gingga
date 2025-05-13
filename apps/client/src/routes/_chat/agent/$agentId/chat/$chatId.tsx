@@ -18,11 +18,11 @@ export async function loader({ params }: Route.LoaderArgs) {
     return redirect(href('/agent/:agentId', { agentId: params.agentId }))
   }
 
-  return { chat, agent, agentId: params.agentId, endpoint: `/api/agents/custom/${params.agentId}` }
+  return { chat, agentId: params.agentId, endpoint: `/api/agents/custom/${params.agentId}` }
 }
 
 export default function AgentChatIdRoute({ loaderData }: Route.ComponentProps) {
-  const { chat, agentId, agent, endpoint } = loaderData
+  const { chat, agentId, endpoint } = loaderData
 
   return (
     <>
@@ -30,7 +30,6 @@ export default function AgentChatIdRoute({ loaderData }: Route.ComponentProps) {
         key={chat.id}
         id={chat.id}
         agentId={agentId}
-        agent={agent}
         endpoint={endpoint}
         initialMessages={convertToUIMessages(chat.messages)}
         selectedVisibilityType={chat.visibility}

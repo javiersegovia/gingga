@@ -11,6 +11,7 @@ import {
   SelectValue,
 } from '@gingga/ui/components/select'
 import { Skeleton } from '@gingga/ui/components/skeleton'
+import { Switch } from '@gingga/ui/components/switch'
 import { Textarea } from '@gingga/ui/components/textarea'
 import { formOptions } from '@tanstack/react-form'
 import { Trash2Icon } from 'lucide-react'
@@ -41,6 +42,7 @@ export const agentFormOptions = formOptions({
     image: null,
     agentType: Agents.agentType.enumValues[0],
     visibility: Agents.visibility.enumValues[0],
+    hasEmailNotifications: false,
   } as AgentFormValues,
   validators: {
     onSubmit: AgentFormSchema,
@@ -248,6 +250,35 @@ export function AgentForm({
                 <field.FormFieldDescription>
                   Optionally assign an owner by email. If left blank, the agent will not have a specific owner.
                 </field.FormFieldDescription>
+                <field.FormFieldMessage id={`${field.name}-errors`} />
+              </field.FormFieldItem>
+            )}
+          />
+
+          {/* Has Email Notifications Field */}
+          <form.AppField
+            name="hasEmailNotifications"
+            mode="value"
+            validators={{
+              onChange: AgentFormSchema.shape.hasEmailNotifications,
+            }}
+            children={field => (
+              <field.FormFieldItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                <div className="space-y-0.5">
+                  <field.FormFieldLabel>Email Notifications for New Leads</field.FormFieldLabel>
+                  <field.FormFieldDescription>
+                    If enabled, the agent owner will receive an email when a new lead is captured by this agent.
+                  </field.FormFieldDescription>
+                </div>
+                <field.FormFieldControl>
+                  <Switch
+                    checked={field.state.value}
+                    onCheckedChange={field.handleChange}
+                    disabled={isSubmitting}
+                    aria-invalid={!!field.state.meta.errors.length}
+                    aria-describedby={field.state.meta.errors.length ? `${field.name}-errors` : undefined}
+                  />
+                </field.FormFieldControl>
                 <field.FormFieldMessage id={`${field.name}-errors`} />
               </field.FormFieldItem>
             )}

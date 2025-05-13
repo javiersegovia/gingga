@@ -77,6 +77,7 @@ export const AgentFormSchema = z.object({
   visibility: z.enum(Agents.visibility.enumValues, {
     errorMap: () => ({ message: 'Please select agent visibility.' }),
   }),
+  hasEmailNotifications: z.boolean().default(false).optional(),
 })
 export type AgentFormValues = z.infer<typeof AgentFormSchema>
 

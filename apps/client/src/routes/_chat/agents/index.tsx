@@ -168,7 +168,7 @@ function AgentCard({ agent, isAdmin }: { agent: Agent, isAdmin?: boolean }) {
           </CardTitle>
 
           {agent.title && (
-            <p className="text-muted-foreground text-sm font-semibold">{agent.title}</p>
+            <p className="text-muted-foreground text-center text-sm font-semibold">{agent.title}</p>
           )}
         </div>
         <CardDescription className="text-center text-sm">

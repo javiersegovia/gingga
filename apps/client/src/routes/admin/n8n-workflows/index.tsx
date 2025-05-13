@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useMutation, useQuery, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 import { formatDistanceToNow } from 'date-fns'
 import { TerminalIcon } from 'lucide-react'
-import { Suspense, useCallback, useState } from 'react'
+import { Suspense, useState } from 'react'
 import { toast } from 'sonner'
 import { useTRPC } from '~/lib/trpc/react'
 import { DataTable } from './_components/n8n-workflows-data-table'

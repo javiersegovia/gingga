@@ -16,12 +16,8 @@ export function useRenameChatMutation() {
   const trpc = useTRPC()
   return useMutation(trpc.chat.renameChat.mutationOptions({
     onSuccess: async (_data, variables) => {
-      await queryClient.invalidateQueries({
-        queryKey: [
-          trpc.chat.getUserChats.queryKey(),
-          trpc.chat.getChatById.queryKey({ id: variables.id }),
-        ],
-      })
+      void queryClient.invalidateQueries({ queryKey: trpc.chat.getUserChats.queryKey() })
+      void queryClient.invalidateQueries({ queryKey: trpc.chat.getChatById.queryKey({ id: variables.id }) })
     },
   }),
   )
@@ -37,7 +33,7 @@ export function useDeleteChatMutation() {
         return
 
       queryClient.removeQueries({ queryKey: trpc.chat.getChatById.queryKey({ id: variables.id }) })
-      await queryClient.invalidateQueries({ queryKey: trpc.chat.getUserChats.queryKey() })
+      void queryClient.invalidateQueries({ queryKey: trpc.chat.getUserChats.queryKey() })
       await revalidate()
     },
   }),
@@ -49,12 +45,8 @@ export function useUpdateChatVisibilityMutation() {
   const trpc = useTRPC()
   return useMutation(trpc.chat.updateChatVisibility.mutationOptions({
     onSuccess: async (_data, variables) => {
-      await queryClient.invalidateQueries({
-        queryKey: [
-          trpc.chat.getUserChats.queryKey(),
-          trpc.chat.getChatById.queryKey({ id: variables.id }),
-        ],
-      })
+      void queryClient.invalidateQueries({ queryKey: trpc.chat.getUserChats.queryKey() })
+      void queryClient.invalidateQueries({ queryKey: trpc.chat.getChatById.queryKey({ id: variables.id }) })
     },
   }),
   )

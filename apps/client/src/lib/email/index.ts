@@ -26,7 +26,7 @@ export async function sendEmail({
   react,
   ...options
 }: {
-  to: string
+  to: string | string[]
   subject: string
   from?: string
 } & (
