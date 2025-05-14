@@ -9,7 +9,7 @@ export function AuthLayout({ children }: AuthLayoutProps) {
   const env = useClientEnv()
 
   return (
-    <div className="text-foreground flex min-h-screen divide-black md:divide-x-6 dark:bg-[#02362b]">
+    <div className="text-foreground flex min-h-screen divide-black md:divide-x-6">
       {/* Right column with image */}
       <div className="hidden min-h-[100vh] flex-col overflow-hidden md:flex md:w-1/2">
         <img

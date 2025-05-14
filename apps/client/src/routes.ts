@@ -38,22 +38,13 @@ export default [
     ...prefix(DASHBOARD_INDEX_PATH, [
       index('routes/_chat/agents/index.tsx'),
       route('create', 'routes/_chat/agents/create.tsx'),
-      // route(':chatId', 'routes/chat/$chatId.tsx'),
-      // Agents routes (flat under /chat/agents)
     ]),
-
-    // ...prefix('/agents', [
-    // route('create', 'routes/chat/agents/create.tsx'),
-    // ]),
 
     ...prefix('/agent/:agentId', [
       index('routes/_chat/agent/$agentId/index.tsx'),
-      // route(':agentId', 'routes/_chat/agent/$agentId/index.tsx'),
       route('/chat/:chatId', 'routes/_chat/agent/$agentId/chat/$chatId.tsx'),
 
-      // Define the 'edit' path segment and associate the layout directly
       route('/edit', 'routes/_chat/agent/$agentId/edit/_layout.tsx', [
-        // Child routes relative to the layout
         route('skills', 'routes/_chat/agent/$agentId/edit/skills.tsx'),
         route('instructions', 'routes/_chat/agent/$agentId/edit/instructions.tsx'),
         route('knowledge', 'routes/_chat/agent/$agentId/edit/knowledge.tsx'),
@@ -65,7 +56,6 @@ export default [
         route(':sessionId', 'routes/_chat/agent/$agentId/sessions/$sessionId.tsx'),
       ]),
 
-      // Placeholder for automations route
       route('automations', 'routes/_chat/agent/$agentId/automations/index.tsx'),
       route('leads', 'routes/_chat/agent/$agentId/leads/index.tsx'),
     ]),

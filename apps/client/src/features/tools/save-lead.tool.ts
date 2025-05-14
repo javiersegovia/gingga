@@ -105,9 +105,9 @@ export function saveLeadTool({ agentId }: { agentId: string }): Tool {
               }
               try {
                 const destination = [NOTIFICATIONS_EMAIL, owner?.email].filter(Boolean) as string[]
-                void sendEmail({
+                await sendEmail({
                   to: destination,
-                  subject: `🚀 New Lead Captured: ${input.name || input.email}`,
+                  subject: `New Lead from Gingga: ${input.name || input.email}`,
                   react: LeadNotificationEmail({ ...emailProps }),
                 })
 

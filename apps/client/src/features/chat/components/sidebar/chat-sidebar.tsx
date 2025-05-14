@@ -55,7 +55,7 @@ export function ChatSidebar() {
     <Sidebar className="border-r">
       <SidebarHeader>
         <div className="p-4">
-          <Link to={DASHBOARD_INDEX_PATH} className="flex justify-center gap-2">
+          <Link to={href(DASHBOARD_INDEX_PATH)} className="flex justify-center gap-2">
             <img
               src={`${env.VITE_ASSETS_URL}/logo/logo-dark-v2.png`}
               alt="Logo"
@@ -70,7 +70,7 @@ export function ChatSidebar() {
         </div>
 
         <Button variant="hoverSecondary" hover="reverse" size="md" className="w-full" asChild>
-          <Link to="/chat/agents">
+          <Link to={href('/agents')}>
             <span>Explore Agents</span>
             <TelescopeIcon className="ml-auto h-4 w-4" />
           </Link>

@@ -37,7 +37,7 @@ export default function RouteComponent({ loaderData: { activeRoute } }: Route.Co
 
     await authClient.signIn.social({
       provider,
-      callbackURL: `${env.VITE_SITE_URL}/chat`,
+      callbackURL: `${env.VITE_SITE_URL}/agents`,
     }, {
       onSuccess() {
         setLoadingProvider(null)
